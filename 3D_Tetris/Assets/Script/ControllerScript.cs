@@ -16,7 +16,7 @@ public class ControllerScript : MonoBehaviour
     private move[] S = { move.x, move._z, move._x, move.z };
     private move[] D = { move.z, move.x, move._z, move._x };
     private move[] W = { move._x, move.z, move.x, move._z };
-    private int indexTable;
+    private int _indexTable;
 
     private Vector3 _offset; // начальное положение между камерой и площадкой
     private float _rotY;  // поворот камеры
@@ -28,7 +28,6 @@ public class ControllerScript : MonoBehaviour
         _myCamera = MyCamera.GetComponent<GameCameraScript>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         // поворот сцены влево
@@ -36,15 +35,15 @@ public class ControllerScript : MonoBehaviour
         {
             if (MyPlane.TurnElement(turn.left)) // если поворачивать камеру можно
             {
-                StartCoroutine(_myCamera.turnCamera(turn.left, MyPlane.TimeRotation));//turnCamera(turn.left));
+                StartCoroutine(_myCamera.TurnCamera(turn.left, MyPlane.TimeRotation));//turnCamera(turn.left));
                 _rotY += 90;
                 if (_rotY == 360 || _rotY == -360)
                     _rotY = 0;
 
                 if (_rotY > -1)
-                    indexTable = (int)_rotY / 90;
+                    _indexTable = (int)_rotY / 90;
                 else
-                    indexTable = ((int)_rotY + 360) / 90;
+                    _indexTable = (int)_rotY + 360 / 90;
             }
         }
 
@@ -53,44 +52,44 @@ public class ControllerScript : MonoBehaviour
         {
             if (MyPlane.TurnElement(turn.right))
             {
-                StartCoroutine(_myCamera.turnCamera(turn.right, MyPlane.TimeRotation));//turnCamera(turn.right));
+                StartCoroutine(_myCamera.TurnCamera(turn.right, MyPlane.TimeRotation));//turnCamera(turn.right));
                 _rotY += -90;
                 if (_rotY == 360 || _rotY == -360)
                     _rotY = 0;
 
                 if (_rotY > -1)
-                    indexTable = (int)_rotY / 90;
+                    _indexTable = (int)_rotY / 90;
                 else
-                    indexTable = ((int)_rotY + 360) / 90;
+                    _indexTable = ((int)_rotY + 360) / 90;
             }
         }
 
         if(TouchControll.TouchEvent == touсhSign.Swipe_LeftUp)//(Input.GetKeyDown(KeyCode.A))
         {
             // Debug.Log(" A A A ");
-            MyPlane.MoveElement(A[indexTable]);
+            MyPlane.MoveElement(A[_indexTable]);
         }
         if (TouchControll.TouchEvent == touсhSign.Swipe_LeftDown)// (Input.GetKeyDown(KeyCode.S))
         {
             //Debug.Log(" S S S ");
-            MyPlane.MoveElement(S[indexTable]);
+            MyPlane.MoveElement(S[_indexTable]);
         }
         if (TouchControll.TouchEvent == touсhSign.Swipe_RightDown)//(Input.GetKeyDown(KeyCode.D))
         {
             // Debug.Log(" D D D ");
-            MyPlane.MoveElement(D[indexTable]);
+            MyPlane.MoveElement(D[_indexTable]);
         }
         if (TouchControll.TouchEvent == touсhSign.Swipe_RightUp)//(Input.GetKeyDown(KeyCode.W))
         {
             // Debug.Log(" W W W ");
-            MyPlane.MoveElement(W[indexTable]);
+            MyPlane.MoveElement(W[_indexTable]);
         }
 
         // обнуляем переменную поскольку мы уже все определили
         TouchControll.TouchEvent = touсhSign.empty;
     }
 
-    private IEnumerator turnCamera(turn direction)
+    private IEnumerator TurnCamera(turn direction)
     {
         int angle;
         if (direction == turn.left)
@@ -103,17 +102,18 @@ public class ControllerScript : MonoBehaviour
         _rotY += angle;
         Quaternion rotationFin = Quaternion.Euler(0, _rotY, 0);
 
-        float fff = Time.time;
         float countTime = 0;
-
         while (countTime < MyPlane.TimeRotation)
         {
-            if ((countTime + Time.deltaTime) < MyPlane.TimeRotation)
+            if (countTime + Time.deltaTime < MyPlane.TimeRotation)
                 countTime += Time.deltaTime;
             else
                 countTime = MyPlane.TimeRotation;
 
-            MyCamera.transform.position = MyPlane.transform.position - (Quaternion.LerpUnclamped(rotation, rotationFin, (countTime / MyPlane.TimeRotation)) * _offset);
+            MyCamera.transform.position = MyPlane.transform.position - (Quaternion.LerpUnclamped(
+                                                                            rotation,
+                                                                            rotationFin, 
+                                                                            countTime / MyPlane.TimeRotation) * _offset);
             MyCamera.transform.LookAt(ObjectLook.transform.position);
 
             yield return null;// new WaitForSeconds(MyPlane.TimeRotate / countIter);

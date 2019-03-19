@@ -16,7 +16,7 @@ public class ChengeScript : MonoBehaviour {
         GameCamera.GetComponent<GameCameraScript>().FirstAnimation();
     }
 
-    public void EndChenge()
+    public void EndChange()
     {       
         EndScreenChange.Invoke();
     }

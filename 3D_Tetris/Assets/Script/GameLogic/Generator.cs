@@ -23,15 +23,6 @@ public class Generator : MonoBehaviour {
     int minYforElement;
     public GameObject examleElement;
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-    }
 
     public GameObject GenerationNewElement( PlaneScript plane)
     {
@@ -44,7 +35,7 @@ public class Generator : MonoBehaviour {
 
         // инициализируем блоки элемента согласно установленной позиции
         ElementScript Element = NewElement.GetComponent<ElementScript>();
-        Element.InicializationAfterGeneric(plane.Height);
+        Element.InitializationAfterGeneric(plane.Height);
 
 
         //// выравниваем элемент относительно координат y 

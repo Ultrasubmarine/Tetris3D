@@ -4,23 +4,18 @@ using UnityEngine;
 
 enum GameState
 {
-    play,
-    win,
-    end,
+    Play,
+    Win,
+    End
 }
 public class GameManager : MonoBehaviour {
 
     PlaneScript PlaneGame;
-	// Use this for initialization
-	void Start () {
-        PlaneGame = PlaneScript.Instanse;
+
+    void Start () {
+        PlaneGame = PlaneScript.Instance;
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     public void Play()
     {

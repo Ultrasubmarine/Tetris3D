@@ -25,12 +25,12 @@ public enum planeState
     collectionState,
 
     startState,
-    endState,
+    endState
 }
 
 public class PlaneScript : Singleton<PlaneScript>
 {
-    bool win = false;
+    bool _isWin = false;
 
     [SerializeField] private Generator _Generator;
     public ElementScript NewElement { get; set; }
@@ -119,7 +119,7 @@ public class PlaneScript : Singleton<PlaneScript>
     // Update is called once per frame
     private void Update()
     {
-        if (Mystate != planeState.endState && Mystate != planeState.startState && !win)
+        if (Mystate != planeState.endState && Mystate != planeState.startState && !_isWin)
         {
             if (NewElement == null && Mystate != planeState.collectionState) // проверка есть ли у нас падающий элемент
             {
@@ -138,7 +138,7 @@ public class PlaneScript : Singleton<PlaneScript>
 
         while (true)
         {
-            if(win) //удаляем
+            if(_isWin) //удаляем
             {
                 if (NewElement != null)
                 {
@@ -162,7 +162,7 @@ public class PlaneScript : Singleton<PlaneScript>
             else
                 break;
 
-            yield return StartCoroutine(NewElement.DropElementVizual(NewElement.gameObject.transform.position.y - 1.0f, _TimeDrop));// элемент визуально падает
+            yield return StartCoroutine(NewElement.DropElementVisual(NewElement.gameObject.transform.position.y - 1.0f, _TimeDrop));// элемент визуально падает
         }
 
         Destroy(_Generator.examleElement);
@@ -391,7 +391,8 @@ public class PlaneScript : Singleton<PlaneScript>
                 GameObject tmp = _block[x, y, z].gameObject;
                 var ggg = _block[x, y, z];
                 _block[x, y, z].destroy = true;
-               // Destroy(_block[x, y, z]);
+               //
+               //  (_block[x, y, z]);
                 _block[x, y, z] = null;
 
                 tmp.GetComponentInParent<ElementScript>().DeleteBlock(ggg);
@@ -422,7 +423,7 @@ public class PlaneScript : Singleton<PlaneScript>
                     flagDrop = true;
                     item.DropElement(this.gameObject);
                     //yield return StartCoroutine(item.DropElementVizual(item.gameObject.transform.position.y - 1.0f, TimeDropAfterDestroy)); // возвращает падение элемента
-                    StartCoroutine(item.DropElementVizual(item.gameObject.transform.position.y - 1.0f, _TimeDropAfterDestroy)); // запускает падение элемента
+                    StartCoroutine(item.DropElementVisual(item.gameObject.transform.position.y - 1.0f, _TimeDropAfterDestroy)); // запускает падение элемента
                 }
                 else
                 {
@@ -437,7 +438,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 checkDropState = false;
                 foreach (var item in _elementMagrer)
                 {
-                    if (item.Drop)
+                    if (item.isDrop)
                     {
                         checkDropState = true;
                         yield return null;
@@ -673,7 +674,7 @@ public class PlaneScript : Singleton<PlaneScript>
             vectorDirection = new Vector3(0f, 0f, -1.0f);
 
         Mystate = planeState.moveState;
-        yield return StartCoroutine(NewElement.MoveElementVizual(vectorDirection, _TimeMove));
+        yield return StartCoroutine(NewElement.MoveElementVisual(vectorDirection, _TimeMove));
 
         Mystate = planeState.emptyState;
         yield return null;
@@ -774,7 +775,7 @@ public class PlaneScript : Singleton<PlaneScript>
 
     private void WinGame()
     {
-        win = true;
+        _isWin = true;
         Debug.Log("END END? PLANE KNOW");
 
         if(NewElement != null)

@@ -16,22 +16,12 @@ public class ParticleAnimationScript : MonoBehaviour {
         
     }
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-    void StartAnimationParticle( int layer)
+    void StartAnimationParticle(int layer)
     {
-        ParticleSystem boom;
-
-        boom = Instantiate(_PrototipeParticle, new Vector3(0, (layer + 0.5f), 0), Quaternion.identity);
+        ParticleSystem boom = Instantiate(_PrototipeParticle, new Vector3(0, (layer + 0.5f), 0), Quaternion.identity);
         boom.Play();
+        
+        //TODO Destroy? Property 'UnityEngine.ParticleSystem.duration' is obsolete: duration property is deprecated.Use main.duration instead.
         Destroy(boom.gameObject, boom.duration);
 
     }

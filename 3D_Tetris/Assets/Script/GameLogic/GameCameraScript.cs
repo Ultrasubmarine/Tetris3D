@@ -41,15 +41,10 @@ public class GameCameraScript : MonoBehaviour
         _offset = Vector3.zero - transform.position; // сохраняем расстояние между камерой и полем
         transform.LookAt(ObjectLook.transform.position);
 
-        _camera = this.GetComponent<Camera>();
+        _camera = GetComponent<Camera>();
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-    }
-
-    public IEnumerator turnCamera(turn direction, float time)
+    public IEnumerator TurnCamera(turn direction, float time)
     {
         int angle;
         if (direction == turn.left)
@@ -58,9 +53,9 @@ public class GameCameraScript : MonoBehaviour
             angle = -90;
 
         // начальный и конечный поворот
-        Quaternion rotation = Quaternion.Euler(0, _rotY, 0);
+        Quaternion rotationStart = Quaternion.Euler(0, _rotY, 0);
         _rotY += angle;
-        Quaternion rotationFin = Quaternion.Euler(0, _rotY, 0);
+        Quaternion rotationEnd = Quaternion.Euler(0, _rotY, 0);
 
         float countTime = 0;
 
@@ -71,7 +66,7 @@ public class GameCameraScript : MonoBehaviour
             else
                 countTime = time;
 
-            transform.position = Vector3.zero - (Quaternion.LerpUnclamped(rotation, rotationFin, (countTime / time)) * _offset);
+            transform.position = Vector3.zero - (Quaternion.LerpUnclamped(rotationStart, rotationEnd, (countTime / time)) * _offset);
             transform.LookAt(ObjectLook.transform.position);
 
             yield return null;

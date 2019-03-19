@@ -20,22 +20,25 @@ public enum touсhSign
 
 }
 public class TouchControll : MonoBehaviour {
-
+    /*TODO чекнуть если ли ссылки в инспекторе и переименовать :D*/
+    
     public static touсhSign TouchEvent;
 
     Vector3 _fp;
     Vector3 _lp;
-    float minDelta;
+    float _minDelta;
 
-    bool touchUI;
+    bool _touchUI;
     // Use this for initialization
     void Start() {
 
-        minDelta = Screen.height * 10 / 100;
+        _minDelta = Screen.height * 10 / 100;
     }
 
     // Update is called once per frame
     void Update() {
+
+        /* TODO Выкорчевать логическую пальму и написать кашерно*/
         
         if (Input.touchCount == 1)
         {
@@ -46,7 +49,7 @@ public class TouchControll : MonoBehaviour {
                 if( EventSystem.current.IsPointerOverGameObject() )
                 {
                     Debug.Log(" use UI");
-                    touchUI = true;
+                    _touchUI = true;
                 }
                 else
                     _fp = Input.touches[0].position;
@@ -59,9 +62,9 @@ public class TouchControll : MonoBehaviour {
             }
             else if (Input.touches[0].phase == TouchPhase.Ended)
             {
-                if (touchUI)
+                if (_touchUI)
                 {
-                    touchUI = !touchUI;
+                    _touchUI = !_touchUI;
                 }
                 else
                 {
@@ -80,13 +83,9 @@ public class TouchControll : MonoBehaviour {
         // длина свайпа
         float d = Mathf.Sqrt(Mathf.Pow((_lp.x - _fp.x), 2) + Mathf.Pow((_lp.y - _fp.y), 2));// scrt( ( x2- x1)^2 + ( y2- y1)^2 )
 
-        if (d < minDelta)
-        {
-        //    Debug.Log(" this touch < 10%");
-            if (_lp.x < Screen.width / 2)
-                TouchEvent = touсhSign.LeftOneTouch;
-            else
-                TouchEvent = touсhSign.RightOneTouch;
+        if (d < _minDelta) {
+            //    Debug.Log(" this touch < 10%");
+            TouchEvent = _lp.x < Screen.width / 2 ? touсhSign.LeftOneTouch : touсhSign.RightOneTouch;
             return;
         }
 
@@ -100,19 +99,9 @@ public class TouchControll : MonoBehaviour {
         }
 
         //right sector 
-        if (_lp.x > _fp.x)
-        {
-        //    Debug.Log(" right swipe");
-            if (_lp.y < _fp.y)
-            {
-             //   Debug.Log("Down");
-                TouchEvent = touсhSign.Swipe_RightDown;
-            }
-            else
-            {
-             //   Debug.Log("Up");
-                TouchEvent = touсhSign.Swipe_RightUp;
-            }     
+        if (_lp.x > _fp.x) {
+            //    Debug.Log(" right swipe");
+            TouchEvent = _lp.y < _fp.y ? touсhSign.Swipe_RightDown : touсhSign.Swipe_RightUp;
         }
 
         //left sector
