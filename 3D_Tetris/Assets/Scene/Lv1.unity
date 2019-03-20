@@ -12103,7 +12103,7 @@ MonoBehaviour:
   - {fileID: 134437413}
   - {fileID: 2026479154}
   Bind: 0
-  Drop: 0
+  isDrop: 0
 --- !u!4 &1777085760
 Transform:
   m_ObjectHideFlags: 0
@@ -12471,11 +12471,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ef0c377dd2c5e498e868c23254f7c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _GradusInTheSeconds: 5
+  _DegreesPerSecond: 5
   _Direction: 0
-  ObjectLook: {fileID: 556433572}
-  OnlyLookObjectLook: {fileID: 159109171}
-  ObjectCamera2: {fileID: 1836002382}
+  _ObjectLook: {fileID: 556433576}
+  _OnlyLookObjectLook: {fileID: 159109175}
+  _ObjectCamera2: {fileID: 1836002386}
   _Height: 30
   _TimeLookUp: 2
   _TimeLookDown: 4

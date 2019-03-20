@@ -294,7 +294,7 @@ public class PlaneScript : Singleton<PlaneScript>
             _block[x + 1, y, z + 1] = item;
         }
 
-        element.Bind = true;
+        element.isBind = true;
     }
 
     private void UnbindMatrixBlock(ElementScript element) // отвязывает блоки данного элемента от матрицы поля
@@ -312,7 +312,7 @@ public class PlaneScript : Singleton<PlaneScript>
             _block[x + 1, y, z + 1] = null;
         }
 
-        element.Bind = false;
+        element.isBind = false;
     }
 
     // ФУНКЦИИ ДЛЯ РАБОТЫ СО СБОРОМ КОЛЛЕКЦИЙ
@@ -417,7 +417,7 @@ public class PlaneScript : Singleton<PlaneScript>
             {
                 if (!CheckCollisionElement(item)) //если коллизии нет, элемент может падать вниз
                 {
-                    if (item.Bind)
+                    if (item.isBind)
                         UnbindMatrixBlock(item);
 
                     flagDrop = true;
@@ -427,7 +427,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 }
                 else
                 {
-                    if (!item.Bind)
+                    if (!item.isBind)
                         BindMatrixBlock(item);
                 }
             }

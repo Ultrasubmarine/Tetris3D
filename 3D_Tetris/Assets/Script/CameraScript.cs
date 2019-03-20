@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum CameraState {
-    rotetaState,
-    gameState,
+    RotateState,
+    GameState,
 }
 
 public class CameraScript : MonoBehaviour {
     [SerializeField] private float _DegreesPerSecond = 5;
 
-    void deletewindiws(int x) {
-    }
+//    void deletewindiws(int x) {
+//    }
 
     [SerializeField] private turn _Direction;
 
@@ -30,13 +30,14 @@ public class CameraScript : MonoBehaviour {
 
     private float _rotY = 0;
     private Vector3 _offset; // начальное положение между камерой и площадкой
-    private CameraState _myState = CameraState.rotetaState;
+    private CameraState _myState = CameraState.RotateState;
 
 
     [SerializeField] private float _Height = 30;
     [SerializeField] private float _TimeLookUp;
     [SerializeField] private float _TimeLookDown;
     
+        //TODO _ObjectCamera2 ссылается на тот же объект что и _PlayerCamera
     [SerializeField] private Camera _PlayerCamera;
     Camera _camera;
 
@@ -53,7 +54,7 @@ public class CameraScript : MonoBehaviour {
     }
 
     private void StartGame() {
-        _myState = CameraState.gameState;
+        _myState = CameraState.GameState;
 
         //ya NE typaya, I am very smart!
 
@@ -63,13 +64,13 @@ public class CameraScript : MonoBehaviour {
     private IEnumerator RotationCoroutine() {
         int angle = _Direction == turn.left ? 90 : -90;
 
-        while (_myState == CameraState.rotetaState) {
+        while (_myState == CameraState.RotateState) {
             Quaternion rotationStart = Quaternion.Euler(0, _rotY, 0);
             Quaternion rotationEnd = Quaternion.Euler(0, _rotY + angle, 0);
 
             float timeRotate = Mathf.Abs(angle / _DegreesPerSecond);
             float countTime = 0;
-            while (countTime < timeRotate && _myState == CameraState.rotetaState) {
+            while (countTime < timeRotate && _myState == CameraState.RotateState) {
                 if (countTime + Time.deltaTime < timeRotate)
                     countTime += Time.deltaTime;
                 else

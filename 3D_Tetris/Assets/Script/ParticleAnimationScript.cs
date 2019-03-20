@@ -3,26 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ParticleAnimationScript : MonoBehaviour {
-
     [SerializeField] ParticleSystem _PrototipeParticle;
 
-    private void Awake()
-    {
+    private void Awake() {
         Messenger<int>.AddListener(GameEvent.DESTROY_LAYER, StartAnimationParticle);
     }
 
-    private void OnDestroy()
-    {
-        
+    private void OnDestroy() {
     }
 
-    void StartAnimationParticle(int layer)
-    {
+    void StartAnimationParticle(int layer) {
+        //TODO Instantiate и Destroy при уничтожении слоя = каждый раз создается мусор
+
         ParticleSystem boom = Instantiate(_PrototipeParticle, new Vector3(0, (layer + 0.5f), 0), Quaternion.identity);
         boom.Play();
-        
-        //TODO Destroy? Property 'UnityEngine.ParticleSystem.duration' is obsolete: duration property is deprecated.Use main.duration instead.
-        Destroy(boom.gameObject, boom.duration);
 
+        Destroy(boom.gameObject, boom.duration); //TODO rider ругается на ParticleSystem.duration;
     }
 }

@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T: Singleton <T> 
-{
+public class Singleton<T> : MonoBehaviour where T : Singleton<T> {
+    public static T Instance { get; private set; }
 
-    public static T Instance { get; private set; } 
-
-    private void Awake()
-    {
+    private void Awake() {
         if (Instance == null) {
             Instance = this as T;
-            
+
             Init();
         }
         else
@@ -22,7 +19,5 @@ public class Singleton<T> : MonoBehaviour where T: Singleton <T>
     /// Если нужен Awake() в дочернем классе.
     /// </summary>
     protected virtual void Init() {
-        
     }
-
 }

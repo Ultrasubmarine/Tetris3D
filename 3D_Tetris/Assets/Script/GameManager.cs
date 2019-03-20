@@ -2,38 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum GameState
-{
+enum GameState {
     Play,
     Win,
     End
 }
-public class GameManager : MonoBehaviour {
 
+public class GameManager : MonoBehaviour {
     PlaneScript PlaneGame;
 
-    void Start () {
+    void Start() {
         PlaneGame = PlaneScript.Instance;
-
     }
 
-    public void Play()
-    {
+    public void Play() {
         PlaneGame.StartGame();
     }
 
-    public void Win()
-    {
-        
+    public void Win() {
     }
 
-    public void End()
-    {
-
+    public void End() {
     }
 
-    public void Restart()
-    {
-
+    public void Restart() {
     }
 }
