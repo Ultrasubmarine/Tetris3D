@@ -11,8 +11,8 @@ public class ElementScript : MonoBehaviour {
     public bool isDrop = false;
     Transform _myTransform;
 
-    void Start() {
-        _myTransform = transform;
+    void Awake() {
+        _myTransform = GetComponent<Transform>();
     }
 
     public void AddBlock(BlockScript newBlock) {

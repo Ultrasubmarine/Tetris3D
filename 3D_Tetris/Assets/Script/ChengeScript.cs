@@ -9,7 +9,7 @@ public class ChengeScript : MonoBehaviour {
     [SerializeField] Camera GameCamera;
     GameCameraScript _gameCameraScript;
     void Awake() {
-        _gameCameraScript = GetComponent<GameCameraScript>();
+        _gameCameraScript = GameCamera.GetComponent<GameCameraScript>();
     }
 
     public void Hide() {
