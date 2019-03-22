@@ -7,8 +7,7 @@ public class Listener : MonoBehaviour {
 
     [SerializeField] string Eventname;
     [SerializeField] UnityEvent EventListener = new UnityEvent();
-
-    private void Start()
+    private void Awake()
     {
         Messenger.AddListener(Eventname, EventListener.Invoke);
     }

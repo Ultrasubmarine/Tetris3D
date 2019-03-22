@@ -21,6 +21,9 @@ public class ControllerScript : MonoBehaviour
     private Vector3 _offset; // начальное положение между камерой и площадкой
     private float _rotY;  // поворот камеры
 
+    static public bool MoveTutorial { get; set; } 
+    static public bool TurnTutorial { get; set; } 
+
     private void Start()
     {
         _offset = MyPlane.transform.position - MyCamera.transform.position; // сохраняем расстояние между камерой и полем
@@ -34,6 +37,8 @@ public class ControllerScript : MonoBehaviour
         // поворот сцены влево
         if ( TouchControll.TouchEvent == touсhSign.LeftOneTouch )//(Input.GetKeyDown(KeyCode.LeftArrow))
         {
+          //  if (TurnTutorial)
+                Messenger<turn>.Broadcast(GameEvent.TURN, turn.left);
             if (MyPlane.TurnElement(turn.left)) // если поворачивать камеру можно
             {
                 StartCoroutine(_myCamera.turnCamera(turn.left, MyPlane.TimeRotation));//turnCamera(turn.left));
@@ -51,6 +56,8 @@ public class ControllerScript : MonoBehaviour
         // поворот сцены вправо
         if (TouchControll.TouchEvent == touсhSign.RightOneTouch)// (Input.GetKeyDown(KeyCode.RightArrow))
         {
+          //  if(TurnTutorial)
+                Messenger<turn>.Broadcast(GameEvent.TURN, turn.right);
             if (MyPlane.TurnElement(turn.right))
             {
                 StartCoroutine(_myCamera.turnCamera(turn.right, MyPlane.TimeRotation));//turnCamera(turn.right));
@@ -67,23 +74,32 @@ public class ControllerScript : MonoBehaviour
 
         if(TouchControll.TouchEvent == touсhSign.Swipe_LeftUp)//(Input.GetKeyDown(KeyCode.A))
         {
-            // Debug.Log(" A A A ");
+            Debug.Log(" A A A ");
             MyPlane.MoveElement(A[indexTable]);
+            if(MoveTutorial)
+                Messenger<move>.Broadcast("MOVE", A[0]);
         }
         if (TouchControll.TouchEvent == touсhSign.Swipe_LeftDown)// (Input.GetKeyDown(KeyCode.S))
         {
-            //Debug.Log(" S S S ");
+            Debug.Log(" S S S ");
             MyPlane.MoveElement(S[indexTable]);
+            if (MoveTutorial)
+                Messenger<move>.Broadcast("MOVE", S[0]);
         }
         if (TouchControll.TouchEvent == touсhSign.Swipe_RightDown)//(Input.GetKeyDown(KeyCode.D))
         {
-            // Debug.Log(" D D D ");
+            Debug.Log(" D D D ");
             MyPlane.MoveElement(D[indexTable]);
+            if (MoveTutorial)
+                Messenger<move>.Broadcast("MOVE", D[0]);
         }
         if (TouchControll.TouchEvent == touсhSign.Swipe_RightUp)//(Input.GetKeyDown(KeyCode.W))
         {
-            // Debug.Log(" W W W ");
+            Debug.Log(" W W W ");
             MyPlane.MoveElement(W[indexTable]);
+            if (MoveTutorial)
+                Messenger<move>.Broadcast("MOVE", W[0]);
+            //Debug.Log("MOVE W");
         }
 
         // обнуляем переменную поскольку мы уже все определили

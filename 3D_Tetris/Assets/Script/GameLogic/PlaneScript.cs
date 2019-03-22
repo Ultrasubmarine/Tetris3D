@@ -104,6 +104,8 @@ public class PlaneScript : Singleton<PlaneScript>
         Messenger.AddListener(GameEvent.REPEAT_GAME, RepleyGame);
         Messenger.AddListener(GameEvent.WIN_GAME, WinGame);
 
+        Messenger<float>.AddListener(GameEvent.CHANGE_TIME_DROP, ChengeTimeDrop);
+
         //Debug.Log("matrix.GetUpperBound(0) =" + _block.GetUpperBound(0));
         //Debug.Log("matrix.GetUpperBound(1) =" + _block.GetUpperBound(1));
         //Debug.Log("matrix.GetUpperBound(2) =" + _block.GetUpperBound(2));
@@ -116,6 +118,10 @@ public class PlaneScript : Singleton<PlaneScript>
         Messenger.RemoveListener(GameEvent.REPEAT_GAME, RepleyGame);
     }
 
+    public void ChengeTimeDrop( float time)
+    {
+        _TimeDrop = time;
+    }
     // Update is called once per frame
     private void Update()
     {

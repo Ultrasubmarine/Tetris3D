@@ -25,6 +25,7 @@ public class Score : MonoBehaviour {
     {
         CurrentScore += 9;
         ScoreText.text = CurrentScore.ToString() + "/" + ScoreForWin.ToString() + " m";
+        Messenger<int>.Broadcast(GameEvent.CURRENT_SCORE, CurrentScore);
         CheckWin();
     }
 
