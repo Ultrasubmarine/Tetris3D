@@ -1573,8 +1573,7 @@ Prefab:
     - target: {fileID: 1713176543038950, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
       propertyPath: m_Icon
       value: 
-      objectReference: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000,
-        type: 0}
+      objectReference: {fileID: 0}
     - target: {fileID: 33401715704026066, guid: 1e5b5857acde9a244881174f648c9ce0,
         type: 2}
       propertyPath: m_Mesh
@@ -2395,8 +2394,7 @@ Prefab:
     - target: {fileID: 1713176543038950, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
       propertyPath: m_Icon
       value: 
-      objectReference: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000,
-        type: 0}
+      objectReference: {fileID: 0}
     - target: {fileID: 33401715704026066, guid: 1e5b5857acde9a244881174f648c9ce0,
         type: 2}
       propertyPath: m_Mesh
@@ -12485,8 +12483,7 @@ Prefab:
     - target: {fileID: 1713176543038950, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
       propertyPath: m_Icon
       value: 
-      objectReference: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000,
-        type: 0}
+      objectReference: {fileID: 0}
     - target: {fileID: 33401715704026066, guid: 1e5b5857acde9a244881174f648c9ce0,
         type: 2}
       propertyPath: m_Mesh
@@ -12592,7 +12589,7 @@ GameObject:
   m_Layer: 0
   m_Name: PLANE
   m_TagString: Untagged
-  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -12650,7 +12647,7 @@ GameObject:
   m_Layer: 0
   m_Name: GENERETOR
   m_TagString: Untagged
-  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -13112,8 +13109,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 134437413}
   - {fileID: 2026479154}
-  Bind: 0
-  Drop: 0
+  isBind: 0
+  isDrop: 0
 --- !u!4 &1777085760
 Transform:
   m_ObjectHideFlags: 0
@@ -13508,8 +13505,7 @@ Prefab:
     - target: {fileID: 1713176543038950, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
       propertyPath: m_Icon
       value: 
-      objectReference: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000,
-        type: 0}
+      objectReference: {fileID: 0}
     - target: {fileID: 33401715704026066, guid: 1e5b5857acde9a244881174f648c9ce0,
         type: 2}
       propertyPath: m_Mesh
@@ -13551,11 +13547,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ef0c377dd2c5e498e868c23254f7c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _GradusInTheSeconds: 5
+  _DegreesPerSecond: 5
   _Direction: 0
-  ObjectLook: {fileID: 556433572}
-  OnlyLookObjectLook: {fileID: 159109171}
-  ObjectCamera2: {fileID: 1836002382}
+  _ObjectLook: {fileID: 556433576}
+  _OnlyLookObjectLook: {fileID: 159109175}
+  _ObjectCamera2: {fileID: 1836002386}
   _Height: 30
   _TimeLookUp: 2
   _TimeLookDown: 4

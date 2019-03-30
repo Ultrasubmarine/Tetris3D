@@ -4,26 +4,18 @@ using UnityEngine;
 using System.Linq;
 
 
-
-
 public class ElementScript : MonoBehaviour {
+    public List<BlockScript> MyBlocks = new List<BlockScript>(); //[] MyBlocks;
 
-    public List<BlockScript> MyBlocks = new List<BlockScript>();//[] MyBlocks;
+    public bool isBind = false;
+    public bool isDrop = false;
+    Transform _myTransform;
 
-    public bool Bind = false;
-    public bool Drop = false;
-
-    // Use this for initialization
-    void Start() {
+    void Awake() {
+        _myTransform = GetComponent<Transform>();
     }
 
-    // Update is called once per frame
-    void Update() {
-
-    }
-
-    public void AddBlock(BlockScript newBlock)
-    {
+    public void AddBlock(BlockScript newBlock) {
         MyBlocks.Add(newBlock);
     }
 
@@ -42,83 +34,70 @@ public class ElementScript : MonoBehaviour {
 
     //}
 
-    public void InicializationAfterGeneric(int height)
-    {
+    public void InitializationAfterGeneric(int height) {
         int maxElement = MyBlocks.Max(s => s.y);
 
         foreach (BlockScript item in MyBlocks)
-        {
             item.y += height - maxElement;
-        }
     }
 
     // ФУНКЦИИ ПАДЕНИЯ
-    public void DropElement(GameObject plane) //падение элемента вниз на 1 ярус. логическое
-    {
+    public void DropElement(GameObject plane) {
+        //падение элемента вниз на 1 ярус. логическое
         foreach (BlockScript item in MyBlocks)
-        {
             item.y--;
-        }
     }
 
-    public IEnumerator DropElementVizual(float finishY, float Timefor)//Speed)
-    {
-        Drop = true;
-        Vector3 startPosition = gameObject.transform.position;
-        Vector3 finalPosition = new Vector3(gameObject.transform.position.x, finishY, gameObject.transform.position.z);
+    public IEnumerator DropElementVisual(float finishY, float time) {
+        //Speed)
+        isDrop = true;
+        Vector3 startPosition = _myTransform.position;
+        Vector3 finalPosition = new Vector3(startPosition.x, finishY, startPosition.z);
 
-        float countTime = 0;
-        do
-        {
-            countTime += Time.deltaTime;
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, Vector3.Lerp(startPosition, finalPosition, countTime / Timefor).y, gameObject.transform.position.z); //Vector3.Lerp(startPosition, finalPosition, countTime / Timefor); 
+        float timer = 0;
+        do {
+            timer += Time.deltaTime;
+            _myTransform.position = new Vector3(gameObject.transform.position.x,
+                Vector3.Lerp(startPosition, finalPosition, timer / time).y,
+                transform.position.z); //Vector3.Lerp(startPosition, finalPosition, countTime / time); 
             yield return null;
+        } while (timer <= time);
 
-        }
-        while (countTime <= Timefor);
+        _myTransform.position =
+            new Vector3(_myTransform.position.x, finalPosition.y, _myTransform.position.z); //finalPosition;
 
-        gameObject.transform.position = new Vector3(gameObject.transform.position.x, finalPosition.y, gameObject.transform.position.z);//finalPosition;
-
-        Drop = false;
-        yield break;
+        isDrop = false;
     }
 
     // ФУНКЦИИ ПОВОРОТА
-    public void TurnElement(turn direction, GameObject target)
-    {
+    public void TurnElement(turn direction, GameObject target) {
         if (direction == turn.left) // правило поворота влево
         {
-            foreach (BlockScript item in MyBlocks)
-            {
+            foreach (BlockScript item in MyBlocks) {
                 int temp = item.x;
                 item.x = item.z;
                 item.z = -temp;
             }
-
         }
-        else
-        {
-            foreach (BlockScript item in MyBlocks)
-            {
+        else {
+            foreach (BlockScript item in MyBlocks) {
                 int temp = item.x;
                 item.x = -item.z;
                 item.z = temp;
             }
-
         }
     }
 
-    public IEnumerator TurnElementVizual(int angle, float TimeFor, GameObject target)
-    {
+    public IEnumerator TurnElementVizual(int angle, float TimeFor, GameObject target) {
         float fff = Time.time;
 
         float deltaAngle;
         float countAngle = 0;
 
-        do
-        {
+        do {
             deltaAngle = angle * (Time.deltaTime / TimeFor);
-            if (((angle > 0) && (countAngle + deltaAngle > angle)) || ((angle < 0) && (countAngle + deltaAngle < angle)))  // если мы уже достаточно повернули и в ту и в другую сторону
+            if (angle > 0 && countAngle + deltaAngle > angle || angle < 0 && countAngle + deltaAngle < angle
+            ) // если мы уже достаточно повернули и в ту и в другую сторону
             {
                 deltaAngle = angle - countAngle; // узнаем сколько нам не хватает на самом деле  
                 countAngle = angle;
@@ -126,221 +105,178 @@ public class ElementScript : MonoBehaviour {
             else
                 countAngle += deltaAngle;
 
-            transform.Rotate(target.transform.position, deltaAngle);
+            _myTransform.Rotate(target.transform.position, deltaAngle);
 
             yield return null;
-
-        }
-        while ((angle > 0) && (countAngle < angle) || ((angle < 0) && (countAngle > angle)));
+        } while (angle > 0 && countAngle < angle || angle < 0 && countAngle > angle);
 
         // Debug.Log(" Время поворота: " + (Time.time - fff));
     }
 
     // ФУНКЦИИ ПЕРЕМЕЩЕНИЯ
-    public void MoveElement(move direction)
-    {
-        if (direction == move.x)
-        {
-            foreach (var item in MyBlocks)
-            {
+    public void MoveElement(move direction) {
+        if (direction == move.x) {
+            foreach (BlockScript item in MyBlocks) {
                 item.x++;
             }
         }
-        else if (direction == move._x)
-        {
-            foreach (var item in MyBlocks)
-            {
+        else if (direction == move._x) {
+            foreach (BlockScript item in MyBlocks) {
                 item.x--;
             }
         }
-        else if (direction == move.z)
-        {
-            foreach (var item in MyBlocks)
-            {
+        else if (direction == move.z) {
+            foreach (BlockScript item in MyBlocks) {
                 item.z++;
             }
         }
-        else if (direction == move._z)
-        {
-            foreach (var item in MyBlocks)
-            {
+        else if (direction == move._z) {
+            foreach (BlockScript item in MyBlocks) {
                 item.z--;
             }
         }
     }
 
-    public IEnumerator MoveElementVizual(Vector3 direction, float TimeFor)
-    {
-        float fff = Time.time;
-
+    public IEnumerator MoveElementVisual(Vector3 direction, float timeFor) {
         List<Vector3> finalPosBlock = new List<Vector3>();
 
-        for (int i = 0; i < MyBlocks.Count; i++)
-        {
-            finalPosBlock.Add(MyBlocks[i].transform.position + direction);
-        }
+        foreach (BlockScript block in MyBlocks)
+            finalPosBlock.Add(block.transform.position + direction);
 
         Vector3 startPosition = Vector3.zero;
         Vector3 finalPosition = direction;
 
         Vector3 lastDeltaVector = Vector3.zero;
-        Vector3 deltaVector;
 
         float countTime = 0;
-        do
-        {
-            if (countTime + Time.deltaTime < TimeFor)
+        do {
+            if (countTime + Time.deltaTime < timeFor)
                 countTime += Time.deltaTime;
             else
                 break;
 
             // tyt bilo eshe  = gameObject.transform.position = 
-            deltaVector = Vector3.Lerp(startPosition, finalPosition, countTime / TimeFor);//direction * (Time.deltaTime / TimeFor);
+            Vector3 deltaVector = Vector3.Lerp(startPosition, finalPosition, countTime / timeFor);
 
             //foreach (var item in MyBlocks)
-            for (int i = 0; i < MyBlocks.Count; i++)
-            {
-                MyBlocks[i].transform.position += (deltaVector - lastDeltaVector);
-            }
+            foreach (BlockScript block in MyBlocks)
+                block.transform.position += deltaVector - lastDeltaVector;
+
 
             lastDeltaVector = deltaVector;
             yield return null;
-        }
-        while (countTime < TimeFor);
+        } while (countTime < timeFor);
 
-        for (int i = 0; i < MyBlocks.Count; i++)
-        {
-            MyBlocks[i].transform.position = new Vector3(finalPosBlock[i].x, MyBlocks[i].transform.position.y, finalPosBlock[i].z);
+        for (int i = 0; i < MyBlocks.Count; i++) {
+            MyBlocks[i].transform.position =
+                new Vector3(finalPosBlock[i].x, MyBlocks[i].transform.position.y, finalPosBlock[i].z);
         }
 
         finalPosBlock.Clear();
-        yield break;
     }
 
-    public bool CheckMove(move direction, int MinCoordinat)
-    {
-
-            if (direction == move.x)
-            {
-                foreach (var item in MyBlocks)
-                {
-                    if (item.x == Mathf.Abs(MinCoordinat))
-                        return false;
-                }
-
-                return true;
-            }
-            else if (direction == move._x)
-            {
-                foreach (var item in MyBlocks)
-                {
-                    if (item.x == MinCoordinat)
-                        return false;                    
-                }
-
-                return true;
-            }
-            else if (direction == move.z)
-            {
-                foreach (var item in MyBlocks)
-                {
-                    if (item.z == Mathf.Abs(MinCoordinat))
-                        return false;
-                }
-
-                return true;
-            }
-            else if (direction == move._z)
-            {
-                foreach (var item in MyBlocks)
-                {
-                    if (item.z == MinCoordinat)
-                        return false;
-                }
-
-                return true;
+    public bool CheckMove(move direction, int MinCoordinat) {
+        if (direction == move.x) {
+            foreach (BlockScript item in MyBlocks) {
+                if (item.x == Mathf.Abs(MinCoordinat))
+                    return false;
             }
 
             return true;
-        
+        }
+
+        if (direction == move._x) {
+            foreach (BlockScript item in MyBlocks) {
+                if (item.x == MinCoordinat)
+                    return false;
+            }
+
+            return true;
+        }
+
+        if (direction == move.z) {
+            foreach (BlockScript item in MyBlocks) {
+                if (item.z == Mathf.Abs(MinCoordinat))
+                    return false;
+            }
+
+            return true;
+        }
+
+        if (direction == move._z) {
+            foreach (BlockScript item in MyBlocks) {
+                if (item.z == MinCoordinat)
+                    return false;
+            }
+
+            return true;
+        }
+
+        return true;
     }
-    public bool CheckEmptyElement()
-    {
-        for (int i = 0; i < MyBlocks.Count; i++)
-        {
+
+    public bool CheckEmptyElement() {
+        for (int i = 0; i < MyBlocks.Count; i++) {
             if (MyBlocks[i] != null)
                 return false; // не пуст
         }
+
         Debug.Log("I,m ALONE");
         return true; // пуст
     }
 
-    public void DeleteBlock(BlockScript dstr)
-    {
-        if (MyBlocks.Contains(dstr))
-        {
-            MyBlocks.Remove(dstr);
+    public void DeleteBlock(BlockScript block) {
+        if (MyBlocks.Contains(block)) {
+            MyBlocks.Remove(block);
 
-            Destroy(dstr.gameObject);
+            //TODO Возвращать блоки в пул?
+            Destroy(block.gameObject);
         }
-
     }
 
-    public ElementScript CheckUnion()
-    {
+    public ElementScript CheckUnion() {
         if (MyBlocks.Count == 0)
             return null;
-        List<BlockScript> M1 = new List<BlockScript>();
-       // MMM
+        List<BlockScript> m1 = new List<BlockScript>();
+        // MMM
 
         BlockScript curr = MyBlocks[0]; // точка отсчета
 
-        M1.Add(curr);
-        foreach (var item in MyBlocks)
-        {
-            if(Sliti_Li(curr, item))
-            {
-                M1.Add(item);
-            }
+        m1.Add(curr);
+        foreach (var item in MyBlocks) {
+            if (Sliti_Li(curr, item))
+                m1.Add(item);
         }
 
-        if (M1.Count == MyBlocks.Count)
+        if (m1.Count == MyBlocks.Count)
             return null; // все норм. мы объединили
-        else
-        {
+        else {
             int k = 0;
-            int countK = M1.Count;
-            while( k< countK)
-            {
-               
-                    var Ost = MyBlocks.Except(M1).ToList();
-                    for (int i = 0; i < Ost.Count; i++)
-                    {
-
-                        if (Sliti_Li(Ost[i], M1[k]))
-                        {
-                            M1.Add(Ost[i]);
+            int countK = m1.Count;
+            while (k < countK) {
+                var Ost = MyBlocks.Except(m1).ToList();
+                for (int i = 0; i < Ost.Count; i++) {
+                    if (Sliti_Li(Ost[i], m1[k])) {
+                        m1.Add(Ost[i]);
                         countK++;
-                        }
                     }
-                k++;
+                }
 
+                k++;
             }
-            
+
 
             // создаем новый элемент
-            if (M1.Count < MyBlocks.Count)
-            {
+            if (m1.Count < MyBlocks.Count) {
                 this.name = "ZLO CUT CUT CUT";
                 Debug.Log("Create ++++ ELEMENT");
                 GameObject newEl = new GameObject("ZLO DOUBLE");
                 newEl.transform.position = Vector3.zero;
 
-                var Ost = MyBlocks.Except(M1).ToList();
+                var Ost = MyBlocks.Except(m1).ToList();
                 newEl.AddComponent<ElementScript>().MyBlocks = Ost;
 
-                for (int i = 0; i < Ost.Count; i++)
-                {
+                for (int i = 0; i < Ost.Count; i++) {
                     Ost[i].gameObject.transform.parent = newEl.transform;
                     MyBlocks.Remove(Ost[i]);
                 }
@@ -350,13 +286,12 @@ public class ElementScript : MonoBehaviour {
             else
                 return null;
         }
-       
     }
 
-    public bool Sliti_Li(BlockScript b1, BlockScript b2)
-    {
-        Vector3 b1p= new Vector3(b1.x, b1.y, b1.z);
+    public bool Sliti_Li(BlockScript b1, BlockScript b2) {
+        Vector3 b1p = new Vector3(b1.x, b1.y, b1.z);
         Vector3 b2p = new Vector3(b2.x, b2.y, b2.z);
+
 
         if (b1p.x == b2p.x && b1p.y == b2p.y && b1p.z == b2p.z + 1)
             return true;
@@ -374,9 +309,7 @@ public class ElementScript : MonoBehaviour {
         return false;
     }
 
-    public void SetTurn(turn direction, GameObject target)
-    {
-        
+    public void SetTurn(turn direction, GameObject target) {
         TurnElement(direction, target);
 
         int rotate;
@@ -384,12 +317,11 @@ public class ElementScript : MonoBehaviour {
             rotate = 90;
         else
             rotate = -90;
-        StartCoroutine(TurnElementVizual(rotate, 0,target));
-       
+
+        StartCoroutine(TurnElementVizual(rotate, 0, target));
     }
 
-    public void SetMove(move direction)
-    {
+    public void SetMove(move direction) {
         Vector3 vectorDirection;
 
         if (direction == move.x)
@@ -401,8 +333,6 @@ public class ElementScript : MonoBehaviour {
         else // (direction == move._z)
             vectorDirection = new Vector3(0f, 0f, -1.0f);
 
-        StartCoroutine(MoveElementVizual(vectorDirection, 0));
-
+        StartCoroutine(MoveElementVisual(vectorDirection, 0));
     }
-
 }
