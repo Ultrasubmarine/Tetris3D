@@ -18,6 +18,13 @@ public class TutorialForUser2 : Listener<turn>
     {
         CallDelegate = ListenEvent;
     }
+    private void OnEnable()
+    {
+        foreach(var it in CheckMotion)
+        {
+            it.SetActive(false);
+        }
+    }
     public void ListenEvent(turn param)
     {
         Debug.Log("I KNIW TURN");
