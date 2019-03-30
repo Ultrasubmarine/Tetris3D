@@ -41,7 +41,7 @@ public class ControllerScript : MonoBehaviour
                 Messenger<turn>.Broadcast(GameEvent.TURN, turn.left);
             if (MyPlane.TurnElement(turn.left)) // если поворачивать камеру можно
             {
-                StartCoroutine(_myCamera.turnCamera(turn.left, MyPlane.TimeRotation));//turnCamera(turn.left));
+                StartCoroutine(_myCamera.TurnCamera(turn.left, MyPlane.TimeRotation));//turnCamera(turn.left));
                 _rotY += 90;
                 if (_rotY == 360 || _rotY == -360)
                     _rotY = 0;
@@ -60,7 +60,7 @@ public class ControllerScript : MonoBehaviour
                 Messenger<turn>.Broadcast(GameEvent.TURN, turn.right);
             if (MyPlane.TurnElement(turn.right))
             {
-                StartCoroutine(_myCamera.turnCamera(turn.right, MyPlane.TimeRotation));//turnCamera(turn.right));
+                StartCoroutine(_myCamera.TurnCamera(turn.right, MyPlane.TimeRotation));//turnCamera(turn.right));
                 _rotY += -90;
                 if (_rotY == 360 || _rotY == -360)
                     _rotY = 0;
