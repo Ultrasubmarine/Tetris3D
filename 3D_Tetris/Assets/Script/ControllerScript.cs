@@ -38,7 +38,7 @@ public class ControllerScript : MonoBehaviour
         if ( TouchControll.TouchEvent == touсhSign.LeftOneTouch )//(Input.GetKeyDown(KeyCode.LeftArrow))
         {
           //  if (TurnTutorial)
-                Messenger<turn>.Broadcast(GameEvent.TURN, turn.left);
+                //Messenger<turn>.Broadcast(GameEvent.TURN, turn.left);
             if (MyPlane.TurnElement(turn.left)) // если поворачивать камеру можно
             {
                 StartCoroutine(_myCamera.TurnCamera(turn.left, MyPlane.TimeRotation));//turnCamera(turn.left));
@@ -57,7 +57,7 @@ public class ControllerScript : MonoBehaviour
         if (TouchControll.TouchEvent == touсhSign.RightOneTouch)// (Input.GetKeyDown(KeyCode.RightArrow))
         {
           //  if(TurnTutorial)
-                Messenger<turn>.Broadcast(GameEvent.TURN, turn.right);
+                //Messenger<turn>.Broadcast(GameEvent.TURN, turn.right);
             if (MyPlane.TurnElement(turn.right))
             {
                 StartCoroutine(_myCamera.TurnCamera(turn.right, MyPlane.TimeRotation));//turnCamera(turn.right));

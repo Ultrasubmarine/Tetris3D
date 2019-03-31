@@ -43,6 +43,7 @@ public class PlaneScript : Singleton<PlaneScript>
     private int _currMaxHeight = 0;
 
     public int Height { get { return _HeightPlane - 1; } } // высота отсчитывается от 0
+    public int Wight { get { return _WightPlane; } } // высота отсчитывается от 0
     public int MinCoordinat { get; private set; }
 
     [Header("Time visual effects")]
