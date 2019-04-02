@@ -40,6 +40,7 @@ public class PlaneScript : Singleton<PlaneScript>
 
     [SerializeField] private int _HeightPlane;
     [SerializeField] private int _LimitHeight = 11;
+    public int LimitHeight { get { return _LimitHeight; } }
     private int _currMaxHeight = 0;
 
     public int Height { get { return _HeightPlane - 1; } } // высота отсчитывается от 0

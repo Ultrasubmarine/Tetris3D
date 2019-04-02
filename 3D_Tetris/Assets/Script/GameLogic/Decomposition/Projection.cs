@@ -55,6 +55,7 @@ public class Projection : MonoBehaviour {
         }
     }
 
+
     public void Destroy(int typeObject /* const PROECTIONS or CEILING*/ )
     {
         List<GameObject> list;
@@ -104,9 +105,9 @@ public class Projection : MonoBehaviour {
         {
             for (int z = 0; z < plane.Wight; z++)
             {
-                if (plane._block[x, (int)(plane._LimitHeight - 1), z] != null || plane._block[x, (int)(plane._LimitHeight - 2), z] != null)
+                if (plane._block[x, (int)(plane.LimitHeight - 1), z] != null || plane._block[x, (int)(plane.LimitHeight - 2), z] != null)
                 {
-                    GameObject tmp = _po;
+                    GameObject tmp = _;
 
                     tmp.transform.position = new Vector3(x - 1, (_LimitHeight + HeightProection), z - 1);
                     _potolocList.Add(tmp);
