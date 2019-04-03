@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projection : MonoBehaviour {
+public class Projection : MonoBehaviour
+{
+
+    PlaneSize _planeSize;
     // TO DO - статическая переменная - высота сцены.
-    int _HeightPlane;
+  //  int _HeightPlane;
 
     public const int PROECTIONS = 1;
     public const int CEILING = 2;
@@ -19,7 +22,7 @@ public class Projection : MonoBehaviour {
     private List<GameObject> _ceilingList; 
     
     // ФУНКЦИИ ДЛЯ РАБОТЫ С ПРОЕКЦИЯМИ
-    private void CreateProjection(ElementScript obj, PlaneScript plane)
+    private void CreateProjection(ElementScript obj)
     {
         bool flagCreate;
 
@@ -40,9 +43,9 @@ public class Projection : MonoBehaviour {
                 GameObject tmp = _PoolProjection.CreateObject();
 
                 float y = -1;
-                for (int i = plane.Height - 1; i > -1; i--)
+                for (int i = PlaneSize.Height - 1; i > -1; i--)
                 {
-                    if (plane._block[(int)item.x + 1, i, (int)item.z + 1] != null)
+                    if (_planeSize._block[(int)item.x + 1, i, (int)item.z + 1] != null)
                     {
                         y = i;
                         break;
@@ -107,10 +110,10 @@ public class Projection : MonoBehaviour {
             {
                 if (plane._block[x, (int)(plane.LimitHeight - 1), z] != null || plane._block[x, (int)(plane.LimitHeight - 2), z] != null)
                 {
-                    GameObject tmp = _;
-
-                    tmp.transform.position = new Vector3(x - 1, (_LimitHeight + HeightProection), z - 1);
-                    _potolocList.Add(tmp);
+//                    GameObject tmp = _;
+//
+//                    tmp.transform.position = new Vector3(x - 1, (_LimitHeight + HeightProection), z - 1);
+//                    _potolocList.Add(tmp);
                 }
             }
         }
