@@ -11,6 +11,7 @@ public class PoolContainer
 	public bool Active;
 	public GameObject Object;
 
+
 	public PoolContainer( GameObject obj) {
 		Object = obj;
 		Active = false;
@@ -73,6 +74,7 @@ public class ObjectPool : MonoBehaviour
 
 	private void InstantiateObject() { 
 		PoolContainer tmp = new PoolContainer( Instantiate(Prefab) );
+        tmp.Object.gameObject.SetActive(false);
         Pool.Add(tmp);
 	}
 }

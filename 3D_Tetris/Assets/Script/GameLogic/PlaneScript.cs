@@ -30,6 +30,7 @@ public enum planeState
 
 public class PlaneScript : Singleton<PlaneScript>
 {
+    [SerializeField] Projection myProj;
     bool _isWin = false;
 
     [SerializeField] private Generator _Generator;
@@ -142,7 +143,7 @@ public class PlaneScript : Singleton<PlaneScript>
 
     private IEnumerator ElementDrop() // ф-я падения элемента
     {
-        VisualProection();
+       myProj.CreateProjection(NewElement);// VisualProection();
 
         while (true)
         {
@@ -586,7 +587,7 @@ public class PlaneScript : Singleton<PlaneScript>
         DestroyProection(_proectionsList);
         yield return StartCoroutine(NewElement.TurnElementVizual(rotate, _TimeRotate, this.gameObject));
 
-        VisualProection();
+        myProj.CreateProjection(NewElement);// VisualProection();   VisualProection();
         Mystate = planeState.emptyState;
         yield return null;
     }
@@ -602,7 +603,7 @@ public class PlaneScript : Singleton<PlaneScript>
             NewElement.MoveElement(direction);
             StartCoroutine(MoveElementVizual(direction));
 
-            VisualProection();
+            myProj.CreateProjection(NewElement);// VisualProection();   VisualProection();
             //   Debug.Log("ПЕРЕМЕСТИЛИ");
         }
     }

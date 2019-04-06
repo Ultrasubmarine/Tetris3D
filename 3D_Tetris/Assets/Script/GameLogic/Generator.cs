@@ -58,7 +58,7 @@ public class Generator : MonoBehaviour {
         examleElement = exElement; // Destroy(exElement, 5f);
         ////////////
 
-        ChengeBlock(Element, plane.gameObject);
+      //  ChengeBlock(Element, plane.gameObject);
 
 
         return NewElement;

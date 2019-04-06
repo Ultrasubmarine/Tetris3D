@@ -9,6 +9,7 @@ public class BlockScript : MonoBehaviour {
     public int z;
 
     public bool destroy = false;
+    public Vector2 XZ { get { return new Vector2(x, z); } } 
 
     public BlockScript() {
     }

@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class Projection : MonoBehaviour
+public class Projection : Singleton<Projection>
 {
 
-    PlaneSize _planeSize;
+    // PlaneMatrix _plane;
+   [SerializeField] PlaneScript _plane;
     // TO DO - статическая переменная - высота сцены.
-  //  int _HeightPlane;
+    //  int _HeightPlane;
 
     public const int PROECTIONS = 1;
     public const int CEILING = 2;
@@ -15,23 +17,29 @@ public class Projection : MonoBehaviour
     [Header(" Проекция ")]
     [SerializeField] ObjectPool _PoolProjection;
     [SerializeField] float _HeightProection = 0.1f;
-    private List<GameObject> _proectionsList;
+    private List<GameObject> _proectionsList = new List<GameObject>();
 
     [Header(" Потолок ")] // ceiling - потолок
     [SerializeField] ObjectPool _PoolСeiling;
-    private List<GameObject> _ceilingList; 
-    
+    private List<GameObject> _ceilingList = new List<GameObject>();
+
+    private void Awake()
+    {
+       // _plane = PlaneMatrix.Instance;
+    }
     // ФУНКЦИИ ДЛЯ РАБОТЫ С ПРОЕКЦИЯМИ
-    private void CreateProjection(ElementScript obj)
+    public void CreateProjection(ElementScript obj)
     {
         bool flagCreate;
 
         Destroy(PROECTIONS); 
 
+       // obj.MyBlocks.GroupBy( b => b.XZ).
         foreach (var item in obj.MyBlocks)
         {
             flagCreate = false;
 
+         //   _proectionsList.Contains()
             foreach (var proectionItem in _proectionsList) // проверяем есть ли уже проекция на эту клетку поля
             {
                 if (proectionItem.gameObject.transform.position.x == item.x && proectionItem.gameObject.transform.position.z == item.z)
@@ -43,9 +51,9 @@ public class Projection : MonoBehaviour
                 GameObject tmp = _PoolProjection.CreateObject();
 
                 float y = -1;
-                for (int i = PlaneSize.Height - 1; i > -1; i--)
+                for (int i = _plane.Height - 1; i > -1; i--)
                 {
-                    if (_planeSize._block[(int)item.x + 1, i, (int)item.z + 1] != null)
+                    if /*(CheckEmptyPlacesInMatrix( (int)item.x +1, (int)item.z +1 ) ) // */(_plane._block[(int)item.x + 1, i, (int)item.z + 1] != null)
                     {
                         y = i;
                         break;
@@ -110,10 +118,10 @@ public class Projection : MonoBehaviour
             {
                 if (plane._block[x, (int)(plane.LimitHeight - 1), z] != null || plane._block[x, (int)(plane.LimitHeight - 2), z] != null)
                 {
-//                    GameObject tmp = _;
-//
-//                    tmp.transform.position = new Vector3(x - 1, (_LimitHeight + HeightProection), z - 1);
-//                    _potolocList.Add(tmp);
+                    //GameObject tmp = _;
+
+                    //tmp.transform.position = new Vector3(x - 1, (_LimitHeight + HeightProection), z - 1);
+                    //_potolocList.Add(tmp);
                 }
             }
         }
