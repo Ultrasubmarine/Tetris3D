@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class Projection : Singleton<Projection>
-{
+public class Projection : Singleton<Projection> {
 
     // PlaneMatrix _plane;
-   [SerializeField] PlaneScript _plane;
+    [SerializeField] PlaneScript _plane;
     // TO DO - статическая переменная - высота сцены.
     //  int _HeightPlane;
 
@@ -21,73 +20,64 @@ public class Projection : Singleton<Projection>
 
     [Header(" Потолок ")] // ceiling - потолок
     [SerializeField] ObjectPool _PoolСeiling;
+    [SerializeField] int MinimumLayerHeight;
     private List<GameObject> _ceilingList = new List<GameObject>();
 
-    private void Awake()
-    {
-       // _plane = PlaneMatrix.Instance;
+    private void Awake() {
+        // _plane = PlaneMatrix.Instance;
     }
+
     // ФУНКЦИИ ДЛЯ РАБОТЫ С ПРОЕКЦИЯМИ
-    public void CreateProjection(ElementScript obj)
-    {
-        bool flagCreate;
+    public void CreateProjection(ElementScript obj) {
 
-        Destroy(PROECTIONS); 
+        Destroy(PROECTIONS);
 
-       // obj.MyBlocks.GroupBy( b => b.XZ).
-        foreach (var item in obj.MyBlocks)
+        var positionProjection = obj.MyBlocks.Select(b => b.XZ).Distinct();
+        foreach (var item in positionProjection)
         {
-            flagCreate = false;
+            float y = _plane.MinHeightInCoordinates(item.x - _plane.MinCoordinat, item.y -_plane.MinCoordinat);
 
-         //   _proectionsList.Contains()
-            foreach (var proectionItem in _proectionsList) // проверяем есть ли уже проекция на эту клетку поля
-            {
-                if (proectionItem.gameObject.transform.position.x == item.x && proectionItem.gameObject.transform.position.z == item.z)
-                    flagCreate = true; // мы уже такую клетку прописали
-            }
+            var posProjection = new Vector3(item.x, (y + _HeightProection), item.y);
 
-            if (!flagCreate)
-            {
-                GameObject tmp = _PoolProjection.CreateObject();
+            _proectionsList.Add(_PoolProjection.CreateObject(posProjection));
+        }
+    }
 
-                float y = -1;
-                for (int i = _plane.Height - 1; i > -1; i--)
-                {
-                    if /*(CheckEmptyPlacesInMatrix( (int)item.x +1, (int)item.z +1 ) ) // */(_plane._block[(int)item.x + 1, i, (int)item.z + 1] != null)
-                    {
-                        y = i;
-                        break;
-                    }
-                }
+    public void CreateCeiling() {
 
-                tmp.transform.position = new Vector3(item.x, (y + 1.0f + _HeightProection), item.z);
-                _proectionsList.Add(tmp);
+        if( _ceilingList.Count > 0)
+        Destroy(CEILING);
+
+        if (_plane.CurrentHeight < MinimumLayerHeight)
+            return;
+
+        for(int x=0; x< _plane.Wight; x++) {
+            for (int z = 0; z < _plane.Wight; z++) {
+
+                Debug.Log(" x = " + x + " z = " + z);
+                int y = _plane.MinHeightInCoordinates(x, z);
+                if(y >= MinimumLayerHeight)
+                    _ceilingList.Add(_PoolСeiling.CreateObject( new Vector3(x + _plane.MinCoordinat,_plane.LimitHeight + _HeightProection,z + +_plane.MinCoordinat) ));
             }
         }
     }
 
-
-    public void Destroy(int typeObject /* const PROECTIONS or CEILING*/ )
-    {
+    public void Destroy(int typeObject /* const PROECTIONS or CEILING*/ ) {
         List<GameObject> list;
         ObjectPool pool;
 
-        switch (typeObject)
-        {
-            case PROECTIONS:
-                {
+        switch (typeObject) {
+            case PROECTIONS: {
                     list = _proectionsList;
                     pool = _PoolProjection;
                     break;
                 }
-            case CEILING:
-                {
+            case CEILING: {
                     list = _ceilingList;
                     pool = _PoolСeiling;
                     break;
                 }
-            default:
-                {
+            default: {
                     Debug.Log("ERROR: value proections not found (Projection.cs)");
                     return;
                     break;
@@ -96,34 +86,13 @@ public class Projection : Singleton<Projection>
         DestroyList(list, pool);
     }
 
-    private void DestroyList( List<GameObject> list, ObjectPool pool )
-    {
+    private void DestroyList(List<GameObject> list, ObjectPool pool) {
         GameObject tmpDestroy;
-        foreach (var item in list)
-        {
+        foreach (var item in list) {
             tmpDestroy = item;
             pool.DestroyObject(tmpDestroy);
         }
 
         list.Clear();
-    }
-
-    private void CreateCeiling( PlaneScript plane)
-    {
-        Destroy(CEILING);
-
-        for (int x = 0; x < plane.Wight; x++) // подумать насчет 3-ки
-        {
-            for (int z = 0; z < plane.Wight; z++)
-            {
-                if (plane._block[x, (int)(plane.LimitHeight - 1), z] != null || plane._block[x, (int)(plane.LimitHeight - 2), z] != null)
-                {
-                    //GameObject tmp = _;
-
-                    //tmp.transform.position = new Vector3(x - 1, (_LimitHeight + HeightProection), z - 1);
-                    //_potolocList.Add(tmp);
-                }
-            }
-        }
     }
 }

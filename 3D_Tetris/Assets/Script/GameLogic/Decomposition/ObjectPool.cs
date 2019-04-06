@@ -10,12 +10,15 @@ public class PoolContainer
 {
 	public bool Active;
 	public GameObject Object;
+    public Transform Transform;
 
 
 	public PoolContainer( GameObject obj) {
 		Object = obj;
 		Active = false;
-	}
+        Transform = obj.transform;
+
+    }
 
     public void SetActive( bool value)
     {
@@ -27,7 +30,6 @@ public class PoolContainer
 public class ObjectPool : MonoBehaviour
 {	
 	[SerializeField] GameObject Prefab;
-	
 	[Header("начальное заполнение пула")]
 	[SerializeField] bool InitialInitialization;
 	[SerializeField] int CountObject;
@@ -50,19 +52,22 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
-	public GameObject CreateObject() {
+
+    public GameObject CreateObject( Vector3 position) {
 
 		int index = -1;
 		
 		for (int i = 0; i < Pool.Count; i++) {
 			if (!Pool[i].Active) {
                 Pool[i].SetActive(true);
+                Pool[i].Transform.position = position;
                 return Pool[i].Object;
             }
 		}
 
-		CreateObject();
+        InstantiateObject();
         Pool[Pool.Count - 1].SetActive(true);
+        Pool[Pool.Count - 1].Transform.position = position;
         return Pool[Pool.Count - 1].Object;
 	}
 

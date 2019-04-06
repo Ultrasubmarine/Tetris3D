@@ -67,7 +67,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
     }
 
-    public bool CheckEmptyPlacesInMatrix( IEnumerable places)
+    public bool CheckEmptyPlaceInMatrix( IEnumerable places)
     {
         foreach (var place in places)
         {
@@ -77,11 +77,12 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         return true;
     }
 
-    int MinHeightInCoordinates(int x, int z)
+
+    public int MinHeightInCoordinates(int x, int z)
     {
         for (int y = _matrix.GetUpperBound(1) - 1; y >= 0; --y)
         {
-            if (_matrix[x, y, z] != null)
+            if (_matrix[x - MinCoordinat, y, z - MinCoordinat] != null)
                 return y+1;
         }
         return 0;        

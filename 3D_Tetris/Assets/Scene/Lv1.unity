@@ -3230,6 +3230,7 @@ MonoBehaviour:
   _PoolProjection: {fileID: 343842832}
   _HeightProection: 0.1
   "_Pool\u0421eiling": {fileID: 1843248900}
+  MinimumLayerHeight: 3
 --- !u!4 &528980684
 Transform:
   m_ObjectHideFlags: 0
@@ -12649,6 +12650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f9ff77ea23e4d4dbdef2cef4eb31d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myProj: {fileID: 528980683}
   _Generator: {fileID: 1634487027}
   _WightPlane: 3
   _HeightPlane: 18
@@ -13588,7 +13590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Prefab: {fileID: 1680515231473706, guid: c92035d7022e18b47b2a2b87e21889c0, type: 2}
   InitialInitialization: 1
-  CountObject: 4
+  CountObject: 9
 --- !u!4 &1843248901
 Transform:
   m_ObjectHideFlags: 0

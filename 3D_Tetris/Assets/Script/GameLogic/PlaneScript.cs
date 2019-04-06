@@ -42,6 +42,7 @@ public class PlaneScript : Singleton<PlaneScript>
     [SerializeField] private int _HeightPlane;
     [SerializeField] private int _LimitHeight = 11;
     public int LimitHeight { get { return _LimitHeight; } }
+    public int CurrentHeight { get { return _currMaxHeight; } }
     private int _currMaxHeight = 0;
 
     public int Height { get { return _HeightPlane - 1; } } // высота отсчитывается от 0
@@ -196,7 +197,7 @@ public class PlaneScript : Singleton<PlaneScript>
         }
 
         CheckCollected(); // проверяем собранные
-        CheckPotoloc();
+        myProj.CreateCeiling();
 
         // TO DO - проверка что надо уничтожить
         yield break;
@@ -460,7 +461,7 @@ public class PlaneScript : Singleton<PlaneScript>
         }
         while (flagDrop); // проверяем что бы все упало, пока оно может падать
 
-        CheckPotoloc();
+        myProj.CreateCeiling() ;
         CheckCollected();
 
        DestroyEmptyElement();
@@ -797,6 +798,16 @@ public class PlaneScript : Singleton<PlaneScript>
         this.enabled = false;
             
         
+    }
+
+    public int MinHeightInCoordinates(int x, int z)
+    {
+        for (int y = _block.GetUpperBound(1) - 1; y >= 0; --y)
+        {
+            if (_block[x, y, z] != null)
+                return y + 1;
+        }
+        return 0;
     }
 
 }
