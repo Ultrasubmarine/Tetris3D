@@ -180,7 +180,8 @@ public class PlaneScript : Singleton<PlaneScript>
         {
             yield return null;
         }
-        DestroyProection(_proectionsList);
+        myProj.Destroy(Projection.PROECTIONS);
+     //   DestroyProection(_proectionsList);
         MergerElement(); // слияние элемента и поля
 
         NewElement = null;
@@ -192,7 +193,7 @@ public class PlaneScript : Singleton<PlaneScript>
             Debug.Log("END GAME");
 
             Messenger.Broadcast(GameEvent.END_GAME);
-            DestroyProection(_potolocList);
+            myProj.Destroy(Projection.CEILING);//  DestroyProection(_potolocList);
             yield break;
         }
 
@@ -585,7 +586,8 @@ public class PlaneScript : Singleton<PlaneScript>
             rotate = -90;
 
         Mystate = planeState.turnState;
-        DestroyProection(_proectionsList);
+    
+        myProj.Destroy(Projection.PROECTIONS);//DestroyProection(_proectionsList);
         yield return StartCoroutine(NewElement.TurnElementVizual(rotate, _TimeRotate, this.gameObject));
 
         myProj.CreateProjection(NewElement);// VisualProection();   VisualProection();
@@ -688,74 +690,6 @@ public class PlaneScript : Singleton<PlaneScript>
 
         Mystate = planeState.emptyState;
         yield return null;
-    }
-
-    // ФУНКЦИИ ДЛЯ РАБОТЫ С ПРОЕКЦИЯМИ
-    private void VisualProection()
-    {
-        bool flagCreate = false;
-
-        DestroyProection(_proectionsList);
-
-        foreach (var item in NewElement.MyBlocks)
-        {
-            flagCreate = false;
-
-            foreach (var proectionItem in _proectionsList) // проверяем есть ли уже проекция на эту клетку поля
-            {
-                if (proectionItem.gameObject.transform.position.x == item.x && proectionItem.gameObject.transform.position.z == item.z)
-                    flagCreate = true; // мы уже такую клетку прописали
-            }
-
-            if (!flagCreate)
-            {
-                GameObject tmp = Instantiate(ProectionObject, this.gameObject.transform);
-
-                float y = -1;
-                for (int i = _HeightPlane - 1; i > -1; i--)
-                {
-                    if (_block[(int)item.x + 1, i, (int)item.z + 1] != null)
-                    {
-                        y = i;
-                        break;
-                    }
-                }
-
-                tmp.transform.position = new Vector3(item.x, (y + 1.0f + HeightProection), item.z);
-                _proectionsList.Add(tmp);
-            }
-        }
-    }
-
-    private void DestroyProection(List<GameObject> proectionList)
-    {
-        GameObject tmpDestroy;
-        foreach (var item in proectionList)//_proectionsList)
-        {
-            tmpDestroy = item;
-            Destroy(tmpDestroy);
-        }
-
-        proectionList.Clear(); //_proectionsList.Clear();
-    }
-
-    private void CheckPotoloc()
-    {
-        DestroyProection(_potolocList);
-
-        for (int x = 0; x < _WightPlane; x++) // подумать насчет 3-ки
-        {
-            for (int z = 0; z < _WightPlane; z++)
-            {
-                if (_block[x, (int)(_LimitHeight - 1), z] != null || _block[x, (int)(_LimitHeight - 2), z] != null)
-                {
-                    GameObject tmp = Instantiate(ProectionPotolocObject, this.gameObject.transform);
-
-                    tmp.transform.position = new Vector3(x - 1, (_LimitHeight + HeightProection), z - 1);
-                    _potolocList.Add(tmp);
-                }
-            }
-        }
     }
 
     // ФУНКЦИИ ВОСПРОИЗВЕДЕНИЯ САМОЙ ИГРЫ

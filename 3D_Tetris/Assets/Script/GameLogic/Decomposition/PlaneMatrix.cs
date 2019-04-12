@@ -48,21 +48,84 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         return true;
     }
 
-    public void BindMatrixBlock()
-    {
+    private void BindBlock(ElementScript element) {
 
-    }
-    public void UnbindMatrixBlock()
-    {
-
-    } 
-
-    public void CheckCollected()
-    {
-
+        ChengeBind(element, true);
     }
 
-    public void DestroyLayer()
+    private void UnbindBlock(ElementScript element) // отвязывает блоки данного элемента от матрицы поля
+    {
+        ChengeBind(element, false);
+    }
+
+    private void ChengeBind(ElementScript element, bool bind) {
+
+        int x, y, z;
+        foreach (BlockScript item in element.MyBlocks) {
+            if (item == null || item.destroy)
+                continue;
+
+            x = item.x;
+            y = item.y;
+            z = item.z;
+
+            _matrix[x + 1, y, z + 1] = bind ? item: null ;
+        }
+
+        element.isBind = bind;
+    }
+
+    private void CheckCollected() // проверяем собранные
+    {
+        bool flagCollection = true;
+        bool flagDestroy = false;
+
+        for (int y = 0; y < _Height; y++) // проверяем все в поскоскости XZ
+        {
+            flagCollection = CheckLayerCollect(y);
+
+            if (flagCollection) // если коллекция собрана
+            {
+                //Mystate = planeState.collectionState; // мы находимся в состоянии сбора коллекции
+                //DestroyLayer(y);
+
+                //int k = 0;
+                //int countK = _elementMagrer.Count();
+                //while (k < countK) {
+                //    ElementScript b = _elementMagrer[k].CheckUnion();
+                //    if (b != null) {
+                //        UnbindBlock(b);
+                //        UnbindBlock(_elementMagrer[k]);
+
+                //        Debug.Log("Create element +++");
+                //        _elementMagrer.Add(b);
+                //        b.transform.parent = gameObject.transform;
+                //        countK++;
+                //    }
+                //    k++;
+                //}
+                // TO DO DestroyVizyal  корутина для отображения уничтожения
+                flagDestroy = true;
+            }
+        }
+    }
+
+    private bool CheckLayerCollect( int layer) {
+
+        bool flagCollection = true;
+        for (int x = 0; x < _Wight && flagCollection; x++) {
+            for (int z = 0; z < _Wight; z++) {
+                if (_matrix[x, layer, z] == null) // если в этом слое есть пустое место, значит колелкция не собрана
+                {
+                    flagCollection = false;
+                    return flagCollection;
+                    break;
+                }
+            }
+        }
+        return flagCollection;
+    }
+        public void DestroyLayer( int layer)
     {
 
     }

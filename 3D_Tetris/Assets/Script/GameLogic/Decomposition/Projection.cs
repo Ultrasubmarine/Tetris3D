@@ -23,10 +23,6 @@ public class Projection : Singleton<Projection> {
     [SerializeField] int MinimumLayerHeight;
     private List<GameObject> _ceilingList = new List<GameObject>();
 
-    private void Awake() {
-        // _plane = PlaneMatrix.Instance;
-    }
-
     // ФУНКЦИИ ДЛЯ РАБОТЫ С ПРОЕКЦИЯМИ
     public void CreateProjection(ElementScript obj) {
 
@@ -53,8 +49,7 @@ public class Projection : Singleton<Projection> {
 
         for(int x=0; x< _plane.Wight; x++) {
             for (int z = 0; z < _plane.Wight; z++) {
-
-                Debug.Log(" x = " + x + " z = " + z);
+                
                 int y = _plane.MinHeightInCoordinates(x, z);
                 if(y >= MinimumLayerHeight)
                     _ceilingList.Add(_PoolСeiling.CreateObject( new Vector3(x + _plane.MinCoordinat,_plane.LimitHeight + _HeightProection,z + +_plane.MinCoordinat) ));
