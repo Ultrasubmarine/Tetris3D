@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using IntegerExtension;
+
 public class PlaneMatrix : Singleton<PlaneMatrix> {
 
-    BlockScript[,,] _matrix;
+    public BlockScript[,,] _matrix;
 
     [Header("Size plane")]
     [SerializeField] int _LimitHeight = 11;
@@ -22,6 +24,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
     private void Awake()
     {
+        ExtensionMetodsForMatrix.SetSizePlane(_Wight);
         _matrix = new BlockScript[_Wight, _Height, _Wight];
 
         MinCoordinat = _Wight / 2 * (-1); // минимальная координата, окторая может быть в текущем поле
@@ -43,8 +46,28 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         MinCoordinat = Wight / 2 * (-1); // минимальная координата, окторая может быть в текущем поле 
     }
 
-    public bool CheckCollisionElement()
-    {
+    public bool CheckEmptyPlane( ElementScript element, Vector3Int direction) {
+
+        if (element.MyBlocks.Count == 0) 
+            return false;
+        
+        Vector3Int newCoordinat;
+        foreach (BlockScript item in element.MyBlocks) {
+            if (!item.destroy) {
+
+                newCoordinat = new Vector3Int(item.x, item.y, item.z) + direction;
+
+                if (newCoordinat.OutOfCoordinatLimit()) 
+                    return false;               
+
+                if (_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()] != null) {
+                    if (!element.isBind)
+                        return false;
+                    if (!element.MyBlocks.Contains(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()])) 
+                        return false;                
+                }
+            }
+        }
         return true;
     }
 

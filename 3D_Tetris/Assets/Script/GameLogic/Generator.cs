@@ -22,10 +22,12 @@ public class Generator : MonoBehaviour {
     int minYforElement;
     public GameObject examleElement;
 
+    [SerializeField] PlaneMatrix _PlaneMatrix;
+
 
     public GameObject GenerationNewElement(PlaneScript plane) {
         //    Destroy(exElement);
-        GameObject NewElement = CreatorElement(plane._block); // Instantiate(generationElement());
+        GameObject NewElement = CreatorElement(_PlaneMatrix._matrix); // Instantiate(generationElement());
 
 
         //устанавливаем нормальную позицию элемента

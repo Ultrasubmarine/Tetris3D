@@ -31,6 +31,7 @@ public enum planeState
 public class PlaneScript : Singleton<PlaneScript>
 {
     [SerializeField] Projection myProj;
+    [SerializeField] PlaneMatrix _PlaneMatrix;
     bool _isWin = false;
 
     [SerializeField] private Generator _Generator;
@@ -60,7 +61,7 @@ public class PlaneScript : Singleton<PlaneScript>
     public planeState Mystate { get; private set; }
 
     // матриц для анализа поля.
-    public BlockScript[,,] _block;
+   // public BlockScript[,,] _PlaneMatrix._matrix;
     public GameObject TextSphere;
     public List<GameObject> TestSphereList = new List<GameObject>();
 
@@ -86,21 +87,21 @@ public class PlaneScript : Singleton<PlaneScript>
         _proectionsList = new List<GameObject>();
         _potolocList = new List<GameObject>();
 
-        _block = new BlockScript[_WightPlane, _HeightPlane, _WightPlane];
+        //_block = new BlockScript[_WightPlane, _HeightPlane, _WightPlane];
 
         MinCoordinat = _WightPlane / 2 * (-1); // минимальная координата, окторая может быть в текущем поле
 
-        //инициализируем пустую матрицу
-        for (int i = 0; i < _WightPlane; i++)
-        {
-            for (int j = 0; j < _HeightPlane; j++)
-            {
-                for (int k = 0; k < _WightPlane; k++)
-                {
-                    _block[i, j, k] = null;
-                }
-            }
-        }
+        ////инициализируем пустую матрицу
+        //for (int i = 0; i < _WightPlane; i++)
+        //{
+        //    for (int j = 0; j < _HeightPlane; j++)
+        //    {
+        //        for (int k = 0; k < _WightPlane; k++)
+        //        {
+        //            _block[i, j, k] = null;
+        //        }
+        //    }
+        //}
 
         NewElement = null;
 
@@ -165,7 +166,7 @@ public class PlaneScript : Singleton<PlaneScript>
 
             bool collision = CheckCollisionElement(NewElement); // проверяем может ли элемент упасть на ярус ниже
 
-            if (!collision)
+            if ( _PlaneMatrix.CheckEmptyPlane(NewElement, new Vector3Int(0, -1, 0)) )//!collision)
             {
                 NewElement.DropElement(this.gameObject); // логическое изменение координат падающего элемента
             }
@@ -220,10 +221,10 @@ public class PlaneScript : Singleton<PlaneScript>
                 }
 
 
-                if (_block[item.x + 1, item.y - 1, item.z + 1] != null)
+                if (_PlaneMatrix._matrix[item.x + 1, item.y - 1, item.z + 1] != null)
                 {
                     // проверяем. вдруг он упирается сам в себя
-                    if (!WhoDrop.gameObject.GetComponentsInChildren<BlockScript>().Contains(_block[item.x + 1, item.y - 1, item.z + 1]))//WhoDrop.MyBlocks.Contains(_block[item.x + 1, item.y - 1, item.z + 1]))
+                    if (!WhoDrop.gameObject.GetComponentsInChildren<BlockScript>().Contains(_PlaneMatrix._matrix[item.x + 1, item.y - 1, item.z + 1]))//WhoDrop.MyBlocks.Contains(_block[item.x + 1, item.y - 1, item.z + 1]))
                     {
                         return true;
                     }
@@ -260,7 +261,7 @@ public class PlaneScript : Singleton<PlaneScript>
             {
                 for (int k = 0; k < _WightPlane; k++)
                 {
-                    if (_block[i, j, k] != null)
+                    if (_PlaneMatrix._matrix[i, j, k] != null)
                     {
                         TestSphereList.Add(Instantiate(TextSphere, this.transform.TransformPoint(new Vector3(i - 1, j, k - 1)), Quaternion.identity));
                     }
@@ -275,7 +276,7 @@ public class PlaneScript : Singleton<PlaneScript>
             {
                 for (int k = 0; k < _WightPlane; k++)// ZZZ
                 {
-                    if (_block[j, i, k] != null)
+                    if (_PlaneMatrix._matrix[j, i, k] != null)
                     {
                         str += " 0";
                     }
@@ -301,7 +302,7 @@ public class PlaneScript : Singleton<PlaneScript>
             y = item.y;
             z = item.z;
 
-            _block[x + 1, y, z + 1] = item;
+            _PlaneMatrix._matrix[x + 1, y, z + 1] = item;
         }
 
         element.isBind = true;
@@ -319,7 +320,7 @@ public class PlaneScript : Singleton<PlaneScript>
             y = item.y;
             z = item.z;
 
-            _block[x + 1, y, z + 1] = null;
+            _PlaneMatrix._matrix[x + 1, y, z + 1] = null;
         }
 
         element.isBind = false;
@@ -339,7 +340,7 @@ public class PlaneScript : Singleton<PlaneScript>
             {
                 for (int z = 0; z < _WightPlane; z++)
                 {
-                    if (_block[x, y, z] == null) // если в этом слое есть пустое место, значит колелкция не собрана
+                    if (_PlaneMatrix._matrix[x, y, z] == null) // если в этом слое есть пустое место, значит колелкция не собрана
                     {
                         flagCollection = false;
                         break;
@@ -398,12 +399,12 @@ public class PlaneScript : Singleton<PlaneScript>
         {
             for (int z = 0; z < _WightPlane; z++)
             {
-                GameObject tmp = _block[x, y, z].gameObject;
-                var ggg = _block[x, y, z];
-                _block[x, y, z].destroy = true;
+                GameObject tmp = _PlaneMatrix._matrix[x, y, z].gameObject;
+                var ggg = _PlaneMatrix._matrix[x, y, z];
+                _PlaneMatrix._matrix[x, y, z].destroy = true;
                //
                //  (_block[x, y, z]);
-                _block[x, y, z] = null;
+                _PlaneMatrix._matrix[x, y, z] = null;
 
                 tmp.GetComponentInParent<ElementScript>().DeleteBlock(ggg);
               //  tmp.SetActive(false);
@@ -494,7 +495,7 @@ public class PlaneScript : Singleton<PlaneScript>
         {
             for (int j = 0; j < _WightPlane; j++)
             {
-                if (_block[i, _LimitHeight, j] != null)
+                if (_PlaneMatrix._matrix[i, _LimitHeight, j] != null)
                     return true;
             }
         }
@@ -516,7 +517,7 @@ public class PlaneScript : Singleton<PlaneScript>
             {
                 for (int z = 0; z < _WightPlane; z++)
                 {
-                    if (_block[x, y, z] != null)
+                    if (_PlaneMatrix._matrix[x, y, z] != null)
                     {
                         _currMaxHeight = y;
                         //Debug.Log("Max = " + _currMaxHeight);                      
@@ -556,7 +557,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 x = item.z;
                 z = -item.x;
 
-                if (_block[x + 1, item.y, z + 1] != null)
+                if (_PlaneMatrix._matrix[x + 1, item.y, z + 1] != null)
                     return false;
             }
         }
@@ -568,7 +569,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 x = -item.z;
                 z = item.x;
 
-                if (_block[x + 1, item.y, z + 1] != null)
+                if (_PlaneMatrix._matrix[x + 1, item.y, z + 1] != null)
                     return false;
             }
         }
@@ -621,7 +622,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 if (item.x == Mathf.Abs(MinCoordinat))
                     return false;
 
-                if (_block[item.x + 1 + 1, item.y, item.z + 1] != null)
+                if (_PlaneMatrix._matrix[item.x + 1 + 1, item.y, item.z + 1] != null)
                     return false;
             }
 
@@ -634,7 +635,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 if (item.x == MinCoordinat)
                     return false;
 
-                if (_block[item.x + 1 - 1, item.y, item.z + 1] != null)
+                if (_PlaneMatrix._matrix[item.x + 1 - 1, item.y, item.z + 1] != null)
                     return false;
             }
 
@@ -647,7 +648,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 if (item.z == Mathf.Abs(MinCoordinat))
                     return false;
 
-                if (_block[item.x + 1, item.y, item.z + 1 + 1] != null)
+                if (_PlaneMatrix._matrix[item.x + 1, item.y, item.z + 1 + 1] != null)
                     return false;
             }
 
@@ -660,7 +661,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 if (item.z == MinCoordinat)
                     return false;
 
-                if (_block[item.x + 1, item.y, item.z + 1 - 1] != null)
+                if (_PlaneMatrix._matrix[item.x + 1, item.y, item.z + 1 - 1] != null)
                     return false;
             }
 
@@ -714,7 +715,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 float y = -1;
                 for (int i = _HeightPlane - 1; i > -1; i--)
                 {
-                    if (_block[(int)item.x + 1, i, (int)item.z + 1] != null)
+                    if (_PlaneMatrix._matrix[(int)item.x + 1, i, (int)item.z + 1] != null)
                     {
                         y = i;
                         break;
@@ -747,7 +748,7 @@ public class PlaneScript : Singleton<PlaneScript>
         {
             for (int z = 0; z < _WightPlane; z++)
             {
-                if (_block[x, (int)(_LimitHeight - 1), z] != null || _block[x, (int)(_LimitHeight - 2), z] != null)
+                if (_PlaneMatrix._matrix[x, (int)(_LimitHeight - 1), z] != null || _PlaneMatrix._matrix[x, (int)(_LimitHeight - 2), z] != null)
                 {
                     GameObject tmp = Instantiate(ProectionPotolocObject, this.gameObject.transform);
 
@@ -802,9 +803,9 @@ public class PlaneScript : Singleton<PlaneScript>
 
     public int MinHeightInCoordinates(int x, int z)
     {
-        for (int y = _block.GetUpperBound(1) - 1; y >= 0; --y)
+        for (int y = _PlaneMatrix._matrix.GetUpperBound(1) - 1; y >= 0; --y)
         {
-            if (_block[x, y, z] != null)
+            if (_PlaneMatrix._matrix[x, y, z] != null)
                 return y + 1;
         }
         return 0;
