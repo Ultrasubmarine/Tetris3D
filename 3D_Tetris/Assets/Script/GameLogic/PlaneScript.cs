@@ -87,21 +87,8 @@ public class PlaneScript : Singleton<PlaneScript>
         _proectionsList = new List<GameObject>();
         _potolocList = new List<GameObject>();
 
-        //_block = new BlockScript[_WightPlane, _HeightPlane, _WightPlane];
-
         MinCoordinat = _WightPlane / 2 * (-1); // минимальная координата, окторая может быть в текущем поле
 
-        ////инициализируем пустую матрицу
-        //for (int i = 0; i < _WightPlane; i++)
-        //{
-        //    for (int j = 0; j < _HeightPlane; j++)
-        //    {
-        //        for (int k = 0; k < _WightPlane; k++)
-        //        {
-        //            _block[i, j, k] = null;
-        //        }
-        //    }
-        //}
 
         NewElement = null;
 
@@ -111,10 +98,6 @@ public class PlaneScript : Singleton<PlaneScript>
 
         Messenger<float>.AddListener(GameEvent.CHANGE_TIME_DROP, ChengeTimeDrop);
 
-        //Debug.Log("matrix.GetUpperBound(0) =" + _block.GetUpperBound(0));
-        //Debug.Log("matrix.GetUpperBound(1) =" + _block.GetUpperBound(1));
-        //Debug.Log("matrix.GetUpperBound(2) =" + _block.GetUpperBound(2));
-        //Debug.Log(" blo =" + _block);
     }
 
     private void OnDestroy()
@@ -164,9 +147,9 @@ public class PlaneScript : Singleton<PlaneScript>
                 yield return null;// мы не можем спустить элемент на метр ниже, пока у нас идет визуальный поворот или перемещение. ждем пока он закончится
             }
 
-            bool collision = CheckCollisionElement(NewElement); // проверяем может ли элемент упасть на ярус ниже
+            bool empty = _PlaneMatrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0)); // проверяем может ли элемент упасть на ярус ниже
 
-            if ( _PlaneMatrix.CheckEmptyPlane(NewElement, new Vector3Int(0, -1, 0)) )//!collision)
+            if (empty)//!collision)
             {
                 NewElement.DropElement(this.gameObject); // логическое изменение координат падающего элемента
             }
@@ -181,7 +164,6 @@ public class PlaneScript : Singleton<PlaneScript>
         {
             yield return null;
         }
-        DestroyProection(_proectionsList);
         MergerElement(); // слияние элемента и поля
 
         NewElement = null;
@@ -193,7 +175,6 @@ public class PlaneScript : Singleton<PlaneScript>
             Debug.Log("END GAME");
 
             Messenger.Broadcast(GameEvent.END_GAME);
-            DestroyProection(_potolocList);
             yield break;
         }
 
@@ -204,127 +185,61 @@ public class PlaneScript : Singleton<PlaneScript>
         yield break;
     }
 
-    private bool CheckCollisionElement(ElementScript WhoDrop) // возвращает 1, если коллизия обнаружена.
-    {
-        if(WhoDrop.MyBlocks.Count ==0)
-        {
-            return true;
-        }
-
-        foreach (BlockScript item in /*WhoDrop.gameObject.GetComponentsInChildren<BlockScript>())//*/WhoDrop.MyBlocks)
-        {
-            if (!item.destroy)
-            {
-                if (item.y == 0)
-                {
-                    return true;
-                }
-
-
-                if (_PlaneMatrix._matrix[item.x + 1, item.y - 1, item.z + 1] != null)
-                {
-                    // проверяем. вдруг он упирается сам в себя
-                    if (!WhoDrop.gameObject.GetComponentsInChildren<BlockScript>().Contains(_PlaneMatrix._matrix[item.x + 1, item.y - 1, item.z + 1]))//WhoDrop.MyBlocks.Contains(_block[item.x + 1, item.y - 1, item.z + 1]))
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     // ФУНКЦИИ ДЛЯ РАБОТЫ СО СЛИЯНИЕМ ЭЛЕМЕНТА И ПОЛЯ
     private void MergerElement()
     {
-        BindMatrixBlock(NewElement);
+        _PlaneMatrix.BindToMatrix(NewElement);
 
         NewElement.transform.parent = this.gameObject.transform;
         _elementMagrer.Add(NewElement);
 
     }
 
-    private void testSphere()
-    {
-        // test sphere
-        foreach (var item in TestSphereList)
-        {
-            var tmp = item;
-            Destroy(tmp);
+    //private void testSphere()
+    //{
+    //    // test sphere
+    //    foreach (var item in TestSphereList)
+    //    {
+    //        var tmp = item;
+    //        Destroy(tmp);
 
-        }
+    //    }
 
-        TestSphereList.Clear();
-        for (int i = 0; i < _WightPlane; i++)
-        {
-            for (int j = 0; j < _HeightPlane; j++)
-            {
-                for (int k = 0; k < _WightPlane; k++)
-                {
-                    if (_PlaneMatrix._matrix[i, j, k] != null)
-                    {
-                        TestSphereList.Add(Instantiate(TextSphere, this.transform.TransformPoint(new Vector3(i - 1, j, k - 1)), Quaternion.identity));
-                    }
-                }
-            }
-        }
+    //    TestSphereList.Clear();
+    //    for (int i = 0; i < _WightPlane; i++)
+    //    {
+    //        for (int j = 0; j < _HeightPlane; j++)
+    //        {
+    //            for (int k = 0; k < _WightPlane; k++)
+    //            {
+    //                if (_PlaneMatrix._matrix[i, j, k] != null)
+    //                {
+    //                    TestSphereList.Add(Instantiate(TextSphere, this.transform.TransformPoint(new Vector3(i - 1, j, k - 1)), Quaternion.identity));
+    //                }
+    //            }
+    //        }
+    //    }
 
-        string str = "";
-        for (int i = 0; i < 5; i++) //  YYYY
-        {
-            for (int j = 0; j < _WightPlane; j++) // XXX
-            {
-                for (int k = 0; k < _WightPlane; k++)// ZZZ
-                {
-                    if (_PlaneMatrix._matrix[j, i, k] != null)
-                    {
-                        str += " 0";
-                    }
-                    else
-                        str += " 1";
-                }
-                str += "\n";
-            }
-            str += "\n";
-        }
-        Debug.Log(str);
-    }
-
-    private void BindMatrixBlock(ElementScript element)
-    {
-        int x, y, z;
-
-        foreach (BlockScript item in element.MyBlocks)
-        {
-            if (item == null || item.destroy)
-                continue;
-            x = item.x;
-            y = item.y;
-            z = item.z;
-
-            _PlaneMatrix._matrix[x + 1, y, z + 1] = item;
-        }
-
-        element.isBind = true;
-    }
-
-    private void UnbindMatrixBlock(ElementScript element) // отвязывает блоки данного элемента от матрицы поля
-    {
-        int x, y, z;
-        foreach (BlockScript item in element.MyBlocks)
-        {
-            if (item == null || item.destroy)
-                continue;
-
-            x = item.x;
-            y = item.y;
-            z = item.z;
-
-            _PlaneMatrix._matrix[x + 1, y, z + 1] = null;
-        }
-
-        element.isBind = false;
-    }
+    //    string str = "";
+    //    for (int i = 0; i < 5; i++) //  YYYY
+    //    {
+    //        for (int j = 0; j < _WightPlane; j++) // XXX
+    //        {
+    //            for (int k = 0; k < _WightPlane; k++)// ZZZ
+    //            {
+    //                if (_PlaneMatrix._matrix[j, i, k] != null)
+    //                {
+    //                    str += " 0";
+    //                }
+    //                else
+    //                    str += " 1";
+    //            }
+    //            str += "\n";
+    //        }
+    //        str += "\n";
+    //    }
+    //    Debug.Log(str);
+    //}
 
     // ФУНКЦИИ ДЛЯ РАБОТЫ СО СБОРОМ КОЛЛЕКЦИЙ
     private void CheckCollected() // проверяем собранные
@@ -360,8 +275,8 @@ public class PlaneScript : Singleton<PlaneScript>
                     ElementScript b = _elementMagrer[k].CheckUnion();
                     if( b != null)
                     {
-                        UnbindMatrixBlock(b);
-                        UnbindMatrixBlock(_elementMagrer[k]);
+                        _PlaneMatrix.UnbindToMatrix(b);
+                        _PlaneMatrix.UnbindToMatrix(_elementMagrer[k]);
 
                         Debug.Log("Create element +++");
                         _elementMagrer.Add(b);
@@ -426,10 +341,11 @@ public class PlaneScript : Singleton<PlaneScript>
           //  Debug.Log("Element manager count =  " + _elementMagrer.Count);
             foreach (var item in _elementMagrer)
             {
-                if (!CheckCollisionElement(item)) //если коллизии нет, элемент может падать вниз
+                var empty = _PlaneMatrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
+                if (empty) //если коллизии нет, элемент может падать вниз
                 {
                     if (item.isBind)
-                        UnbindMatrixBlock(item);
+                        _PlaneMatrix.UnbindToMatrix(item);
 
                     flagDrop = true;
                     item.DropElement(this.gameObject);
@@ -439,7 +355,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 else
                 {
                     if (!item.isBind)
-                        BindMatrixBlock(item);
+                        _PlaneMatrix.BindToMatrix(item);
                 }
             }
 
@@ -586,7 +502,7 @@ public class PlaneScript : Singleton<PlaneScript>
             rotate = -90;
 
         Mystate = planeState.turnState;
-        DestroyProection(_proectionsList);
+    //    DestroyProection(_proectionsList);
         yield return StartCoroutine(NewElement.TurnElementVizual(rotate, _TimeRotate, this.gameObject));
 
         myProj.CreateProjection(NewElement);// VisualProection();   VisualProection();
@@ -691,74 +607,6 @@ public class PlaneScript : Singleton<PlaneScript>
         yield return null;
     }
 
-    // ФУНКЦИИ ДЛЯ РАБОТЫ С ПРОЕКЦИЯМИ
-    private void VisualProection()
-    {
-        bool flagCreate = false;
-
-        DestroyProection(_proectionsList);
-
-        foreach (var item in NewElement.MyBlocks)
-        {
-            flagCreate = false;
-
-            foreach (var proectionItem in _proectionsList) // проверяем есть ли уже проекция на эту клетку поля
-            {
-                if (proectionItem.gameObject.transform.position.x == item.x && proectionItem.gameObject.transform.position.z == item.z)
-                    flagCreate = true; // мы уже такую клетку прописали
-            }
-
-            if (!flagCreate)
-            {
-                GameObject tmp = Instantiate(ProectionObject, this.gameObject.transform);
-
-                float y = -1;
-                for (int i = _HeightPlane - 1; i > -1; i--)
-                {
-                    if (_PlaneMatrix._matrix[(int)item.x + 1, i, (int)item.z + 1] != null)
-                    {
-                        y = i;
-                        break;
-                    }
-                }
-
-                tmp.transform.position = new Vector3(item.x, (y + 1.0f + HeightProection), item.z);
-                _proectionsList.Add(tmp);
-            }
-        }
-    }
-
-    private void DestroyProection(List<GameObject> proectionList)
-    {
-        GameObject tmpDestroy;
-        foreach (var item in proectionList)//_proectionsList)
-        {
-            tmpDestroy = item;
-            Destroy(tmpDestroy);
-        }
-
-        proectionList.Clear(); //_proectionsList.Clear();
-    }
-
-    private void CheckPotoloc()
-    {
-        DestroyProection(_potolocList);
-
-        for (int x = 0; x < _WightPlane; x++) // подумать насчет 3-ки
-        {
-            for (int z = 0; z < _WightPlane; z++)
-            {
-                if (_PlaneMatrix._matrix[x, (int)(_LimitHeight - 1), z] != null || _PlaneMatrix._matrix[x, (int)(_LimitHeight - 2), z] != null)
-                {
-                    GameObject tmp = Instantiate(ProectionPotolocObject, this.gameObject.transform);
-
-                    tmp.transform.position = new Vector3(x - 1, (_LimitHeight + HeightProection), z - 1);
-                    _potolocList.Add(tmp);
-                }
-            }
-        }
-    }
-
     // ФУНКЦИИ ВОСПРОИЗВЕДЕНИЯ САМОЙ ИГРЫ
     public void StartGame()
     {
@@ -774,7 +622,7 @@ public class PlaneScript : Singleton<PlaneScript>
         while (_elementMagrer.Count > 0)
         {
             ElementScript tmp = _elementMagrer[0];
-            UnbindMatrixBlock(tmp);
+            _PlaneMatrix.UnbindToMatrix(tmp);
             _elementMagrer.Remove(tmp);
             Destroy(tmp.gameObject);
         }

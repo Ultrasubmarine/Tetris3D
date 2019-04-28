@@ -46,7 +46,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         MinCoordinat = Wight / 2 * (-1); // минимальная координата, окторая может быть в текущем поле 
     }
 
-    public bool CheckEmptyPlane( ElementScript element, Vector3Int direction) {
+    public bool CheckEmptyPlaсe( ElementScript element, Vector3Int direction) {
 
         if (element.MyBlocks.Count == 0) 
             return false;
@@ -71,13 +71,34 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         return true;
     }
 
-    public void BindMatrixBlock()
-    {
+    public void BindToMatrix(ElementScript element) {
 
+        int x, y, z;
+        foreach (BlockScript item in element.MyBlocks) {
+            if (item == null || item.destroy)
+                continue;
+            x = item.x;
+            y = item.y;
+            z = item.z;
+
+            _matrix[x.ToIndex(), y, z.ToIndex()] = item;
+        }
+        element.isBind = true;
     }
-    public void UnbindMatrixBlock()
-    {
 
+    public void UnbindToMatrix(ElementScript element) {
+
+        int x, y, z;
+        foreach (BlockScript item in element.MyBlocks) {
+            if (item == null || item.destroy)
+                continue;
+            x = item.x;
+            y = item.y;
+            z = item.z;
+
+            _matrix[x.ToIndex(), y, z.ToIndex()] = null;
+        }
+        element.isBind = false;
     } 
 
     public void CheckCollected()
@@ -89,17 +110,6 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     {
 
     }
-
-    public bool CheckEmptyPlaceInMatrix( IEnumerable places)
-    {
-        foreach (var place in places)
-        {
-            if (place != null)
-                return false;
-        }
-        return true;
-    }
-
 
     public int MinHeightInCoordinates(int x, int z)
     {
