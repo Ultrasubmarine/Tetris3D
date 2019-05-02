@@ -23,5 +23,6 @@ public static class GameEvent
 
     public const string CHANGE_TIME_DROP = "CHANGE_TIME_DROP";
 
+    public const string GAME_OVER = "GAME_OVER";
 
 }

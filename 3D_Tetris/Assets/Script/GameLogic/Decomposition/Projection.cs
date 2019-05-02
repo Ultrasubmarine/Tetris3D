@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+using IntegerExtension;
+
 public class Projection : Singleton<Projection> {
 
-    // PlaneMatrix _plane;
-    [SerializeField] PlaneScript _plane;
+    [SerializeField] PlaneMatrix _matrix;
+    [SerializeField] HeightHandler _Heighthandler;//PlaneScript _plane;
     // TO DO - статическая переменная - высота сцены.
     //  int _HeightPlane;
 
@@ -35,9 +37,9 @@ public class Projection : Singleton<Projection> {
         var positionProjection = obj.MyBlocks.Select(b => b.XZ).Distinct();
         foreach (var item in positionProjection)
         {
-            float y = _plane.MinHeightInCoordinates(item.x - _plane.MinCoordinat, item.y -_plane.MinCoordinat);
+            float y = _matrix.MinHeightInCoordinates(item.x.ToIndex(), item.z.ToIndex());
 
-            var posProjection = new Vector3(item.x, (y + _HeightProection), item.y);
+            var posProjection = new Vector3(item.x, (y + _HeightProection), item.z);
 
             _proectionsList.Add(_PoolProjection.CreateObject(posProjection));
         }
@@ -48,16 +50,16 @@ public class Projection : Singleton<Projection> {
         if( _ceilingList.Count > 0)
         Destroy(CEILING);
 
-        if (_plane.CurrentHeight < MinimumLayerHeight)
+        if (_Heighthandler.CurrentHeight < MinimumLayerHeight)
             return;
 
-        for(int x=0; x< _plane.Wight; x++) {
-            for (int z = 0; z < _plane.Wight; z++) {
+        for(int x=0; x< _matrix.Wight; x++) {
+            for (int z = 0; z < _matrix.Wight; z++) {
 
                 Debug.Log(" x = " + x + " z = " + z);
-                int y = _plane.MinHeightInCoordinates(x, z);
+                int y = _matrix.MinHeightInCoordinates(x, z);
                 if(y >= MinimumLayerHeight)
-                    _ceilingList.Add(_PoolСeiling.CreateObject( new Vector3(x + _plane.MinCoordinat,_plane.LimitHeight + _HeightProection,z + +_plane.MinCoordinat) ));
+                    _ceilingList.Add(_PoolСeiling.CreateObject( new Vector3(x.ToCoordinat(),_matrix.LimitHeight + _HeightProection,z.ToCoordinat()) ));
             }
         }
     }

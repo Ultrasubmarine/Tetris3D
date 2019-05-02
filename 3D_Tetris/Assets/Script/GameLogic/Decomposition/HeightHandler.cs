@@ -14,30 +14,33 @@ public class HeightHandler : MonoBehaviour {
     public int LimitHeight{ get { return _LimitHeight; } }
     public int CurrentHeight { get { return _CurrentHeight; } }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    public bool CheckLimit() {
+
+        CheckHeight();
+        return OutOfLimitHeight();
+    }
 
     public void CheckHeight() {
 
         _CurrentHeight = 0;
         int check;
 
-        for (int x = 0; x < Matrix.Wight; x++) {
-            for (int z = 0; z < Matrix.Wight; z++) {
-               check = Matrix.MinHeightInCoordinates(x, z);
-               _CurrentHeight = _CurrentHeight > check? _CurrentHeight : check;
-                //if( OutOfLimitHeight() )
+        for (int x = 0; x < Matrix.Wight && !OutOfLimitHeight(); x++) {
+            for (int z = 0; z < Matrix.Wight && !OutOfLimitHeight(); z++) {
 
+               check = Matrix.MinHeightInCoordinates(x, z);
+                if(check > _CurrentHeight) {
+                    _CurrentHeight = check;           
+                }
             }
         }
+
         Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT, _LimitHeight, _CurrentHeight +1);
     }
 
     private bool OutOfLimitHeight( ) {
 
-        if (_CurrentHeight < LimitHeight)
+        if (_CurrentHeight <= LimitHeight)
             return false;
         return true;
     }

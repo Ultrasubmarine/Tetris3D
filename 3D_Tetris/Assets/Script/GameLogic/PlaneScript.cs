@@ -32,6 +32,8 @@ public class PlaneScript : Singleton<PlaneScript>
 {
     [SerializeField] Projection myProj;
     [SerializeField] PlaneMatrix _PlaneMatrix;
+    [SerializeField] HeightHandler _HeightHandler;
+
     bool _isWin = false;
 
     [SerializeField] private Generator _Generator;
@@ -104,6 +106,7 @@ public class PlaneScript : Singleton<PlaneScript>
     {
         Messenger.RemoveListener(GameEvent.PLAY_GAME, StartGame);
         Messenger.RemoveListener(GameEvent.REPEAT_GAME, RepleyGame);
+
     }
 
     public void ChengeTimeDrop( float time)
@@ -169,7 +172,7 @@ public class PlaneScript : Singleton<PlaneScript>
         NewElement = null;
         // Mystate = planeState.emptyState;
 
-        if (CheckLimitHeight())
+        if (_HeightHandler.CheckLimit())//CheckLimitHeight())
         {
             Mystate = planeState.endState;
             Debug.Log("END GAME");
@@ -247,26 +250,11 @@ public class PlaneScript : Singleton<PlaneScript>
         bool flagCollection = true;
         bool flagDestroy = false;
 
-        for (int y = 0; y < _HeightPlane; y++) // проверяем все в поскоскости XZ
-        {
-            flagCollection = true;
-
-            for (int x = 0; x < _WightPlane && flagCollection; x++)
-            {
-                for (int z = 0; z < _WightPlane; z++)
-                {
-                    if (_PlaneMatrix._matrix[x, y, z] == null) // если в этом слое есть пустое место, значит колелкция не собрана
-                    {
-                        flagCollection = false;
-                        break;
-                    }
-                }
-            }
+        flagCollection = _PlaneMatrix.CollectLayers();
 
             if (flagCollection) // если коллекция собрана
             {
                 Mystate = planeState.collectionState; // мы находимся в состоянии сбора коллекции
-                DestroyLayer(y);
 
                 int k = 0;
                 int countK = _elementMagrer.Count();
@@ -288,7 +276,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 // TO DO DestroyVizyal  корутина для отображения уничтожения
                 flagDestroy = true;
             }
-        }
+        
 
         if (flagDestroy) // Удаляем пустые элементы.
         {
@@ -298,11 +286,31 @@ public class PlaneScript : Singleton<PlaneScript>
         }
         else
         {
-            CheckCurrentheight();
+            _HeightHandler.CheckHeight(); //CheckCurrentheight();
             Mystate = planeState.emptyState;
 
           //  testSphere();
 
+        }
+    }
+
+    public void ElementCut() {
+        Mystate = planeState.collectionState; // мы находимся в состоянии сбора коллекции
+
+        int k = 0;
+        int countK = _elementMagrer.Count();
+        while (k < countK) {
+            ElementScript b = _elementMagrer[k].CheckUnion();
+            if (b != null) {
+                _PlaneMatrix.UnbindToMatrix(b);
+                _PlaneMatrix.UnbindToMatrix(_elementMagrer[k]);
+
+                Debug.Log("Create element +++");
+                _elementMagrer.Add(b);
+                b.transform.parent = gameObject.transform;
+                countK++;
+            }
+            k++;
         }
     }
 
@@ -404,47 +412,6 @@ public class PlaneScript : Singleton<PlaneScript>
         }
     }
 
-    // ФУНКЦИИ ДЛЯ ПРОВЕРКИ ВЫСОТЫ
-    private bool CheckLimitHeight()
-    {
-        for (int i = 0; i < _WightPlane; i++)
-        {
-            for (int j = 0; j < _WightPlane; j++)
-            {
-                if (_PlaneMatrix._matrix[i, _LimitHeight, j] != null)
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    private void CheckCurrentheight()
-    {
-        //Debug.Log("CHECK Height");
-        _currMaxHeight = 0;
-        if (Mystate == planeState.endState)
-        {
-            Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT, _LimitHeight, 0);
-            return;
-        }
-        for (int y = 0; y < _LimitHeight; y++)
-        {
-            for (int x = 0; x < _WightPlane; x++)
-            {
-                for (int z = 0; z < _WightPlane; z++)
-                {
-                    if (_PlaneMatrix._matrix[x, y, z] != null)
-                    {
-                        _currMaxHeight = y;
-                        //Debug.Log("Max = " + _currMaxHeight);                      
-                        continue;
-                    }
-                }
-            }
-        }
-        Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT, _LimitHeight, _currMaxHeight + 1);
-    }
-
     // ФУНКЦИИ ПОВОРОТА ЭЛЕМЕНТА
     public bool TurnElement(turn napravl) // возвращает разрешение на поворот камеры, если мы можем повернуть элемент
     {
@@ -492,7 +459,6 @@ public class PlaneScript : Singleton<PlaneScript>
 
         return true;
     }
-
     private IEnumerator TurnElementVizual(turn direction) // начинаем визуальный поворот
     {
         int rotate;
@@ -626,7 +592,7 @@ public class PlaneScript : Singleton<PlaneScript>
             _elementMagrer.Remove(tmp);
             Destroy(tmp.gameObject);
         }
-        CheckCurrentheight();
+        _HeightHandler.CheckHeight();
         StartGame();
         Debug.Log("Current max H " + _currMaxHeight);
       //  Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT, _LimitHeight, 0);
@@ -647,16 +613,6 @@ public class PlaneScript : Singleton<PlaneScript>
         this.enabled = false;
             
         
-    }
-
-    public int MinHeightInCoordinates(int x, int z)
-    {
-        for (int y = _PlaneMatrix._matrix.GetUpperBound(1) - 1; y >= 0; --y)
-        {
-            if (_PlaneMatrix._matrix[x, y, z] != null)
-                return y + 1;
-        }
-        return 0;
     }
 
 }

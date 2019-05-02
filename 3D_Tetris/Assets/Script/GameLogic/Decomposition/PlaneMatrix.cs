@@ -41,10 +41,6 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
             }
         }
     }
-    public PlaneMatrix()
-    {
-        MinCoordinat = Wight / 2 * (-1); // минимальная координата, окторая может быть в текущем поле 
-    }
 
     public bool CheckEmptyPlaсe( ElementScript element, Vector3Int direction) {
 
@@ -101,21 +97,50 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         element.isBind = false;
     } 
 
-    public void CheckCollected()
-    {
+    public bool CollectLayers() {
 
+        bool flag = false; ;
+        for (int y = 0; y < _LimitHeight; y++) {
+            if (CheckCollectedInLayer(y)) {
+                DestroyLayer(y);
+                flag = true;
+            }
+        }
+        return flag;
+    }
+    public bool CheckCollectedInLayer(int layer) {
+
+        for (int x = 0; x < Wight; x++) {
+            for (int z = 0; z < Wight; z++) {
+                if (_matrix[x, layer, z] == null) // если в этом слое есть пустое место, значит колелкция не собрана
+                {
+                    return false;    
+                }
+            }
+        }
+        return true;       
     }
 
-    public void DestroyLayer()
+    public void DestroyLayer(int layer)
     {
+        Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER, layer);
+        for (int x = 0; x < Wight; x++) {
+            for (int z = 0; z < Wight; z++) {
 
+                GameObject tmp = _matrix[x, layer, z].gameObject;
+                var ggg = _matrix[x, layer, z];
+                _matrix[x, layer, z].destroy = true;
+                _matrix[x, layer, z] = null;
+                tmp.GetComponentInParent<ElementScript>().DeleteBlock(ggg);             
+            }
+        }
     }
 
     public int MinHeightInCoordinates(int x, int z)
     {
         for (int y = _matrix.GetUpperBound(1) - 1; y >= 0; --y)
         {
-            if (_matrix[x - MinCoordinat, y, z - MinCoordinat] != null)
+            if (_matrix[x, y, z] != null)
                 return y+1;
         }
         return 0;        

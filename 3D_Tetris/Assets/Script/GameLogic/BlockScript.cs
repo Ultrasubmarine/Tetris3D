@@ -2,6 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct CoordinatXZ {
+    public int x;
+    public int z;
+
+    public CoordinatXZ( int x, int z) {
+        this.x = x;
+        this.z = z;
+    }
+}
 
 public class BlockScript : MonoBehaviour {
     public int x;
@@ -9,8 +18,9 @@ public class BlockScript : MonoBehaviour {
     public int z;
 
     public bool destroy = false;
-    public Vector2Int XZ { get { return new Vector2Int(x, z); } } 
-  
+   // public Vector2Int XZ { get { return new Vector2Int(x, z); } }
+    public CoordinatXZ XZ { get { return new CoordinatXZ(x, z); } }
+    
     public BlockScript() {
     }
 
