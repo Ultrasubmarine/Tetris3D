@@ -6,7 +6,7 @@ using IntegerExtension;
 
 public class HeightHandler : MonoBehaviour {
 
-    [SerializeField] PlaneMatrix Matrix;
+    PlaneMatrix _matrix;
 
     [SerializeField, Space(20)] int _LimitHeight;
     [SerializeField] int _CurrentHeight;
@@ -14,6 +14,10 @@ public class HeightHandler : MonoBehaviour {
     public int LimitHeight{ get { return _LimitHeight; } }
     public int CurrentHeight { get { return _CurrentHeight; } }
 
+    private void Start() {
+        _matrix = PlaneMatrix.Instance;
+        _matrix.SetLimitHeight(_LimitHeight);
+    }
     public bool CheckLimit() {
 
         CheckHeight();
@@ -25,10 +29,10 @@ public class HeightHandler : MonoBehaviour {
         _CurrentHeight = 0;
         int check;
 
-        for (int x = 0; x < Matrix.Wight && !OutOfLimitHeight(); x++) {
-            for (int z = 0; z < Matrix.Wight && !OutOfLimitHeight(); z++) {
+        for (int x = 0; x < _matrix.Wight && !OutOfLimitHeight(); x++) {
+            for (int z = 0; z < _matrix.Wight && !OutOfLimitHeight(); z++) {
 
-               check = Matrix.MinHeightInCoordinates(x, z);
+               check = _matrix.MinHeightInCoordinates(x, z);
                 if(check > _CurrentHeight) {
                     _CurrentHeight = check;           
                 }

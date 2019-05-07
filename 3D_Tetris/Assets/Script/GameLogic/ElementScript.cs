@@ -220,8 +220,6 @@ public class ElementScript : MonoBehaviour {
             if (MyBlocks[i] != null)
                 return false; // не пуст
         }
-
-        Debug.Log("I,m ALONE");
         return true; // пуст
     }
 

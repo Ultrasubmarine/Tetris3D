@@ -7,7 +7,7 @@ using IntegerExtension;
 
 public class Projection : Singleton<Projection> {
 
-    [SerializeField] PlaneMatrix _matrix;
+    PlaneMatrix _matrix;
     [SerializeField] HeightHandler _Heighthandler;//PlaneScript _plane;
     // TO DO - статическая переменная - высота сцены.
     //  int _HeightPlane;
@@ -29,6 +29,9 @@ public class Projection : Singleton<Projection> {
         // _plane = PlaneMatrix.Instance;
     }
 
+    private void Start() {
+        _matrix = PlaneMatrix.Instance;
+    }
     // ФУНКЦИИ ДЛЯ РАБОТЫ С ПРОЕКЦИЯМИ
     public void CreateProjection(ElementScript obj) {
 

@@ -23,7 +23,7 @@ public class ControllerSpeedElement: MonoBehaviour { //Listener<int> {
     }
     private void CheckScoreAndTimeDrop( int score)
     {
-        Debug.Log(" МЕНЯ ВЫЗВАЛИ");
+
         var speed = ScoreAndTime.Find(s => s.x < score).y;
         if (_afterTime < speed)
         {

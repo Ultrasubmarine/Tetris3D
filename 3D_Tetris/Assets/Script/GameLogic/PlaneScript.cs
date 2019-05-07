@@ -31,8 +31,9 @@ public enum planeState
 public class PlaneScript : Singleton<PlaneScript>
 {
     [SerializeField] Projection myProj;
-    [SerializeField] PlaneMatrix _PlaneMatrix;
+    PlaneMatrix _matrix;
     [SerializeField] HeightHandler _HeightHandler;
+    [SerializeField] ElementManager _ElementManager;
 
     bool _isWin = false;
 
@@ -43,18 +44,13 @@ public class PlaneScript : Singleton<PlaneScript>
     [SerializeField] private int _WightPlane;
 
     [SerializeField] private int _HeightPlane;
-    [SerializeField] private int _LimitHeight = 11;
-    public int LimitHeight { get { return _LimitHeight; } }
-    public int CurrentHeight { get { return _currMaxHeight; } }
-    private int _currMaxHeight = 0;
 
     public int Height { get { return _HeightPlane - 1; } } // высота отсчитывается от 0
-    public int Wight { get { return _WightPlane; } } // высота отсчитывается от 0
     public int MinCoordinat { get; private set; }
 
-    [Header("Time visual effects")]
-    [SerializeField] private float _TimeDrop = 1;
 
+    [Header("Time visual effects")]
+    [SerializeField] public float _TimeDrop = 1;
     [SerializeField] private float _TimeDropAfterDestroy = 1;
     [SerializeField] private float _TimeMove = 1;
     [SerializeField] private float _TimeRotate = 1;
@@ -62,35 +58,20 @@ public class PlaneScript : Singleton<PlaneScript>
 
     public planeState Mystate { get; private set; }
 
-    // матриц для анализа поля.
-   // public BlockScript[,,] _PlaneMatrix._matrix;
     public GameObject TextSphere;
     public List<GameObject> TestSphereList = new List<GameObject>();
 
     private List<ElementScript> _elementMagrer;
 
-    [Header("Proections")]
-    public GameObject ProectionObject;
-
-    public float HeightProection = 0.1f;
-    private List<GameObject> _proectionsList;
-
-    public GameObject ProectionPotolocObject;
-    public float HeightProectionPotoloc = 6;
-    private List<GameObject> _potolocList;
-
     // Use this for initialization
     private void Start()
     {
-    
+        _matrix = PlaneMatrix.Instance;
         Mystate = planeState.startState;//Mystate = planeState.emptyState;
 
         _elementMagrer = new List<ElementScript>();
-        _proectionsList = new List<GameObject>();
-        _potolocList = new List<GameObject>();
-
+ 
         MinCoordinat = _WightPlane / 2 * (-1); // минимальная координата, окторая может быть в текущем поле
-
 
         NewElement = null;
 
@@ -111,7 +92,7 @@ public class PlaneScript : Singleton<PlaneScript>
 
     public void ChengeTimeDrop( float time)
     {
-        _TimeDrop = time;
+        //_TimeDrop = time;
     }
     // Update is called once per frame
     private void Update()
@@ -150,7 +131,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 yield return null;// мы не можем спустить элемент на метр ниже, пока у нас идет визуальный поворот или перемещение. ждем пока он закончится
             }
 
-            bool empty = _PlaneMatrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0)); // проверяем может ли элемент упасть на ярус ниже
+            bool empty = _matrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0)); // проверяем может ли элемент упасть на ярус ниже
 
             if (empty)//!collision)
             {
@@ -167,7 +148,7 @@ public class PlaneScript : Singleton<PlaneScript>
         {
             yield return null;
         }
-        MergerElement(); // слияние элемента и поля
+        _ElementManager.MergeElement( NewElement); // слияние элемента и поля
 
         NewElement = null;
         // Mystate = planeState.emptyState;
@@ -186,16 +167,6 @@ public class PlaneScript : Singleton<PlaneScript>
 
         // TO DO - проверка что надо уничтожить
         yield break;
-    }
-
-    // ФУНКЦИИ ДЛЯ РАБОТЫ СО СЛИЯНИЕМ ЭЛЕМЕНТА И ПОЛЯ
-    private void MergerElement()
-    {
-        _PlaneMatrix.BindToMatrix(NewElement);
-
-        NewElement.transform.parent = this.gameObject.transform;
-        _elementMagrer.Add(NewElement);
-
     }
 
     //private void testSphere()
@@ -250,34 +221,15 @@ public class PlaneScript : Singleton<PlaneScript>
         bool flagCollection = true;
         bool flagDestroy = false;
 
-        flagCollection = _PlaneMatrix.CollectLayers();
+        flagCollection = _matrix.CollectLayers();
 
-            if (flagCollection) // если коллекция собрана
-            {
-                Mystate = planeState.collectionState; // мы находимся в состоянии сбора коллекции
-
-                int k = 0;
-                int countK = _elementMagrer.Count();
-                while(k < countK)
-                {
-                    ElementScript b = _elementMagrer[k].CheckUnion();
-                    if( b != null)
-                    {
-                        _PlaneMatrix.UnbindToMatrix(b);
-                        _PlaneMatrix.UnbindToMatrix(_elementMagrer[k]);
-
-                        Debug.Log("Create element +++");
-                        _elementMagrer.Add(b);
-                        b.transform.parent = gameObject.transform;
-                        countK++;
-                    }
-                    k++;
-                }
-                // TO DO DestroyVizyal  корутина для отображения уничтожения
-                flagDestroy = true;
-            }
+        if (flagCollection) // если коллекция собрана
+        {
+            Mystate = planeState.collectionState; // мы находимся в состоянии сбора коллекции
+            _ElementManager.CutElement();
+            flagDestroy = true;
+        }
         
-
         if (flagDestroy) // Удаляем пустые элементы.
         {
          //   Debug.Log("DROP AFTER DESTROY");
@@ -288,53 +240,9 @@ public class PlaneScript : Singleton<PlaneScript>
         {
             _HeightHandler.CheckHeight(); //CheckCurrentheight();
             Mystate = planeState.emptyState;
-
           //  testSphere();
 
         }
-    }
-
-    public void ElementCut() {
-        Mystate = planeState.collectionState; // мы находимся в состоянии сбора коллекции
-
-        int k = 0;
-        int countK = _elementMagrer.Count();
-        while (k < countK) {
-            ElementScript b = _elementMagrer[k].CheckUnion();
-            if (b != null) {
-                _PlaneMatrix.UnbindToMatrix(b);
-                _PlaneMatrix.UnbindToMatrix(_elementMagrer[k]);
-
-                Debug.Log("Create element +++");
-                _elementMagrer.Add(b);
-                b.transform.parent = gameObject.transform;
-                countK++;
-            }
-            k++;
-        }
-    }
-
-    private void DestroyLayer(int y)
-    {
-       // Debug.Log("Destroy layer y=" + y);
-        Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER, y);
-        for (int x = 0; x < _WightPlane; x++)
-        {
-            for (int z = 0; z < _WightPlane; z++)
-            {
-                GameObject tmp = _PlaneMatrix._matrix[x, y, z].gameObject;
-                var ggg = _PlaneMatrix._matrix[x, y, z];
-                _PlaneMatrix._matrix[x, y, z].destroy = true;
-               //
-               //  (_block[x, y, z]);
-                _PlaneMatrix._matrix[x, y, z] = null;
-
-                tmp.GetComponentInParent<ElementScript>().DeleteBlock(ggg);
-              //  tmp.SetActive(false);
-                //Destroy(tmp);
-            }
-        }
-
     }
 
     private IEnumerator DropAfterDestroy()
@@ -347,13 +255,13 @@ public class PlaneScript : Singleton<PlaneScript>
             flagDrop = false;
 
           //  Debug.Log("Element manager count =  " + _elementMagrer.Count);
-            foreach (var item in _elementMagrer)
+            foreach (var item in _ElementManager._elementMarger)
             {
-                var empty = _PlaneMatrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
+                var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
                 if (empty) //если коллизии нет, элемент может падать вниз
                 {
                     if (item.isBind)
-                        _PlaneMatrix.UnbindToMatrix(item);
+                        _matrix.UnbindToMatrix(item);
 
                     flagDrop = true;
                     item.DropElement(this.gameObject);
@@ -363,7 +271,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 else
                 {
                     if (!item.isBind)
-                        _PlaneMatrix.BindToMatrix(item);
+                        _matrix.BindToMatrix(item);
                 }
             }
 
@@ -371,7 +279,7 @@ public class PlaneScript : Singleton<PlaneScript>
             while (checkDropState)
             {
                 checkDropState = false;
-                foreach (var item in _elementMagrer)
+                foreach (var item in _ElementManager._elementMarger)
                 {
                     if (item.isDrop)
                     {
@@ -389,27 +297,9 @@ public class PlaneScript : Singleton<PlaneScript>
         myProj.CreateCeiling() ;
         CheckCollected();
 
-       DestroyEmptyElement();
+       _ElementManager.DestroyEmptyElement();
 
         yield return null;
-    }
-
-    private void DestroyEmptyElement()
-    {
-        // проверка пустых элементов
-        for (int i = 0; i < _elementMagrer.Count;)
-        {
-            if (_elementMagrer[i].CheckEmptyElement())//_elementMagrer[i].gameObject.transform.childCount == 0)
-            {
-                GameObject tmp = _elementMagrer[i].gameObject;
-                _elementMagrer.Remove(_elementMagrer[i]);
-                Destroy(tmp);
-            }
-            else
-            {
-                i++;
-            }
-        }
     }
 
     // ФУНКЦИИ ПОВОРОТА ЭЛЕМЕНТА
@@ -440,7 +330,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 x = item.z;
                 z = -item.x;
 
-                if (_PlaneMatrix._matrix[x + 1, item.y, z + 1] != null)
+                if (_matrix._matrix[x + 1, item.y, z + 1] != null)
                     return false;
             }
         }
@@ -452,7 +342,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 x = -item.z;
                 z = item.x;
 
-                if (_PlaneMatrix._matrix[x + 1, item.y, z + 1] != null)
+                if (_matrix._matrix[x + 1, item.y, z + 1] != null)
                     return false;
             }
         }
@@ -504,7 +394,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 if (item.x == Mathf.Abs(MinCoordinat))
                     return false;
 
-                if (_PlaneMatrix._matrix[item.x + 1 + 1, item.y, item.z + 1] != null)
+                if (_matrix._matrix[item.x + 1 + 1, item.y, item.z + 1] != null)
                     return false;
             }
 
@@ -517,7 +407,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 if (item.x == MinCoordinat)
                     return false;
 
-                if (_PlaneMatrix._matrix[item.x + 1 - 1, item.y, item.z + 1] != null)
+                if (_matrix._matrix[item.x + 1 - 1, item.y, item.z + 1] != null)
                     return false;
             }
 
@@ -530,7 +420,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 if (item.z == Mathf.Abs(MinCoordinat))
                     return false;
 
-                if (_PlaneMatrix._matrix[item.x + 1, item.y, item.z + 1 + 1] != null)
+                if (_matrix._matrix[item.x + 1, item.y, item.z + 1 + 1] != null)
                     return false;
             }
 
@@ -543,7 +433,7 @@ public class PlaneScript : Singleton<PlaneScript>
                 if (item.z == MinCoordinat)
                     return false;
 
-                if (_PlaneMatrix._matrix[item.x + 1, item.y, item.z + 1 - 1] != null)
+                if (_matrix._matrix[item.x + 1, item.y, item.z + 1 - 1] != null)
                     return false;
             }
 
@@ -585,23 +475,15 @@ public class PlaneScript : Singleton<PlaneScript>
 
     private void RepleyGame()
     {
-        while (_elementMagrer.Count > 0)
-        {
-            ElementScript tmp = _elementMagrer[0];
-            _PlaneMatrix.UnbindToMatrix(tmp);
-            _elementMagrer.Remove(tmp);
-            Destroy(tmp.gameObject);
-        }
+        _ElementManager.DestroyAllElements();
         _HeightHandler.CheckHeight();
         StartGame();
-        Debug.Log("Current max H " + _currMaxHeight);
       //  Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT, _LimitHeight, 0);
     }
 
     private void WinGame()
     {
         _isWin = true;
-        Debug.Log("END END? PLANE KNOW");
 
         if(NewElement != null)
         {
@@ -611,8 +493,7 @@ public class PlaneScript : Singleton<PlaneScript>
         }
 
         this.enabled = false;
-            
-        
+             
     }
 
 }

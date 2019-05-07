@@ -9,7 +9,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     public BlockScript[,,] _matrix;
 
     [Header("Size plane")]
-    [SerializeField] int _LimitHeight = 11;
+    int _LimitHeight = 18; 
     [SerializeField] int _Wight;
     [SerializeField] int _Height;
 
@@ -22,24 +22,24 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
     public static int MinCoordinat { get; private set; }
 
-    private void Awake()
-    {
+    protected override void Init() {
         ExtensionMetodsForMatrix.SetSizePlane(_Wight);
         _matrix = new BlockScript[_Wight, _Height, _Wight];
 
         MinCoordinat = _Wight / 2 * (-1); // минимальная координата, окторая может быть в текущем поле
 
         //инициализируем пустую матрицу
-        for (int i = 0; i < _Wight; i++)
-        {
-            for (int j = 0; j < _Height; j++)
-            {
-                for (int k = 0; k < _Wight; k++)
-                {
+        for (int i = 0; i < _Wight; i++) {
+            for (int j = 0; j < _Height; j++) {
+                for (int k = 0; k < _Wight; k++) {
                     _matrix[i, j, k] = null;
                 }
             }
         }
+    }
+
+    public void SetLimitHeight( int limit) {
+        _LimitHeight = limit;
     }
 
     public bool CheckEmptyPlaсe( ElementScript element, Vector3Int direction) {
