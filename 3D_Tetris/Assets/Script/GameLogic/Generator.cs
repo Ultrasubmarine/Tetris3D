@@ -25,17 +25,17 @@ public class Generator : MonoBehaviour {
     [SerializeField] PlaneMatrix _PlaneMatrix;
 
 
-    public GameObject GenerationNewElement(PlaneScript plane) {
+    public GameObject GenerationNewElement( Transform plane){//PlaneScript plane) {
         //    Destroy(exElement);
         GameObject NewElement = CreatorElement(_PlaneMatrix._matrix); // Instantiate(generationElement());
 
 
         //устанавливаем нормальную позицию элемента
-        Vector3 temp = plane.gameObject.transform.position;
+        Vector3 temp = plane.position;
 
         // инициализируем блоки элемента согласно установленной позиции
         ElementScript Element = NewElement.GetComponent<ElementScript>();
-        Element.InitializationAfterGeneric(plane.Height);
+        Element.InitializationAfterGeneric(_PlaneMatrix.Height);//plane.Height);
 
 
         //// выравниваем элемент относительно координат y 
@@ -44,7 +44,7 @@ public class Generator : MonoBehaviour {
 
         int size = max_y - min_y;
 
-        NewElement.transform.position = new Vector3(temp.x, temp.y + plane.Height - size, temp.z);
+        NewElement.transform.position = new Vector3(temp.x, temp.y + _PlaneMatrix.Height - size, temp.z);
 
 
         // TO DO - вычленить в отдельный метод создание дубляжа

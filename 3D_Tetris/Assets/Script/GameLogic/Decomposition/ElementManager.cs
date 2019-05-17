@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class ElementManager : MonoBehaviour {
 
-    PlaneScript _PlaneScript;
+    [SerializeField] PlaneScript _PlaneScript;
     PlaneMatrix _matrix;
+    [SerializeField] Generator _Generator;
+    [SerializeField] StateMachine machine; 
+
     public List<ElementScript> _elementMarger;
 
     public ElementScript NewElement;
@@ -14,10 +17,22 @@ public class ElementManager : MonoBehaviour {
     void Start () {
         _elementMarger = new List<ElementScript>();
         _matrix = PlaneMatrix.Instance;
-    }
-	
-    public void GenerateElement() {
 
+        Messenger.AddListener( StateMachine.StateMachineKey + GameState2.Empty, GenerateElement);
+    }
+
+    private void OnDestroy() {
+        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.Empty, GenerateElement);
+    }
+
+    public void GenerateElement() {
+        // генерируем новый элемент при помощи генератора
+        GameObject generationElement = _Generator.GenerationNewElement(_PlaneScript.transform);
+        NewElement = generationElement.GetComponent<ElementScript>();
+        NewElement.gameObject.transform.parent = _PlaneScript.gameObject.transform;
+        //machine.ChangeState(GameState2.NewElement);
+        _PlaneScript.NewElement = NewElement;
+        StartCoroutine(_PlaneScript.ElementDrop()); // начинаем процесс падения сгенерированного элемента);
     }
 
     public IEnumerator DropElement() {

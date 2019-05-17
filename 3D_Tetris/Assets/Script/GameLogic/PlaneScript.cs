@@ -30,6 +30,8 @@ public enum planeState
 
 public class PlaneScript : Singleton<PlaneScript>
 {
+    [SerializeField] StateMachine machine;
+
     [SerializeField] Projection myProj;
     PlaneMatrix _matrix;
     [SerializeField] HeightHandler _HeightHandler;
@@ -95,23 +97,23 @@ public class PlaneScript : Singleton<PlaneScript>
         //_TimeDrop = time;
     }
     // Update is called once per frame
-    private void Update()
-    {
-        if (Mystate != planeState.endState && Mystate != planeState.startState && !_isWin)
-        {
-            if (NewElement == null && Mystate != planeState.collectionState) // проверка есть ли у нас падающий элемент
-            {
-                // генерируем новый элемент при помощи генератора
-                GameObject generationElement = _Generator.GenerationNewElement(this);
-                NewElement = generationElement.GetComponent<ElementScript>();
-                NewElement.gameObject.transform.parent = this.gameObject.transform;
-                StartCoroutine(ElementDrop()); // начинаем процесс падения сгенерированного элемента
-            }
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Mystate != planeState.endState && Mystate != planeState.startState && !_isWin) {
+    //        if (NewElement == null && Mystate != planeState.collectionState) // проверка есть ли у нас падающий элемент
+    //        {
+    //            // генерируем новый элемент при помощи генератора
+    //            GameObject generationElement = _Generator.GenerationNewElement(this.transform);
+    //            NewElement = generationElement.GetComponent<ElementScript>();
+    //            NewElement.gameObject.transform.parent = this.gameObject.transform;
+    //            StartCoroutine(ElementDrop()); // начинаем процесс падения сгенерированного элемента
+    //        }
+    //    }
+    //}
 
-    private IEnumerator ElementDrop() // ф-я падения элемента
+    public IEnumerator ElementDrop() // ф-я падения элемента
     {
+       Mystate = planeState.emptyState;
        myProj.CreateProjection(NewElement);// VisualProection();
 
         while (true)
@@ -165,6 +167,7 @@ public class PlaneScript : Singleton<PlaneScript>
         CheckCollected(); // проверяем собранные
         myProj.CreateCeiling();
 
+      
         // TO DO - проверка что надо уничтожить
         yield break;
     }
@@ -240,7 +243,8 @@ public class PlaneScript : Singleton<PlaneScript>
         {
             _HeightHandler.CheckHeight(); //CheckCurrentheight();
             Mystate = planeState.emptyState;
-          //  testSphere();
+            machine.ChangeState(GameState2.Empty);
+            //  testSphere();
 
         }
     }

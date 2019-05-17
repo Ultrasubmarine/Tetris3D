@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 [CustomEditor(typeof(StateMachine))]
 public class StateMachineEditor : Editor {
+    StateMachine component;
 
     SerializedProperty table;
+    SerializedProperty text1;
     int _needCount;
 
     private void OnEnable() {
         table = serializedObject.FindProperty("StateTable");
+        text1 = serializedObject.FindProperty("UIText");
         _needCount = Enum.GetValues(typeof(GameState2)).Length ;
+
+        component = (StateMachine)target;
     }
 
     public override void OnInspectorGUI() {
@@ -22,10 +28,8 @@ public class StateMachineEditor : Editor {
         if (table.arraySize != _needCount * _needCount)
             ChengeTable();
 
-
         EditorGUILayout.LabelField("Таблица переходов:");
 
-        // EditorGUILayout.BeginVertical();
         for (int row = 0; row < _needCount; row++) {
 
             EditorGUILayout.BeginHorizontal();
@@ -38,14 +42,12 @@ public class StateMachineEditor : Editor {
             }
             EditorGUILayout.EndHorizontal();
         }
+
+        component.UIText = (Text)EditorGUILayout.ObjectField("State Text", component.UIText, typeof(Text), true);
         serializedObject.ApplyModifiedProperties();
     }
 
     private void ChengeTable() {
-        Debug.Log("ПЫТАЕМСЯ ИЗМЕНИТЬ РАЗМЕР");
-
-        table.arraySize = _needCount* _needCount;// = _needCount;    }
-        Debug.Log(" " +table.arraySize.ToString()  +  " need " + _needCount.ToString());
-        
+        table.arraySize = _needCount* _needCount;      
     }
 }

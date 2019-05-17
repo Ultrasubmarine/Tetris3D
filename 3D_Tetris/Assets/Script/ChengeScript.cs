@@ -14,7 +14,6 @@ public class ChengeScript : MonoBehaviour {
 
     public void Hide() {
         HideScreen.Invoke();
-        Debug.Log("Gid");
 //        GameCamera.GetComponent<GameCameraScript>().FirstAnimation();
         _gameCameraScript.FirstAnimation();
     }
