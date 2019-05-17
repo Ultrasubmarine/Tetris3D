@@ -81,6 +81,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         return true;
     }
 
+    #region привязка/отвязка эл-та к матрице
     public void BindToMatrix(ElementScript element) {
 
         int x, y, z;
@@ -110,25 +111,17 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         }
         element.isBind = false;
     }
+    #endregion
 
-    public void AfterMerge() {
-        if (_HeightHandler.CheckLimit()) {
-            Debug.Log("ENDGAME");
-        }
-        else
-            CheckCollections();
-    }
-
-    public void CheckCollections() {
+    #region сбор коллекций в слоях матрицы
+    private void CheckCollections() {
         if (CollectLayers())
             machine.ChangeState(GameState2.DropAllElements);
         else 
-          //  _HeightHandler.CheckHeight(); 
             machine.ChangeState(GameState2.Empty);
         
     }
-
-    public bool CollectLayers() {
+    private bool CollectLayers() {
 
         bool flag = false; ;
         for (int y = 0; y < _LimitHeight; y++) {
@@ -139,7 +132,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         }
         return flag;
     }
-    public bool CheckCollectedInLayer(int layer) {
+    private bool CheckCollectedInLayer(int layer) {
 
         for (int x = 0; x < Wight; x++) {
             for (int z = 0; z < Wight; z++) {
@@ -151,7 +144,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         }
         return true;       
     }
-
+    
     public void DestroyLayer(int layer)
     {
         Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER, layer);
@@ -166,6 +159,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
             }
         }
     }
+    #endregion
 
     public int MinHeightInCoordinates(int x, int z)
     {

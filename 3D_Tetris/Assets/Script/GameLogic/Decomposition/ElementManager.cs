@@ -45,15 +45,15 @@ public class ElementManager : MonoBehaviour {
         NewElement.gameObject.transform.parent = _PlaneScript.gameObject.transform;
 
         _PlaneScript.NewElement = NewElement;
-        //StartCoroutine(_PlaneScript.ElementDrop()); // начинаем процесс падения сгенерированного элемента);
 
         machine.ChangeState(GameState2.NewElement);
     }
 
+    #region  функции падения нового эл-та ( и его слияние)
     public void StartDropElement() {
         StartCoroutine(DropElement());
     }
-    public IEnumerator DropElement() {
+    private IEnumerator DropElement() {
 
         _PlaneScript.Mystate = planeState.emptyState;
         myProj.CreateProjection(NewElement);
@@ -84,39 +84,80 @@ public class ElementManager : MonoBehaviour {
         MergeElement(NewElement); // слияние элемента и поля
         NewElement = null;
         machine.ChangeState(GameState2.Merge);
-        // // TODO - можно рповерить высоту только этого эл-та!
-        // if (_HeightHandler.CheckLimit())//CheckLimitHeight())
-        //{
-        //     _PlaneScript.Mystate = planeState.endState;
-        //     Debug.Log("END GAME");
 
-        //     Messenger.Broadcast(GameEvent.END_GAME);
-        //     yield break;
-        // }
-
-        // _PlaneScript.CheckCollected(); // проверяем собранные
         // myProj.CreateCeiling();
-
-
         // // TO DO - проверка что надо уничтожить
         yield break;
     }
 
-    public void MergeElement( ElementScript newElement) {
+    private void MergeElement( ElementScript newElement) {
 
         _matrix.BindToMatrix(newElement);
 
         newElement.transform.parent = this.gameObject.transform;
         _elementMarger.Add(newElement);
     }
+    #endregion
 
-
+    #region  функции падения всех эл-тов ( после уничтожения слоев)
     public void StartDropAllElements() {
-        StartCoroutine(_PlaneScript.DropAfterDestroy());
+        StartCoroutine(DropAllElements());//_PlaneScript.DropAfterDestroy());
     }
-    public void ElementDrop() {
 
+    private IEnumerator DropAllElements() {
+        bool flagDrop = false;
+        bool checkDropState = true;
+
+        do {
+            flagDrop = StartAllElementDrop();
+
+            if(flagDrop)                
+                yield return new WaitUntil(AllElementsDrop);
+            yield return new WaitForSeconds( _PlaneScript._TimeDelay); // слишком резко уничтожаются 
+        }
+        while (flagDrop); // проверяем что бы все упало, пока оно может падать
+
+        myProj.CreateCeiling();
+        machine.ChangeState(GameState2.Collection);
+
+        DestroyEmptyElement();
+        yield return null;
     }
+
+    private bool StartAllElementDrop() {
+
+        bool flagDrop = false;
+        foreach (var item in _elementMarger) {
+            var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
+            if (empty) //если коллизии нет, элемент может падать вниз
+            {
+                if (item.isBind)
+                    _matrix.UnbindToMatrix(item);
+
+                flagDrop = true;
+                item.DropElement(this.gameObject);
+                StartCoroutine(item.DropElementVisual(item.gameObject.transform.position.y - 1.0f, _PlaneScript._TimeDropAfterDestroy)); // запускает падение элемента
+            }
+            else {
+                if (!item.isBind)
+                    _matrix.BindToMatrix(item);
+            }
+        }
+        return flagDrop;
+    }
+
+    private bool AllElementsDrop() {
+
+        foreach (var item in _elementMarger) {
+            if (item.isDrop) {
+                return false;
+            }
+        }
+        return true;
+        
+    }
+
+    #endregion
 
     public void CutElement() {
 
@@ -136,7 +177,7 @@ public class ElementManager : MonoBehaviour {
         }
     }
 
-    public void DestroyEmptyElement() {
+    private void DestroyEmptyElement() {
         // проверка пустых элементов
         for (int i = 0; i < _elementMarger.Count;) {
             if (_elementMarger[i].CheckEmptyElement())

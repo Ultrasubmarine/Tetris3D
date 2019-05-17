@@ -25,7 +25,7 @@ public class HeightHandler : MonoBehaviour {
     }
 
     public void ChengeStateOutOfHeights() {
-        if(CheckLimit()) {
+        if(CheckOutOfLimit()) {
             Debug.Log("END GAME");
         }
         else {
@@ -33,7 +33,7 @@ public class HeightHandler : MonoBehaviour {
         }
     }
 
-    public bool CheckLimit() {
+    private bool CheckOutOfLimit() {
 
         CheckHeight();
         return OutOfLimitHeight();

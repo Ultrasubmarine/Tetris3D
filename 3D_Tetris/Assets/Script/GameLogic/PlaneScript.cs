@@ -52,8 +52,9 @@ public class PlaneScript : Singleton<PlaneScript>
 
 
     [Header("Time visual effects")]
+    [SerializeField] public float _TimeDelay = 1;
     [SerializeField] public float _TimeDrop = 1;
-    [SerializeField] private float _TimeDropAfterDestroy = 1;
+    [SerializeField] public float _TimeDropAfterDestroy = 1;
     [SerializeField] private float _TimeMove = 1;
     [SerializeField] private float _TimeRotate = 1;
     public float TimeRotation { get { return _TimeRotate; } }
@@ -142,97 +143,7 @@ public class PlaneScript : Singleton<PlaneScript>
     //    }
     //    Debug.Log(str);
     //}
-
-    // ФУНКЦИИ ДЛЯ РАБОТЫ СО СБОРОМ КОЛЛЕКЦИЙ
-    public void CheckCollected() // проверяем собранные
-    {
-        bool flagCollection = true;
-        bool flagDestroy = false;
-
-        flagCollection = _matrix.CollectLayers();
-
-        if (flagCollection) // если коллекция собрана
-        {
-            Mystate = planeState.collectionState; // мы находимся в состоянии сбора коллекции
-            _ElementManager.CutElement();
-            flagDestroy = true;
-        }
-        
-        if (flagDestroy) // Удаляем пустые элементы.
-        {
-         //   Debug.Log("DROP AFTER DESTROY");
-          //  testSphere();
-            StartCoroutine(DropAfterDestroy());
-        }
-        else
-        {
-            _HeightHandler.CheckHeight(); //CheckCurrentheight();
-            Mystate = planeState.emptyState;
-            machine.ChangeState(GameState2.Empty);
-            Debug.Log(" SET ELEMENT MERGE");
-            //  testSphere();
-
-        }
-    }
-
     
-    public IEnumerator DropAfterDestroy()
-    {
-        bool flagDrop = false;
-        bool checkDropState = true;
-
-        do
-        {
-            flagDrop = false;
-
-          //  Debug.Log("Element manager count =  " + _elementMagrer.Count);
-            foreach (var item in _ElementManager._elementMarger)
-            {
-                var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
-                if (empty) //если коллизии нет, элемент может падать вниз
-                {
-                    if (item.isBind)
-                        _matrix.UnbindToMatrix(item);
-
-                    flagDrop = true;
-                    item.DropElement(this.gameObject);
-                    //yield return StartCoroutine(item.DropElementVizual(item.gameObject.transform.position.y - 1.0f, TimeDropAfterDestroy)); // возвращает падение элемента
-                    StartCoroutine(item.DropElementVisual(item.gameObject.transform.position.y - 1.0f, _TimeDropAfterDestroy)); // запускает падение элемента
-                }
-                else
-                {
-                    if (!item.isBind)
-                        _matrix.BindToMatrix(item);
-                }
-            }
-
-            // проверяем работают ли еще корутины падения элементов (проверка состояния элементов)
-            while (checkDropState)
-            {
-                checkDropState = false;
-                foreach (var item in _ElementManager._elementMarger)
-                {
-                    if (item.isDrop)
-                    {
-                        checkDropState = true;
-                        yield return null;
-                        break;
-                    }
-                }
-              //  Debug.Log("*");
-            }
-            yield return new WaitForSeconds(_TimeDropAfterDestroy);
-        }
-        while (flagDrop); // проверяем что бы все упало, пока оно может падать
-
-        myProj.CreateCeiling() ;
-        machine.ChangeState(GameState2.Collection);//  CheckCollected();
-
-        _ElementManager.DestroyEmptyElement();
-
-        yield return null;
-    }
-
     // ФУНКЦИИ ПОВОРОТА ЭЛЕМЕНТА
     public bool TurnElement(turn napravl) // возвращает разрешение на поворот камеры, если мы можем повернуть элемент
     {
