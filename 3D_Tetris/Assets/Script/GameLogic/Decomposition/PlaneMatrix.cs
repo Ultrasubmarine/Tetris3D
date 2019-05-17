@@ -6,6 +6,10 @@ using IntegerExtension;
 
 public class PlaneMatrix : Singleton<PlaneMatrix> {
 
+    // DELETE
+    [SerializeField] StateMachine machine;
+    [SerializeField] HeightHandler _HeightHandler;
+    //
     public BlockScript[,,] _matrix;
 
     [Header("Size plane")]
@@ -36,8 +40,18 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
                 }
             }
         }
+
+        
     }
- 
+
+    private void Start() {
+        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.Collection, CheckCollections);
+    }
+
+    private void OnDestroy() {
+        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.Collection, CheckCollections);
+    }
+
     public void SetLimitHeight( int limit) {
         _LimitHeight = limit;
     }
@@ -95,7 +109,24 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
             _matrix[x.ToIndex(), y, z.ToIndex()] = null;
         }
         element.isBind = false;
-    } 
+    }
+
+    public void AfterMerge() {
+        if (_HeightHandler.CheckLimit()) {
+            Debug.Log("ENDGAME");
+        }
+        else
+            CheckCollections();
+    }
+
+    public void CheckCollections() {
+        if (CollectLayers())
+            machine.ChangeState(GameState2.DropAllElements);
+        else 
+          //  _HeightHandler.CheckHeight(); 
+            machine.ChangeState(GameState2.Empty);
+        
+    }
 
     public bool CollectLayers() {
 

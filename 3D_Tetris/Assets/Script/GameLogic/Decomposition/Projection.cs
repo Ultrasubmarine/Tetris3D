@@ -58,8 +58,7 @@ public class Projection : Singleton<Projection> {
 
         for(int x=0; x< _matrix.Wight; x++) {
             for (int z = 0; z < _matrix.Wight; z++) {
-
-                Debug.Log(" x = " + x + " z = " + z);
+                
                 int y = _matrix.MinHeightInCoordinates(x, z);
                 if(y >= MinimumLayerHeight)
                     _ceilingList.Add(_PoolСeiling.CreateObject( new Vector3(x.ToCoordinat(),_matrix.LimitHeight + _HeightProection,z.ToCoordinat()) ));

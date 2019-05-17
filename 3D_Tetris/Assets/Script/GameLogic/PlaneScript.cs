@@ -58,7 +58,7 @@ public class PlaneScript : Singleton<PlaneScript>
     [SerializeField] private float _TimeRotate = 1;
     public float TimeRotation { get { return _TimeRotate; } }
 
-    public planeState Mystate { get; private set; }
+    public planeState Mystate { get; set; }
 
     public GameObject TextSphere;
     public List<GameObject> TestSphereList = new List<GameObject>();
@@ -95,81 +95,6 @@ public class PlaneScript : Singleton<PlaneScript>
     public void ChengeTimeDrop( float time)
     {
         //_TimeDrop = time;
-    }
-    // Update is called once per frame
-    //private void Update()
-    //{
-    //    if (Mystate != planeState.endState && Mystate != planeState.startState && !_isWin) {
-    //        if (NewElement == null && Mystate != planeState.collectionState) // проверка есть ли у нас падающий элемент
-    //        {
-    //            // генерируем новый элемент при помощи генератора
-    //            GameObject generationElement = _Generator.GenerationNewElement(this.transform);
-    //            NewElement = generationElement.GetComponent<ElementScript>();
-    //            NewElement.gameObject.transform.parent = this.gameObject.transform;
-    //            StartCoroutine(ElementDrop()); // начинаем процесс падения сгенерированного элемента
-    //        }
-    //    }
-    //}
-
-    public IEnumerator ElementDrop() // ф-я падения элемента
-    {
-       Mystate = planeState.emptyState;
-       myProj.CreateProjection(NewElement);// VisualProection();
-
-        while (true)
-        {
-            if(_isWin) //удаляем
-            {
-                if (NewElement != null)
-                {
-                    GameObject tmp = NewElement.gameObject;
-                    NewElement = null;
-                    Destroy(tmp);
-                }
-                yield break;
-            }
-            while (Mystate == planeState.turnState || Mystate == planeState.moveState)
-            {
-                yield return null;// мы не можем спустить элемент на метр ниже, пока у нас идет визуальный поворот или перемещение. ждем пока он закончится
-            }
-
-            bool empty = _matrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0)); // проверяем может ли элемент упасть на ярус ниже
-
-            if (empty)//!collision)
-            {
-                NewElement.DropElement(this.gameObject); // логическое изменение координат падающего элемента
-            }
-            else
-                break;
-
-            yield return StartCoroutine(NewElement.DropElementVisual(NewElement.gameObject.transform.position.y - 1.0f, _TimeDrop));// элемент визуально падает
-        }
-
-        Destroy(_Generator.examleElement);
-        while (Mystate == planeState.moveState)
-        {
-            yield return null;
-        }
-        _ElementManager.MergeElement( NewElement); // слияние элемента и поля
-
-        NewElement = null;
-        // Mystate = planeState.emptyState;
-
-        if (_HeightHandler.CheckLimit())//CheckLimitHeight())
-        {
-            Mystate = planeState.endState;
-            Debug.Log("END GAME");
-
-            Messenger.Broadcast(GameEvent.END_GAME);
-            yield break;
-        }
-
-        CheckCollected(); // проверяем собранные
-        myProj.CreateCeiling();
-
-      
-        // TO DO - проверка что надо уничтожить
-        yield break;
     }
 
     //private void testSphere()
@@ -219,7 +144,7 @@ public class PlaneScript : Singleton<PlaneScript>
     //}
 
     // ФУНКЦИИ ДЛЯ РАБОТЫ СО СБОРОМ КОЛЛЕКЦИЙ
-    private void CheckCollected() // проверяем собранные
+    public void CheckCollected() // проверяем собранные
     {
         bool flagCollection = true;
         bool flagDestroy = false;
@@ -244,12 +169,14 @@ public class PlaneScript : Singleton<PlaneScript>
             _HeightHandler.CheckHeight(); //CheckCurrentheight();
             Mystate = planeState.emptyState;
             machine.ChangeState(GameState2.Empty);
+            Debug.Log(" SET ELEMENT MERGE");
             //  testSphere();
 
         }
     }
 
-    private IEnumerator DropAfterDestroy()
+    
+    public IEnumerator DropAfterDestroy()
     {
         bool flagDrop = false;
         bool checkDropState = true;
@@ -299,9 +226,9 @@ public class PlaneScript : Singleton<PlaneScript>
         while (flagDrop); // проверяем что бы все упало, пока оно может падать
 
         myProj.CreateCeiling() ;
-        CheckCollected();
+        machine.ChangeState(GameState2.Collection);//  CheckCollected();
 
-       _ElementManager.DestroyEmptyElement();
+        _ElementManager.DestroyEmptyElement();
 
         yield return null;
     }

@@ -6,6 +6,9 @@ using IntegerExtension;
 
 public class HeightHandler : MonoBehaviour {
 
+    // DELETE
+    [SerializeField] StateMachine machine;
+    //
     PlaneMatrix _matrix;
 
     [SerializeField, Space(20)] int _LimitHeight;
@@ -17,7 +20,19 @@ public class HeightHandler : MonoBehaviour {
     private void Start() {
         _matrix = PlaneMatrix.Instance;
         _matrix.SetLimitHeight(_LimitHeight);
+
+        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.Merge, ChengeStateOutOfHeights);
     }
+
+    public void ChengeStateOutOfHeights() {
+        if(CheckLimit()) {
+            Debug.Log("END GAME");
+        }
+        else {
+            machine.ChangeState(GameState2.Collection);
+        }
+    }
+
     public bool CheckLimit() {
 
         CheckHeight();

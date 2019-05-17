@@ -15,6 +15,7 @@ public enum GameState2 {
     Merge,
 
     Collection,
+    DropAllElements,
 
     Win,
     End,
