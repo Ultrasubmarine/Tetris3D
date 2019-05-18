@@ -22,7 +22,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     public int Height { get { return _Height - 1; } } // высота отсчитывается от 0
 
     public int LimitHeight { get { return _LimitHeight; } }
-    public int CurrentHeight { get; private set; }
+    public int CurrentHeight { get { return _HeightHandler.CurrentHeight; } } 
 
     public static int MinCoordinat { get; private set; }
 

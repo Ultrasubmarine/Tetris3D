@@ -11,7 +11,6 @@ public class ElementManager : MonoBehaviour {
 
     //TODO delete
     [SerializeField] HeightHandler _HeightHandler;
-    [SerializeField] Projection myProj;
     //
 
     public List<ElementScript> _elementMarger;
@@ -47,6 +46,7 @@ public class ElementManager : MonoBehaviour {
         _PlaneScript.NewElement = NewElement;
 
         machine.ChangeState(GameState2.NewElement);
+
     }
 
     #region  функции падения нового эл-та ( и его слияние)
@@ -56,8 +56,7 @@ public class ElementManager : MonoBehaviour {
     private IEnumerator DropElement() {
 
         _PlaneScript.Mystate = planeState.emptyState;
-        myProj.CreateProjection(NewElement);
-        
+   
         while (true) {
 
             while (_PlaneScript.Mystate == planeState.turnState || _PlaneScript.Mystate == planeState.moveState) {
@@ -117,7 +116,7 @@ public class ElementManager : MonoBehaviour {
         }
         while (flagDrop); // проверяем что бы все упало, пока оно может падать
 
-        myProj.CreateCeiling();
+     //   myProj.CreateCeiling();
         machine.ChangeState(GameState2.Collection);
 
         DestroyEmptyElement();

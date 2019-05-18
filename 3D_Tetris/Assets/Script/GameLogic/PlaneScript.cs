@@ -32,7 +32,6 @@ public class PlaneScript : Singleton<PlaneScript>
 {
     [SerializeField] StateMachine machine;
 
-    [SerializeField] Projection myProj;
     PlaneMatrix _matrix;
     [SerializeField] HeightHandler _HeightHandler;
     [SerializeField] ElementManager _ElementManager;
@@ -203,7 +202,7 @@ public class PlaneScript : Singleton<PlaneScript>
     //    DestroyProection(_proectionsList);
         yield return StartCoroutine(NewElement.TurnElementVizual(rotate, _TimeRotate, this.gameObject));
 
-        myProj.CreateProjection(NewElement);// VisualProection();   VisualProection();
+        Messenger<ElementScript>.Broadcast(GameEvent.TURN_ELEMENT, NewElement);
         Mystate = planeState.emptyState;
         yield return null;
     }
@@ -219,7 +218,7 @@ public class PlaneScript : Singleton<PlaneScript>
             NewElement.MoveElement(direction);
             StartCoroutine(MoveElementVizual(direction));
 
-            myProj.CreateProjection(NewElement);// VisualProection();   VisualProection();
+            Messenger<ElementScript>.Broadcast(GameEvent.MOVE_ELEMENT, NewElement);//myProj.CreateProjection(NewElement);// VisualProection();   VisualProection();
             //   Debug.Log("ПЕРЕМЕСТИЛИ");
         }
     }

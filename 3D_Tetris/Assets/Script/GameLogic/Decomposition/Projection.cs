@@ -5,7 +5,7 @@ using System.Linq;
 
 using IntegerExtension;
 
-public class Projection : Singleton<Projection> {
+public class Projection : MonoBehaviour {
 
     PlaneMatrix _matrix;
     [SerializeField] HeightHandler _Heighthandler;//PlaneScript _plane;
@@ -26,7 +26,15 @@ public class Projection : Singleton<Projection> {
     private List<GameObject> _ceilingList = new List<GameObject>();
 
     private void Awake() {
-        // _plane = PlaneMatrix.Instance;
+        Messenger<ElementScript>.AddListener(GameEvent.CREATE_NEW_ELEMENT, CreateProjection);
+        Messenger<ElementScript>.AddListener(GameEvent.TURN_ELEMENT, CreateProjection);
+        Messenger<ElementScript>.AddListener(GameEvent.MOVE_ELEMENT, CreateProjection);
+    }
+
+    private void OnDestroy() {
+        Messenger<ElementScript>.RemoveListener(GameEvent.CREATE_NEW_ELEMENT, CreateProjection);
+        Messenger<ElementScript>.RemoveListener(GameEvent.TURN_ELEMENT, CreateProjection);
+        Messenger<ElementScript>.RemoveListener(GameEvent.MOVE_ELEMENT, CreateProjection);
     }
 
     private void Start() {
@@ -53,7 +61,7 @@ public class Projection : Singleton<Projection> {
         if( _ceilingList.Count > 0)
         Destroy(CEILING);
 
-        if (_Heighthandler.CurrentHeight < MinimumLayerHeight)
+        if (_matrix.CurrentHeight < MinimumLayerHeight)
             return;
 
         for(int x=0; x< _matrix.Wight; x++) {

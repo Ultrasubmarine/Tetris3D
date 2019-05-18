@@ -25,4 +25,10 @@ public static class GameEvent
 
     public const string GAME_OVER = "GAME_OVER";
 
+    // AFTER Decomposition
+    public const string CREATE_NEW_ELEMENT = "CREATE_NEW_ELEMENT";
+    public const string TURN_ELEMENT = "TURN_ELEMENT";
+    public const string MOVE_ELEMENT = "MOVE_ELEMENT";
+    //
+
 }
