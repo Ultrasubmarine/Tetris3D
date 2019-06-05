@@ -41,36 +41,37 @@ public class ElementScript : MonoBehaviour {
             item.y += height - maxElement;
     }
 
-    // ФУНКЦИИ ПАДЕНИЯ
-    public void DropElement(GameObject plane) {
-        //падение элемента вниз на 1 ярус. логическое
+    #region ФУНКЦИИ ПАДЕНИЯ
+    public void LogicDrop() {
         foreach (BlockScript item in MyBlocks)
             item.y--;
     }
 
-    public IEnumerator DropElementVisual(float finishY, float time) {
-        //Speed)
+    public IEnumerator VisualDrop( float time) {
+    
         isDrop = true;
+        yield return StartCoroutine(VizualRelocation( Vector3.down, time));
+        isDrop = false;
+    }
+    #endregion
+
+    private IEnumerator VizualRelocation( Vector3 offset, float time) {
+
         Vector3 startPosition = _myTransform.position;
-        Vector3 finalPosition = new Vector3(startPosition.x, finishY, startPosition.z);
+        Vector3 finalPosition = _myTransform.position + offset;
 
         float timer = 0;
         do {
             timer += Time.deltaTime;
-            _myTransform.position = new Vector3(gameObject.transform.position.x,
-                Vector3.Lerp(startPosition, finalPosition, timer / time).y,
-                transform.position.z); //Vector3.Lerp(startPosition, finalPosition, countTime / time); 
+            _myTransform.position = Vector3.Lerp(startPosition, finalPosition, timer / time);
             yield return null;
         } while (timer <= time);
 
-        _myTransform.position =
-            new Vector3(_myTransform.position.x, finalPosition.y, _myTransform.position.z); //finalPosition;
-
-        isDrop = false;
+        _myTransform.position = finalPosition;
     }
 
     // ФУНКЦИИ ПОВОРОТА
-    public void TurnElement(turn direction, GameObject target) {
+    public void LogicTurn(turn direction) {
         if (direction == turn.left) // правило поворота влево
         {
             foreach (BlockScript item in MyBlocks) {
@@ -114,7 +115,7 @@ public class ElementScript : MonoBehaviour {
     }
 
     // ФУНКЦИИ ПЕРЕМЕЩЕНИЯ
-    public void MoveElement(move direction) {
+    public void LogicMove(move direction) {
         if (direction == move.x) {
             foreach (BlockScript item in MyBlocks) {
                 item.x++;
@@ -137,7 +138,8 @@ public class ElementScript : MonoBehaviour {
         }
     }
 
-    public IEnumerator MoveElementVisual(Vector3 direction, float timeFor) {
+    public IEnumerator VisualMove(Vector3 direction, float time) {
+
         List<Vector3> finalPosBlock = new List<Vector3>();
 
         foreach (BlockScript block in MyBlocks)
@@ -150,22 +152,19 @@ public class ElementScript : MonoBehaviour {
 
         float countTime = 0;
         do {
-            if (countTime + Time.deltaTime < timeFor)
+            if (countTime + Time.deltaTime < time)
                 countTime += Time.deltaTime;
             else
                 break;
 
-            // tyt bilo eshe  = gameObject.transform.position = 
-            Vector3 deltaVector = Vector3.Lerp(startPosition, finalPosition, countTime / timeFor);
+            Vector3 deltaVector = Vector3.Lerp(startPosition, finalPosition, countTime / time);
 
-            //foreach (var item in MyBlocks)
             foreach (BlockScript block in MyBlocks)
                 block.transform.position += deltaVector - lastDeltaVector;
 
-
             lastDeltaVector = deltaVector;
             yield return null;
-        } while (countTime < timeFor);
+        } while (countTime < time);
 
         for (int i = 0; i < MyBlocks.Count; i++) {
             MyBlocks[i].transform.position =
@@ -308,7 +307,7 @@ public class ElementScript : MonoBehaviour {
     }
 
     public void SetTurn(turn direction, GameObject target) {
-        TurnElement(direction, target);
+        LogicTurn(direction);
 
         int rotate;
         if (direction == turn.left)
@@ -331,6 +330,6 @@ public class ElementScript : MonoBehaviour {
         else // (direction == move._z)
             vectorDirection = new Vector3(0f, 0f, -1.0f);
 
-        StartCoroutine(MoveElementVisual(vectorDirection, 0));
+        StartCoroutine(VisualMove(vectorDirection, 0));
     }
 }

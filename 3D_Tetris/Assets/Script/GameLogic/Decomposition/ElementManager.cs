@@ -9,10 +9,6 @@ public class ElementManager : MonoBehaviour {
     [SerializeField] Generator _Generator;
     [SerializeField] StateMachine machine;
 
-    //TODO delete
-    [SerializeField] HeightHandler _HeightHandler;
-    //
-
     public List<ElementScript> _elementMarger;
 
     public ElementScript NewElement;
@@ -67,12 +63,12 @@ public class ElementManager : MonoBehaviour {
 
             if (empty)
             {
-                NewElement.DropElement(this.gameObject); // логическое изменение координат падающего элемента
+                NewElement.LogicDrop(); // логическое изменение координат падающего элемента
             }
             else
                 break;
 
-            yield return StartCoroutine(NewElement.DropElementVisual(NewElement.gameObject.transform.position.y - 1.0f, _PlaneScript._TimeDrop));// элемент визуально падает
+            yield return StartCoroutine(NewElement.VisualDrop( _PlaneScript._TimeDrop));// элемент визуально падает
         }
 
         Destroy(_Generator.examleElement);
@@ -134,8 +130,8 @@ public class ElementManager : MonoBehaviour {
                     _matrix.UnbindToMatrix(item);
 
                 flagDrop = true;
-                item.DropElement(this.gameObject);
-                StartCoroutine(item.DropElementVisual(item.gameObject.transform.position.y - 1.0f, _PlaneScript._TimeDropAfterDestroy)); // запускает падение элемента
+                item.LogicDrop();
+                StartCoroutine(item.VisualDrop( _PlaneScript._TimeDropAfterDestroy)); // запускает падение элемента
             }
             else {
                 if (!item.isBind)

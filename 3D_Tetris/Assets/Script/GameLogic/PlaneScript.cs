@@ -151,7 +151,7 @@ public class PlaneScript : Singleton<PlaneScript>
 
         if (ChekTurnElement(napravl))
         {
-            NewElement.TurnElement(napravl, this.gameObject);
+            NewElement.LogicTurn(napravl);
 
             StartCoroutine(TurnElementVizual(napravl));
             return true;
@@ -215,7 +215,7 @@ public class PlaneScript : Singleton<PlaneScript>
 
         if (CheckMoveElement(direction))
         {
-            NewElement.MoveElement(direction);
+            NewElement.LogicMove(direction);
             StartCoroutine(MoveElementVizual(direction));
 
             Messenger<ElementScript>.Broadcast(GameEvent.MOVE_ELEMENT, NewElement);//myProj.CreateProjection(NewElement);// VisualProection();   VisualProection();
@@ -298,7 +298,7 @@ public class PlaneScript : Singleton<PlaneScript>
             vectorDirection = new Vector3(0f, 0f, -1.0f);
 
         Mystate = planeState.moveState;
-        yield return StartCoroutine(NewElement.MoveElementVisual(vectorDirection, _TimeMove));
+        yield return StartCoroutine(NewElement.VisualMove(vectorDirection, _TimeMove));
 
         Mystate = planeState.emptyState;
         yield return null;
