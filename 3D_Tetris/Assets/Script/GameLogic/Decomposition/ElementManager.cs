@@ -175,7 +175,7 @@ public class ElementManager : MonoBehaviour {
     private void DestroyEmptyElement() {
         // проверка пустых элементов
         for (int i = 0; i < _elementMarger.Count;) {
-            if (_elementMarger[i].CheckEmptyElement())
+            if (_elementMarger[i].CheckEmpty())
             {
                 GameObject tmp = _elementMarger[i].gameObject;
                 _elementMarger.Remove(_elementMarger[i]);

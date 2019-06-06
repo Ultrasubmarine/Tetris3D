@@ -70,7 +70,7 @@ public class ElementScript : MonoBehaviour {
         _myTransform.position = finalPosition;
     }
 
-    // ФУНКЦИИ ПОВОРОТА
+    #region ФУНКЦИИ ПОВОРОТА
     public void LogicTurn(turn direction) {
         if (direction == turn.left) // правило поворота влево
         {
@@ -89,16 +89,14 @@ public class ElementScript : MonoBehaviour {
         }
     }
 
-    public IEnumerator TurnElementVizual(int angle, float TimeFor, GameObject target) {
-        float fff = Time.time;
-
+    public IEnumerator VizualTurn(int angle, float time, GameObject target) {
+  
         float deltaAngle;
         float countAngle = 0;
 
         do {
-            deltaAngle = angle * (Time.deltaTime / TimeFor);
-            if (angle > 0 && countAngle + deltaAngle > angle || angle < 0 && countAngle + deltaAngle < angle
-            ) // если мы уже достаточно повернули и в ту и в другую сторону
+            deltaAngle = angle * (Time.deltaTime / time);
+            if (angle > 0 && countAngle + deltaAngle > angle || angle < 0 && countAngle + deltaAngle < angle) // если мы уже достаточно повернули и в ту и в другую сторону
             {
                 deltaAngle = angle - countAngle; // узнаем сколько нам не хватает на самом деле  
                 countAngle = angle;
@@ -110,11 +108,10 @@ public class ElementScript : MonoBehaviour {
 
             yield return null;
         } while (angle > 0 && countAngle < angle || angle < 0 && countAngle > angle);
-
-        // Debug.Log(" Время поворота: " + (Time.time - fff));
     }
+    #endregion
 
-    // ФУНКЦИИ ПЕРЕМЕЩЕНИЯ
+    #region ФУНКЦИИ ПЕРЕМЕЩЕНИЯ
     public void LogicMove(move direction) {
         if (direction == move.x) {
             foreach (BlockScript item in MyBlocks) {
@@ -143,7 +140,7 @@ public class ElementScript : MonoBehaviour {
         List<Vector3> finalPosBlock = new List<Vector3>();
 
         foreach (BlockScript block in MyBlocks)
-            finalPosBlock.Add(block.transform.position + direction);
+            finalPosBlock.Add(block.MyTransform.position + direction);
 
         Vector3 startPosition = Vector3.zero;
         Vector3 finalPosition = direction;
@@ -160,14 +157,14 @@ public class ElementScript : MonoBehaviour {
             Vector3 deltaVector = Vector3.Lerp(startPosition, finalPosition, countTime / time);
 
             foreach (BlockScript block in MyBlocks)
-                block.transform.position += deltaVector - lastDeltaVector;
+                block.MyTransform.position += deltaVector - lastDeltaVector;
 
             lastDeltaVector = deltaVector;
             yield return null;
         } while (countTime < time);
 
         for (int i = 0; i < MyBlocks.Count; i++) {
-            MyBlocks[i].transform.position =
+            MyBlocks[i].MyTransform.position =
                 new Vector3(finalPosBlock[i].x, MyBlocks[i].transform.position.y, finalPosBlock[i].z);
         }
 
@@ -180,41 +177,34 @@ public class ElementScript : MonoBehaviour {
                 if (item.x == Mathf.Abs(MinCoordinat))
                     return false;
             }
-
             return true;
         }
-
         if (direction == move._x) {
             foreach (BlockScript item in MyBlocks) {
                 if (item.x == MinCoordinat)
                     return false;
             }
-
             return true;
         }
-
         if (direction == move.z) {
             foreach (BlockScript item in MyBlocks) {
                 if (item.z == Mathf.Abs(MinCoordinat))
                     return false;
             }
-
             return true;
         }
-
         if (direction == move._z) {
             foreach (BlockScript item in MyBlocks) {
                 if (item.z == MinCoordinat)
                     return false;
             }
-
             return true;
         }
-
         return true;
     }
+    #endregion
 
-    public bool CheckEmptyElement() {
+    public bool CheckEmpty() {
         for (int i = 0; i < MyBlocks.Count; i++) {
             if (MyBlocks[i] != null)
                 return false; // не пуст
@@ -231,6 +221,7 @@ public class ElementScript : MonoBehaviour {
         }
     }
 
+    #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
     public ElementScript CheckUnion() {
         if (MyBlocks.Count == 0)
             return null;
@@ -241,7 +232,7 @@ public class ElementScript : MonoBehaviour {
 
         m1.Add(curr);
         foreach (var item in MyBlocks) {
-            if (Sliti_Li(curr, item))
+            if (CheckContact(curr, item))
                 m1.Add(item);
         }
 
@@ -253,42 +244,41 @@ public class ElementScript : MonoBehaviour {
             while (k < countK) {
                 var Ost = MyBlocks.Except(m1).ToList();
                 for (int i = 0; i < Ost.Count; i++) {
-                    if (Sliti_Li(Ost[i], m1[k])) {
+                    if (CheckContact(Ost[i], m1[k])) {
                         m1.Add(Ost[i]);
                         countK++;
                     }
                 }
-
                 k++;
             }
-
-
             // создаем новый элемент
             if (m1.Count < MyBlocks.Count) {
-                this.name = "ZLO CUT CUT CUT";
-                Debug.Log("Create ++++ ELEMENT");
-                GameObject newEl = new GameObject("ZLO DOUBLE");
-                newEl.transform.position = Vector3.zero;
 
                 var Ost = MyBlocks.Except(m1).ToList();
-                newEl.AddComponent<ElementScript>().MyBlocks = Ost;
-
-                for (int i = 0; i < Ost.Count; i++) {
-                    Ost[i].gameObject.transform.parent = newEl.transform;
-                    MyBlocks.Remove(Ost[i]);
-                }
-
-                return newEl.GetComponent<ElementScript>();
+                return CreateElement(Ost);
             }
             else
                 return null;
         }
     }
 
-    public bool Sliti_Li(BlockScript b1, BlockScript b2) {
+    private ElementScript CreateElement( List<BlockScript> blocks) {
+
+        GameObject newElement = new GameObject("ZLO DOUBLE");
+        newElement.transform.position = Vector3.zero;
+
+        newElement.AddComponent<ElementScript>().MyBlocks = blocks;
+
+        for (int i = 0; i < blocks.Count; i++) {
+            blocks[i].MyTransform.parent = newElement.transform;
+            MyBlocks.Remove(blocks[i]);
+        }
+        return newElement.GetComponent<ElementScript>();
+    }
+
+    public bool CheckContact(BlockScript b1, BlockScript b2) {
         Vector3 b1p = new Vector3(b1.x, b1.y, b1.z);
         Vector3 b2p = new Vector3(b2.x, b2.y, b2.z);
-
 
         if (b1p.x == b2p.x && b1p.y == b2p.y && b1p.z == b2p.z + 1)
             return true;
@@ -305,6 +295,7 @@ public class ElementScript : MonoBehaviour {
 
         return false;
     }
+    #endregion
 
     public void SetTurn(turn direction, GameObject target) {
         LogicTurn(direction);
@@ -315,7 +306,7 @@ public class ElementScript : MonoBehaviour {
         else
             rotate = -90;
 
-        StartCoroutine(TurnElementVizual(rotate, 0, target));
+        StartCoroutine(VizualTurn(rotate, 0, target));
     }
 
     public void SetMove(move direction) {

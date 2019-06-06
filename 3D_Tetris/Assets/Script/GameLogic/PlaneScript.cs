@@ -200,7 +200,7 @@ public class PlaneScript : Singleton<PlaneScript>
 
         Mystate = planeState.turnState;
     //    DestroyProection(_proectionsList);
-        yield return StartCoroutine(NewElement.TurnElementVizual(rotate, _TimeRotate, this.gameObject));
+        yield return StartCoroutine(NewElement.VizualTurn(rotate, _TimeRotate, this.gameObject));
 
         Messenger<ElementScript>.Broadcast(GameEvent.TURN_ELEMENT, NewElement);
         Mystate = planeState.emptyState;
