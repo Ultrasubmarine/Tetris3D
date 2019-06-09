@@ -39,7 +39,7 @@ public class PlaneScript : Singleton<PlaneScript>
     bool _isWin = false;
 
     [SerializeField] private Generator _Generator;
-    public ElementScript NewElement { get; set; }
+    public Element NewElement { get; set; }
 
     [Header("Size plane")]
     [SerializeField] private int _WightPlane;
@@ -63,7 +63,7 @@ public class PlaneScript : Singleton<PlaneScript>
     public GameObject TextSphere;
     public List<GameObject> TestSphereList = new List<GameObject>();
 
-    private List<ElementScript> _elementMagrer;
+    private List<Element> _elementMagrer;
 
     // Use this for initialization
     private void Start()
@@ -71,7 +71,7 @@ public class PlaneScript : Singleton<PlaneScript>
         _matrix = PlaneMatrix.Instance;
         Mystate = planeState.startState;//Mystate = planeState.emptyState;
 
-        _elementMagrer = new List<ElementScript>();
+        _elementMagrer = new List<Element>();
  
         MinCoordinat = _WightPlane / 2 * (-1); // минимальная координата, окторая может быть в текущем поле
 
@@ -202,104 +202,7 @@ public class PlaneScript : Singleton<PlaneScript>
     //    DestroyProection(_proectionsList);
         yield return StartCoroutine(NewElement.VizualTurn(rotate, _TimeRotate, this.gameObject));
 
-        Messenger<ElementScript>.Broadcast(GameEvent.TURN_ELEMENT, NewElement);
-        Mystate = planeState.emptyState;
-        yield return null;
-    }
-
-    // ФУНКЦИИ ПЕРЕМЕЩЕНИЯ ЭЛЕМЕНТА
-    public void MoveElement(move direction)
-    {
-        if (Mystate != planeState.emptyState)
-            return; // ХММММММММММММММММ,,, ЭТО НАВЕРНОЕ НЕ ОЧЕНЬ
-
-        if (CheckMoveElement(direction))
-        {
-            NewElement.LogicMove(direction);
-            StartCoroutine(MoveElementVizual(direction));
-
-            Messenger<ElementScript>.Broadcast(GameEvent.MOVE_ELEMENT, NewElement);//myProj.CreateProjection(NewElement);// VisualProection();   VisualProection();
-            //   Debug.Log("ПЕРЕМЕСТИЛИ");
-        }
-    }
-
-    private bool CheckMoveElement(move direction) // 1- можно переместить 2- нельзя
-    {
-        if (NewElement == null)
-            return false;
-
-        if (direction == move.x)
-        {
-            foreach (var item in NewElement.MyBlocks)
-            {
-                if (item.x == Mathf.Abs(MinCoordinat))
-                    return false;
-
-                if (_matrix._matrix[item.x + 1 + 1, item.y, item.z + 1] != null)
-                    return false;
-            }
-
-            return true;
-        }
-        else if (direction == move._x)
-        {
-            foreach (var item in NewElement.MyBlocks)
-            {
-                if (item.x == MinCoordinat)
-                    return false;
-
-                if (_matrix._matrix[item.x + 1 - 1, item.y, item.z + 1] != null)
-                    return false;
-            }
-
-            return true;
-        }
-        else if (direction == move.z)
-        {
-            foreach (var item in NewElement.MyBlocks)
-            {
-                if (item.z == Mathf.Abs(MinCoordinat))
-                    return false;
-
-                if (_matrix._matrix[item.x + 1, item.y, item.z + 1 + 1] != null)
-                    return false;
-            }
-
-            return true;
-        }
-        else if (direction == move._z)
-        {
-            foreach (var item in NewElement.MyBlocks)
-            {
-                if (item.z == MinCoordinat)
-                    return false;
-
-                if (_matrix._matrix[item.x + 1, item.y, item.z + 1 - 1] != null)
-                    return false;
-            }
-
-            return true;
-        }
-
-        return true;
-    }
-
-    private IEnumerator MoveElementVizual(move direction)
-    {
-        Vector3 vectorDirection;
-
-        if (direction == move.x)
-            vectorDirection = new Vector3(1.0f, 0f, 0f);
-        else if (direction == move._x)
-            vectorDirection = new Vector3(-1.0f, 0f, 0f);
-        else if (direction == move.z)
-            vectorDirection = new Vector3(0f, 0f, 1.0f);
-        else // (direction == move._z)
-            vectorDirection = new Vector3(0f, 0f, -1.0f);
-
-        Mystate = planeState.moveState;
-        yield return StartCoroutine(NewElement.VisualMove(vectorDirection, _TimeMove));
-
+        Messenger<Element>.Broadcast(GameEvent.TURN_ELEMENT, NewElement);
         Mystate = planeState.emptyState;
         yield return null;
     }

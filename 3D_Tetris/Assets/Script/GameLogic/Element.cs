@@ -4,8 +4,8 @@ using UnityEngine;
 using System.Linq;
 
 
-public class ElementScript : MonoBehaviour {
-    public List<BlockScript> MyBlocks = new List<BlockScript>(); //[] MyBlocks;
+public class Element : MonoBehaviour {
+    public List<Block> MyBlocks = new List<Block>(); //[] MyBlocks;
 
     public bool isBind = false;
     public bool isDrop = false;
@@ -15,35 +15,20 @@ public class ElementScript : MonoBehaviour {
         _myTransform = GetComponent<Transform>();
     }
 
-    public void AddBlock(BlockScript newBlock) {
+    public void AddBlock(Block newBlock) {
         MyBlocks.Add(newBlock);
     }
-
-    //public void CorrectElementChild()
-    //{
-    //    Vector3 min = new Vector3();
-    //    Vector3 max = new Vector3();
-
-    //    min.x = MyBlocks.Min(s => s.x);
-    //    min.y = MyBlocks.Min(s => s.y);
-    //    min.z = MyBlocks.Min(s => s.z);
-
-    //    max.x = MyBlocks.Max(s => s.x);
-    //    max.y = MyBlocks.Max(s => s.y);
-    //    max.z = MyBlocks.Max(s => s.z);
-
-    //}
 
     public void InitializationAfterGeneric(int height) {
         int maxElement = MyBlocks.Max(s => s.y);
 
-        foreach (BlockScript item in MyBlocks)
+        foreach (Block item in MyBlocks)
             item.y += height - maxElement;
     }
 
     #region ФУНКЦИИ ПАДЕНИЯ
     public void LogicDrop() {
-        foreach (BlockScript item in MyBlocks)
+        foreach (Block item in MyBlocks)
             item.y--;
     }
 
@@ -74,14 +59,14 @@ public class ElementScript : MonoBehaviour {
     public void LogicTurn(turn direction) {
         if (direction == turn.left) // правило поворота влево
         {
-            foreach (BlockScript item in MyBlocks) {
+            foreach (Block item in MyBlocks) {
                 int temp = item.x;
                 item.x = item.z;
                 item.z = -temp;
             }
         }
         else {
-            foreach (BlockScript item in MyBlocks) {
+            foreach (Block item in MyBlocks) {
                 int temp = item.x;
                 item.x = -item.z;
                 item.z = temp;
@@ -111,98 +96,12 @@ public class ElementScript : MonoBehaviour {
     }
     #endregion
 
-    #region ФУНКЦИИ ПЕРЕМЕЩЕНИЯ
-    public void LogicMove(move direction) {
-        if (direction == move.x) {
-            foreach (BlockScript item in MyBlocks) {
-                item.x++;
-            }
-        }
-        else if (direction == move._x) {
-            foreach (BlockScript item in MyBlocks) {
-                item.x--;
-            }
-        }
-        else if (direction == move.z) {
-            foreach (BlockScript item in MyBlocks) {
-                item.z++;
-            }
-        }
-        else if (direction == move._z) {
-            foreach (BlockScript item in MyBlocks) {
-                item.z--;
-            }
+    public void OffsetCoordinatBlocks(int of_x = 0, int of_y = 0, int of_z = 0) {
+
+        foreach (var item in MyBlocks) {
+            item.OffsetCoordinat(of_x, of_y, of_z);
         }
     }
-
-    public IEnumerator VisualMove(Vector3 direction, float time) {
-
-        List<Vector3> finalPosBlock = new List<Vector3>();
-
-        foreach (BlockScript block in MyBlocks)
-            finalPosBlock.Add(block.MyTransform.position + direction);
-
-        Vector3 startPosition = Vector3.zero;
-        Vector3 finalPosition = direction;
-
-        Vector3 lastDeltaVector = Vector3.zero;
-
-        float countTime = 0;
-        do {
-            if (countTime + Time.deltaTime < time)
-                countTime += Time.deltaTime;
-            else
-                break;
-
-            Vector3 deltaVector = Vector3.Lerp(startPosition, finalPosition, countTime / time);
-
-            foreach (BlockScript block in MyBlocks)
-                block.MyTransform.position += deltaVector - lastDeltaVector;
-
-            lastDeltaVector = deltaVector;
-            yield return null;
-        } while (countTime < time);
-
-        for (int i = 0; i < MyBlocks.Count; i++) {
-            MyBlocks[i].MyTransform.position =
-                new Vector3(finalPosBlock[i].x, MyBlocks[i].transform.position.y, finalPosBlock[i].z);
-        }
-
-        finalPosBlock.Clear();
-    }
-
-    public bool CheckMove(move direction, int MinCoordinat) {
-        if (direction == move.x) {
-            foreach (BlockScript item in MyBlocks) {
-                if (item.x == Mathf.Abs(MinCoordinat))
-                    return false;
-            }
-            return true;
-        }
-        if (direction == move._x) {
-            foreach (BlockScript item in MyBlocks) {
-                if (item.x == MinCoordinat)
-                    return false;
-            }
-            return true;
-        }
-        if (direction == move.z) {
-            foreach (BlockScript item in MyBlocks) {
-                if (item.z == Mathf.Abs(MinCoordinat))
-                    return false;
-            }
-            return true;
-        }
-        if (direction == move._z) {
-            foreach (BlockScript item in MyBlocks) {
-                if (item.z == MinCoordinat)
-                    return false;
-            }
-            return true;
-        }
-        return true;
-    }
-    #endregion
 
     public bool CheckEmpty() {
         for (int i = 0; i < MyBlocks.Count; i++) {
@@ -212,7 +111,7 @@ public class ElementScript : MonoBehaviour {
         return true; // пуст
     }
 
-    public void DeleteBlock(BlockScript block) {
+    public void DeleteBlock(Block block) {
         if (MyBlocks.Contains(block)) {
             MyBlocks.Remove(block);
 
@@ -222,13 +121,12 @@ public class ElementScript : MonoBehaviour {
     }
 
     #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
-    public ElementScript CheckUnion() {
+    public Element CheckUnion() {
         if (MyBlocks.Count == 0)
             return null;
-        List<BlockScript> m1 = new List<BlockScript>();
-        // MMM
+        List<Block> m1 = new List<Block>();
 
-        BlockScript curr = MyBlocks[0]; // точка отсчета
+        Block curr = MyBlocks[0]; // точка отсчета
 
         m1.Add(curr);
         foreach (var item in MyBlocks) {
@@ -262,21 +160,21 @@ public class ElementScript : MonoBehaviour {
         }
     }
 
-    private ElementScript CreateElement( List<BlockScript> blocks) {
+    private Element CreateElement( List<Block> blocks) {
 
         GameObject newElement = new GameObject("ZLO DOUBLE");
         newElement.transform.position = Vector3.zero;
 
-        newElement.AddComponent<ElementScript>().MyBlocks = blocks;
+        newElement.AddComponent<Element>().MyBlocks = blocks;
 
         for (int i = 0; i < blocks.Count; i++) {
             blocks[i].MyTransform.parent = newElement.transform;
             MyBlocks.Remove(blocks[i]);
         }
-        return newElement.GetComponent<ElementScript>();
+        return newElement.GetComponent<Element>();
     }
 
-    public bool CheckContact(BlockScript b1, BlockScript b2) {
+    public bool CheckContact(Block b1, Block b2) {
         Vector3 b1p = new Vector3(b1.x, b1.y, b1.z);
         Vector3 b2p = new Vector3(b2.x, b2.y, b2.z);
 
@@ -297,6 +195,7 @@ public class ElementScript : MonoBehaviour {
     }
     #endregion
 
+    #region для Generator.cs
     public void SetTurn(turn direction, GameObject target) {
         LogicTurn(direction);
 
@@ -321,6 +220,39 @@ public class ElementScript : MonoBehaviour {
         else // (direction == move._z)
             vectorDirection = new Vector3(0f, 0f, -1.0f);
 
-        StartCoroutine(VisualMove(vectorDirection, 0));
+        //StartCoroutine(VisualMove(vectorDirection, 0));
     }
+
+    public bool CheckMove(move direction, int MinCoordinat) {
+        if (direction == move.x) {
+            foreach (Block item in MyBlocks) {
+                if (item.x == Mathf.Abs(MinCoordinat))
+                    return false;
+            }
+            return true;
+        }
+        if (direction == move._x) {
+            foreach (Block item in MyBlocks) {
+                if (item.x == MinCoordinat)
+                    return false;
+            }
+            return true;
+        }
+        if (direction == move.z) {
+            foreach (Block item in MyBlocks) {
+                if (item.z == Mathf.Abs(MinCoordinat))
+                    return false;
+            }
+            return true;
+        }
+        if (direction == move._z) {
+            foreach (Block item in MyBlocks) {
+                if (item.z == MinCoordinat)
+                    return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    #endregion
 }

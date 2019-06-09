@@ -12,19 +12,24 @@ public struct CoordinatXZ {
     }
 }
 
-public class BlockScript : MonoBehaviour {
+public class Block : MonoBehaviour {
     public int x;
     public int y;
     public int z;
 
     public bool destroy = false;
-   // public Vector2Int XZ { get { return new Vector2Int(x, z); } }
+    public Transform MyTransform;
+
     public CoordinatXZ XZ { get { return new CoordinatXZ(x, z); } }
-    
-    public BlockScript() {
+
+    private void Awake() {
+        MyTransform = this.transform;
     }
 
-    public BlockScript(int xx, int yy, int zz) {
+    public Block() {
+    }
+
+    public Block(int xx, int yy, int zz) {
         x = xx;
         y = yy;
         z = zz;
@@ -34,5 +39,11 @@ public class BlockScript : MonoBehaviour {
         x = (int) point.x - 1; // координаты plane - круговые
         y = (int) point.y;
         z = (int) point.z - 1; // координаты plane - круговые
+    }
+
+    public void OffsetCoordinat(int of_x=0, int of_y=0, int of_z=0) {
+        x += of_x;
+        y += of_y;
+        z += of_z;
     }
 }

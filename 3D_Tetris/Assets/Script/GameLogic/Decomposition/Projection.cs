@@ -26,22 +26,22 @@ public class Projection : MonoBehaviour {
     private List<GameObject> _ceilingList = new List<GameObject>();
 
     private void Awake() {
-        Messenger<ElementScript>.AddListener(GameEvent.CREATE_NEW_ELEMENT, CreateProjection);
-        Messenger<ElementScript>.AddListener(GameEvent.TURN_ELEMENT, CreateProjection);
-        Messenger<ElementScript>.AddListener(GameEvent.MOVE_ELEMENT, CreateProjection);
+        Messenger<Element>.AddListener(GameEvent.CREATE_NEW_ELEMENT, CreateProjection);
+        Messenger<Element>.AddListener(GameEvent.TURN_ELEMENT, CreateProjection);
+        Messenger<Element>.AddListener(GameEvent.MOVE_ELEMENT, CreateProjection);
     }
 
     private void OnDestroy() {
-        Messenger<ElementScript>.RemoveListener(GameEvent.CREATE_NEW_ELEMENT, CreateProjection);
-        Messenger<ElementScript>.RemoveListener(GameEvent.TURN_ELEMENT, CreateProjection);
-        Messenger<ElementScript>.RemoveListener(GameEvent.MOVE_ELEMENT, CreateProjection);
+        Messenger<Element>.RemoveListener(GameEvent.CREATE_NEW_ELEMENT, CreateProjection);
+        Messenger<Element>.RemoveListener(GameEvent.TURN_ELEMENT, CreateProjection);
+        Messenger<Element>.RemoveListener(GameEvent.MOVE_ELEMENT, CreateProjection);
     }
 
     private void Start() {
         _matrix = PlaneMatrix.Instance;
     }
     // ФУНКЦИИ ДЛЯ РАБОТЫ С ПРОЕКЦИЯМИ
-    public void CreateProjection(ElementScript obj) {
+    public void CreateProjection(Element obj) {
 
         Destroy(PROECTIONS);
 

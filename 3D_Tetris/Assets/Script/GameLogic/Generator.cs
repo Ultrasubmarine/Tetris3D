@@ -4,10 +4,10 @@ using UnityEngine;
 using System.Linq;
 
 
-public class Element {
-    public GameObject El;
-    public double P;
-}
+//public class Element {
+//    public GameObject El;
+//    public double P;
+//}
 
 public class Generator : MonoBehaviour {
     public GameObject[] PrefabElement;
@@ -34,7 +34,7 @@ public class Generator : MonoBehaviour {
         Vector3 temp = plane.position;
 
         // инициализируем блоки элемента согласно установленной позиции
-        ElementScript Element = NewElement.GetComponent<ElementScript>();
+        Element Element = NewElement.GetComponent<Element>();
         Element.InitializationAfterGeneric(_PlaneMatrix.Height);//plane.Height);
 
 
@@ -50,7 +50,7 @@ public class Generator : MonoBehaviour {
         // TO DO - вычленить в отдельный метод создание дубляжа
         GameObject exElement = Instantiate(NewElement);
         exElement.name = " TUTOR";
-        foreach (var item in exElement.GetComponent<ElementScript>().MyBlocks) {
+        foreach (var item in exElement.GetComponent<Element>().MyBlocks) {
             item.GetComponent<Renderer>().material = _BonusMaterial;
             item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
         }
@@ -87,7 +87,7 @@ public class Generator : MonoBehaviour {
         }
     }
 
-    private GameObject CreatorElement(BlockScript[,,] matrix) {
+    private GameObject CreatorElement(Block[,,] matrix) {
         int indexmat = Random.Range(0, MyMaterial.Length - 1);
         // check min matrix element
         Vector3 min = CheckMatrixMinimum(matrix);
@@ -96,7 +96,7 @@ public class Generator : MonoBehaviour {
 
         // create element
         GameObject elementObj = new GameObject("MY ZLO");
-        ElementScript createElement = elementObj.AddComponent<ElementScript>();
+        Element createElement = elementObj.AddComponent<Element>();
 
         Vector3 lastPoint = new Vector3(min.x, 0, min.z);
 
@@ -123,25 +123,25 @@ public class Generator : MonoBehaviour {
     }
 
 
-    private void CreatorBlock(Vector3 position, ElementScript element, int indexmat) {
+    private void CreatorBlock(Vector3 position, Element element, int indexmat) {
         // добавляем компонент с координатами блока
         GameObject currBlock = Instantiate(PrefabBlock);
-        currBlock.AddComponent<BlockScript>().SetCoordinat(position);
+        currBlock.AddComponent<Block>().SetCoordinat(position);
         currBlock.GetComponent<MeshRenderer>().material = MyMaterial[indexmat];
 
         currBlock.gameObject.transform.parent = element.gameObject.transform;
         currBlock.transform.localPosition = position;
-        SettingsPositionBlock(currBlock.GetComponent<BlockScript>());
-        element.AddBlock(currBlock.GetComponent<BlockScript>());
+        SettingsPositionBlock(currBlock.GetComponent<Block>());
+        element.AddBlock(currBlock.GetComponent<Block>());
     }
 
-    private void SettingsPositionBlock(BlockScript block) {
+    private void SettingsPositionBlock(Block block) {
         Vector3 position = new Vector3(block.x, block.y, block.z);
         block.gameObject.transform.localPosition = position;
     }
 
     // chek matrix min
-    private Vector3 CheckMatrixMinimum(BlockScript[,,] matrix) {
+    private Vector3 CheckMatrixMinimum(Block[,,] matrix) {
         int min = matrix.GetUpperBound(1) - 1;
         int curr_min;
         Vector3 min_point = new Vector3(matrix.GetUpperBound(0), matrix.GetUpperBound(1) - 1, matrix.GetUpperBound(2));
@@ -168,7 +168,7 @@ public class Generator : MonoBehaviour {
     }
 
     // слепок матрицы
-    private bool[,,] CastMatrix(int min, BlockScript[,,] matrix) {
+    private bool[,,] CastMatrix(int min, Block[,,] matrix) {
         bool[,,] castMatrix = new bool[3, 3, 3];
         bool blockLayer;
 
@@ -225,7 +225,7 @@ public class Generator : MonoBehaviour {
         return castMatrix;
     }
 
-    private List<Vector3> PovFreeCount(Vector3 point, bool[,,] matrix, ElementScript currEl) {
+    private List<Vector3> PovFreeCount(Vector3 point, bool[,,] matrix, Element currEl) {
         List<Vector3> ListPov = new List<Vector3>();
 
         if (point.x < 2)
@@ -261,7 +261,7 @@ public class Generator : MonoBehaviour {
     }
 
 
-    void ChengeBlock(ElementScript element, GameObject target) {
+    void ChengeBlock(Element element, GameObject target) {
         Random rn = new Random();
 
         int turnCount = Random.Range(1, 2);

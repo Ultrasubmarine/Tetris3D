@@ -433,10 +433,7 @@ MonoBehaviour:
   _PlaneScript: {fileID: 1630847257}
   _Generator: {fileID: 1634487027}
   machine: {fileID: 661031969}
-  _HeightHandler: {fileID: 824329424}
-  myProj: {fileID: 528980683}
   _elementMarger: []
-  NewElement: {fileID: 0}
 --- !u!4 &39482332
 Transform:
   m_ObjectHideFlags: 0
@@ -1349,6 +1346,7 @@ MonoBehaviour:
   y: 0
   z: 0
   destroy: 0
+  MyTransform: {fileID: 0}
 --- !u!23 &134437414
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1818,7 +1816,10 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 33401715704026066, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
+    - {fileID: 65401144960053416, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
+    - {fileID: 23467233712937480, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1001 &208940747
@@ -2925,6 +2926,48 @@ Transform:
   m_Father: {fileID: 528980684}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &363865032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 363865034}
+  - component: {fileID: 363865033}
+  m_Layer: 0
+  m_Name: moving
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &363865033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 363865032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b168377fe140493479f365eea0cd5908, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _StateMachine: {fileID: 661031969}
+  _Time: 0.2
+--- !u!4 &363865034
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 363865032}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 860787691}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &385851844
 GameObject:
   m_ObjectHideFlags: 0
@@ -3021,7 +3064,10 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 33401715704026066, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
+    - {fileID: 65401144960053416, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
+    - {fileID: 23467233712937480, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &408943256
@@ -6196,6 +6242,8 @@ MonoBehaviour:
   MyPlane: {fileID: 1630847257}
   MyCamera: {fileID: 1836002385}
   ObjectLook: {fileID: 556433572}
+  _StateMachine: {fileID: 661031969}
+  moving: {fileID: 363865033}
 --- !u!4 &860787691
 Transform:
   m_ObjectHideFlags: 0
@@ -6205,7 +6253,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 363865034}
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13918,7 +13967,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 33401715704026066, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
+    - {fileID: 65401144960053416, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
+    - {fileID: 23467233712937480, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1569215926
@@ -14030,7 +14082,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   machine: {fileID: 661031969}
-  myProj: {fileID: 528980683}
   _HeightHandler: {fileID: 824329424}
   _ElementManager: {fileID: 39482331}
   _Generator: {fileID: 1634487027}
@@ -14936,7 +14987,15 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 65401144960053416, guid: 1e5b5857acde9a244881174f648c9ce0,
+        type: 2}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 65401144960053416, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
+    - {fileID: 33401715704026066, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
+    - {fileID: 23467233712937480, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 1e5b5857acde9a244881174f648c9ce0, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1843248899
@@ -16227,6 +16286,7 @@ MonoBehaviour:
   y: 0
   z: 0
   destroy: 0
+  MyTransform: {fileID: 0}
 --- !u!23 &2026479155
 MeshRenderer:
   m_ObjectHideFlags: 0

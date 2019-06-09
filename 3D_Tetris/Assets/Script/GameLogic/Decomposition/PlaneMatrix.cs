@@ -10,7 +10,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     [SerializeField] StateMachine machine;
     [SerializeField] HeightHandler _HeightHandler;
     //
-    public BlockScript[,,] _matrix;
+    public Block[,,] _matrix;
 
     [Header("Size plane")]
     int _LimitHeight = 18; 
@@ -28,7 +28,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
     protected override void Init() {
         ExtensionMetodsForMatrix.SetSizePlane(_Wight);
-        _matrix = new BlockScript[_Wight, _Height, _Wight];
+        _matrix = new Block[_Wight, _Height, _Wight];
 
         MinCoordinat = _Wight / 2 * (-1); // минимальная координата, окторая может быть в текущем поле
 
@@ -39,9 +39,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
                     _matrix[i, j, k] = null;
                 }
             }
-        }
-
-        
+        }        
     }
 
     private void Start() {
@@ -56,13 +54,13 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         _LimitHeight = limit;
     }
 
-    public bool CheckEmptyPlaсe( ElementScript element, Vector3Int direction) {
+    public bool CheckEmptyPlaсe( Element element, Vector3Int direction) {
 
         if (element.MyBlocks.Count == 0) 
             return false;
         
         Vector3Int newCoordinat;
-        foreach (BlockScript item in element.MyBlocks) {
+        foreach (Block item in element.MyBlocks) {
             if (!item.destroy) {
 
                 newCoordinat = new Vector3Int(item.x, item.y, item.z) + direction;
@@ -82,10 +80,10 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     }
 
     #region привязка/отвязка эл-та к матрице
-    public void BindToMatrix(ElementScript element) {
+    public void BindToMatrix(Element element) {
 
         int x, y, z;
-        foreach (BlockScript item in element.MyBlocks) {
+        foreach (Block item in element.MyBlocks) {
             if (item == null || item.destroy)
                 continue;
             x = item.x;
@@ -97,10 +95,10 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         element.isBind = true;
     }
 
-    public void UnbindToMatrix(ElementScript element) {
+    public void UnbindToMatrix(Element element) {
 
         int x, y, z;
-        foreach (BlockScript item in element.MyBlocks) {
+        foreach (Block item in element.MyBlocks) {
             if (item == null || item.destroy)
                 continue;
             x = item.x;
@@ -155,7 +153,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
                 var ggg = _matrix[x, layer, z];
                 _matrix[x, layer, z].destroy = true;
                 _matrix[x, layer, z] = null;
-                tmp.GetComponentInParent<ElementScript>().DeleteBlock(ggg);             
+                tmp.GetComponentInParent<Element>().DeleteBlock(ggg);             
             }
         }
     }

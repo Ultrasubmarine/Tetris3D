@@ -9,13 +9,13 @@ public class ElementManager : MonoBehaviour {
     [SerializeField] Generator _Generator;
     [SerializeField] StateMachine machine;
 
-    public List<ElementScript> _elementMarger;
+    public List<Element> _elementMarger;
 
-    public ElementScript NewElement;
+    static public Element NewElement;
 
     // Use this for initialization
     void Start () {
-        _elementMarger = new List<ElementScript>();
+        _elementMarger = new List<Element>();
         _matrix = PlaneMatrix.Instance;
 
         Messenger.AddListener( StateMachine.StateMachineKey + GameState2.Empty, GenerateElement);
@@ -36,7 +36,7 @@ public class ElementManager : MonoBehaviour {
     public void GenerateElement() {
 
         GameObject generationElement = _Generator.GenerationNewElement(_PlaneScript.transform);
-        NewElement = generationElement.GetComponent<ElementScript>();
+        NewElement = generationElement.GetComponent<Element>();
         NewElement.gameObject.transform.parent = _PlaneScript.gameObject.transform;
 
         _PlaneScript.NewElement = NewElement;
@@ -85,7 +85,7 @@ public class ElementManager : MonoBehaviour {
         yield break;
     }
 
-    private void MergeElement( ElementScript newElement) {
+    private void MergeElement( Element newElement) {
 
         _matrix.BindToMatrix(newElement);
 
@@ -159,7 +159,7 @@ public class ElementManager : MonoBehaviour {
         int k = 0;
         int countK = _elementMarger.Count;
         while (k < countK) {
-            ElementScript b = _elementMarger[k].CheckUnion();
+            Element b = _elementMarger[k].CheckUnion();
             if (b != null) {
                 _matrix.UnbindToMatrix(b);
                 _matrix.UnbindToMatrix(_elementMarger[k]);
@@ -189,7 +189,7 @@ public class ElementManager : MonoBehaviour {
 
     public void DestroyAllElements() {
         while (_elementMarger.Count > 0) {
-            ElementScript tmp = _elementMarger[0];
+            Element tmp = _elementMarger[0];
             _matrix.UnbindToMatrix(tmp);
             _elementMarger.Remove(tmp);
             Destroy(tmp.gameObject);

@@ -44,19 +44,20 @@ public class StateMachine : MonoBehaviour {
         ChangeState((GameState2)newState);    
     }
 
-    public bool ChangeState(GameState2 newState) {
+    public bool ChangeState(GameState2 newState, bool broadcust = true) {
         
         if (StateTable[GetIndex(newState)]) {
-            SetState(newState);
+            SetState(newState, broadcust);
             return true;
         }
         Debug.Log("Can'T change");
         return false;
     }
 
-    private void SetState(GameState2 newState) {
+    private void SetState(GameState2 newState, bool broadcust = true) {
         _currState = newState;
-        Messenger.Broadcast(StateMachineKey + newState.ToString());
+        if(broadcust)
+            Messenger.Broadcast(StateMachineKey + newState.ToString(), MessengerMode.REQUIRE_LISTENER);
         UIText.text = newState.ToString();
     }
 

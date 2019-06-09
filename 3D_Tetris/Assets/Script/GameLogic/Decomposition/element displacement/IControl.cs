@@ -4,11 +4,13 @@ using UnityEngine;
 
 public abstract class ControlBase<T>: MonoBehaviour {
 
-    public void Action( T parametr) {
+    public bool Action( T parametr) {
         if (CheckOpportunity(parametr)) {
             Logic(parametr);
             Vizual(parametr);
+            return true;
         }
+        return false;
 
     }
 

@@ -16,8 +16,8 @@ namespace IntegerExtension {
             return coordinat + _difference;
         }
 
-        public static int ToCoordinat(this int coordinat) {
-            return coordinat - _difference;
+        public static int ToCoordinat(this int index) {
+            return index - _difference;
         }
 
         public static bool OutOfCoordinatLimit( this Vector3Int coordinat) {
