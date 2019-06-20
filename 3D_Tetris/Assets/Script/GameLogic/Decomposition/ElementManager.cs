@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ElementManager : MonoBehaviour {
 
-    [SerializeField] PlaneScript _PlaneScript;
     PlaneMatrix _matrix;
+    [SerializeField] Speed _Speed;
     [SerializeField] Generator _Generator;
     [SerializeField] StateMachine machine;
 
@@ -35,11 +35,11 @@ public class ElementManager : MonoBehaviour {
 
     public void GenerateElement() {
 
-        GameObject generationElement = _Generator.GenerationNewElement(_PlaneScript.transform);
+        GameObject generationElement = _Generator.GenerationNewElement(gameObject.transform);//_PlaneScript.transform);
         NewElement = generationElement.GetComponent<Element>();
-        NewElement.gameObject.transform.parent = _PlaneScript.gameObject.transform;
+        NewElement.gameObject.transform.parent = gameObject.transform;
 
-        _PlaneScript.NewElement = NewElement;
+        //_PlaneScript.NewElement = NewElement;
 
         machine.ChangeState(GameState2.NewElement);
 
@@ -51,11 +51,11 @@ public class ElementManager : MonoBehaviour {
     }
     private IEnumerator DropElement() {
 
-        _PlaneScript.Mystate = planeState.emptyState;
+        //_PlaneScript.Mystate = planeState.emptyState;
    
         while (true) {
 
-            while (_PlaneScript.Mystate == planeState.turnState || _PlaneScript.Mystate == planeState.moveState) {
+            while (machine.State != GameState2.NewElement){//_PlaneScript.Mystate == planeState.turnState || _PlaneScript.Mystate == planeState.moveState) {
                 yield return null;
             }
 
@@ -68,20 +68,23 @@ public class ElementManager : MonoBehaviour {
             else
                 break;
 
-            yield return StartCoroutine(NewElement.VisualDrop( _PlaneScript._TimeDrop));// элемент визуально падает
+            yield return StartCoroutine(NewElement.VisualDrop(_Speed._TimeDrop));// элемент визуально падает
         }
 
         Destroy(_Generator.examleElement);
 
-        while (_PlaneScript.Mystate == planeState.moveState) {
+        while (machine.State != GameState2.NewElement) {//_PlaneScript.Mystate == planeState.turnState || _PlaneScript.Mystate == planeState.moveState) {
             yield return null;
         }
+        //while (_PlaneScript.Mystate == planeState.moveState) {
+        //    yield return null;
+        //}
         MergeElement(NewElement); // слияние элемента и поля
         NewElement = null;
         machine.ChangeState(GameState2.Merge);
 
         // myProj.CreateCeiling();
-        // // TO DO - проверка что надо уничтожить
+        // // TODO - проверка что надо уничтожить
         yield break;
     }
 
@@ -108,7 +111,7 @@ public class ElementManager : MonoBehaviour {
 
             if(flagDrop)                
                 yield return new WaitUntil(AllElementsDrop);
-            yield return new WaitForSeconds( _PlaneScript._TimeDelay); // слишком резко уничтожаются 
+            yield return new WaitForSeconds( _Speed._TimeDelay); // слишком резко уничтожаются 
         }
         while (flagDrop); // проверяем что бы все упало, пока оно может падать
 
@@ -131,7 +134,7 @@ public class ElementManager : MonoBehaviour {
 
                 flagDrop = true;
                 item.LogicDrop();
-                StartCoroutine(item.VisualDrop( _PlaneScript._TimeDropAfterDestroy)); // запускает падение элемента
+                StartCoroutine(item.VisualDrop(_Speed._TimeDropAfterDestroy)); // запускает падение элемента
             }
             else {
                 if (!item.isBind)

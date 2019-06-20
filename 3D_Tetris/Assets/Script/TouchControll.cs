@@ -29,13 +29,8 @@ public class TouchControll : MonoBehaviour {
 
     bool _isTouchUI;
 
-//    void Start() {
-////        _minSwipeLength = (float) Screen.height * 10 / 100;
-//    }
-
     void Update() {
         /* TODO Я бы переписал*/
-
         if (Input.touchCount == 1) {
             if (Input.touches[0].phase == TouchPhase.Began) {
                 if (EventSystem.current.IsPointerOverGameObject()) {

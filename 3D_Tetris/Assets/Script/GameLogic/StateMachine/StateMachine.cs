@@ -32,7 +32,7 @@ public class StateMachine : MonoBehaviour {
     private int _countState;
     [SerializeField] bool setText;
     public Text UIText;
-
+    public GameState2 State { get { return _currState; } }
 
     void Start () {
         _countState = Enum.GetValues(typeof(GameState2)).Length;

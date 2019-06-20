@@ -30,6 +30,8 @@ public class GameCameraScript : MonoBehaviour {
     private Vector3 _offset; // начальное положение между камерой и площадкой
     private float _rotY; // поворот камеры
 
+    [SerializeField] StateMachine _StateMachine;
+
     private void Awake() {
         Messenger<int, int>.AddListener(GameEvent.CURRENT_HEIGHT, CheckStabilization);
         _myTransform = transform;
@@ -41,37 +43,7 @@ public class GameCameraScript : MonoBehaviour {
         _myTransform.LookAt(ObjectLook.transform.position);
 
         _camera = GetComponent<Camera>();
-    }
-
-    public IEnumerator TurnCamera(turn direction, float time) {
-        int angle;
-        if (direction == turn.left)
-            angle = 90;
-        else
-            angle = -90;
-
-        // начальный и конечный поворот
-        Quaternion rotationStart = Quaternion.Euler(0, _rotY, 0);
-        _rotY += angle;
-        Quaternion rotationEnd = Quaternion.Euler(0, _rotY, 0);
-
-        float countTime = 0;
-
-        while (countTime < time) {
-            if ((countTime + Time.deltaTime) < time)
-                countTime += Time.deltaTime;
-            else
-                countTime = time;
-
-            _myTransform.position = Vector3.zero -
-                                 Quaternion.LerpUnclamped(rotationStart, rotationEnd, countTime / time) * _offset;
-            _myTransform.LookAt(ObjectLook.transform.position);
-
-            yield return null;
-        }
-
-        if (_rotY == 360 || _rotY == -360)
-            _rotY = 0;
+        transform.LookAt(ObjectLook.transform.position);
     }
 
     public void CheckStabilization(int Limit, int Current) {
@@ -86,7 +58,6 @@ public class GameCameraScript : MonoBehaviour {
         Vector3 needPosition = Vector3.Lerp(MinDistance.position, MaxDistance.position, Current / (float) Limit);
 
         float t = 0;
-
         // для подсчета конечного поворота
         _offset = Vector3.zero - needPosition; // сохраняем НОВОЕ расстояние между камерой и полем
         Quaternion rotation = Quaternion.Euler(0, _rotY, 0);

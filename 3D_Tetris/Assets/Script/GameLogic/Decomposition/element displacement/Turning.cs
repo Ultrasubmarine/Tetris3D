@@ -2,53 +2,145 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Turning : ControlBase<turn> {
+public class Turning : MonoBehaviour{
 
-    protected override bool CheckOpportunity(turn parametr) {
-   
-        //int x, z;
-        //if (direction == turn.left) {
-        //    foreach (var item in NewElement.MyBlocks) {
-        //        // по правилу поворота
-        //        x = item.z;
-        //        z = -item.x;
+    // for camera
+    private Vector3 _offset; // начальное положение между камерой и площадкой
+    private float _rotY; // поворот камеры
+    [SerializeField] GameObject _Camera;
 
-        //        if (_matrix._matrix[x + 1, item.y, z + 1] != null)
-        //            return false;
-        //    }
-        //}
-        //else {
-        //    foreach (var item in NewElement.MyBlocks) {
-        //        // по правилу поворота
-        //        x = -item.z;
-        //        z = item.x;
+    [SerializeField] StateMachine _StateMachine;
+    [SerializeField] private GameObject ObjectLook;
 
-        //        if (_matrix._matrix[x + 1, item.y, z + 1] != null)
-        //            return false;
-        //    }
-        //}
+    private PlaneMatrix _matrix;
 
-        return true;
-        
+    private void Start() {
+        _offset = Vector3.zero - _Camera.transform.position; // сохраняем расстояние между камерой и полем
+        _matrix = PlaneMatrix.Instance;
     }
 
-    protected override void Logic(turn parametr) {
-        throw new System.NotImplementedException();
+    public bool Action(Element element, turn direction, float time) {
+
+        if (CheckOpportunity(direction, element)) {
+
+            if (!_StateMachine.ChangeState(GameState2.Turn, false))
+                return false;
+
+            Logic(direction, element);
+            Vizual(direction, element, time);
+            return true;
+        }
+        return false;
     }
 
-    protected override void Vizual(turn parametr) {
-        throw new System.NotImplementedException();
+    protected bool CheckOpportunity(turn direction, Element element) {
+
+        int x, z;
+        if (direction == turn.left) {
+            foreach (var item in element.MyBlocks) {
+                // по правилу поворота
+                x = item.z;
+                z = -item.x;
+
+                if (_matrix._matrix[x + 1, item.y, z + 1] != null)
+                    return false;
+            }
+        }
+        else {
+            foreach (var item in element.MyBlocks) {
+                // по правилу поворота
+                x = -item.z;
+                z = item.x;
+
+                if (_matrix._matrix[x + 1, item.y, z + 1] != null)
+                    return false;
+            }
+        }
+
+        return true;        
     }
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    protected void Logic(turn direction, Element element) {
+            if (direction == turn.left) // правило поворота влево
+            {
+                foreach (Block item in element.MyBlocks) {
+                    int temp = item.x;
+                    item.x = item.z;
+                    item.z = -temp;
+                }
+            }
+            else {
+                foreach (Block item in element.MyBlocks) {
+                    int temp = item.x;
+                    item.x = -item.z;
+                    item.z = temp;
+                }
+            }
+    }
 
+    protected void Vizual(turn direction, Element element, float time) {
 
+        int angle;
+        if (direction == turn.left)
+            angle = 90;
+        else
+            angle = -90;
+
+        StartCoroutine(TurnElement(element, angle, time, ObjectLook));
+        StartCoroutine(TurnCamera(direction, time));
+    }
+
+    public IEnumerator TurnCamera(turn direction, float time) {
+
+        int angle;
+        if (direction == turn.left)
+            angle = 90;
+        else
+            angle = -90;
+
+        // начальный и конечный поворот
+        Quaternion rotationStart = Quaternion.Euler(0, _rotY, 0);
+        _rotY += angle;
+        Quaternion rotationEnd = Quaternion.Euler(0, _rotY, 0);
+
+        float countTime = 0;
+        while (countTime < time) {
+            if ((countTime + Time.deltaTime) < time)
+                countTime += Time.deltaTime;
+            else
+                countTime = time;
+
+            _Camera.transform.position = Vector3.zero -
+                                 Quaternion.LerpUnclamped(rotationStart, rotationEnd, countTime / time) * _offset;
+
+            _Camera.transform.LookAt(ObjectLook.transform.position);
+            yield return new WaitForEndOfFrame();
+        }
+
+        if (_rotY == 360 || _rotY == -360)
+            _rotY = 0;
+
+        _StateMachine.ChangeState(GameState2.NewElement, false);
+    }
+
+    public IEnumerator TurnElement(Element element, int angle, float time, GameObject target) {
+
+        float deltaAngle;
+        float countAngle = 0;
+
+        do {
+            deltaAngle = angle * (Time.deltaTime / time);
+            if (angle > 0 && countAngle + deltaAngle > angle || angle < 0 && countAngle + deltaAngle < angle) // если мы уже достаточно повернули и в ту и в другую сторону
+            {
+                deltaAngle = angle - countAngle; // узнаем сколько нам не хватает на самом деле  
+                countAngle = angle;
+            }
+            else
+                countAngle += deltaAngle;
+
+            element.gameObject.transform.Rotate(target.transform.position, deltaAngle);
+
+            yield return null;
+        } while (angle > 0 && countAngle < angle || angle < 0 && countAngle > angle);
+    }
 }
