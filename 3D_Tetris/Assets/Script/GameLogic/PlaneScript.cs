@@ -63,17 +63,13 @@ public class PlaneScript : Singleton<PlaneScript>
     public GameObject TextSphere;
     public List<GameObject> TestSphereList = new List<GameObject>();
 
-    private List<Element> _elementMagrer;
-
     // Use this for initialization
     private void Start()
     {
         _matrix = PlaneMatrix.Instance;
         Mystate = planeState.startState;//Mystate = planeState.emptyState;
 
-        _elementMagrer = new List<Element>();
  
-        MinCoordinat = _WightPlane / 2 * (-1); // минимальная координата, окторая может быть в текущем поле
 
         NewElement = null;
 
@@ -143,69 +139,6 @@ public class PlaneScript : Singleton<PlaneScript>
     //    Debug.Log(str);
     //}
     
-    // ФУНКЦИИ ПОВОРОТА ЭЛЕМЕНТА
-    public bool TurnElement(turn napravl) // возвращает разрешение на поворот камеры, если мы можем повернуть элемент
-    {
-        if (Mystate != planeState.emptyState)
-            return false; // ХММММММММММММММММ,,, ЭТО НАВЕРНОЕ НЕ ОЧЕНЬ
-
-        if (ChekTurnElement(napravl))
-        {
-            NewElement.LogicTurn(napravl);
-
-            StartCoroutine(TurnElementVizual(napravl));
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool ChekTurnElement(turn direction) // проверяет возможность поворота падающего элемента
-    {
-        int x, z;
-        if (direction == turn.left)
-        {
-            foreach (var item in NewElement.MyBlocks)
-            {
-                // по правилу поворота
-                x = item.z;
-                z = -item.x;
-
-                if (_matrix._matrix[x + 1, item.y, z + 1] != null)
-                    return false;
-            }
-        }
-        else
-        {
-            foreach (var item in NewElement.MyBlocks)
-            {
-                // по правилу поворота
-                x = -item.z;
-                z = item.x;
-
-                if (_matrix._matrix[x + 1, item.y, z + 1] != null)
-                    return false;
-            }
-        }
-
-        return true;
-    }
-    private IEnumerator TurnElementVizual(turn direction) // начинаем визуальный поворот
-    {
-        int rotate;
-        if (direction == turn.left)
-            rotate = 90;
-        else
-            rotate = -90;
-
-        Mystate = planeState.turnState;
-    //    DestroyProection(_proectionsList);
-        yield return StartCoroutine(NewElement.VizualTurn(rotate, _TimeRotate, this.gameObject));
-
-        Messenger<Element>.Broadcast(GameEvent.TURN_ELEMENT, NewElement);
-        Mystate = planeState.emptyState;
-        yield return null;
-    }
 
     // ФУНКЦИИ ВОСПРОИЗВЕДЕНИЯ САМОЙ ИГРЫ
     public void StartGame()

@@ -4,17 +4,14 @@ using UnityEngine;
 
 public class Moving: MonoBehaviour {
 
-    PlaneMatrix _Matrix;
+    PlaneMatrix _matrix;
     [SerializeField] StateMachine _StateMachine;
 
-    [Header("Time one move")]
-    [SerializeField] float _Time;
-
     private void Start() {
-        _Matrix = PlaneMatrix.Instance;
+        _matrix = PlaneMatrix.Instance;
     }
 
-    public  void Action( Element element, move direction) {
+    public  void Action( Element element, move direction, float time) {
 
         if (element == null)
             return;
@@ -27,7 +24,7 @@ public class Moving: MonoBehaviour {
             Logic( direction, element);
 
             Vector3 vectorDirection = SetVectorMove(direction);
-            Vizual(element, vectorDirection, _Time);
+            Vizual(element, vectorDirection, time);
             Messenger<Element>.Broadcast(GameEvent.MOVE_ELEMENT, element);
         }
     }
@@ -35,12 +32,12 @@ public class Moving: MonoBehaviour {
     private bool CheckOpportunity(Element element, move direction) {
 
         Vector3Int vectorDirection = SetVectorMove(direction);
-        return _Matrix.CheckEmptyPlaсe(element, vectorDirection);  
+        return _matrix.CheckEmptyPlaсe(element, vectorDirection);  
     }
 
     public Vector3Int SetVectorMove(move direction) {
-        Vector3Int vectorDirection;
 
+        Vector3Int vectorDirection;
         if (direction == move.x)
             vectorDirection = new Vector3Int(1, 0, 0);
         else if (direction == move._x)
@@ -119,6 +116,5 @@ public class Moving: MonoBehaviour {
 
         _StateMachine.ChangeState(GameState2.NewElement, false);
     }
-
-    
+   
 }

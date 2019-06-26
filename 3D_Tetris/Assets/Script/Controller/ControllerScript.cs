@@ -5,14 +5,9 @@ using System;
 
 public class ControllerScript : MonoBehaviour
 {
-    [SerializeField] private PlaneScript MyPlane;
-    [SerializeField] private Camera MyCamera;
-    [SerializeField] private GameObject ObjectLook;
-
-    private GameCameraScript _myCamera;
     [SerializeField] StateMachine _StateMachine;
+
     [SerializeField] Moving moving;
-    //[SerializeField] Action<Element,move> moveAct;
     [SerializeField] Turning turning;
 
     // таблица для перемещения блоков в зависимости от угла обзора.
@@ -31,49 +26,47 @@ public class ControllerScript : MonoBehaviour
 
     private void Start()
     {
-        MyCamera.transform.LookAt(ObjectLook.transform.position);
-        _myCamera = MyCamera.GetComponent<GameCameraScript>();
-
         Messenger.AddListener(StateMachine.StateMachineKey + GameState2.Move, Popo);
     }
 
     // Update is called once per frame
     private void Update()
     {
+
         // поворот сцены влево
-        if ( TouchControll.TouchEvent == touсhSign.LeftOneTouch )//(Input.GetKeyDown(KeyCode.LeftArrow))
+        if ( TouchControll.TouchEvent == touсhSign.LeftOneTouch && ElementManager.NewElement !=null)//(Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            if( turning.Action(ElementManager.NewElement, turn.left, MyPlane.TimeRotation))
+            if( turning.Action(ElementManager.NewElement, turn.left, Speed.TimeRotate))
                 CorrectIndex(90);           
         }
         // поворот сцены вправо
-        if (TouchControll.TouchEvent == touсhSign.RightOneTouch)// (Input.GetKeyDown(KeyCode.RightArrow))
+        if (TouchControll.TouchEvent == touсhSign.RightOneTouch && ElementManager.NewElement != null)// (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            if(turning.Action(ElementManager.NewElement, turn.right, MyPlane.TimeRotation))
+            if(turning.Action(ElementManager.NewElement, turn.right, Speed.TimeRotate))
                 CorrectIndex(-90);           
         }
 
         if(TouchControll.TouchEvent == touсhSign.Swipe_LeftUp)//(Input.GetKeyDown(KeyCode.A))
         {
-            moving.Action(ElementManager.NewElement, A[indexTable]);
+            moving.Action(ElementManager.NewElement, A[indexTable], Speed.TimeMove);
             if (MoveTutorial)
                 Messenger<move>.Broadcast("MOVE", A[0]);
         }
         if (TouchControll.TouchEvent == touсhSign.Swipe_LeftDown)// (Input.GetKeyDown(KeyCode.S))
         {
-            moving.Action(ElementManager.NewElement, S[indexTable]);
+            moving.Action(ElementManager.NewElement, S[indexTable], Speed.TimeMove);
             if (MoveTutorial)
                 Messenger<move>.Broadcast("MOVE", S[0]);
         }
         if (TouchControll.TouchEvent == touсhSign.Swipe_RightDown)//(Input.GetKeyDown(KeyCode.D))
         {
-            moving.Action(ElementManager.NewElement, D[indexTable]);
+            moving.Action(ElementManager.NewElement, D[indexTable], Speed.TimeMove);
             if (MoveTutorial)
                 Messenger<move>.Broadcast("MOVE", D[0]);
         }
         if (TouchControll.TouchEvent == touсhSign.Swipe_RightUp)//(Input.GetKeyDown(KeyCode.W))
         {
-            moving.Action(ElementManager.NewElement, W[indexTable]);
+            moving.Action(ElementManager.NewElement, W[indexTable], Speed.TimeMove);
             if (MoveTutorial)
                 Messenger<move>.Broadcast("MOVE", W[0]);
         }

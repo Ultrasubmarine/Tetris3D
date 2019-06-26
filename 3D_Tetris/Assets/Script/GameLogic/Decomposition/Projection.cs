@@ -22,7 +22,7 @@ public class Projection : MonoBehaviour {
 
     [Header(" Потолок ")] // ceiling - потолок
     [SerializeField] ObjectPool _PoolСeiling;
-    [SerializeField] int MinimumLayerHeight;
+    [SerializeField] int _MinimumLayerHeight;
     private List<GameObject> _ceilingList = new List<GameObject>();
 
     private void Awake() {
@@ -61,14 +61,14 @@ public class Projection : MonoBehaviour {
         if( _ceilingList.Count > 0)
         Destroy(CEILING);
 
-        if (_matrix.CurrentHeight < MinimumLayerHeight)
+        if (_matrix.CurrentHeight < _MinimumLayerHeight)
             return;
 
         for(int x=0; x< _matrix.Wight; x++) {
             for (int z = 0; z < _matrix.Wight; z++) {
                 
                 int y = _matrix.MinHeightInCoordinates(x, z);
-                if(y >= MinimumLayerHeight)
+                if(y >= _MinimumLayerHeight)
                     _ceilingList.Add(_PoolСeiling.CreateObject( new Vector3(x.ToCoordinat(),_matrix.LimitHeight + _HeightProection,z.ToCoordinat()) ));
             }
         }

@@ -12,15 +12,18 @@ public class ElementManager : MonoBehaviour {
     public List<Element> _elementMarger;
 
     static public Element NewElement;
+    private Transform MyTransform;
 
     // Use this for initialization
     void Start () {
         _elementMarger = new List<Element>();
         _matrix = PlaneMatrix.Instance;
+        MyTransform = this.transform;
 
         Messenger.AddListener( StateMachine.StateMachineKey + GameState2.Empty, GenerateElement);
         Messenger.AddListener(StateMachine.StateMachineKey + GameState2.NewElement, StartDropElement);
 
+        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, DestroyEmptyElement);
         Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, CutElement);
         Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, StartDropAllElements);
     }
@@ -35,14 +38,11 @@ public class ElementManager : MonoBehaviour {
 
     public void GenerateElement() {
 
-        GameObject generationElement = _Generator.GenerationNewElement(gameObject.transform);//_PlaneScript.transform);
+        GameObject generationElement = _Generator.GenerationNewElement(MyTransform);//_PlaneScript.transform);
         NewElement = generationElement.GetComponent<Element>();
-        NewElement.gameObject.transform.parent = gameObject.transform;
-
-        //_PlaneScript.NewElement = NewElement;
+        NewElement.MyTransform.parent = MyTransform;
 
         machine.ChangeState(GameState2.NewElement);
-
     }
 
     #region  функции падения нового эл-та ( и его слияние)
@@ -51,11 +51,9 @@ public class ElementManager : MonoBehaviour {
     }
     private IEnumerator DropElement() {
 
-        //_PlaneScript.Mystate = planeState.emptyState;
-   
         while (true) {
 
-            while (machine.State != GameState2.NewElement){//_PlaneScript.Mystate == planeState.turnState || _PlaneScript.Mystate == planeState.moveState) {
+            while (machine.State != GameState2.NewElement){
                 yield return null;
             }
 
@@ -73,12 +71,10 @@ public class ElementManager : MonoBehaviour {
 
         Destroy(_Generator.examleElement);
 
-        while (machine.State != GameState2.NewElement) {//_PlaneScript.Mystate == planeState.turnState || _PlaneScript.Mystate == planeState.moveState) {
+        while (machine.State != GameState2.NewElement) {
             yield return null;
         }
-        //while (_PlaneScript.Mystate == planeState.moveState) {
-        //    yield return null;
-        //}
+     
         MergeElement(NewElement); // слияние элемента и поля
         NewElement = null;
         machine.ChangeState(GameState2.Merge);
@@ -118,7 +114,6 @@ public class ElementManager : MonoBehaviour {
      //   myProj.CreateCeiling();
         machine.ChangeState(GameState2.Collection);
 
-        DestroyEmptyElement();
         yield return null;
     }
 
@@ -129,7 +124,7 @@ public class ElementManager : MonoBehaviour {
             var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
             if (empty) //если коллизии нет, элемент может падать вниз
             {
-                if (item.isBind)
+                if (item.IsBind)
                     _matrix.UnbindToMatrix(item);
 
                 flagDrop = true;
@@ -137,7 +132,7 @@ public class ElementManager : MonoBehaviour {
                 StartCoroutine(item.VisualDrop(_Speed._TimeDropAfterDestroy)); // запускает падение элемента
             }
             else {
-                if (!item.isBind)
+                if (!item.IsBind)
                     _matrix.BindToMatrix(item);
             }
         }
@@ -147,7 +142,7 @@ public class ElementManager : MonoBehaviour {
     private bool AllElementsDrop() {
 
         foreach (var item in _elementMarger) {
-            if (item.isDrop) {
+            if (item.IsDrop) {
                 return false;
             }
         }
@@ -168,7 +163,7 @@ public class ElementManager : MonoBehaviour {
                 _matrix.UnbindToMatrix(_elementMarger[k]);
 
                 _elementMarger.Add(b);
-                b.transform.parent = gameObject.transform;
+                b.MyTransform.parent = MyTransform;
                 countK++;
             }
             k++;

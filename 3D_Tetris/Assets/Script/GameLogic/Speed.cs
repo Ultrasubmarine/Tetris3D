@@ -11,4 +11,17 @@ public class Speed : MonoBehaviour {
     [SerializeField] private float _TimeMove = 1;
     [SerializeField] private float _TimeRotate = 1;
 
+    static public float TimeDelay { get; set; }
+    static public float TimeDrop { get; set; }
+    static public float TimeDropAfterDestroy { get; set; }
+    static public float TimeMove { get; set; }
+    static public float TimeRotate { get; set; }
+
+    private void Awake() {
+        TimeDelay = _TimeDelay;
+        TimeDrop = _TimeDrop;
+        TimeDropAfterDestroy = _TimeDropAfterDestroy;
+        TimeMove = _TimeMove;
+        TimeRotate = _TimeRotate;
+    }
 }

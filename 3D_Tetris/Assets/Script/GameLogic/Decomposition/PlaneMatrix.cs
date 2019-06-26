@@ -13,15 +13,14 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     public Block[,,] _matrix;
 
     [Header("Size plane")]
-    int _LimitHeight = 18; 
+    int _limitHeight = 18; 
     [SerializeField] int _Wight;
     [SerializeField] int _Height;
-
 
     public int Wight { get { return _Wight;  } }
     public int Height { get { return _Height - 1; } } // высота отсчитывается от 0
 
-    public int LimitHeight { get { return _LimitHeight; } }
+    public int LimitHeight { get { return _limitHeight; } }
     public int CurrentHeight { get { return _HeightHandler.CurrentHeight; } } 
 
     public static int MinCoordinat { get; private set; }
@@ -51,7 +50,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     }
 
     public void SetLimitHeight( int limit) {
-        _LimitHeight = limit;
+        _limitHeight = limit;
     }
 
     public bool CheckEmptyPlaсe( Element element, Vector3Int direction) {
@@ -61,7 +60,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         
         Vector3Int newCoordinat;
         foreach (Block item in element.MyBlocks) {
-            if (!item.destroy) {
+            if (!item.Destroy) {
 
                 newCoordinat = new Vector3Int(item.x, item.y, item.z) + direction;
 
@@ -69,7 +68,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
                     return false;               
 
                 if (_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()] != null) {
-                    if (!element.isBind)
+                    if (!element.IsBind)
                         return false;
                     if (!element.MyBlocks.Contains(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()])) 
                         return false;                
@@ -79,12 +78,16 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         return true;
     }
 
+    public bool CheckEmptyPlace( int x_index, int y_index, int z_index) {
+        return _matrix[x_index, y_index, z_index] == null;   
+    }
+
     #region привязка/отвязка эл-та к матрице
     public void BindToMatrix(Element element) {
 
         int x, y, z;
         foreach (Block item in element.MyBlocks) {
-            if (item == null || item.destroy)
+            if (item == null || item.Destroy)
                 continue;
             x = item.x;
             y = item.y;
@@ -92,14 +95,14 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
             _matrix[x.ToIndex(), y, z.ToIndex()] = item;
         }
-        element.isBind = true;
+        element.IsBind = true;
     }
 
     public void UnbindToMatrix(Element element) {
 
         int x, y, z;
         foreach (Block item in element.MyBlocks) {
-            if (item == null || item.destroy)
+            if (item == null || item.Destroy)
                 continue;
             x = item.x;
             y = item.y;
@@ -107,7 +110,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
             _matrix[x.ToIndex(), y, z.ToIndex()] = null;
         }
-        element.isBind = false;
+        element.IsBind = false;
     }
     #endregion
 
@@ -122,7 +125,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     private bool CollectLayers() {
 
         bool flag = false; ;
-        for (int y = 0; y < _LimitHeight; y++) {
+        for (int y = 0; y < _limitHeight; y++) {
             if (CheckCollectedInLayer(y)) {
                 DestroyLayer(y);
                 flag = true;
@@ -151,7 +154,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
                 GameObject tmp = _matrix[x, layer, z].gameObject;
                 var ggg = _matrix[x, layer, z];
-                _matrix[x, layer, z].destroy = true;
+                _matrix[x, layer, z].Destroy = true;
                 _matrix[x, layer, z] = null;
                 tmp.GetComponentInParent<Element>().DeleteBlock(ggg);             
             }
@@ -159,11 +162,30 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     }
     #endregion
 
-    public int MinHeightInCoordinates(int x, int z)
+    public Vector3Int FindLowerAccessiblePlace() {
+
+        int min = Height - 1;
+        int curr_min, new_min;
+
+        Vector3Int min_point = new Vector3Int(0, min, 0);
+
+        for (int x = 0; x < Wight && min != 0; ++x) {
+            for (int z = 0; z < Wight && min !=0; ++z) {
+                curr_min = MinHeightInCoordinates(x, z);
+                if(curr_min < min ) {
+                    min = curr_min;
+                    min_point = new Vector3Int(x, min, z);
+                }
+            }
+        }
+        Debug.Log(min_point);
+        return min_point;
+    }
+    public int MinHeightInCoordinates(int x_index, int z_index)
     {
         for (int y = _matrix.GetUpperBound(1) - 1; y >= 0; --y)
         {
-            if (_matrix[x, y, z] != null)
+            if (_matrix[x_index, y, z_index] != null)
                 return y+1;
         }
         return 0;        

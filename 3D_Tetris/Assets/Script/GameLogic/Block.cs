@@ -17,7 +17,7 @@ public class Block : MonoBehaviour {
     public int y;
     public int z;
 
-    public bool destroy = false;
+    public bool Destroy = false;
     public Transform MyTransform;
 
     public CoordinatXZ XZ { get { return new CoordinatXZ(x, z); } }

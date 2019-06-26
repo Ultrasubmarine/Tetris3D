@@ -138,7 +138,7 @@ public class Turning : MonoBehaviour{
             else
                 countAngle += deltaAngle;
 
-            element.gameObject.transform.Rotate(target.transform.position, deltaAngle);
+            element.MyTransform.Rotate(target.transform.position, deltaAngle);
 
             yield return null;
         } while (angle > 0 && countAngle < angle || angle < 0 && countAngle > angle);

@@ -7,12 +7,12 @@ using System.Linq;
 public class Element : MonoBehaviour {
     public List<Block> MyBlocks = new List<Block>(); //[] MyBlocks;
 
-    public bool isBind = false;
-    public bool isDrop = false;
-    Transform _myTransform;
+    public bool IsBind = false;
+    public bool IsDrop = false;
+    public Transform MyTransform { get; private set; } 
 
     void Awake() {
-        _myTransform = GetComponent<Transform>();
+        MyTransform = this.transform;
     }
 
     public void AddBlock(Block newBlock) {
@@ -34,25 +34,25 @@ public class Element : MonoBehaviour {
 
     public IEnumerator VisualDrop( float time) {
     
-        isDrop = true;
+        IsDrop = true;
         yield return StartCoroutine(VizualRelocation( Vector3.down, time));
-        isDrop = false;
+        IsDrop = false;
     }
     #endregion
 
     private IEnumerator VizualRelocation( Vector3 offset, float time) {
 
-        Vector3 startPosition = _myTransform.position;
-        Vector3 finalPosition = _myTransform.position + offset;
+        Vector3 startPosition = MyTransform.position;
+        Vector3 finalPosition = MyTransform.position + offset;
 
         float timer = 0;
         do {
             timer += Time.deltaTime;
-            _myTransform.position = Vector3.Lerp(startPosition, finalPosition, timer / time);
+            MyTransform.position = Vector3.Lerp(startPosition, finalPosition, timer / time);
             yield return null;
         } while (timer <= time);
 
-        _myTransform.position = finalPosition;
+        MyTransform.position = finalPosition;
     }
 
     #region ФУНКЦИИ ПОВОРОТА
@@ -89,7 +89,7 @@ public class Element : MonoBehaviour {
             else
                 countAngle += deltaAngle;
 
-            _myTransform.Rotate(target.transform.position, deltaAngle);
+            MyTransform.Rotate(target.transform.position, deltaAngle);
 
             yield return null;
         } while (angle > 0 && countAngle < angle || angle < 0 && countAngle > angle);

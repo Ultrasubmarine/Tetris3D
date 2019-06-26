@@ -22,21 +22,18 @@ public class Generator : MonoBehaviour {
     int minYforElement;
     public GameObject examleElement;
 
-    [SerializeField] PlaneMatrix _PlaneMatrix;
+    [SerializeField] PlaneMatrix _Matrix;
 
 
-    public GameObject GenerationNewElement( Transform plane){//PlaneScript plane) {
-        //    Destroy(exElement);
-        GameObject NewElement = CreatorElement(_PlaneMatrix._matrix); // Instantiate(generationElement());
-
+    public GameObject GenerationNewElement( Transform elementParent){
+        GameObject NewElement = CreatorElement(_Matrix._matrix); // Instantiate(generationElement());
 
         //устанавливаем нормальную позицию элемента
-        Vector3 temp = plane.position;
+        Vector3 temp = elementParent.position;
 
         // инициализируем блоки элемента согласно установленной позиции
         Element Element = NewElement.GetComponent<Element>();
-        Element.InitializationAfterGeneric(_PlaneMatrix.Height);//plane.Height);
-
+        Element.InitializationAfterGeneric(_Matrix.Height);//plane.Height);
 
         //// выравниваем элемент относительно координат y 
         var min_y = Element.MyBlocks.Min(s => s.y);
@@ -44,8 +41,7 @@ public class Generator : MonoBehaviour {
 
         int size = max_y - min_y;
 
-        NewElement.transform.position = new Vector3(temp.x, temp.y + _PlaneMatrix.Height - size, temp.z);
-
+        NewElement.transform.position = new Vector3(temp.x, temp.y + _Matrix.Height - size, temp.z);
 
         // TO DO - вычленить в отдельный метод создание дубляжа
         GameObject exElement = Instantiate(NewElement);
@@ -56,13 +52,11 @@ public class Generator : MonoBehaviour {
         }
 
         exElement.transform.position =
-            new Vector3(temp.x, plane.gameObject.transform.position.y + minYforElement, temp.z);
+            new Vector3(temp.x, elementParent.gameObject.transform.position.y + minYforElement, temp.z);
         examleElement = exElement; // Destroy(exElement, 5f);
         ////////////
 
       //  ChengeBlock(Element, plane.gameObject);
-
-
         return NewElement;
     }
 
@@ -88,11 +82,12 @@ public class Generator : MonoBehaviour {
     }
 
     private GameObject CreatorElement(Block[,,] matrix) {
+
         int indexmat = Random.Range(0, MyMaterial.Length - 1);
         // check min matrix element
-        Vector3 min = CheckMatrixMinimum(matrix);
+        Vector3 min = _Matrix.FindLowerAccessiblePlace();
         minYforElement = (int) min.y;
-        bool[,,] matrixCheck = CastMatrix((int) min.y, matrix);
+        bool[,,] matrixCheck = CastMatrix((int) min.y);
 
         // create element
         GameObject elementObj = new GameObject("MY ZLO");
@@ -122,7 +117,6 @@ public class Generator : MonoBehaviour {
         return createElement.gameObject;
     }
 
-
     private void CreatorBlock(Vector3 position, Element element, int indexmat) {
         // добавляем компонент с координатами блока
         GameObject currBlock = Instantiate(PrefabBlock);
@@ -140,88 +134,23 @@ public class Generator : MonoBehaviour {
         block.gameObject.transform.localPosition = position;
     }
 
-    // chek matrix min
-    private Vector3 CheckMatrixMinimum(Block[,,] matrix) {
-        int min = matrix.GetUpperBound(1) - 1;
-        int curr_min;
-        Vector3 min_point = new Vector3(matrix.GetUpperBound(0), matrix.GetUpperBound(1) - 1, matrix.GetUpperBound(2));
-
-        // но спускаться нужно сверху вниз! 
-        for (int x = 0; x < matrix.GetUpperBound(0) + 1; ++x) {
-            curr_min = matrix.GetUpperBound(1) - 1;
-            for (int z = 0; z < matrix.GetUpperBound(2) + 1; ++z) {
-                for (int y = matrix.GetUpperBound(1) - 1; y >= 0; --y) {
-                    if (matrix[x, y, z] == null)
-                        curr_min = y;
-                    else
-                        break;
-                }
-
-                if (min > curr_min) {
-                    min = curr_min;
-                    min_point = new Vector3(x, min, z);
-                }
-            }
-        }
-
-        return min_point;
-    }
-
     // слепок матрицы
-    private bool[,,] CastMatrix(int min, Block[,,] matrix) {
+    private bool[,,] CastMatrix(int min) {
+
         bool[,,] castMatrix = new bool[3, 3, 3];
         bool blockLayer;
 
-        //  Debug.Log("min -"+ min);
         // делаем слепок
         for (int x = 0; x < 3; x++) {
             for (int z = 0; z < 3; z++) {
                 blockLayer = false;
-                //for (int y = 2; y >= 0; y--)
-                //{
-                //    if( min + y < matrix.GetUpperBound(1))
-                //    {
-                //        if (matrix[x, min + y, z] == null && !blockLayer)
-                //        {
-                //            castMatrix[x, y, z] = true;
-                //        }
-                //        else
-                //        {
-                //            blockLayer = true;
-                //            castMatrix[x, y, z] = false;
-                //        }
-
-                //    }
-                //    else
-                //    {
-                //        castMatrix[x, y, z] = true;
-                //    }
-
-                //}
-                for (int y = matrix.GetUpperBound(1) - 1; y >= min; y--) {
-                    //if (min + y < matrix.GetUpperBound(1))
-                    {
-                        if (matrix[x, y, z] == null && !blockLayer) {
-                            if (y <= min + 2 && y >= min)
-                                castMatrix[x, y - min, z] = true;
-                        }
-                        else {
-                            blockLayer = true;
-                            if (y <= min + 2 && y >= min) {
-                                //   Debug.Log("block layer x " + x.ToString() + " y " + y.ToString() + " z " + z.ToString());
-
-                                castMatrix[x, y - min, z] = false;
-                            }
-                        }
-                    }
-                    //else
-                    //{
-                    //    castMatrix[x, y, z] = true;
-                    //}
+                for (int y = min + 3 - 1; y >= min; y--) {                
+                    if(!blockLayer)
+                        blockLayer = !_Matrix.CheckEmptyPlace(x, y, z);
+                    castMatrix[x, y - min, z] = !blockLayer;               
                 }
             }
         }
-
         return castMatrix;
     }
 
