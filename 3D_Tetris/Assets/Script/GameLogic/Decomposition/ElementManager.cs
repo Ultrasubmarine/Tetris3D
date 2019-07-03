@@ -14,6 +14,7 @@ public class ElementManager : MonoBehaviour {
     static public Element NewElement;
     private Transform MyTransform;
 
+    [SerializeField] ObjectPool _ElementPool;
     // Use this for initialization
     void Start () {
         _elementMarger = new List<Element>();
@@ -177,7 +178,7 @@ public class ElementManager : MonoBehaviour {
             {
                 GameObject tmp = _elementMarger[i].gameObject;
                 _elementMarger.Remove(_elementMarger[i]);
-                Destroy(tmp);
+                Destroy(tmp);//_ElementPool.DestroyObject(tmp);
             }
             else {
                 i++;

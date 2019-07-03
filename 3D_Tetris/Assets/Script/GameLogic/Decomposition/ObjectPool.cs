@@ -6,35 +6,33 @@ using System.Linq;
 using System.Linq.Expressions;
 using Boo.Lang.Environments;
 
-public class PoolContainer
-{
-	public bool Active;
-	public GameObject Object;
+public class PoolContainer<T> where T : MonoBehaviour {
+    public bool Active;
+    public T Object;
     public Transform Transform;
+    public GameObject Gobj;
 
-
-	public PoolContainer( GameObject obj) {
-		Object = obj;
-		Active = false;
-        Transform = obj.transform;
-
+    public PoolContainer(T obj, GameObject g) {
+        Object = obj;
+        Active = false;
+        Transform =obj.transform;
+        Gobj = g;
     }
 
-    public void SetActive( bool value)
-    {
+    public void SetActive(bool value) {
         Active = value;
-        Object.SetActive(value);
+        Gobj.SetActive(value);
+       // Transform.gameObject.SetActive(value);
     }
 }
 
-public class ObjectPool : MonoBehaviour
-{	
-	[SerializeField] GameObject Prefab;
+public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
+    [SerializeField] protected GameObject Prefab;
 	[Header("начальное заполнение пула")]
-	[SerializeField] bool InitialInitialization;
-	[SerializeField] int CountObject;
+	[SerializeField] protected bool InitialInitialization;
+	[SerializeField] protected int CountObject;
 
-	List<PoolContainer> Pool = new List<PoolContainer>();
+	List<PoolContainer<T>> Pool = new List<PoolContainer<T>>();
 
     private void Awake()
     {
@@ -52,22 +50,18 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
-
-    public GameObject CreateObject( Vector3 position) {
+    public T CreateObject( Vector3 position) {
 
 		int index = -1;
-		
-		for (int i = 0; i < Pool.Count; i++) {
-			if (!Pool[i].Active) {
-                Pool[i].SetActive(true);
-                Pool[i].Transform.position = position;
-                return Pool[i].Object;
-            }
-		}
 
-        InstantiateObject();
-        Pool[Pool.Count - 1].SetActive(true);
-        Pool[Pool.Count - 1].Transform.position = position;
+        var returnObj = Pool.FirstOrDefault(obj => !obj.Gobj.active);
+        if( returnObj == null) {
+            InstantiateObject();
+            returnObj = Pool[Pool.Count - 1];
+        }
+
+        returnObj.SetActive(true);
+        returnObj.Transform.position = position;
         return Pool[Pool.Count - 1].Object;
 	}
 
@@ -77,9 +71,12 @@ public class ObjectPool : MonoBehaviour
         returnContainer.SetActive(false);
     } 
 
-	private void InstantiateObject() { 
-		PoolContainer tmp = new PoolContainer( Instantiate(Prefab) );
-        tmp.Object.gameObject.SetActive(false);
-        Pool.Add(tmp);
+	private void InstantiateObject() {
+
+        GameObject GGG = Instantiate(Prefab);
+        Debug.Log("Instn");
+        PoolContainer<T> newObj = new PoolContainer<T>(GGG.GetComponent<T>(), GGG);
+        newObj.SetActive(false);
+        Pool.Add(newObj);
 	}
 }

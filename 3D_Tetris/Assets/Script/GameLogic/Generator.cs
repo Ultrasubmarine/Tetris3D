@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-
+using IntegerExtension;
 
 //public class Element {
 //    public GameObject El;
@@ -23,9 +23,19 @@ public class Generator : MonoBehaviour {
     public GameObject examleElement;
 
     [SerializeField] PlaneMatrix _Matrix;
+    bool[,,] _castMatrix;
 
+    [SerializeField] ObjectPool _ElementPool;
 
+    private void Start() {
+        _castMatrix = new bool[3, 3, 3];
+    }
     public GameObject GenerationNewElement( Transform elementParent){
+
+        Vector3 min = _Matrix.FindLowerAccessiblePlace();
+        minYforElement =(int) min.y;
+        bool[,,] matrixCheck = CastMatrix((int)min.y);
+
         GameObject NewElement = CreatorElement(_Matrix._matrix); // Instantiate(generationElement());
 
         //устанавливаем нормальную позицию элемента
@@ -83,33 +93,32 @@ public class Generator : MonoBehaviour {
 
     private GameObject CreatorElement(Block[,,] matrix) {
 
-        int indexmat = Random.Range(0, MyMaterial.Length - 1);
-        // check min matrix element
+        int indexЬat = Random.Range(0, MyMaterial.Length - 1);
+
         Vector3 min = _Matrix.FindLowerAccessiblePlace();
-        minYforElement = (int) min.y;
-        bool[,,] matrixCheck = CastMatrix((int) min.y);
+        _castMatrix = CastMatrix((int) min.y);
 
         // create element
         GameObject elementObj = new GameObject("MY ZLO");
-        Element createElement = elementObj.AddComponent<Element>();
+        Element createElement = elementObj.AddComponent<Element>(); // _ElementPool.CreateObject(this.transform.position).GetComponent<Element>();//
 
-        Vector3 lastPoint = new Vector3(min.x, 0, min.z);
+        Vector3Int lastPoint = new Vector3Int((int)min.x, 0, (int)min.z);
 
         // выращиваем элемент - 1 блок
-        CreatorBlock(lastPoint, createElement, indexmat);
-        matrixCheck[(int) min.x, (int) 0, (int) min.z] = false;
+        CreatorBlock(lastPoint, createElement, indexЬat);
+        _castMatrix[(int) min.x, (int) 0, (int) min.z] = false;
 
-        List<Vector3> pov; // степень свободы
+        List<Vector3Int> pov; // степень свободы
         int index;
         for (int i = 0; i < 3; i++) {
-            pov = PovFreeCount(lastPoint, matrixCheck, createElement);
+            pov = PovFreeCount(lastPoint, createElement);
             if (pov.Count > 0) {
                 index = (int) Random.Range(0, pov.Count);
 
                 // добавляем компонент с координатами блока
-                CreatorBlock(pov[index], createElement, indexmat);
+                CreatorBlock(pov[index], createElement, indexЬat);
                 // обновляем слепок
-                matrixCheck[(int) pov[index].x, (int) pov[index].y, (int) pov[index].z] = false;
+                _castMatrix[(int) pov[index].x, (int) pov[index].y, (int) pov[index].z] = false;
                 lastPoint = pov[index];
             }
         }
@@ -138,57 +147,50 @@ public class Generator : MonoBehaviour {
     private bool[,,] CastMatrix(int min) {
 
         bool[,,] castMatrix = new bool[3, 3, 3];
-        bool blockLayer;
-
+        int barrier;
         // делаем слепок
         for (int x = 0; x < 3; x++) {
             for (int z = 0; z < 3; z++) {
-                blockLayer = false;
-                for (int y = min + 3 - 1; y >= min; y--) {                
-                    if(!blockLayer)
-                        blockLayer = !_Matrix.CheckEmptyPlace(x, y, z);
-                    castMatrix[x, y - min, z] = !blockLayer;               
+                barrier = _Matrix.MinHeightInCoordinates(x,z);
+                for (int y = min + 3 - 1; y >= min; y--) {
+                    castMatrix[x, y - min, z] = y < barrier ? false : true ;               
                 }
             }
         }
         return castMatrix;
     }
 
-    private List<Vector3> PovFreeCount(Vector3 point, bool[,,] matrix, Element currEl) {
-        List<Vector3> ListPov = new List<Vector3>();
+    private List<Vector3Int> PovFreeCount(Vector3Int point, Element currEl) {
+        List<Vector3Int> ListPov = new List<Vector3Int>();
 
-        if (point.x < 2)
-            if (matrix[(int) point.x + 1, (int) point.y, (int) point.z] &&
-                (point.y == 0 || !matrix[(int) point.x + 1, (int) point.y - 1, (int) point.z])) {
-                ListPov.Add(new Vector3(point.x + 1, (int) point.y, (int) point.z));
-            }
+        if( CheckEmptyPlace(point + new Vector3Int(1, 0, 0)) )
+           ListPov.Add(point + new Vector3Int(1, 0, 0));
 
-        if (point.x > 0)
-            if (matrix[(int) point.x - 1, (int) point.y, (int) point.z] &&
-                (point.y == 0 || !matrix[(int) point.x - 1, (int) point.y - 1, (int) point.z])) {
-                ListPov.Add(new Vector3(point.x - 1, (int) point.y, (int) point.z));
-            }
+        if (CheckEmptyPlace(point + new Vector3Int(-1, 0, 0)))
+            ListPov.Add(point + new Vector3Int(-1, 0, 0));
 
-        if (point.z < 2)
-            if (matrix[(int) point.x, (int) point.y, (int) point.z + 1] &&
-                (point.y == 0 || !matrix[(int) point.x, (int) point.y - 1, (int) point.z + 1])) {
-                ListPov.Add(new Vector3(point.x, (int) point.y, (int) point.z + 1));
-            }
+        if (CheckEmptyPlace(point + new Vector3Int(0, 0, 1)))
+            ListPov.Add(point + new Vector3Int(0, 0, 1));
 
-        if (point.z > 0)
-            if (matrix[(int) point.x, (int) point.y, (int) point.z - 1] &&
-                (point.y == 0 || matrix[(int) point.x, (int) point.y - 1, (int) point.z - 1])) {
-                ListPov.Add(new Vector3(point.x, (int) point.y, (int) point.z - 1));
-            }
+        if (CheckEmptyPlace(point + new Vector3Int(0, 0, -1)))
+            ListPov.Add(point + new Vector3Int(0, 0, -1));
 
         if (point.y < 2)
-            if (matrix[(int) point.x, (int) point.y + 1, (int) point.z]) {
-                ListPov.Add(new Vector3(point.x, (int) point.y + 1, (int) point.z));
-            }
+            if (CheckEmptyPlace(point + new Vector3Int(0, 1, 0)))
+                ListPov.Add(point + new Vector3Int(0, 1, 0));
 
         return ListPov;
     }
 
+    public bool CheckEmptyPlace( Vector3Int indices) {
+        if (indices.OutOfIndexLimit())
+            return false;
+
+        if (indices.y != 0 && _castMatrix[indices.x, indices.y - 1, indices.z])
+            return false;
+
+        return _castMatrix[indices.x, indices.y, indices.z];
+    }
 
     void ChengeBlock(Element element, GameObject target) {
         Random rn = new Random();
