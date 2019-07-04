@@ -92,7 +92,7 @@ public class ElementManager : MonoBehaviour {
         newElement.transform.parent = this.gameObject.transform;
         _elementMarger.Add(newElement);
     }
-    #endregion
+    #endregion 
 
     #region  функции падения всех эл-тов ( после уничтожения слоев)
     public void StartDropAllElements() {
