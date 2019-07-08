@@ -14,7 +14,7 @@ public class ElementManager : MonoBehaviour {
     static public Element NewElement;
     private Transform MyTransform;
 
-    [SerializeField] ObjectPool _ElementPool;
+    [SerializeField] ElementPool _ElementPool;
     // Use this for initialization
     void Start () {
         _elementMarger = new List<Element>();
@@ -24,17 +24,18 @@ public class ElementManager : MonoBehaviour {
         Messenger.AddListener( StateMachine.StateMachineKey + GameState2.Empty, GenerateElement);
         Messenger.AddListener(StateMachine.StateMachineKey + GameState2.NewElement, StartDropElement);
 
-        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, DestroyEmptyElement);
-        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, CutElement);
-        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, StartDropAllElements);
+        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, AfterCollectElement);
+//        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, CutElement);
+//        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, StartDropAllElements);
     }
 
     private void OnDestroy() {
         Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.Empty, GenerateElement);
         Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.NewElement, StartDropElement);
 
-        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.DropAllElements, CutElement);
-        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.DropAllElements, StartDropAllElements);
+        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.DropAllElements, AfterCollectElement);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.DropAllElements, CutElement);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.DropAllElements, StartDropAllElements);
     }
 
     public void GenerateElement() {
@@ -153,6 +154,12 @@ public class ElementManager : MonoBehaviour {
 
     #endregion
 
+    public void AfterCollectElement()
+    {
+        DestroyEmptyElement();
+        CutElement();
+        StartDropAllElements();
+    }
     public void CutElement() {
 
         int k = 0;
@@ -176,9 +183,11 @@ public class ElementManager : MonoBehaviour {
         for (int i = 0; i < _elementMarger.Count;) {
             if (_elementMarger[i].CheckEmpty())
             {
-                GameObject tmp = _elementMarger[i].gameObject;
+//                DestroyBlock();
+                Element tmp = _elementMarger[i];
                 _elementMarger.Remove(_elementMarger[i]);
-                Destroy(tmp);//_ElementPool.DestroyObject(tmp);
+               
+                _ElementPool.DestroyObject(tmp); //Destroy(tmp);//
             }
             else {
                 i++;
@@ -191,8 +200,13 @@ public class ElementManager : MonoBehaviour {
             Element tmp = _elementMarger[0];
             _matrix.UnbindToMatrix(tmp);
             _elementMarger.Remove(tmp);
-            Destroy(tmp.gameObject);
+            _ElementPool.DestroyObject(_elementMarger[0]); //  Destroy(tmp.gameObject);
         }
     }
-    
+
+    private void DestroyBlock(Element element)
+    {
+//        element.GetChilA
+    }
+
 }

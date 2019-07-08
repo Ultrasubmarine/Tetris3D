@@ -25,7 +25,7 @@ public class Generator : MonoBehaviour {
     [SerializeField] PlaneMatrix _Matrix;
     bool[,,] _castMatrix;
 
-    [SerializeField] ObjectPool _ElementPool;
+    [SerializeField] ElementPool _ElementPool;
 
     private void Start() {
         _castMatrix = new bool[3, 3, 3];
@@ -100,7 +100,7 @@ public class Generator : MonoBehaviour {
 
         // create element
         GameObject elementObj = new GameObject("MY ZLO");
-        Element createElement = elementObj.AddComponent<Element>(); // _ElementPool.CreateObject(this.transform.position).GetComponent<Element>();//
+        Element createElement = _ElementPool.CreateObject(this.transform.position);//
 
         Vector3Int lastPoint = new Vector3Int((int)min.x, 0, (int)min.z);
 

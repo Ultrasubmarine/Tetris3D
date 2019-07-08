@@ -9,8 +9,8 @@ public class Element : MonoBehaviour {
 
     public bool IsBind = false;
     public bool IsDrop = false;
-    public Transform MyTransform { get; private set; } 
-
+    public Transform MyTransform { get; private set; }
+    public ElementPool _Pool;
     void Awake() {
         MyTransform = this.transform;
     }
@@ -103,6 +103,11 @@ public class Element : MonoBehaviour {
         }
     }
 
+    private void OnDisable()
+    {
+        Debug.Log( " Sleep with " + transform.childCount.ToString() + " Block =" + MyBlocks.Count.ToString() );
+    }
+
     public bool CheckEmpty() {
         for (int i = 0; i < MyBlocks.Count; i++) {
             if (MyBlocks[i] != null)
@@ -114,10 +119,11 @@ public class Element : MonoBehaviour {
     public void DeleteBlock(Block block) {
         if (MyBlocks.Contains(block)) {
             MyBlocks.Remove(block);
-
+            Debug.Log("DestroyBlock in Element");
             //TODO Возвращать блоки в пул?
             Destroy(block.gameObject);
         }
+        Debug.Log("oststok " + MyBlocks.Count.ToString());
     }
 
     #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
@@ -162,16 +168,16 @@ public class Element : MonoBehaviour {
 
     private Element CreateElement( List<Block> blocks) {
 
-        GameObject newElement = new GameObject("ZLO DOUBLE");
-        newElement.transform.position = Vector3.zero;
-
-        newElement.AddComponent<Element>().MyBlocks = blocks;
+       // GameObject newElement = new GameObject("ZLO DOUBLE");
+//        newElement.transform.position = Vector3.zero;
+        Element newEL = _Pool.CreateObject(Vector3.zero);
+        newEL.MyBlocks = blocks;
 
         for (int i = 0; i < blocks.Count; i++) {
-            blocks[i].MyTransform.parent = newElement.transform;
+            blocks[i].MyTransform.parent = newEL.transform;
             MyBlocks.Remove(blocks[i]);
         }
-        return newElement.GetComponent<Element>();
+        return newEL;
     }
 
     public bool CheckContact(Block b1, Block b2) {
