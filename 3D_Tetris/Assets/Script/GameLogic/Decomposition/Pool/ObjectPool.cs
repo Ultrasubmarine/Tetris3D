@@ -82,7 +82,7 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
 	private void InstantiateObject() {
 
         GameObject newPoolObj = Instantiate(Prefab);
-
+        Debug.Log("Instn");
         PoolContainer<T> newObj = new PoolContainer<T>(newPoolObj.GetComponent<T>(), newPoolObj);
         newObj.SetActive(false);
         Pool.Add(newObj);

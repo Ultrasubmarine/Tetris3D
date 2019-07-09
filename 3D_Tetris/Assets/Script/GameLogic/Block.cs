@@ -20,10 +20,13 @@ public class Block : MonoBehaviour {
     public bool Destroy = false;
     public Transform MyTransform;
 
+    public MeshRenderer Mesh { get; private set; }
+    
     public CoordinatXZ XZ { get { return new CoordinatXZ(x, z); } }
 
     private void Awake() {
         MyTransform = this.transform;
+        Mesh = GetComponent<MeshRenderer>();
     }
 
     public Block() {
@@ -45,5 +48,10 @@ public class Block : MonoBehaviour {
         x += of_x;
         y += of_y;
         z += of_z;
+    }
+
+    void OnDisable()
+    {
+        Destroy = false;
     }
 }

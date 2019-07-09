@@ -10,7 +10,9 @@ public class Element : MonoBehaviour {
     public bool IsBind = false;
     public bool IsDrop = false;
     public Transform MyTransform { get; private set; }
+
     public ElementPool _Pool;
+    public BlockPool _BlockPool;
     void Awake() {
         MyTransform = this.transform;
     }
@@ -121,7 +123,7 @@ public class Element : MonoBehaviour {
             MyBlocks.Remove(block);
 //            Debug.Log("DestroyBlock in Element");
             //TODO Возвращать блоки в пул?
-            Destroy(block.gameObject);
+            _BlockPool.DestroyObject(block);//Destroy(block.gameObject);
         }
 //        Debug.Log("oststok " + MyBlocks.Count.ToString());
     }

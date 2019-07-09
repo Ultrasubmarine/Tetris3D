@@ -178,7 +178,6 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
                 }
             }
         }
-        Debug.Log(min_point);
         return min_point;
     }
     public int MinHeightInCoordinates(int x_index, int z_index)

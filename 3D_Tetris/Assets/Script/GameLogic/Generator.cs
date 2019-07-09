@@ -1,84 +1,59 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using IntegerExtension;
-using UnityEngine.Serialization;
-
-//public class Element {
-//    public GameObject El;
-//    public double P;
-//}
 
 public class Generator : MonoBehaviour {
 
-    [FormerlySerializedAs("prefabBlock")] [FormerlySerializedAs("PrefabBlock")] public GameObject _PrefabBlock;
-
-    [FormerlySerializedAs("MyMaterial")] [SerializeField] Material[] _MyMaterial;
-
-    [SerializeField] Material _BonusMaterial;
-    int _minYforElement;
-    [FormerlySerializedAs("ExamleElement")] public GameObject _ExamleElement;
-
-    [SerializeField] PlaneMatrix _Matrix;
-    bool[,,] _castMatrix;
-
+    [Header("Pools")]
     [SerializeField] ElementPool _ElementPool;
+    [SerializeField] BlockPool _BlockPool;
+    [Space(15)]
     
-    private void Start() {
+    [SerializeField] Material[] _MyMaterial;
+    [Tooltip(" подсказка места расположения падающего элемента")]
+    [SerializeField] Material _BonusMaterial;
+
+    PlaneMatrix _matrix;
+    bool[,,] _castMatrix;
+    Vector3Int _minPoint;
+
+    private void Start()
+    {
+        _matrix = PlaneMatrix.Instance;
         _castMatrix = new bool[3, 3, 3];
     }
-    public GameObject GenerationNewElement( Transform elementParent){
+    
+    public Element GenerationNewElement( Transform elementParent){
 
-        Vector3 min = _Matrix.FindLowerAccessiblePlace();
-        _minYforElement =(int) min.y;
-        bool[,,] matrixCheck = CreateCastMatrix((int)min.y);
+        _minPoint = _matrix.FindLowerAccessiblePlace();
+        _castMatrix = CreateCastMatrix(_minPoint.y);
 
-        GameObject newElement = CreateElement();
+        Element newElement = CreateElement();
 
-        //устанавливаем нормальную позицию элемента
-        Vector3 temp = elementParent.position;
+        Vector3 pos = elementParent.position;
+        newElement.InitializationAfterGeneric(_matrix.Height);
 
-        // инициализируем блоки элемента согласно установленной позиции
-        Element element = newElement.GetComponent<Element>();
-        element.InitializationAfterGeneric(_Matrix.Height);//plane.Height);
-
-        //// выравниваем элемент относительно координат y 
-        var min_y = element.MyBlocks.Min(s => s.y);
-        var max_y = element.MyBlocks.Max(s => s.y);
+        // выравниваем элемент относительно координат y 
+        var min_y = newElement.MyBlocks.Min(s => s.y);
+        var max_y = newElement.MyBlocks.Max(s => s.y);
 
         int size = max_y - min_y;
+        newElement.MyTransform.position = new Vector3(pos.x, pos.y + _matrix.Height - size, pos.z);
 
-        newElement.transform.position = new Vector3(temp.x, temp.y + _Matrix.Height - size, temp.z);
-
-//        // TO DO - вычленить в отдельный метод создание дубляжа
-//        GameObject exElement = Instantiate(newElement);
-//        exElement.name = " TUTOR";
-//        foreach (var item in exElement.GetComponent<Element>().MyBlocks) {
-//            item.GetComponent<Renderer>().material = _BonusMaterial;
-//            item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
-//        }
-//
-//        exElement.transform.position =
-//            new Vector3(temp.x, elementParent.gameObject.transform.position.y + _minYforElement, temp.z);
-////        examleElement = exElement; // Destroy(exElement, 5f);
-//        ////////////
-//
-//      //  ChengeBlock(Element, plane.gameObject);
+        CreateDuplicate(newElement);
+      //  ChengeBlock(Element, plane.gameObject);
         return newElement;
     }
 
-    private GameObject CreateElement() {
+    private Element CreateElement() {
 
         int indexMat = Random.Range(0, _MyMaterial.Length - 1);
-        
-        Vector3Int min = _Matrix.FindLowerAccessiblePlace();
-        _castMatrix = CreateCastMatrix(min.y);
 
         Element createElement = _ElementPool.CreateObject(Vector3.zero);
         
-        Vector3Int lastPoint = new Vector3Int(min.x, 0, min.z);
-        _castMatrix[ min.x, 0, min.z] = false;
+        Vector3Int lastPoint = new Vector3Int(_minPoint.x, 0, _minPoint.z);
+        _castMatrix[ _minPoint.x, 0, _minPoint.z] = false;
         
         CreateBlock(lastPoint, createElement, indexMat);
        
@@ -90,7 +65,7 @@ public class Generator : MonoBehaviour {
             CreateBlock(lastPoint, createElement, indexMat);
             _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;       
         }
-        return createElement.gameObject;
+        return createElement;
     }
 
     private bool[,,] CreateCastMatrix(int min) {
@@ -100,7 +75,7 @@ public class Generator : MonoBehaviour {
 
         for (int x = 0; x < 3; x++) {
             for (int z = 0; z < 3; z++) {
-                barrier = _Matrix.MinHeightInCoordinates(x,z);
+                barrier = _matrix.MinHeightInCoordinates(x,z);
                 for (int y = min + 3 - 1; y >= min; y--) {
                     castMatrix[x, y - min, z] = y < barrier ? false : true ;               
                 }
@@ -141,16 +116,15 @@ public class Generator : MonoBehaviour {
         return _castMatrix[indices.x, indices.y, indices.z];
     }
     
-    private void CreateBlock(Vector3 position, Element element, int indexMat) {
-
-        GameObject currBlock = Instantiate(_PrefabBlock);
-        currBlock.AddComponent<Block>().SetCoordinat(position);
-        currBlock.GetComponent<MeshRenderer>().material = _MyMaterial[indexMat];
-
-        currBlock.gameObject.transform.parent = element.gameObject.transform;
-        currBlock.transform.localPosition = position;
-        SetBlockPosition(currBlock.GetComponent<Block>());
-        element.AddBlock(currBlock.GetComponent<Block>());
+    private void CreateBlock(Vector3 position, Element element, int indexMat)
+    {
+        Block currBlock = _BlockPool.CreateObject(Vector3Int.zero);
+        currBlock.Mesh.material = _MyMaterial[indexMat];
+        currBlock.SetCoordinat(position);
+       
+        currBlock.MyTransform.parent = element.gameObject.transform;
+        SetBlockPosition(currBlock);
+        element.AddBlock(currBlock);     
     }
 
     private void SetBlockPosition(Block block) {
@@ -158,6 +132,32 @@ public class Generator : MonoBehaviour {
         block.gameObject.transform.localPosition = position;
     }
 
+    // TODO Duplicate 
+    private void CreateDuplicate( Element element)
+    {
+//        _Duplicate = _ElementPool.CreateObject(Vector3Int.zero);
+//        
+//        foreach (var item in element.MyBlocks) {
+//            
+//            item.GetComponent<Renderer>().material = _BonusMaterial;
+//            item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
+//        }
+
+//last --->
+//        // TO DO - вычленить в отдельный метод создание дубляжа
+//        GameObject exElement = Instantiate(newElement);
+//        exElement.name = "TUTOR";
+//        foreach (var item in exElement.GetComponent<Element>().MyBlocks) {
+//            item.GetComponent<Renderer>().material = _BonusMaterial;
+//            item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
+//        }
+//
+//        exElement.transform.position =
+//            new Vector3(temp.x, elementParent.gameObject.transform.position.y + _minYforElement, temp.z);
+////        examleElement = exElement; // Destroy(exElement, 5f);
+//        ////////////
+    }
+    
 //    void ChengeBlock(Element element, GameObject target) {
 //        Random rn = new Random();
 //

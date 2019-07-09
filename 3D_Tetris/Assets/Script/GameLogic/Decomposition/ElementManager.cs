@@ -40,8 +40,7 @@ public class ElementManager : MonoBehaviour {
 
     public void GenerateElement() {
 
-        GameObject generationElement = _Generator.GenerationNewElement(MyTransform);//_PlaneScript.transform);
-        NewElement = generationElement.GetComponent<Element>();
+        NewElement = _Generator.GenerationNewElement(MyTransform);
         NewElement.MyTransform.parent = MyTransform;
 
         machine.ChangeState(GameState2.NewElement);
