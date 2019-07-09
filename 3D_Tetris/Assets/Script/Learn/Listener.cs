@@ -18,7 +18,7 @@ public class Listener <T> : MonoBehaviour{
     public Action<T> CallDelegate  ;
 
     private void Start()    {
-        Debug.Log("I Lissten " + EventName + "tttt");
+//        Debug.Log("I Lissten " + EventName + "tttt");
         Messenger<T>.AddListener(EventName, CallDelegate);
     }
 

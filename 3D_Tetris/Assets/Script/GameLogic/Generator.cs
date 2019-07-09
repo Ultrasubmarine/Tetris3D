@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using IntegerExtension;
+using UnityEngine.Serialization;
 
 //public class Element {
 //    public GameObject El;
@@ -10,145 +11,93 @@ using IntegerExtension;
 //}
 
 public class Generator : MonoBehaviour {
-    public GameObject[] PrefabElement;
-    public double[] PElement;
-    public GameObject PrefabBlock;
 
-    [SerializeField] int heightGeneration;
-    [SerializeField] Material[] MyMaterial;
+    [FormerlySerializedAs("prefabBlock")] [FormerlySerializedAs("PrefabBlock")] public GameObject _PrefabBlock;
 
+    [FormerlySerializedAs("MyMaterial")] [SerializeField] Material[] _MyMaterial;
 
     [SerializeField] Material _BonusMaterial;
-    int minYforElement;
-    public GameObject examleElement;
+    int _minYforElement;
+    [FormerlySerializedAs("ExamleElement")] public GameObject _ExamleElement;
 
     [SerializeField] PlaneMatrix _Matrix;
     bool[,,] _castMatrix;
 
     [SerializeField] ElementPool _ElementPool;
-
+    
     private void Start() {
         _castMatrix = new bool[3, 3, 3];
     }
     public GameObject GenerationNewElement( Transform elementParent){
 
         Vector3 min = _Matrix.FindLowerAccessiblePlace();
-        minYforElement =(int) min.y;
-        bool[,,] matrixCheck = CastMatrix((int)min.y);
+        _minYforElement =(int) min.y;
+        bool[,,] matrixCheck = CreateCastMatrix((int)min.y);
 
-        GameObject NewElement = CreatorElement(_Matrix._matrix); // Instantiate(generationElement());
+        GameObject newElement = CreateElement();
 
         //устанавливаем нормальную позицию элемента
         Vector3 temp = elementParent.position;
 
         // инициализируем блоки элемента согласно установленной позиции
-        Element Element = NewElement.GetComponent<Element>();
-        Element.InitializationAfterGeneric(_Matrix.Height);//plane.Height);
+        Element element = newElement.GetComponent<Element>();
+        element.InitializationAfterGeneric(_Matrix.Height);//plane.Height);
 
         //// выравниваем элемент относительно координат y 
-        var min_y = Element.MyBlocks.Min(s => s.y);
-        var max_y = Element.MyBlocks.Max(s => s.y);
+        var min_y = element.MyBlocks.Min(s => s.y);
+        var max_y = element.MyBlocks.Max(s => s.y);
 
         int size = max_y - min_y;
 
-        NewElement.transform.position = new Vector3(temp.x, temp.y + _Matrix.Height - size, temp.z);
+        newElement.transform.position = new Vector3(temp.x, temp.y + _Matrix.Height - size, temp.z);
 
-        // TO DO - вычленить в отдельный метод создание дубляжа
-        GameObject exElement = Instantiate(NewElement);
-        exElement.name = " TUTOR";
-        foreach (var item in exElement.GetComponent<Element>().MyBlocks) {
-            item.GetComponent<Renderer>().material = _BonusMaterial;
-            item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
-        }
-
-        exElement.transform.position =
-            new Vector3(temp.x, elementParent.gameObject.transform.position.y + minYforElement, temp.z);
-        examleElement = exElement; // Destroy(exElement, 5f);
-        ////////////
-
-      //  ChengeBlock(Element, plane.gameObject);
-        return NewElement;
+//        // TO DO - вычленить в отдельный метод создание дубляжа
+//        GameObject exElement = Instantiate(newElement);
+//        exElement.name = " TUTOR";
+//        foreach (var item in exElement.GetComponent<Element>().MyBlocks) {
+//            item.GetComponent<Renderer>().material = _BonusMaterial;
+//            item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
+//        }
+//
+//        exElement.transform.position =
+//            new Vector3(temp.x, elementParent.gameObject.transform.position.y + _minYforElement, temp.z);
+////        examleElement = exElement; // Destroy(exElement, 5f);
+//        ////////////
+//
+//      //  ChengeBlock(Element, plane.gameObject);
+        return newElement;
     }
 
-    private GameObject generationElement() {
-        if (PElement.Length == 0) // равномерный закон распределения ( по умолчанию ) 
-        {
-            return PrefabElement[Random.Range(0, PrefabElement.Length)];
-        }
-        else // заданный закон распределения
-        {
-            double valueLine = 0;
-            double rand = Random.value;
+    private GameObject CreateElement() {
 
-            for (int i = 0; i < PrefabElement.Length; i++) // просматриваем все вероятности элементов
-            {
-                valueLine += PElement[i];
-                if (rand < valueLine)
-                    return PrefabElement[i];
-            }
+        int indexMat = Random.Range(0, _MyMaterial.Length - 1);
+        
+        Vector3Int min = _Matrix.FindLowerAccessiblePlace();
+        _castMatrix = CreateCastMatrix(min.y);
 
-            return PrefabElement[PrefabElement.Length - 1];
-        }
-    }
-
-    private GameObject CreatorElement(Block[,,] matrix) {
-
-        int indexЬat = Random.Range(0, MyMaterial.Length - 1);
-
-        Vector3 min = _Matrix.FindLowerAccessiblePlace();
-        _castMatrix = CastMatrix((int) min.y);
-
-        // create element
-        GameObject elementObj = new GameObject("MY ZLO");
-        Element createElement = _ElementPool.CreateObject(this.transform.position);//
-
-        Vector3Int lastPoint = new Vector3Int((int)min.x, 0, (int)min.z);
-
-        // выращиваем элемент - 1 блок
-        CreatorBlock(lastPoint, createElement, indexЬat);
-        _castMatrix[(int) min.x, (int) 0, (int) min.z] = false;
-
-        List<Vector3Int> pov; // степень свободы
-        int index;
+        Element createElement = _ElementPool.CreateObject(Vector3.zero);
+        
+        Vector3Int lastPoint = new Vector3Int(min.x, 0, min.z);
+        _castMatrix[ min.x, 0, min.z] = false;
+        
+        CreateBlock(lastPoint, createElement, indexMat);
+       
+        List<Vector3Int> freePlaces; 
         for (int i = 0; i < 3; i++) {
-            pov = PovFreeCount(lastPoint, createElement);
-            if (pov.Count > 0) {
-                index = (int) Random.Range(0, pov.Count);
+            freePlaces = FoundFreePlacesAround(lastPoint);
+            lastPoint = freePlaces[ Random.Range(0, freePlaces.Count-1) ];
 
-                // добавляем компонент с координатами блока
-                CreatorBlock(pov[index], createElement, indexЬat);
-                // обновляем слепок
-                _castMatrix[(int) pov[index].x, (int) pov[index].y, (int) pov[index].z] = false;
-                lastPoint = pov[index];
-            }
+            CreateBlock(lastPoint, createElement, indexMat);
+            _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;       
         }
-
         return createElement.gameObject;
     }
 
-    private void CreatorBlock(Vector3 position, Element element, int indexmat) {
-        // добавляем компонент с координатами блока
-        GameObject currBlock = Instantiate(PrefabBlock);
-        currBlock.AddComponent<Block>().SetCoordinat(position);
-        currBlock.GetComponent<MeshRenderer>().material = MyMaterial[indexmat];
-
-        currBlock.gameObject.transform.parent = element.gameObject.transform;
-        currBlock.transform.localPosition = position;
-        SettingsPositionBlock(currBlock.GetComponent<Block>());
-        element.AddBlock(currBlock.GetComponent<Block>());
-    }
-
-    private void SettingsPositionBlock(Block block) {
-        Vector3 position = new Vector3(block.x, block.y, block.z);
-        block.gameObject.transform.localPosition = position;
-    }
-
-    // слепок матрицы
-    private bool[,,] CastMatrix(int min) {
+    private bool[,,] CreateCastMatrix(int min) {
 
         bool[,,] castMatrix = new bool[3, 3, 3];
         int barrier;
-        // делаем слепок
+
         for (int x = 0; x < 3; x++) {
             for (int z = 0; z < 3; z++) {
                 barrier = _Matrix.MinHeightInCoordinates(x,z);
@@ -159,30 +108,30 @@ public class Generator : MonoBehaviour {
         }
         return castMatrix;
     }
-
-    private List<Vector3Int> PovFreeCount(Vector3Int point, Element currEl) {
-        List<Vector3Int> ListPov = new List<Vector3Int>();
+    
+    private List<Vector3Int> FoundFreePlacesAround(Vector3Int point) {
+        List<Vector3Int> listPov = new List<Vector3Int>();
 
         if( CheckEmptyPlace(point + new Vector3Int(1, 0, 0)) )
-           ListPov.Add(point + new Vector3Int(1, 0, 0));
+            listPov.Add(point + new Vector3Int(1, 0, 0));
 
         if (CheckEmptyPlace(point + new Vector3Int(-1, 0, 0)))
-            ListPov.Add(point + new Vector3Int(-1, 0, 0));
+            listPov.Add(point + new Vector3Int(-1, 0, 0));
 
         if (CheckEmptyPlace(point + new Vector3Int(0, 0, 1)))
-            ListPov.Add(point + new Vector3Int(0, 0, 1));
+            listPov.Add(point + new Vector3Int(0, 0, 1));
 
         if (CheckEmptyPlace(point + new Vector3Int(0, 0, -1)))
-            ListPov.Add(point + new Vector3Int(0, 0, -1));
+            listPov.Add(point + new Vector3Int(0, 0, -1));
 
         if (point.y < 2)
             if (CheckEmptyPlace(point + new Vector3Int(0, 1, 0)))
-                ListPov.Add(point + new Vector3Int(0, 1, 0));
+                listPov.Add(point + new Vector3Int(0, 1, 0));
 
-        return ListPov;
+        return listPov;
     }
 
-    public bool CheckEmptyPlace( Vector3Int indices) {
+    private bool CheckEmptyPlace( Vector3Int indices) {
         if (indices.OutOfIndexLimit())
             return false;
 
@@ -191,31 +140,48 @@ public class Generator : MonoBehaviour {
 
         return _castMatrix[indices.x, indices.y, indices.z];
     }
+    
+    private void CreateBlock(Vector3 position, Element element, int indexMat) {
 
-    void ChengeBlock(Element element, GameObject target) {
-        Random rn = new Random();
+        GameObject currBlock = Instantiate(_PrefabBlock);
+        currBlock.AddComponent<Block>().SetCoordinat(position);
+        currBlock.GetComponent<MeshRenderer>().material = _MyMaterial[indexMat];
 
-        int turnCount = Random.Range(1, 2);
-        if (turnCount > 0) {
-            turn direction = (turn) Random.Range(0, 1 + 1);
-            Debug.Log(direction.ToString());
-            while (turnCount > 0) {
-                element.SetTurn(direction, target);
-                turnCount--;
-            }
-        }
-
-        int moveCount = Random.Range(0, 2);
-        if (moveCount > 0) {
-            move directionMove = (move) Random.Range(0, 4 + 1);
-            while (turnCount > 0) {
-                if (element.CheckMove(directionMove, 3 / 2 * (-1))) {
-                    element.SetMove(directionMove);
-                    moveCount--;
-                }
-                else
-                    break;
-            }
-        }
+        currBlock.gameObject.transform.parent = element.gameObject.transform;
+        currBlock.transform.localPosition = position;
+        SetBlockPosition(currBlock.GetComponent<Block>());
+        element.AddBlock(currBlock.GetComponent<Block>());
     }
+
+    private void SetBlockPosition(Block block) {
+        Vector3 position = new Vector3(block.x, block.y, block.z);
+        block.gameObject.transform.localPosition = position;
+    }
+
+//    void ChengeBlock(Element element, GameObject target) {
+//        Random rn = new Random();
+//
+//        int turnCount = Random.Range(1, 2);
+//        if (turnCount > 0) {
+//            turn direction = (turn) Random.Range(0, 1 + 1);
+//            Debug.Log(direction.ToString());
+//            while (turnCount > 0) {
+//                element.SetTurn(direction, target);
+//                turnCount--;
+//            }
+//        }
+//
+//        int moveCount = Random.Range(0, 2);
+//        if (moveCount > 0) {
+//            move directionMove = (move) Random.Range(0, 4 + 1);
+//            while (turnCount > 0) {
+//                if (element.CheckMove(directionMove, 3 / 2 * (-1))) {
+//                    element.SetMove(directionMove);
+//                    moveCount--;
+//                }
+//                else
+//                    break;
+//            }
+//        }
+//    }
 }

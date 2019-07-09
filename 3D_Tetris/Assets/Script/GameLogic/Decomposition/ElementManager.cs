@@ -71,7 +71,7 @@ public class ElementManager : MonoBehaviour {
             yield return StartCoroutine(NewElement.VisualDrop(_Speed._TimeDrop));// элемент визуально падает
         }
 
-        Destroy(_Generator.examleElement);
+//        Destroy(_Generator.examleElement);
 
         while (machine.State != GameState2.NewElement) {
             yield return null;

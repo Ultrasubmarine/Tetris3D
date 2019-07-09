@@ -105,7 +105,7 @@ public class Element : MonoBehaviour {
 
     private void OnDisable()
     {
-        Debug.Log( " Sleep with " + transform.childCount.ToString() + " Block =" + MyBlocks.Count.ToString() );
+//        Debug.Log( " Sleep with " + transform.childCount.ToString() + " Block =" + MyBlocks.Count.ToString() );
     }
 
     public bool CheckEmpty() {
@@ -119,11 +119,11 @@ public class Element : MonoBehaviour {
     public void DeleteBlock(Block block) {
         if (MyBlocks.Contains(block)) {
             MyBlocks.Remove(block);
-            Debug.Log("DestroyBlock in Element");
+//            Debug.Log("DestroyBlock in Element");
             //TODO Возвращать блоки в пул?
             Destroy(block.gameObject);
         }
-        Debug.Log("oststok " + MyBlocks.Count.ToString());
+//        Debug.Log("oststok " + MyBlocks.Count.ToString());
     }
 
     #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
