@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ElementManager : MonoBehaviour {
@@ -153,9 +154,9 @@ public class ElementManager : MonoBehaviour {
 
     #endregion
 
-    public void AfterCollectElement()
-    {
-        DestroyEmptyElement();
+    public void AfterCollectElement() {
+        
+        ClearElementsAfterDeletedBlocks();
         CutElement();
         StartDropAllElements();
     }
@@ -177,23 +178,39 @@ public class ElementManager : MonoBehaviour {
         }
     }
 
-    private void DestroyEmptyElement() {
-        // проверка пустых элементов
+    private void ClearElementsAfterDeletedBlocks() {
+        
+        foreach (var element in _elementMarger) {
+            var deletedList = element.MyBlocks.Where(s => s.Destroy).ToArray();
+            if (deletedList.ToArray().Length > 0) {               
+                element.DeleteBlocks(deletedList);
+                ClearDestroyBlocks(deletedList);
+            }
+        }
+        DestroyEmptyElement();
+    }
+    
+    private void ClearDestroyBlocks(Block[] deletedList) {
+        foreach (var item in deletedList) {
+            _Generator.DeleteBlock(item);
+        }        
+    }
+    
+    private void DestroyEmptyElement() {       
         for (int i = 0; i < _elementMarger.Count;) {
             if (_elementMarger[i].CheckEmpty())
             {
-//                DestroyBlock();
                 Element tmp = _elementMarger[i];
                 _elementMarger.Remove(_elementMarger[i]);
                
-                _ElementPool.DestroyObject(tmp); //Destroy(tmp);//
+                _Generator.DeleteElement(tmp); 
             }
             else {
                 i++;
             }
         }
     }
-
+    
     public void DestroyAllElements() {
         while (_elementMarger.Count > 0) {
             Element tmp = _elementMarger[0];

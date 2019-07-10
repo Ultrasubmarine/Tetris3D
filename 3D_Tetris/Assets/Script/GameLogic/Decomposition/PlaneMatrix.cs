@@ -24,7 +24,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     public int CurrentHeight { get { return _HeightHandler.CurrentHeight; } } 
 
     public static int MinCoordinat { get; private set; }
-
+    
     protected override void Init() {
         ExtensionMetodsForMatrix.SetSizePlane(_Wight);
         _matrix = new Block[_Wight, _Height, _Wight];
@@ -38,7 +38,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
                     _matrix[i, j, k] = null;
                 }
             }
-        }        
+        }
     }
 
     private void Start() {
@@ -137,7 +137,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
         for (int x = 0; x < Wight; x++) {
             for (int z = 0; z < Wight; z++) {
-                if (_matrix[x, layer, z] == null) // если в этом слое есть пустое место, значит колелкция не собрана
+                if (_matrix[x, layer, z] == null)
                 {
                     return false;    
                 }
@@ -151,12 +151,8 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER, layer);
         for (int x = 0; x < Wight; x++) {
             for (int z = 0; z < Wight; z++) {
-
-                GameObject tmp = _matrix[x, layer, z].gameObject;
-                var ggg = _matrix[x, layer, z];
                 _matrix[x, layer, z].Destroy = true;
-                _matrix[x, layer, z] = null;
-                tmp.GetComponentInParent<Element>().DeleteBlock(ggg);             
+                _matrix[x, layer, z] = null;           
             }
         }
     }

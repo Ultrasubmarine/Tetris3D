@@ -157,7 +157,14 @@ public class Generator : MonoBehaviour {
 ////        examleElement = exElement; // Destroy(exElement, 5f);
 //        ////////////
     }
-    
+
+    public void DeleteBlock(Block block) {
+        _BlockPool.DestroyObject(block);
+    }
+
+    public void DeleteElement(Element element) {
+        _ElementPool.DestroyObject(element);
+    }
 //    void ChengeBlock(Element element, GameObject target) {
 //        Random rn = new Random();
 //

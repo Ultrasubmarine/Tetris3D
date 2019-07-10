@@ -12,7 +12,7 @@ public class Element : MonoBehaviour {
     public Transform MyTransform { get; private set; }
 
     public ElementPool _Pool;
-    public BlockPool _BlockPool;
+    
     void Awake() {
         MyTransform = this.transform;
     }
@@ -118,16 +118,11 @@ public class Element : MonoBehaviour {
         return true; // пуст
     }
 
-    public void DeleteBlock(Block block) {
-        if (MyBlocks.Contains(block)) {
-            MyBlocks.Remove(block);
-//            Debug.Log("DestroyBlock in Element");
-            //TODO Возвращать блоки в пул?
-            _BlockPool.DestroyObject(block);//Destroy(block.gameObject);
-        }
-//        Debug.Log("oststok " + MyBlocks.Count.ToString());
-    }
 
+    public void DeleteBlocks( Block[] massBlock) {
+        MyBlocks = MyBlocks.Except(massBlock).ToList();
+    }
+    
     #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
     public Element CheckUnion() {
         if (MyBlocks.Count == 0)
