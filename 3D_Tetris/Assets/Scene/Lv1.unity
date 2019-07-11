@@ -478,8 +478,6 @@ MonoBehaviour:
   _Speed: {fileID: 31514270}
   _Generator: {fileID: 1634487027}
   machine: {fileID: 661031969}
-  _elementMarger: []
-  _ElementPool: {fileID: 1773942638}
 --- !u!4 &39482332
 Transform:
   m_ObjectHideFlags: 0
@@ -642,7 +640,6 @@ MonoBehaviour:
   x: 0
   y: 0
   z: 0
-  Destroy: 0
   MyTransform: {fileID: 0}
 --- !u!114 &62302480
 MonoBehaviour:
@@ -658,8 +655,6 @@ MonoBehaviour:
   MyBlocks: []
   IsBind: 0
   IsDrop: 0
-  _Pool: {fileID: 0}
-  _BlockPool: {fileID: 0}
 --- !u!4 &62302481
 Transform:
   m_ObjectHideFlags: 0
@@ -1453,7 +1448,6 @@ MonoBehaviour:
   x: 1
   y: 0
   z: 0
-  Destroy: 0
   MyTransform: {fileID: 0}
 --- !u!23 &134437414
 MeshRenderer:
@@ -7411,7 +7405,6 @@ MonoBehaviour:
   x: 0
   y: 0
   z: 0
-  Destroy: 0
   MyTransform: {fileID: 992891217}
 --- !u!1 &1025111760
 GameObject:
@@ -14485,7 +14478,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1634487028}
   - component: {fileID: 1634487027}
-  - component: {fileID: 1634487029}
   m_Layer: 0
   m_Name: GENERETOR
   m_TagString: Untagged
@@ -14506,8 +14498,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ElementPool: {fileID: 1773942638}
   _BlockPool: {fileID: 1649896089}
-  _PrefabBlock: {fileID: 1329749059490912, guid: 3954ba09a094fab4bac0c6ca7b6e3b79,
-    type: 2}
   _MyMaterial:
   - {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
   - {fileID: 2100000, guid: e36ef87c222810e489bbe703b699cde1, type: 2}
@@ -14530,19 +14520,6 @@ Transform:
   m_Father: {fileID: 372640279}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1634487029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1634487026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ce1cfb63826abd4caad5cfe168e00df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MyList: []
-  Pool: {fileID: 1773942638}
 --- !u!1 &1649896087
 GameObject:
   m_ObjectHideFlags: 0
@@ -15049,8 +15026,6 @@ MonoBehaviour:
   - {fileID: 2026479154}
   IsBind: 0
   IsDrop: 0
-  _Pool: {fileID: 0}
-  _BlockPool: {fileID: 0}
 --- !u!4 &1777085760
 Transform:
   m_ObjectHideFlags: 0
@@ -15923,7 +15898,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1634487029}
+      - m_Target: {fileID: 0}
         m_MethodName: Create
         m_Mode: 1
         m_Arguments:
@@ -16677,7 +16652,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1634487029}
+      - m_Target: {fileID: 0}
         m_MethodName: Destroy
         m_Mode: 1
         m_Arguments:
@@ -17078,7 +17053,6 @@ MonoBehaviour:
   x: -1
   y: 0
   z: 0
-  Destroy: 0
   MyTransform: {fileID: 0}
 --- !u!23 &2026479155
 MeshRenderer:
