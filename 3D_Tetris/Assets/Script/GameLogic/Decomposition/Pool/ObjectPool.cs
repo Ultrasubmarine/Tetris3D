@@ -54,8 +54,6 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
 
     public T CreateObject( Vector3 position) {
 
-		int index = -1;
-
         var returnObj = Pool.FirstOrDefault(obj => !obj.GObj.active);
         if( returnObj == null)
         {

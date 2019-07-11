@@ -29,7 +29,7 @@ public class Generator : MonoBehaviour {
         _minPoint = _matrix.FindLowerAccessiblePlace();
         _castMatrix = CreateCastMatrix(_minPoint.y);
 
-        Element newElement = CreateElement();
+        Element newElement = GenerateElement();
 
         Vector3 pos = elementParent.position;
         newElement.InitializationAfterGeneric(_matrix.Height);
@@ -46,7 +46,7 @@ public class Generator : MonoBehaviour {
         return newElement;
     }
 
-    private Element CreateElement() {
+    private Element GenerateElement() {
 
         int indexMat = Random.Range(0, _MyMaterial.Length - 1);
 
@@ -158,6 +158,11 @@ public class Generator : MonoBehaviour {
 //        ////////////
     }
 
+    public Element CreateEmptyElement()
+    {
+        return _ElementPool.CreateObject(Vector3.zero);
+    }
+    
     public void DeleteBlock(Block block) {
         _BlockPool.DestroyObject(block);
     }

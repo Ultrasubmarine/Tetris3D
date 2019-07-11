@@ -53,5 +53,8 @@ public class Block : MonoBehaviour {
     void OnDisable()
     {
         Destroy = false;
+        MyTransform.position = Vector3.zero;
+        MyTransform.rotation = Quaternion.identity;
+            
     }
 }

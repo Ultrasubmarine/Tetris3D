@@ -5,13 +5,11 @@ using System.Linq;
 
 
 public class Element : MonoBehaviour {
-    public List<Block> MyBlocks = new List<Block>(); //[] MyBlocks;
+    public List<Block> MyBlocks = new List<Block>();
 
     public bool IsBind = false;
     public bool IsDrop = false;
     public Transform MyTransform { get; private set; }
-
-    public ElementPool _Pool;
     
     void Awake() {
         MyTransform = this.transform;
@@ -107,73 +105,58 @@ public class Element : MonoBehaviour {
 
     private void OnDisable()
     {
-//        Debug.Log( " Sleep with " + transform.childCount.ToString() + " Block =" + MyBlocks.Count.ToString() );
+        MyTransform.rotation = Quaternion.identity;
+        MyTransform.position = Vector3.zero;
     }
 
     public bool CheckEmpty() {
-        for (int i = 0; i < MyBlocks.Count; i++) {
-            if (MyBlocks[i] != null)
-                return false; // не пуст
-        }
-        return true; // пуст
+        if( MyBlocks.Count > 0)
+                return false; 
+        return true;
     }
 
-
-    public void DeleteBlocksInList( Block[] massBlock) {
-        MyBlocks = MyBlocks.Except(massBlock).ToList();
+    public void DeleteBlocksInList(Block[] massBlock)
+    {
+        MyBlocks = MyBlocks.Except( massBlock).ToList();
     }
     
     #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
     public List<Block> CheckUnion() {
         if (MyBlocks.Count == 0)
             return null;
-        List<Block> ContactList = new List<Block>();
+        List<Block> contactList = new List<Block>();
 
         Block curr = MyBlocks[0]; 
 
-        ContactList.Add(curr);
+        contactList.Add(curr);
         foreach (var item in MyBlocks) {
             if (CheckContact(curr, item))
-                ContactList.Add(item);
+                contactList.Add(item);
         }
 
-        if (ContactList.Count == MyBlocks.Count)
+        if (contactList.Count == MyBlocks.Count)
             return null; 
         else {
             int k = 0;
-            int countK = ContactList.Count;
+            int countK = contactList.Count;
             while (k < countK) {
-                var remainingBlocks = MyBlocks.Except(ContactList).ToList();
+                var remainingBlocks = MyBlocks.Except(contactList).ToList();
                 for (int i = 0; i < remainingBlocks.Count; i++) {
-                    if (CheckContact(remainingBlocks[i], ContactList[k])) {
-                        ContactList.Add(remainingBlocks[i]);
+                    if (CheckContact(remainingBlocks[i], contactList[k])) {
+                        contactList.Add(remainingBlocks[i]);
                         countK++;
                     }
                 }
                 k++;
             }
-            if (ContactList.Count < MyBlocks.Count) {
-                var notContact = MyBlocks.Except(ContactList).ToList();
-                MyBlocks = MyBlocks.Except(notContact).ToList();
+            if (contactList.Count < MyBlocks.Count) {
+                var notContact = MyBlocks.Except(contactList).ToList();
+                MyBlocks = contactList;
                 return notContact;
             }
             else
                 return null;
         }
-    }
-
-    private Element CreateElement( List<Block> blocks) {
-
-       // GameObject newElement = new GameObject("ZLO DOUBLE");
-//        newElement.transform.position = Vector3.zero;
-        Element newEL = _Pool.CreateObject(Vector3.zero);
-        newEL.MyBlocks = blocks;
-
-        for (int i = 0; i < blocks.Count; i++) {
-            blocks[i].MyTransform.parent = newEL.transform;
-            MyBlocks.Remove(blocks[i]);
-        }
-        return newEL;
     }
 
     public bool CheckContact(Block b1, Block b2) {

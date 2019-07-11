@@ -13,14 +13,13 @@ public class ElementManager : MonoBehaviour {
     public List<Element> _elementMarger;
 
     static public Element NewElement;
-    private Transform MyTransform;
+    private Transform _myTransform;
 
-    [SerializeField] ElementPool _ElementPool;
     // Use this for initialization
     void Start () {
         _elementMarger = new List<Element>();
         _matrix = PlaneMatrix.Instance;
-        MyTransform = this.transform;
+        _myTransform = this.transform;
 
         Messenger.AddListener( StateMachine.StateMachineKey + GameState2.Empty, GenerateElement);
         Messenger.AddListener(StateMachine.StateMachineKey + GameState2.NewElement, StartDropElement);
@@ -41,8 +40,8 @@ public class ElementManager : MonoBehaviour {
 
     public void GenerateElement() {
 
-        NewElement = _Generator.GenerationNewElement(MyTransform);
-        NewElement.MyTransform.parent = MyTransform;
+        NewElement = _Generator.GenerationNewElement(_myTransform);
+        NewElement.MyTransform.parent = _myTransform;
 
         machine.ChangeState(GameState2.NewElement);
     }
@@ -51,6 +50,7 @@ public class ElementManager : MonoBehaviour {
     public void StartDropElement() {
         StartCoroutine(DropElement());
     }
+    
     private IEnumerator DropElement() {
 
         while (true) {
@@ -167,14 +167,14 @@ public class ElementManager : MonoBehaviour {
         while (k < countK) {
             List<Block> cutBlocks = _elementMarger[k].CheckUnion();
             if (cutBlocks != null) {
-                Element newElement = _ElementPool.CreateObject(Vector3.zero);
+                Element newElement = _Generator.CreateEmptyElement();
                 newElement.MyBlocks = cutBlocks;
                 
                 _matrix.UnbindToMatrix(newElement);
                 _matrix.UnbindToMatrix(_elementMarger[k]);
 
                 _elementMarger.Add(newElement);
-                newElement.MyTransform.parent = MyTransform;
+                newElement.MyTransform.parent = _myTransform;
                 countK++;
             }
             k++;
@@ -218,9 +218,10 @@ public class ElementManager : MonoBehaviour {
     public void DeleteAllElements() {
         while (_elementMarger.Count > 0) {
             Element tmp = _elementMarger[0];
+            
             _matrix.UnbindToMatrix(tmp);
             _elementMarger.Remove(tmp);
-            _ElementPool.DestroyObject(_elementMarger[0]);
+            _Generator.DeleteElement(tmp);
         }
     }
     #endregion
