@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public struct CoordinatXZ {
     public int x;
@@ -17,7 +18,7 @@ public class Block : MonoBehaviour {
     public int y;
     public int z;
 
-    public bool Destroy = false;
+    public bool IsDestroy { get; set; }
     public Transform MyTransform;
 
     public MeshRenderer Mesh { get; private set; }
@@ -44,17 +45,10 @@ public class Block : MonoBehaviour {
         z = (int) point.z - 1; // координаты plane - круговые
     }
 
-    public void OffsetCoordinat(int of_x=0, int of_y=0, int of_z=0) {
-        x += of_x;
-        y += of_y;
-        z += of_z;
-    }
-
     void OnDisable()
     {
-        Destroy = false;
+        IsDestroy = false;
         MyTransform.position = Vector3.zero;
-        MyTransform.rotation = Quaternion.identity;
-            
+        MyTransform.rotation = Quaternion.identity;          
     }
 }

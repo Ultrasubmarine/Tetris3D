@@ -10,10 +10,10 @@ public class ElementManager : MonoBehaviour {
     [SerializeField] Generator _Generator;
     [SerializeField] StateMachine machine;
 
-    public List<Element> _elementMarger;
+    List<Element> _elementMarger;
 
     static public Element NewElement;
-    private Transform _myTransform;
+    Transform _myTransform;
 
     // Use this for initialization
     void Start () {
@@ -25,8 +25,6 @@ public class ElementManager : MonoBehaviour {
         Messenger.AddListener(StateMachine.StateMachineKey + GameState2.NewElement, StartDropElement);
 
         Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, AfterCollectElement);
-//        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, CutElement);
-//        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, StartDropAllElements);
     }
 
     private void OnDestroy() {
@@ -34,8 +32,6 @@ public class ElementManager : MonoBehaviour {
         Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.NewElement, StartDropElement);
 
         Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.DropAllElements, AfterCollectElement);
-//        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.DropAllElements, CutElement);
-//        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.DropAllElements, StartDropAllElements);
     }
 
     public void GenerateElement() {
@@ -54,11 +50,9 @@ public class ElementManager : MonoBehaviour {
     private IEnumerator DropElement() {
 
         while (true) {
-
             while (machine.State != GameState2.NewElement){
                 yield return null;
             }
-
             bool empty = _matrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0)); // проверяем может ли элемент упасть на ярус ниже
 
             if (empty)
@@ -82,7 +76,6 @@ public class ElementManager : MonoBehaviour {
         machine.ChangeState(GameState2.Merge);
 
         // myProj.CreateCeiling();
-        // // TODO - проверка что надо уничтожить
         yield break;
     }
 
@@ -94,98 +87,19 @@ public class ElementManager : MonoBehaviour {
         _elementMarger.Add(newElement);
     }
     #endregion 
-
-    #region  функции падения всех эл-тов ( после уничтожения слоев)
-    public void StartDropAllElements() {
-        StartCoroutine(DropAllElements());//_PlaneScript.DropAfterDestroy());
-    }
-
-    private IEnumerator DropAllElements() {
-        bool flagDrop = false;
-        bool checkDropState = true;
-
-        do {
-            flagDrop = StartAllElementDrop();
-
-            if(flagDrop)                
-                yield return new WaitUntil(AllElementsDrop);
-            yield return new WaitForSeconds( _Speed._TimeDelay); // слишком резко уничтожаются 
-        }
-        while (flagDrop); // проверяем что бы все упало, пока оно может падать
-
-     //   myProj.CreateCeiling();
-        machine.ChangeState(GameState2.Collection);
-
-        yield return null;
-    }
-
-    private bool StartAllElementDrop() {
-
-        bool flagDrop = false;
-        foreach (var item in _elementMarger) {
-            var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
-            if (empty) //если коллизии нет, элемент может падать вниз
-            {
-                if (item.IsBind)
-                    _matrix.UnbindToMatrix(item);
-
-                flagDrop = true;
-                item.LogicDrop();
-                StartCoroutine(item.VisualDrop(_Speed._TimeDropAfterDestroy)); // запускает падение элемента
-            }
-            else {
-                if (!item.IsBind)
-                    _matrix.BindToMatrix(item);
-            }
-        }
-        return flagDrop;
-    }
-
-    private bool AllElementsDrop() {
-
-        foreach (var item in _elementMarger) {
-            if (item.IsDrop) {
-                return false;
-            }
-        }
-        return true;
-        
-    }
-
-    #endregion
-
+  
     public void AfterCollectElement() {
         
         ClearElementsAfterDeletedBlocks();
         CutElement();
-        StartDropAllElements();
-    }
-    private void CutElement() {
-
-        int k = 0;
-        int countK = _elementMarger.Count;
-        while (k < countK) {
-            List<Block> cutBlocks = _elementMarger[k].CheckUnion();
-            if (cutBlocks != null) {
-                Element newElement = _Generator.CreateEmptyElement();
-                newElement.MyBlocks = cutBlocks;
-                
-                _matrix.UnbindToMatrix(newElement);
-                _matrix.UnbindToMatrix(_elementMarger[k]);
-
-                _elementMarger.Add(newElement);
-                newElement.MyTransform.parent = _myTransform;
-                countK++;
-            }
-            k++;
-        }
+        StartCoroutine(StartDropAllElements());
     }
 
     #region функции удаления
     private void ClearElementsAfterDeletedBlocks() {
         
         foreach (var element in _elementMarger) {
-            var deletedList = element.MyBlocks.Where(s => s.Destroy).ToArray();
+            var deletedList = element.MyBlocks.Where(s => s.IsDestroy).ToArray();
             if (deletedList.ToArray().Length > 0) {               
                 element.DeleteBlocksInList(deletedList);
                 ClearDeleteBlocks(deletedList);
@@ -224,5 +138,77 @@ public class ElementManager : MonoBehaviour {
             _Generator.DeleteElement(tmp);
         }
     }
+    #endregion
+    
+    private void CutElement() {
+
+        int k = 0;
+        int countK = _elementMarger.Count;
+        while (k < countK) {
+            List<Block> cutBlocks = _elementMarger[k].CheckUnion();
+            if (cutBlocks != null) {
+                Element newElement = _Generator.CreateEmptyElement();
+                newElement.MyBlocks = cutBlocks;
+                
+                _matrix.UnbindToMatrix(newElement);
+                _matrix.UnbindToMatrix(_elementMarger[k]);
+
+                _elementMarger.Add(newElement);
+                newElement.MyTransform.parent = _myTransform;
+                countK++;
+            }
+            k++;
+        }
+    }
+    
+    #region  функции падения всех эл-тов ( после уничтожения слоев)
+
+    private IEnumerator StartDropAllElements() {
+        bool flagDrop = false;
+        do {
+            flagDrop = DropAllElements();
+
+            if(flagDrop)                
+                yield return new WaitUntil(CheckAllElementsDrop);
+            yield return new WaitForSeconds( _Speed._TimeDelay); // слишком резко уничтожаются 
+        }
+        while (flagDrop); // проверяем что бы все упало, пока оно может падать
+
+        //   myProj.CreateCeiling();
+        machine.ChangeState(GameState2.Collection);
+
+        yield return null;
+    }
+
+    private bool DropAllElements() {
+        bool flagDrop = false;
+        foreach (var item in _elementMarger) {
+            var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
+            if (empty) //если коллизии нет, элемент может падать вниз
+            {
+                if (item.IsBind)
+                    _matrix.UnbindToMatrix(item);
+
+                flagDrop = true;
+                item.LogicDrop();
+                StartCoroutine(item.VisualDrop(_Speed._TimeDropAfterDestroy)); // запускает падение элемента
+            }
+            else {
+                if (!item.IsBind)
+                    _matrix.BindToMatrix(item);
+            }
+        }
+        return flagDrop;
+    }
+
+    private bool CheckAllElementsDrop() {
+        foreach (var item in _elementMarger) {
+            if (item.IsDrop) {
+                return false;
+            }
+        }
+        return true;     
+    }
+
     #endregion
 }
