@@ -160,43 +160,47 @@ public class ElementManager : MonoBehaviour {
         CutElement();
         StartDropAllElements();
     }
-    public void CutElement() {
+    private void CutElement() {
 
         int k = 0;
         int countK = _elementMarger.Count;
         while (k < countK) {
-            Element b = _elementMarger[k].CheckUnion();
-            if (b != null) {
-                _matrix.UnbindToMatrix(b);
+            List<Block> cutBlocks = _elementMarger[k].CheckUnion();
+            if (cutBlocks != null) {
+                Element newElement = _ElementPool.CreateObject(Vector3.zero);
+                newElement.MyBlocks = cutBlocks;
+                
+                _matrix.UnbindToMatrix(newElement);
                 _matrix.UnbindToMatrix(_elementMarger[k]);
 
-                _elementMarger.Add(b);
-                b.MyTransform.parent = MyTransform;
+                _elementMarger.Add(newElement);
+                newElement.MyTransform.parent = MyTransform;
                 countK++;
             }
             k++;
         }
     }
 
+    #region функции удаления
     private void ClearElementsAfterDeletedBlocks() {
         
         foreach (var element in _elementMarger) {
             var deletedList = element.MyBlocks.Where(s => s.Destroy).ToArray();
             if (deletedList.ToArray().Length > 0) {               
-                element.DeleteBlocks(deletedList);
-                ClearDestroyBlocks(deletedList);
+                element.DeleteBlocksInList(deletedList);
+                ClearDeleteBlocks(deletedList);
             }
         }
-        DestroyEmptyElement();
+        DeleteEmptyElement();
     }
     
-    private void ClearDestroyBlocks(Block[] deletedList) {
+    private void ClearDeleteBlocks(Block[] deletedList) {
         foreach (var item in deletedList) {
             _Generator.DeleteBlock(item);
         }        
     }
     
-    private void DestroyEmptyElement() {       
+    private void DeleteEmptyElement() {       
         for (int i = 0; i < _elementMarger.Count;) {
             if (_elementMarger[i].CheckEmpty())
             {
@@ -211,18 +215,13 @@ public class ElementManager : MonoBehaviour {
         }
     }
     
-    public void DestroyAllElements() {
+    public void DeleteAllElements() {
         while (_elementMarger.Count > 0) {
             Element tmp = _elementMarger[0];
             _matrix.UnbindToMatrix(tmp);
             _elementMarger.Remove(tmp);
-            _ElementPool.DestroyObject(_elementMarger[0]); //  Destroy(tmp.gameObject);
+            _ElementPool.DestroyObject(_elementMarger[0]);
         }
     }
-
-    private void DestroyBlock(Element element)
-    {
-//        element.GetChilA
-    }
-
+    #endregion
 }

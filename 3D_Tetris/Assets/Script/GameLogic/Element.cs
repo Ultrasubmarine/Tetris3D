@@ -119,44 +119,43 @@ public class Element : MonoBehaviour {
     }
 
 
-    public void DeleteBlocks( Block[] massBlock) {
+    public void DeleteBlocksInList( Block[] massBlock) {
         MyBlocks = MyBlocks.Except(massBlock).ToList();
     }
     
     #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
-    public Element CheckUnion() {
+    public List<Block> CheckUnion() {
         if (MyBlocks.Count == 0)
             return null;
-        List<Block> m1 = new List<Block>();
+        List<Block> ContactList = new List<Block>();
 
-        Block curr = MyBlocks[0]; // точка отсчета
+        Block curr = MyBlocks[0]; 
 
-        m1.Add(curr);
+        ContactList.Add(curr);
         foreach (var item in MyBlocks) {
             if (CheckContact(curr, item))
-                m1.Add(item);
+                ContactList.Add(item);
         }
 
-        if (m1.Count == MyBlocks.Count)
-            return null; // все норм. мы объединили
+        if (ContactList.Count == MyBlocks.Count)
+            return null; 
         else {
             int k = 0;
-            int countK = m1.Count;
+            int countK = ContactList.Count;
             while (k < countK) {
-                var Ost = MyBlocks.Except(m1).ToList();
-                for (int i = 0; i < Ost.Count; i++) {
-                    if (CheckContact(Ost[i], m1[k])) {
-                        m1.Add(Ost[i]);
+                var remainingBlocks = MyBlocks.Except(ContactList).ToList();
+                for (int i = 0; i < remainingBlocks.Count; i++) {
+                    if (CheckContact(remainingBlocks[i], ContactList[k])) {
+                        ContactList.Add(remainingBlocks[i]);
                         countK++;
                     }
                 }
                 k++;
             }
-            // создаем новый элемент
-            if (m1.Count < MyBlocks.Count) {
-
-                var Ost = MyBlocks.Except(m1).ToList();
-                return CreateElement(Ost);
+            if (ContactList.Count < MyBlocks.Count) {
+                var notContact = MyBlocks.Except(ContactList).ToList();
+                MyBlocks = MyBlocks.Except(notContact).ToList();
+                return notContact;
             }
             else
                 return null;

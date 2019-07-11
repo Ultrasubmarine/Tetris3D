@@ -69,8 +69,6 @@ public class PlaneScript : Singleton<PlaneScript>
         _matrix = PlaneMatrix.Instance;
         Mystate = planeState.startState;//Mystate = planeState.emptyState;
 
- 
-
         NewElement = null;
 
         Messenger.AddListener(GameEvent.PLAY_GAME, StartGame);
@@ -152,7 +150,7 @@ public class PlaneScript : Singleton<PlaneScript>
 
     private void RepleyGame()
     {
-        _ElementManager.DestroyAllElements();
+        _ElementManager.DeleteAllElements();
         _HeightHandler.CheckHeight();
         StartGame();
       //  Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT, _LimitHeight, 0);
