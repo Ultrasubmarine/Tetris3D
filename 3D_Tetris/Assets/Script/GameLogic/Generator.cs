@@ -14,10 +14,15 @@ public class Generator : MonoBehaviour {
     [Tooltip(" подсказка места расположения падающего элемента")]
     [SerializeField] Material _BonusMaterial;
 
+    [Header("For turn & move")] 
+    [SerializeField] Moving _Mover;
+    [SerializeField] Turning _Turner;
+    
     PlaneMatrix _matrix;
     bool[,,] _castMatrix;
     Vector3Int _minPoint;
 
+    Element _exElement;
     private void Start()
     {
         _matrix = PlaneMatrix.Instance;
@@ -41,11 +46,27 @@ public class Generator : MonoBehaviour {
         int size = max_y - min_y;
         newElement.MyTransform.position = new Vector3(pos.x, pos.y + _matrix.Height - size, pos.z);
 
-        CreateDuplicate(newElement);
-      //  ChengeBlock(Element, plane.gameObject);
+     CreateDuplicate(newElement);
+        //ConfuseElement(newElement);//, plane.gameObject);
         return newElement;
     }
 
+    private bool[,,] CreateCastMatrix(int min) {
+
+        bool[,,] castMatrix = new bool[3, 3, 3];
+        int barrier;
+
+        for (int x = 0; x < 3; x++) {
+            for (int z = 0; z < 3; z++) {
+                barrier = _matrix.MinHeightInCoordinates(x,z);
+                for (int y = min + 3 - 1; y >= min; y--) {
+                    castMatrix[x, y - min, z] = y < barrier ? false : true ;               
+                }
+            }
+        }
+        return castMatrix;
+    }
+    
     private Element GenerateElement() {
 
         int indexMat = Random.Range(0, _MyMaterial.Length - 1);
@@ -67,21 +88,21 @@ public class Generator : MonoBehaviour {
         }
         return createElement;
     }
-
-    private bool[,,] CreateCastMatrix(int min) {
-
-        bool[,,] castMatrix = new bool[3, 3, 3];
-        int barrier;
-
-        for (int x = 0; x < 3; x++) {
-            for (int z = 0; z < 3; z++) {
-                barrier = _matrix.MinHeightInCoordinates(x,z);
-                for (int y = min + 3 - 1; y >= min; y--) {
-                    castMatrix[x, y - min, z] = y < barrier ? false : true ;               
-                }
-            }
-        }
-        return castMatrix;
+    
+    private void CreateBlock(Vector3 position, Element element, int indexMat)
+    {
+        Block currBlock = _BlockPool.CreateObject(Vector3Int.zero);
+        currBlock.Mesh.material = _MyMaterial[indexMat];
+        currBlock.SetCoordinat(position);
+       
+        currBlock.MyTransform.parent = element.gameObject.transform;
+        SetBlockPosition(currBlock);
+        element.AddBlock(currBlock);     
+    }
+    
+    private void SetBlockPosition(Block block) {
+        Vector3 position = new Vector3(block.x, block.y, block.z);
+        block.gameObject.transform.localPosition = position;
     }
     
     private List<Vector3Int> FoundFreePlacesAround(Vector3Int point) {
@@ -115,22 +136,8 @@ public class Generator : MonoBehaviour {
 
         return _castMatrix[indices.x, indices.y, indices.z];
     }
-    
-    private void CreateBlock(Vector3 position, Element element, int indexMat)
-    {
-        Block currBlock = _BlockPool.CreateObject(Vector3Int.zero);
-        currBlock.Mesh.material = _MyMaterial[indexMat];
-        currBlock.SetCoordinat(position);
-       
-        currBlock.MyTransform.parent = element.gameObject.transform;
-        SetBlockPosition(currBlock);
-        element.AddBlock(currBlock);     
-    }
 
-    private void SetBlockPosition(Block block) {
-        Vector3 position = new Vector3(block.x, block.y, block.z);
-        block.gameObject.transform.localPosition = position;
-    }
+  
 
     // TODO Duplicate 
     private void CreateDuplicate( Element element)
@@ -142,20 +149,21 @@ public class Generator : MonoBehaviour {
 //            item.GetComponent<Renderer>().material = _BonusMaterial;
 //            item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
 //        }
-
-//last --->
-//        // TO DO - вычленить в отдельный метод создание дубляжа
-//        GameObject exElement = Instantiate(newElement);
-//        exElement.name = "TUTOR";
-//        foreach (var item in exElement.GetComponent<Element>().MyBlocks) {
-//            item.GetComponent<Renderer>().material = _BonusMaterial;
-//            item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
-//        }
 //
-//        exElement.transform.position =
-//            new Vector3(temp.x, elementParent.gameObject.transform.position.y + _minYforElement, temp.z);
-////        examleElement = exElement; // Destroy(exElement, 5f);
-//        ////////////
+//last --->
+        // TO DO - вычленить в отдельный метод создание дубляжа
+        GameObject exElement = Instantiate(element.gameObject);
+        exElement.name = "TUTOR";
+        foreach (var item in exElement.GetComponent<Element>().MyBlocks) {
+            item.GetComponent<Renderer>().material = _BonusMaterial;
+            item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
+        }
+
+        exElement.transform.position =
+            new Vector3(element.MyTransform.position.x, _minPoint.y + 0.42f, element.MyTransform.position.z);
+        exElement = exElement; //
+        Destroy(exElement, 2f);
+        ////////////
     }
 
     public Element CreateEmptyElement()
@@ -170,10 +178,11 @@ public class Generator : MonoBehaviour {
     public void DeleteElement(Element element) {
         _ElementPool.DestroyObject(element);
     }
-//    void ChengeBlock(Element element, GameObject target) {
-//        Random rn = new Random();
-//
-//        int turnCount = Random.Range(1, 2);
+    
+    void ConfuseElement(Element element){//, GameObject target) {
+        Random rn = new Random();
+
+          int turnCount = Random.Range(1, 2);
 //        if (turnCount > 0) {
 //            turn direction = (turn) Random.Range(0, 1 + 1);
 //            Debug.Log(direction.ToString());
@@ -182,18 +191,18 @@ public class Generator : MonoBehaviour {
 //                turnCount--;
 //            }
 //        }
-//
-//        int moveCount = Random.Range(0, 2);
-//        if (moveCount > 0) {
-//            move directionMove = (move) Random.Range(0, 4 + 1);
-//            while (turnCount > 0) {
-//                if (element.CheckMove(directionMove, 3 / 2 * (-1))) {
-//                    element.SetMove(directionMove);
-//                    moveCount--;
-//                }
-//                else
-//                    break;
-//            }
-//        }
-//    }
+
+        int moveCount = Random.Range(0, 2);
+        if (moveCount > 0) {
+            move directionMove = (move) Random.Range(0, 4 + 1);
+            while (moveCount > 0) {
+                if ( _Mover.MomentaryActionForGenerator(element, directionMove)) {
+                    Debug.Log("mover in " + directionMove.ToString());
+                    moveCount--;
+                }
+                else
+                    break;
+            }
+        }
+    }
 }

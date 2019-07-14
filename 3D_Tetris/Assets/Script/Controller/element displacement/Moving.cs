@@ -116,5 +116,30 @@ public class Moving: MonoBehaviour {
 
         _StateMachine.ChangeState(GameState2.NewElement, false);
     }
-   
+
+    public bool MomentaryActionForGenerator( Element element, move direction)
+    {
+        if (CheckOpportunity(element, direction))
+        {
+            Logic(direction, element);
+            Vector3 vectorDirection = SetVectorMove(direction);
+            MomentaryVizual(element, vectorDirection);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void MomentaryVizual( Element element, Vector3 direction)
+    {
+        Vector3 finalPosition;
+        for (int i = 0; i < element.MyBlocks.Count; i++)
+        {
+            finalPosition = element.MyBlocks[i].MyTransform.position + direction;
+            element.MyBlocks[i].MyTransform.position =
+                new Vector3(finalPosition.x, element.MyBlocks[i].transform.position.y, finalPosition.z);
+        }
+        
+    }
+ 
 }

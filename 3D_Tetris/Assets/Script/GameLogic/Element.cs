@@ -19,6 +19,7 @@ public class Element : MonoBehaviour {
     {
         MyTransform.rotation = Quaternion.identity;
         MyTransform.position = Vector3.zero;
+        gameObject.name = "element";
     }
 
     public void AddBlock(Block newBlock) {

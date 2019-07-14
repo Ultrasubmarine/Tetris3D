@@ -148,7 +148,12 @@ public class ElementManager : MonoBehaviour {
             List<Block> cutBlocks = _elementMarger[k].CheckUnion();
             if (cutBlocks != null) {
                 Element newElement = _Generator.CreateEmptyElement();
+                newElement.MyTransform.position = _elementMarger[k].MyTransform.position;
                 newElement.MyBlocks = cutBlocks;
+                foreach (var block in newElement.MyBlocks)
+                {
+                    block.MyTransform.parent = newElement.MyTransform;
+                }
                 
                 _matrix.UnbindToMatrix(newElement);
                 _matrix.UnbindToMatrix(_elementMarger[k]);
