@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Runtime.Serialization;
 using IntegerExtension;
 
 public class Generator : MonoBehaviour {
@@ -22,7 +23,7 @@ public class Generator : MonoBehaviour {
     bool[,,] _castMatrix;
     Vector3Int _minPoint;
 
-    Element _exElement;
+    Element _answerElement;
     private void Start()
     {
         _matrix = PlaneMatrix.Instance;
@@ -35,10 +36,12 @@ public class Generator : MonoBehaviour {
         _castMatrix = CreateCastMatrix(_minPoint.y);
 
         Element newElement = GenerateElement();
-
+        
+       // CreateDuplicate(newElement);
+        
         Vector3 pos = elementParent.position;
         newElement.InitializationAfterGeneric(_matrix.Height);
-
+        
         // выравниваем элемент относительно координат y 
         var min_y = newElement.MyBlocks.Min(s => s.y);
         var max_y = newElement.MyBlocks.Max(s => s.y);
@@ -46,7 +49,6 @@ public class Generator : MonoBehaviour {
         int size = max_y - min_y;
         newElement.MyTransform.position = new Vector3(pos.x, pos.y + _matrix.Height - size, pos.z);
 
-     CreateDuplicate(newElement);
         //ConfuseElement(newElement);//, plane.gameObject);
         return newElement;
     }
@@ -77,11 +79,15 @@ public class Generator : MonoBehaviour {
         _castMatrix[ _minPoint.x, 0, _minPoint.z] = false;
         
         CreateBlock(lastPoint, createElement, indexMat);
-       
-        List<Vector3Int> freePlaces; 
+        Debug.ClearDeveloperConsole();
+        List<Vector3Int> freePlaces;
+        int index;
         for (int i = 0; i < 3; i++) {
             freePlaces = FoundFreePlacesAround(lastPoint);
-            lastPoint = freePlaces[ Random.Range(0, freePlaces.Count-1) ];
+            Debug.Log( "free " + freePlaces.Count);
+            if( freePlaces.Count == 0)
+                break;
+            lastPoint = freePlaces[  Random.Range(0, freePlaces.Count) ];
 
             CreateBlock(lastPoint, createElement, indexMat);
             _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;       
@@ -92,7 +98,7 @@ public class Generator : MonoBehaviour {
     private void CreateBlock(Vector3 position, Element element, int indexMat)
     {
         Block currBlock = _BlockPool.CreateObject(Vector3Int.zero);
-        currBlock.Mesh.material = _MyMaterial[indexMat];
+        currBlock.Mesh.material = indexMat < 100 ? _MyMaterial[indexMat] : _BonusMaterial;
         currBlock.SetCoordinat(position);
        
         currBlock.MyTransform.parent = element.gameObject.transform;
@@ -137,33 +143,27 @@ public class Generator : MonoBehaviour {
         return _castMatrix[indices.x, indices.y, indices.z];
     }
 
-  
-
-    // TODO Duplicate 
     private void CreateDuplicate( Element element)
     {
-//        _Duplicate = _ElementPool.CreateObject(Vector3Int.zero);
-//        
-//        foreach (var item in element.MyBlocks) {
-//            
-//            item.GetComponent<Renderer>().material = _BonusMaterial;
-//            item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
-//        }
-//
-//last --->
-        // TO DO - вычленить в отдельный метод создание дубляжа
-        GameObject exElement = Instantiate(element.gameObject);
-        exElement.name = "TUTOR";
-        foreach (var item in exElement.GetComponent<Element>().MyBlocks) {
-            item.GetComponent<Renderer>().material = _BonusMaterial;
-            item.gameObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
-        }
+        if( !ReferenceEquals( _answerElement, null) )
+            DestroyOldDuplicate();
+        _answerElement= _ElementPool.CreateObject(Vector3Int.zero);
 
-        exElement.transform.position =
-            new Vector3(element.MyTransform.position.x, _minPoint.y + 0.42f, element.MyTransform.position.z);
-        exElement = exElement; //
-        Destroy(exElement, 2f);
-        ////////////
+        Vector3 stabiliation = new Vector3(1, 0, 1);
+        foreach (var item in element.MyBlocks)
+        {
+            CreateBlock( item.MyTransform.position + stabiliation, _answerElement, 666);
+        }
+       _answerElement.MyTransform.position += new Vector3(0,0.42f, 0); 
+    }
+
+    private void DestroyOldDuplicate()
+    {
+        foreach (var block in _answerElement.MyBlocks)
+        {
+            DeleteBlock(block);
+        }
+        DeleteElement(_answerElement);
     }
 
     public Element CreateEmptyElement()

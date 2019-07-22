@@ -58,7 +58,6 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
         if( returnObj == null)
         {
             InstantiateObject();
-            Debug.Log("Create new obj / pull = null");
             returnObj = Pool[Pool.Count - 1];
         }
 
@@ -80,7 +79,6 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
 	private void InstantiateObject() {
 
         GameObject newPoolObj = Instantiate(Prefab);
-        Debug.Log("Instn");
         PoolContainer<T> newObj = new PoolContainer<T>(newPoolObj.GetComponent<T>(), newPoolObj);
         newObj.SetActive(false);
         Pool.Add(newObj);

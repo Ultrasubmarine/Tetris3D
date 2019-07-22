@@ -83,7 +83,6 @@ public class PlaneScript : Singleton<PlaneScript>
     {
         Messenger.RemoveListener(GameEvent.PLAY_GAME, StartGame);
         Messenger.RemoveListener(GameEvent.REPEAT_GAME, RepleyGame);
-
     }
 
     public void ChengeTimeDrop( float time)
