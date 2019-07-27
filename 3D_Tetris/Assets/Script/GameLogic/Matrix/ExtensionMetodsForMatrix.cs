@@ -7,11 +7,11 @@ namespace IntegerExtension {
 
         static int _absMinCoordinat;
         static int _difference; // index - coordinate
-        static int wight;
+        static int _wight;
         public static void SetSizePlane( int wight) {
             _absMinCoordinat = wight / 2;
             _difference = 0 - (-_absMinCoordinat);
-            ExtensionMetodsForMatrix.wight = wight;
+            ExtensionMetodsForMatrix._wight = wight;
         }
         public static int ToIndex( this int coordinat) {
             return coordinat + _difference;
@@ -30,7 +30,7 @@ namespace IntegerExtension {
 
         public static bool OutOfIndexLimit(this Vector3Int index) {
 
-            if ( index.x < 0 || index.x >=wight || index.y < 0 || index.z < 0 || index.z >= wight )
+            if ( index.x < 0 || index.x >=_wight || index.y < 0 || index.z < 0 || index.z >= _wight )
                 return true;
             return false;
         }

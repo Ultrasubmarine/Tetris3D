@@ -54,22 +54,22 @@ public class Moving: MonoBehaviour {
 
         if (direction == move.x) {
             foreach (Block item in element.MyBlocks) {
-                item.x++;
+                item.OffsetCoordinates( 1,0,0) ;
             }
         }
         else if (direction == move._x) {
             foreach (Block item in element.MyBlocks) {
-                item.x--;
+                item.OffsetCoordinates( -1,0,0) ;
             }
         }
         else if (direction == move.z) {
             foreach (Block item in element.MyBlocks) {
-                item.z++;
+                item.OffsetCoordinates( 0,0,1) ;
             }
         }
         else if (direction == move._z) {
             foreach (Block item in element.MyBlocks) {
-                item.z--;
+                item.OffsetCoordinates( 0,0,-1) ;
             }
         }
     }

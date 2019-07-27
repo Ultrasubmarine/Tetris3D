@@ -12,7 +12,6 @@ public class ControllerScript : MonoBehaviour
 
     // таблица для перемещения блоков в зависимости от угла обзора.
     private move[] A = { move._z, move._x, move.z, move.x };
-
     private move[] S = { move.x, move._z, move._x, move.z };
     private move[] D = { move.z, move.x, move._z, move._x };
     private move[] W = { move._x, move.z, move.x, move._z };

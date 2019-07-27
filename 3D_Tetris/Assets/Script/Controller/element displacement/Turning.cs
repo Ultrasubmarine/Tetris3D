@@ -39,20 +39,20 @@ public class Turning : MonoBehaviour{
         if (direction == turn.left) {
             foreach (var item in element.MyBlocks) {
                 // по правилу поворота
-                x = item.z;
-                z = -item.x;
+                x = item.Coordinates.z;
+                z = -item.Coordinates.x;
 
-                if (_matrix._matrix[x + 1, item.y, z + 1] != null)
+                if (_matrix._matrix[x + 1, item.Coordinates.y, z + 1] != null)
                     return false;
             }
         }
         else {
             foreach (var item in element.MyBlocks) {
                 // по правилу поворота
-                x = -item.z;
-                z = item.x;
+                x = -item.Coordinates.z;
+                z = item.Coordinates.x;
 
-                if (_matrix._matrix[x + 1, item.y, z + 1] != null)
+                if (_matrix._matrix[x + 1, item.Coordinates.y, z + 1] != null)
                     return false;
             }
         }
@@ -64,16 +64,18 @@ public class Turning : MonoBehaviour{
             if (direction == turn.left) // правило поворота влево
             {
                 foreach (Block item in element.MyBlocks) {
-                    int temp = item.x;
-                    item.x = item.z;
-                    item.z = -temp;
+                    int temp = item.Coordinates.x;
+                    item.SetCoordinates(item.Coordinates.z, item.Coordinates.y, -item.Coordinates.x );
+//                    item.Coordinates.x = item.Coordinates.z;
+//                    item.Coordinates.z = -temp;
                 }
             }
             else {
                 foreach (Block item in element.MyBlocks) {
-                    int temp = item.x;
-                    item.x = -item.z;
-                    item.z = temp;
+                    int temp = item.Coordinates.x;
+                    item.SetCoordinates(-item.Coordinates.z, item.Coordinates.y, item.Coordinates.x );
+//                    item.Coordinates.x = -item.Coordinates.z;
+//                    item.Coordinates.z = temp;
                 }
             }
     }

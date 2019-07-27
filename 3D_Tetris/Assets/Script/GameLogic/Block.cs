@@ -13,18 +13,18 @@ public struct CoordinatXZ {
     }
 }
 
-public class Block : MonoBehaviour {
-    public int x;
-    public int y;
-    public int z;
-
+public class Block : MonoBehaviour
+{
+    public Vector3Int Coordinates {
+        get { return _coordinates; } }
+    private Vector3Int _coordinates;
+    public CoordinatXZ XZ { get { return new CoordinatXZ(Coordinates.x, Coordinates.z); } }
+    
     public bool IsDestroy { get; set; }
-    public Transform MyTransform;
-
+    
+    public Transform MyTransform { get; private set; }
     public MeshRenderer Mesh { get; private set; }
     
-    public CoordinatXZ XZ { get { return new CoordinatXZ(x, z); } }
-
     private void Awake() {
         MyTransform = this.transform;
         Mesh = GetComponent<MeshRenderer>();
@@ -33,16 +33,22 @@ public class Block : MonoBehaviour {
     public Block() {
     }
 
-    public Block(int xx, int yy, int zz) {
-        x = xx;
-        y = yy;
-        z = zz;
+    public Block(int x, int y, int z) {
+       _coordinates = new Vector3Int(x,y,z);
     }
 
-    public void SetCoordinat(Vector3 point) {
-        x = (int) point.x - 1; // координаты plane - круговые
-        y = (int) point.y;
-        z = (int) point.z - 1; // координаты plane - круговые
+    public void SetCoordinates(int x, int y, int z)
+    {
+        _coordinates.x = x;
+        _coordinates.y = y;
+        _coordinates.z = z;
+    }
+
+    public void OffsetCoordinates( int x =0, int y =0, int z =0)
+    {
+        _coordinates.x += x;
+        _coordinates.y += y;
+        _coordinates.z += z;
     }
 
     void OnDisable()

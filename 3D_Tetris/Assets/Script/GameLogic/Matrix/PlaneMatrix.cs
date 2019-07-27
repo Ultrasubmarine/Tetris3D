@@ -57,7 +57,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         foreach (Block item in element.MyBlocks) {
             if (!item.IsDestroy) {
 
-                newCoordinat = new Vector3Int(item.x, item.y, item.z) + direction;
+                newCoordinat = new Vector3Int(item.Coordinates.x, item.Coordinates.y, item.Coordinates.z) + direction;
 
                 if (newCoordinat.OutOfCoordinatLimit()) 
                     return false;               
@@ -84,9 +84,9 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         foreach (Block item in element.MyBlocks) {
             if (item == null || item.IsDestroy)
                 continue;
-            x = item.x;
-            y = item.y;
-            z = item.z;
+            x = item.Coordinates.x;
+            y = item.Coordinates.y;
+            z = item.Coordinates.z;
 
             _matrix[x.ToIndex(), y, z.ToIndex()] = item;
         }
@@ -99,9 +99,9 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
         foreach (Block item in element.MyBlocks) {
             if (item == null || item.IsDestroy)
                 continue;
-            x = item.x;
-            y = item.y;
-            z = item.z;
+            x = item.Coordinates.x;
+            y = item.Coordinates.y;
+            z = item.Coordinates.z;
 
             _matrix[x.ToIndex(), y, z.ToIndex()] = null;
         }

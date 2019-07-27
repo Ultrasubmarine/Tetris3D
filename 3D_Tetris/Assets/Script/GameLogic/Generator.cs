@@ -37,14 +37,14 @@ public class Generator : MonoBehaviour {
 
         Element newElement = GenerateElement();
         
-       // CreateDuplicate(newElement);
+//       CreateDuplicate(newElement);
         
         Vector3 pos = elementParent.position;
         newElement.InitializationAfterGeneric(_matrix.Height);
         
         // выравниваем элемент относительно координат y 
-        var min_y = newElement.MyBlocks.Min(s => s.y);
-        var max_y = newElement.MyBlocks.Max(s => s.y);
+        var min_y = newElement.MyBlocks.Min(s => s.Coordinates.y);
+        var max_y = newElement.MyBlocks.Max(s => s.Coordinates.y);
 
         int size = max_y - min_y;
         newElement.MyTransform.position = new Vector3(pos.x, pos.y + _matrix.Height - size, pos.z);
@@ -95,11 +95,11 @@ public class Generator : MonoBehaviour {
         return createElement;
     }
     
-    private void CreateBlock(Vector3 position, Element element, int indexMat)
+    private void CreateBlock(Vector3Int position, Element element, int indexMat)
     {
         Block currBlock = _BlockPool.CreateObject(Vector3Int.zero);
         currBlock.Mesh.material = indexMat < 100 ? _MyMaterial[indexMat] : _BonusMaterial;
-        currBlock.SetCoordinat(position);
+        currBlock.SetCoordinates(position.x.ToCoordinat(), position.y, position.z.ToCoordinat() );
        
         currBlock.MyTransform.parent = element.gameObject.transform;
         SetBlockPosition(currBlock);
@@ -107,7 +107,7 @@ public class Generator : MonoBehaviour {
     }
     
     private void SetBlockPosition(Block block) {
-        Vector3 position = new Vector3(block.x, block.y, block.z);
+        Vector3 position = new Vector3(block.Coordinates.x, block.Coordinates.y, block.Coordinates.z);
         block.gameObject.transform.localPosition = position;
     }
     
@@ -149,10 +149,10 @@ public class Generator : MonoBehaviour {
             DestroyOldDuplicate();
         _answerElement= _ElementPool.CreateObject(Vector3Int.zero);
 
-        Vector3 stabiliation = new Vector3(1, 0, 1);
+        Vector3Int stabiliation = new Vector3Int(1, 0, 1);
         foreach (var item in element.MyBlocks)
         {
-            CreateBlock( item.MyTransform.position + stabiliation, _answerElement, 666);
+            //CreateBlock( ( (Vector3Int)item.MyTransform.position + stabiliation), _answerElement, 666);
         }
        _answerElement.MyTransform.position += new Vector3(0,0.42f, 0); 
     }

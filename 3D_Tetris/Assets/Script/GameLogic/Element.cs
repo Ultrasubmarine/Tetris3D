@@ -27,16 +27,16 @@ public class Element : MonoBehaviour {
     }
 
     public void InitializationAfterGeneric(int height) {
-        int maxElement = MyBlocks.Max(s => s.y);
+        int maxElement = MyBlocks.Max(s => s.Coordinates.y);
 
         foreach (Block item in MyBlocks)
-            item.y += height - maxElement;
+            item.OffsetCoordinates(0,  height - maxElement, 0); //item.Coordinates.y += height - maxElement;
     }
 
     #region ФУНКЦИИ ПАДЕНИЯ
     public void LogicDrop() {
         foreach (Block item in MyBlocks)
-            item.y--;
+            item.OffsetCoordinates(0,  -1, 0);//item.Coordinates.y--;
     }
 
     public IEnumerator VisualDrop( float time) {
@@ -113,8 +113,8 @@ public class Element : MonoBehaviour {
     }
 
     public bool CheckContact(Block b1, Block b2) {
-        Vector3 b1p = new Vector3(b1.x, b1.y, b1.z);
-        Vector3 b2p = new Vector3(b2.x, b2.y, b2.z);
+        Vector3 b1p = new Vector3(b1.Coordinates.x, b1.Coordinates.y, b1.Coordinates.z);
+        Vector3 b2p = new Vector3(b2.Coordinates.x, b2.Coordinates.y, b2.Coordinates.z);
 
         if (b1p.x == b2p.x && b1p.y == b2p.y && b1p.z == b2p.z + 1)
             return true;
