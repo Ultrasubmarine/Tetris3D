@@ -84,7 +84,6 @@ public class Generator : MonoBehaviour {
         int index;
         for (int i = 0; i < 3; i++) {
             freePlaces = FoundFreePlacesAround(lastPoint);
-            Debug.Log( "free " + freePlaces.Count);
             if( freePlaces.Count == 0)
                 break;
             lastPoint = freePlaces[  Random.Range(0, freePlaces.Count) ];

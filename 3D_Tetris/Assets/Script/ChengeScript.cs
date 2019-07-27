@@ -7,15 +7,15 @@ public class ChengeScript : MonoBehaviour {
     [SerializeField] UnityEvent HideScreen;
     [SerializeField] UnityEvent EndScreenChange;
     [SerializeField] Camera GameCamera;
-    GameCameraScript _gameCameraScript;
+    GameCamera _gameCamera;
     void Awake() {
-        _gameCameraScript = GameCamera.GetComponent<GameCameraScript>();
+        _gameCamera = GameCamera.GetComponent<GameCamera>();
     }
 
     public void Hide() {
         HideScreen.Invoke();
 //        GameCamera.GetComponent<GameCameraScript>().FirstAnimation();
-        _gameCameraScript.FirstAnimation();
+        _gameCamera.FirstAnimation();
     }
 
     public void EndChange() {

@@ -6,7 +6,6 @@ using UnityEngine;
 public class ElementManager : MonoBehaviour {
 
     PlaneMatrix _matrix;
-    [SerializeField] Speed _Speed;
     [SerializeField] Generator _Generator;
     [SerializeField] StateMachine machine;
 
@@ -62,7 +61,7 @@ public class ElementManager : MonoBehaviour {
             else
                 break;
 
-            yield return StartCoroutine(NewElement.VisualDrop(_Speed._TimeDrop));// элемент визуально падает
+            yield return StartCoroutine(NewElement.VisualDrop(Speed.TimeDrop));// элемент визуально падает
         }
 
 //        Destroy(_Generator.examleElement);
@@ -175,7 +174,7 @@ public class ElementManager : MonoBehaviour {
 
             if(flagDrop)                
                 yield return new WaitUntil(CheckAllElementsDrop);
-            yield return new WaitForSeconds( _Speed._TimeDelay); // слишком резко уничтожаются 
+            yield return new WaitForSeconds( Speed.TimeDelay); // слишком резко уничтожаются 
         }
         while (flagDrop); // проверяем что бы все упало, пока оно может падать
 
@@ -196,7 +195,7 @@ public class ElementManager : MonoBehaviour {
 
                 flagDrop = true;
                 item.LogicDrop();
-                StartCoroutine(item.VisualDrop(_Speed._TimeDropAfterDestroy)); // запускает падение элемента
+                StartCoroutine(item.VisualDrop(Speed.TimeDropAfterDestroy)); // запускает падение элемента
             }
             else {
                 if (!item.IsBind)
