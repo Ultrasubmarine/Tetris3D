@@ -87,6 +87,8 @@ public class Turning : MonoBehaviour{
 
         StartCoroutine(TurnElement(element, angle, time, _ObjectLook));
         StartCoroutine(TurnCamera(direction, time));
+        
+        Messenger<Element>.Broadcast(GameEvent.TURN_ELEMENT.ToString() , element);
     }
 
     IEnumerator TurnCamera(turn direction, float time) {

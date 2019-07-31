@@ -54,7 +54,7 @@ public class HeightHandler : MonoBehaviour {
             }
         }
 
-        //Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT, _LimitHeight, _CurrentHeight +1);
+        Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT.ToString(), _LimitHeight, _CurrentHeight +1);
     }
 
     private bool OutOfLimitHeight( ) {

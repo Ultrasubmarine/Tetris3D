@@ -32,7 +32,7 @@ public class GameCamera : MonoBehaviour {
     [SerializeField] private float _FirstOrthographicSize = 15;
 
     private void Awake() {
-        Messenger<int, int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CheckStabilization);
+      //  Messenger<int, int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CheckStabilization);
         _myTransform = transform;
     }
 

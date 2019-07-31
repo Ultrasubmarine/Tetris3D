@@ -2,29 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Serialization;
 
 public class GameObjectPool : MonoBehaviour {
 
-	[SerializeField] protected GameObject Prefab;
+	[FormerlySerializedAs("Prefab")] [SerializeField] protected GameObject _Prefab;
+	[FormerlySerializedAs("InitialInitialization")]
 	[Header("начальное заполнение пула")]
-	[SerializeField] protected bool InitialInitialization;
-	[SerializeField] protected int CountObject;
+	[SerializeField] protected bool _InitialInitialization;
+	[FormerlySerializedAs("CountObject")] [SerializeField] protected int _CountObject;
 
-	List<GameObject> Pool = new List<GameObject>();
+	List<GameObject> _pool = new List<GameObject>();
 	private Transform _transform;
     
 	private void Awake()
 	{
 		_transform = this.gameObject.transform;
-		if(InitialInitialization)
+		if(_InitialInitialization)
 		{
-			FirstInicialization();
+			FirstInitialization();
 		}
 	}
 
-	public void FirstInicialization() {
+	public void FirstInitialization() {
         
-		for (int i = 0; i < CountObject; i++)
+		for (int i = 0; i < _CountObject; i++)
 		{
 			InstantiateObject();
 		}
@@ -32,11 +34,11 @@ public class GameObjectPool : MonoBehaviour {
 
 	public GameObject CreateObject( Vector3 position) {
 
-		var returnObj = Pool.FirstOrDefault(obj => !obj.active);
+		var returnObj = _pool.FirstOrDefault(obj => !obj.active);
 		if( returnObj == null)
 		{
 			InstantiateObject();
-			returnObj = Pool[Pool.Count - 1];
+			returnObj = _pool[_pool.Count - 1];
 		}
 
 		returnObj.SetActive(true);
@@ -46,7 +48,7 @@ public class GameObjectPool : MonoBehaviour {
 
 	public void DestroyObject( GameObject obj) {
 
-		var returnContainer = Pool.FirstOrDefault(s => s == obj);
+		var returnContainer = _pool.FirstOrDefault(s => s == obj);
 		if (returnContainer == null)
 			return;
         
@@ -55,9 +57,9 @@ public class GameObjectPool : MonoBehaviour {
 	} 
 
 	private void InstantiateObject() {
-		GameObject newPoolObj = Instantiate(Prefab);
+		GameObject newPoolObj = Instantiate(_Prefab);
 		newPoolObj.SetActive(false);
-		Pool.Add(newPoolObj);
+		_pool.Add(newPoolObj);
 		newPoolObj.transform.parent = _transform;
 	}
 }

@@ -4,13 +4,11 @@ using UnityEngine;
 using System.Linq;
 
 using IntegerExtension;
+using UnityEngine.Networking.NetworkSystem;
 
 public class Projection : MonoBehaviour {
 
     PlaneMatrix _matrix;
-    [SerializeField] HeightHandler _Heighthandler;//PlaneScript _plane;
-    // TO DO - статическая переменная - высота сцены.
-    //  int _HeightPlane;
 
     public const int PROECTIONS = 1;
     public const int CEILING = 2;
@@ -30,18 +28,25 @@ public class Projection : MonoBehaviour {
         Messenger<Element>.AddListener(GameEvent.TURN_ELEMENT.ToString(), CreateProjection);
         Messenger<Element>.AddListener(GameEvent.MOVE_ELEMENT.ToString(), CreateProjection);
         
+        Messenger<int,int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CreateCeiling);
+
+        Messenger<Element>.AddListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
     }
 
     private void OnDestroy() {
         Messenger<Element>.RemoveListener(GameEvent.CREATE_NEW_ELEMENT.ToString(), CreateProjection);
         Messenger<Element>.RemoveListener(GameEvent.TURN_ELEMENT.ToString(), CreateProjection);
         Messenger<Element>.RemoveListener(GameEvent.MOVE_ELEMENT.ToString(), CreateProjection);
+        
+        Messenger<int,int>.RemoveListener(GameEvent.CURRENT_HEIGHT.ToString(), CreateCeiling);
+       
+        Messenger<Element>.RemoveListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
     }
 
     private void Start() {
         _matrix = PlaneMatrix.Instance;
     }
-    // ФУНКЦИИ ДЛЯ РАБОТЫ С ПРОЕКЦИЯМИ
+
     public void CreateProjection(Element obj) {
 
         Destroy(PROECTIONS);
@@ -57,25 +62,28 @@ public class Projection : MonoBehaviour {
         }
     }
 
-    public void CreateCeiling() {
+    public void CreateCeiling(int limit, int current) {
 
-        if( _ceilingList.Count > 0)
         Destroy(CEILING);
 
-        if (_matrix.CurrentHeight < _MinimumLayerHeight)
+        if ( current < _MinimumLayerHeight)
             return;
 
         for(int x=0; x< _matrix.Wight; x++) {
             for (int z = 0; z < _matrix.Wight; z++) {
                 
                 int y = _matrix.MinHeightInCoordinates(x, z);
-//                if(y >= _MinimumLayerHeight)
-//                    _ceilingList.Add(_PoolСeiling.CreateObject( new Vector3(x.ToCoordinat(),_matrix.LimitHeight + _HeightProection,z.ToCoordinat()) ));
+                if(y >= _MinimumLayerHeight)
+                   _ceilingList.Add(_PoolСeiling.CreateObject( new Vector3(x.ToCoordinat(),_matrix.LimitHeight + _HeightProection,z.ToCoordinat()) ));
             }
         }
     }
 
-    public void Destroy(int typeObject /* const PROECTIONS or CEILING*/ ) {
+    public void DeleteProjection(Element element)
+    {
+        Destroy(PROECTIONS);
+    }
+    private void Destroy(int typeObject /* const PROECTIONS or CEILING*/ ) {
         List<GameObject> list;
         GameObjectPool pool;
 

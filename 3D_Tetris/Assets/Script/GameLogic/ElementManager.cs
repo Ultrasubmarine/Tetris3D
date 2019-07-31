@@ -53,16 +53,16 @@ public class ElementManager : MonoBehaviour {
             while (machine.State != GameState2.NewElement){
                 yield return null;
             }
-            bool empty = _matrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0)); // проверяем может ли элемент упасть на ярус ниже
+            bool empty = _matrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0)); 
 
             if (empty)
             {
-                NewElement.LogicDrop(); // логическое изменение координат падающего элемента
+                NewElement.LogicDrop(); 
             }
             else
                 break;
 
-            yield return StartCoroutine(NewElement.VisualDrop(Speed.TimeDrop));// элемент визуально падает
+            yield return StartCoroutine(NewElement.VisualDrop(Speed.TimeDrop));
         }
 
 //        Destroy(_Generator.examleElement);
@@ -70,12 +70,12 @@ public class ElementManager : MonoBehaviour {
         while (machine.State != GameState2.NewElement) {
             yield return null;
         }
-     
-        MergeElement(NewElement); // слияние элемента и поля
+        
+        Messenger<Element>.Broadcast(GameEvent.END_DROP_ELEMENT.ToString(), NewElement);
+        MergeElement(NewElement);
         NewElement = null;
         machine.ChangeState(GameState2.Merge);
-
-        // myProj.CreateCeiling();
+        
         yield break;
     }
 

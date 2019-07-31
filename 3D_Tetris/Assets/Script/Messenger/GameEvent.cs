@@ -27,5 +27,6 @@ public enum GameEvent
     CREATE_NEW_ELEMENT,
     TURN_ELEMENT,
     MOVE_ELEMENT,
+    END_DROP_ELEMENT,
     //
 }
