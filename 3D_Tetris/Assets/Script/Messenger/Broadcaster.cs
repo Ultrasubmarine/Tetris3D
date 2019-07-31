@@ -4,11 +4,10 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 public class Broadcaster : MonoBehaviour {
-
-    [FormerlySerializedAs("BroadcastEventName")] [SerializeField] string _BroadcastEventName;
+    [SerializeField] GameEvent _BroadcastEventName;
 
     public void Broadcast()
     {
-        Messenger.Broadcast(_BroadcastEventName);
+        Messenger.Broadcast(_BroadcastEventName.ToString());
     }
 }
