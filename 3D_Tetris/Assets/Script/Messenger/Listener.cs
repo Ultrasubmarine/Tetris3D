@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class Listener : MonoBehaviour {
 
-    [SerializeField] string Eventname;
-    [SerializeField] UnityEvent EventListener = new UnityEvent();
+    [FormerlySerializedAs("Eventname")] [SerializeField] string _Eventname;
+    [FormerlySerializedAs("EventListener")] [SerializeField] UnityEvent _EventListener = new UnityEvent();
     private void Awake()
     {
-        Messenger.AddListener(Eventname, EventListener.Invoke);
+        Messenger.AddListener(_Eventname, _EventListener.Invoke);
     }
 
-    private void OnEnable()
+    void OnDestroy()
     {
-        Messenger.RemoveListener(Eventname, EventListener.Invoke);
+        Messenger.RemoveListener(_Eventname, _EventListener.Invoke);
     }
 
 }

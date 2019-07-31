@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Linq;
 using System.Linq.Expressions;
 using Boo.Lang.Environments;
+using UnityEngine.Serialization;
 
 public class PoolContainer<T> where T : MonoBehaviour {
     public bool Active;
@@ -22,31 +23,30 @@ public class PoolContainer<T> where T : MonoBehaviour {
     public void SetActive(bool value) {
         Active = value;
         GObj.SetActive(value);
-       // Transform.gameObject.SetActive(value);
     }
 }
 
 public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
-    [SerializeField] protected GameObject Prefab;
-	[Header("начальное заполнение пула")]
-	[SerializeField] protected bool InitialInitialization;
-	[SerializeField] protected int CountObject;
+    [SerializeField] protected GameObject _Prefab;
+    [Header("начальное заполнение пула")]
+	[SerializeField] protected bool _InitialInitialization;
+	[SerializeField] protected int _CountObject;
 
-	List<PoolContainer<T>> Pool = new List<PoolContainer<T>>();
+	List<PoolContainer<T>> _pool = new List<PoolContainer<T>>();
     private Transform _transform;
     
     private void Awake()
     {
         _transform = this.gameObject.transform;
-        if(InitialInitialization)
+        if(_InitialInitialization)
         {
-            FirstInicialization();
+            FirstInitialization();
         }
     }
 
-    public void FirstInicialization() {
+    public void FirstInitialization() {
         
-        for (int i = 0; i < CountObject; i++)
+        for (int i = 0; i < _CountObject; i++)
         {
             InstantiateObject();
         }
@@ -54,11 +54,11 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
 
     public T CreateObject( Vector3 position) {
 
-        var returnObj = Pool.FirstOrDefault(obj => !obj.GObj.active);
+        var returnObj = _pool.FirstOrDefault(obj => !obj.GObj.active);
         if( returnObj == null)
         {
             InstantiateObject();
-            returnObj = Pool[Pool.Count - 1];
+            returnObj = _pool[_pool.Count - 1];
         }
 
         returnObj.SetActive(true);
@@ -68,7 +68,7 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
 
 	public void DestroyObject( T obj) {
 
-        var returnContainer = Pool.FirstOrDefault(s => s.Object == obj);
+        var returnContainer = _pool.FirstOrDefault(s => s.Object == obj);
         if (returnContainer == null)
             return;
         
@@ -78,10 +78,10 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
 
 	private void InstantiateObject() {
 
-        GameObject newPoolObj = Instantiate(Prefab);
+        GameObject newPoolObj = Instantiate(_Prefab);
         PoolContainer<T> newObj = new PoolContainer<T>(newPoolObj.GetComponent<T>(), newPoolObj);
         newObj.SetActive(false);
-        Pool.Add(newObj);
+        _pool.Add(newObj);
         newPoolObj.transform.parent = _transform;
 
     }

@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ParticleAnimationScript : MonoBehaviour {
-    [SerializeField] ParticleSystem _PrototipeParticle;
-
+    [SerializeField] GameObjectPool _Pool;
     private void Awake() {
         Messenger<int>.AddListener(GameEvent.DESTROY_LAYER.ToString(), StartAnimationParticle);
     }
 
     private void OnDestroy() {
+        Messenger<int>.RemoveListener(GameEvent.DESTROY_LAYER.ToString(), StartAnimationParticle);
     }
 
     void StartAnimationParticle(int layer) {
-        //TODO Instantiate и Destroy при уничтожении слоя = каждый раз создается мусор
 
-        ParticleSystem boom = Instantiate(_PrototipeParticle, new Vector3(0, (layer + 0.5f), 0), Quaternion.identity);
-        boom.Play();
+        GameObject boom = _Pool.CreateObject( new Vector3(0, (layer + 0.5f)));
+        StartCoroutine(DestroyParticle(boom));
+    }
 
-        Destroy(boom.gameObject, boom.duration); //TODO rider ругается на ParticleSystem.duration;
+    IEnumerator DestroyParticle( GameObject particle)
+    {
+        yield return new WaitForSeconds( 5);       
+        _Pool.DestroyObject(particle);
     }
 }

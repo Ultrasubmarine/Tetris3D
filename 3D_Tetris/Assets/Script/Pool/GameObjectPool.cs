@@ -6,11 +6,10 @@ using UnityEngine.Serialization;
 
 public class GameObjectPool : MonoBehaviour {
 
-	[FormerlySerializedAs("Prefab")] [SerializeField] protected GameObject _Prefab;
-	[FormerlySerializedAs("InitialInitialization")]
+	[SerializeField] protected GameObject _Prefab;
 	[Header("начальное заполнение пула")]
 	[SerializeField] protected bool _InitialInitialization;
-	[FormerlySerializedAs("CountObject")] [SerializeField] protected int _CountObject;
+	[SerializeField] protected int _CountObject;
 
 	List<GameObject> _pool = new List<GameObject>();
 	private Transform _transform;
