@@ -9,7 +9,7 @@ public class Turning : MonoBehaviour{
     private Vector3 _offset; // начальное положение между камерой и площадкой
     private float _rotY; // поворот камеры
     [SerializeField] GameObject _Camera;
-
+    GameCamera _gameCamera;
     [SerializeField] StateMachine _StateMachine;
     [SerializeField] private GameObject _ObjectLook;
 
@@ -18,6 +18,7 @@ public class Turning : MonoBehaviour{
     private void Start() {
         _offset = Vector3.zero - _Camera.transform.position; // сохраняем расстояние между камерой и полем
         _matrix = PlaneMatrix.Instance;
+        _gameCamera = _Camera.GetComponent<GameCamera>();
     }
 
     public bool Action(Element element, turn direction, float time) {
@@ -121,6 +122,7 @@ public class Turning : MonoBehaviour{
         if (_rotY >= 360 || _rotY <= -360)
             _rotY = 0;
 
+        _gameCamera.Rotation = _rotY;
         _StateMachine.ChangeState(GameState2.NewElement, false);
     }
 

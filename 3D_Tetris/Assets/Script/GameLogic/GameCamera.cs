@@ -25,6 +25,7 @@ public class GameCamera : MonoBehaviour {
 
     private Vector3 _offset; // положение между камерой и площадкой
     private float _rotY;
+    public float Rotation{ set { _rotY = value; } }
     
     [Space(15)]
     [Header("First Animation")]
@@ -32,7 +33,7 @@ public class GameCamera : MonoBehaviour {
     [SerializeField] private float _FirstOrthographicSize = 15;
 
     private void Awake() {
-      //  Messenger<int, int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CheckStabilization);
+        Messenger<int, int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CheckStabilization);
         _myTransform = transform;
     }
 
