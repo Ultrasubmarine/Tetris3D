@@ -16,12 +16,12 @@ public class Projection : MonoBehaviour {
     public const int CEILING = 2;
 
     [Header(" Проекция ")]
-    [SerializeField] ObjectPool<Element> _PoolProjection;
+    [SerializeField] GameObjectPool _PoolProjection;
     [SerializeField] float _HeightProection = 0.1f;
     private List<GameObject> _proectionsList = new List<GameObject>();
 
     [Header(" Потолок ")] // ceiling - потолок
-    [SerializeField] ObjectPool<Element> _PoolСeiling;
+    [SerializeField] GameObjectPool _PoolСeiling;
     [SerializeField] int _MinimumLayerHeight;
     private List<GameObject> _ceilingList = new List<GameObject>();
 
@@ -29,6 +29,7 @@ public class Projection : MonoBehaviour {
         Messenger<Element>.AddListener(GameEvent.CREATE_NEW_ELEMENT.ToString(), CreateProjection);
         Messenger<Element>.AddListener(GameEvent.TURN_ELEMENT.ToString(), CreateProjection);
         Messenger<Element>.AddListener(GameEvent.MOVE_ELEMENT.ToString(), CreateProjection);
+        
     }
 
     private void OnDestroy() {
@@ -52,7 +53,7 @@ public class Projection : MonoBehaviour {
 
             var posProjection = new Vector3(item.x, (y + _HeightProection), item.z);
 
-//            _proectionsList.Add(_PoolProjection.CreateObject(posProjection));
+           _proectionsList.Add(_PoolProjection.CreateObject(posProjection));
         }
     }
 
@@ -76,35 +77,32 @@ public class Projection : MonoBehaviour {
 
     public void Destroy(int typeObject /* const PROECTIONS or CEILING*/ ) {
         List<GameObject> list;
-//        ObjectPool pool;
-//
-//        switch (typeObject) {
-//            case PROECTIONS: {
-//                    list = _proectionsList;
-//                    pool = _PoolProjection;
-//                    break;
-//                }
-//            case CEILING: {
-//                    list = _ceilingList;
-//                    pool = _PoolСeiling;
-//                    break;
-//                }
-//            default: {
-//                    Debug.Log("ERROR: value proections not found (Projection.cs)");
-//                    return;
-//                    break;
-//                }
-//        }
-//        DestroyList(list, pool);
+        GameObjectPool pool;
+
+        switch (typeObject) {
+            case PROECTIONS: {
+                    list = _proectionsList;
+                    pool = _PoolProjection;
+                    break;
+                }
+            case CEILING: {
+                    list = _ceilingList;
+                    pool = _PoolСeiling;
+                    break;
+                }
+            default: {
+                    Debug.Log("ERROR: value proections not found (Projection.cs)");
+                    return;
+                    break;
+                }
+        }
+        DestroyList(list, pool);
     }
 
-    private void DestroyList(List<GameObject> list, ObjectPool<Element> pool) {
-        GameObject tmpDestroy;
+    private void DestroyList(List<GameObject> list, GameObjectPool pool) {
         foreach (var item in list) {
-            tmpDestroy = item;
-           // pool.DestroyObject(tmpDestroy);
+            pool.DestroyObject(item);
         }
-
         list.Clear();
     }
 }

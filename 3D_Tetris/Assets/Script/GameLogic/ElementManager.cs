@@ -39,6 +39,7 @@ public class ElementManager : MonoBehaviour {
         NewElement.MyTransform.parent = _myTransform;
 
         machine.ChangeState(GameState2.NewElement);
+        Messenger<Element>.Broadcast(GameEvent.CREATE_NEW_ELEMENT.ToString(), NewElement);
     }
 
     #region  функции падения нового эл-та ( и его слияние)
