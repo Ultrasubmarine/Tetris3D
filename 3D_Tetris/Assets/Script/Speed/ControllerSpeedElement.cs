@@ -11,7 +11,7 @@ public class ControllerSpeedElement: MonoBehaviour { //Listener<int> {
 
     private void Awake()
     {
-        Messenger<int>.AddListener(GameEvent.CURRENT_SCORE, CheckScoreAndTimeDrop);
+        Messenger<int>.AddListener(GameEvent.CURRENT_SCORE.ToString(), CheckScoreAndTimeDrop);
         ScoreAndTime = ScoreAndTime.OrderByDescending(s => s.x).ToList();
 
     }
@@ -34,6 +34,6 @@ public class ControllerSpeedElement: MonoBehaviour { //Listener<int> {
 
     public void ChengeTimeDrop( float timeDrop)
     {
-        Messenger<float>.Broadcast(GameEvent.CHANGE_TIME_DROP, timeDrop);
+        Messenger<float>.Broadcast(GameEvent.CHANGE_TIME_DROP.ToString(), timeDrop);
     }
 }

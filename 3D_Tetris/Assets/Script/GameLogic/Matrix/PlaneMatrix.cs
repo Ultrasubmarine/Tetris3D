@@ -143,7 +143,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     
     private void DestroyLayer(int layer)
     {
-        Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER, layer);
+        Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER.ToString(), layer);
         for (int x = 0; x < Wight; x++) {
             for (int z = 0; z < Wight; z++) {
                 _matrix[x, layer, z].IsDestroy = true;

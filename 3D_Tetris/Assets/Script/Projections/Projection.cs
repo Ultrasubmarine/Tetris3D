@@ -26,15 +26,15 @@ public class Projection : MonoBehaviour {
     private List<GameObject> _ceilingList = new List<GameObject>();
 
     private void Awake() {
-        Messenger<Element>.AddListener(GameEvent.CREATE_NEW_ELEMENT, CreateProjection);
-        Messenger<Element>.AddListener(GameEvent.TURN_ELEMENT, CreateProjection);
-        Messenger<Element>.AddListener(GameEvent.MOVE_ELEMENT, CreateProjection);
+        Messenger<Element>.AddListener(GameEvent.CREATE_NEW_ELEMENT.ToString(), CreateProjection);
+        Messenger<Element>.AddListener(GameEvent.TURN_ELEMENT.ToString(), CreateProjection);
+        Messenger<Element>.AddListener(GameEvent.MOVE_ELEMENT.ToString(), CreateProjection);
     }
 
     private void OnDestroy() {
-        Messenger<Element>.RemoveListener(GameEvent.CREATE_NEW_ELEMENT, CreateProjection);
-        Messenger<Element>.RemoveListener(GameEvent.TURN_ELEMENT, CreateProjection);
-        Messenger<Element>.RemoveListener(GameEvent.MOVE_ELEMENT, CreateProjection);
+        Messenger<Element>.RemoveListener(GameEvent.CREATE_NEW_ELEMENT.ToString(), CreateProjection);
+        Messenger<Element>.RemoveListener(GameEvent.TURN_ELEMENT.ToString(), CreateProjection);
+        Messenger<Element>.RemoveListener(GameEvent.MOVE_ELEMENT.ToString(), CreateProjection);
     }
 
     private void Start() {

@@ -6,7 +6,7 @@ public class ParticleAnimationScript : MonoBehaviour {
     [SerializeField] ParticleSystem _PrototipeParticle;
 
     private void Awake() {
-        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER, StartAnimationParticle);
+        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER.ToString(), StartAnimationParticle);
     }
 
     private void OnDestroy() {

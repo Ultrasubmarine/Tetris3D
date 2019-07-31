@@ -32,7 +32,7 @@ public class GameCamera : MonoBehaviour {
     [SerializeField] private float _FirstOrthographicSize = 15;
 
     private void Awake() {
-        Messenger<int, int>.AddListener(GameEvent.CURRENT_HEIGHT, CheckStabilization);
+        Messenger<int, int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CheckStabilization);
         _myTransform = transform;
     }
 
@@ -101,6 +101,6 @@ public class GameCamera : MonoBehaviour {
             timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        Messenger.Broadcast(GameEvent.PLAY_GAME);
+        Messenger.Broadcast(GameEvent.PLAY_GAME.ToString());
     }
 }

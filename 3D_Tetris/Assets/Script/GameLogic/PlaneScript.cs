@@ -71,18 +71,18 @@ public class PlaneScript : Singleton<PlaneScript>
 
         NewElement = null;
 
-        Messenger.AddListener(GameEvent.PLAY_GAME, StartGame);
-        Messenger.AddListener(GameEvent.REPEAT_GAME, RepleyGame);
-        Messenger.AddListener(GameEvent.WIN_GAME, WinGame);
+        Messenger.AddListener(GameEvent.PLAY_GAME.ToString(), StartGame);
+        Messenger.AddListener(GameEvent.REPEAT_GAME.ToString(), RepleyGame);
+        Messenger.AddListener(GameEvent.WIN_GAME.ToString(), WinGame);
 
-        Messenger<float>.AddListener(GameEvent.CHANGE_TIME_DROP, ChengeTimeDrop);
+        Messenger<float>.AddListener(GameEvent.CHANGE_TIME_DROP.ToString(), ChengeTimeDrop);
 
     }
 
     private void OnDestroy()
     {
-        Messenger.RemoveListener(GameEvent.PLAY_GAME, StartGame);
-        Messenger.RemoveListener(GameEvent.REPEAT_GAME, RepleyGame);
+        Messenger.RemoveListener(GameEvent.PLAY_GAME.ToString(), StartGame);
+        Messenger.RemoveListener(GameEvent.REPEAT_GAME.ToString(), RepleyGame);
     }
 
     public void ChengeTimeDrop( float time)

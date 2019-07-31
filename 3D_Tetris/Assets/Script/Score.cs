@@ -12,7 +12,7 @@ public class Score : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER, ScoreeIncrement);
+        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER.ToString(), ScoreeIncrement);
         ScoreText.text = CurrentScore.ToString() + "/" + ScoreForWin.ToString() + " m";
     }
 	
@@ -25,7 +25,7 @@ public class Score : MonoBehaviour {
     {
         CurrentScore += 9;
         ScoreText.text = CurrentScore.ToString() + "/" + ScoreForWin.ToString() + " m";
-        Messenger<int>.Broadcast(GameEvent.CURRENT_SCORE, CurrentScore);
+        Messenger<int>.Broadcast(GameEvent.CURRENT_SCORE.ToString(), CurrentScore);
         CheckWin();
     }
 
@@ -33,7 +33,7 @@ public class Score : MonoBehaviour {
     {
         if(CurrentScore >= ScoreForWin)
         {
-            Messenger.Broadcast(GameEvent.WIN_GAME);
+            Messenger.Broadcast(GameEvent.WIN_GAME.ToString());
             Debug.Log("WIN");
         }
     }

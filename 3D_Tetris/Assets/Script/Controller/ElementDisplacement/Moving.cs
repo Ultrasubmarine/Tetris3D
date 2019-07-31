@@ -25,7 +25,7 @@ public class Moving: MonoBehaviour {
 
             Vector3 vectorDirection = SetVectorMove(direction);
             Vizual(element, vectorDirection, time);
-            Messenger<Element>.Broadcast(GameEvent.MOVE_ELEMENT, element);
+            Messenger<Element>.Broadcast(GameEvent.MOVE_ELEMENT.ToString(), element);
         }
     }
 
