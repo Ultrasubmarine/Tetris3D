@@ -25,7 +25,8 @@ public class ControllerScript : MonoBehaviour
 
     private void Start()
     {
-//        Messenger.AddListener( , Popo);
+        Messenger<ETouсhSign>.AddListener( ETouchType.Swipe.ToString(), Move);
+        Messenger<ETouсhSign>.AddListener( ETouchType.OneClick.ToString(), Turn);
     }
 
     // Update is called once per frame
@@ -33,37 +34,37 @@ public class ControllerScript : MonoBehaviour
     {
 
         // поворот сцены влево
-        if ( TouchControl.TouchEvent == touсhSign.LeftOneTouch && ElementManager.NewElement !=null)//(Input.GetKeyDown(KeyCode.LeftArrow))
+        if ( TouchControl.TouchEvent == ETouсhSign.LeftOneTouch && ElementManager.NewElement !=null)//(Input.GetKeyDown(KeyCode.LeftArrow))
         {
             if( turning.Action(ElementManager.NewElement, turn.left, Speed.TimeRotate))
                 CorrectIndex(90);           
         }
         // поворот сцены вправо
-        if (TouchControl.TouchEvent == touсhSign.RightOneTouch && ElementManager.NewElement != null)// (Input.GetKeyDown(KeyCode.RightArrow))
+        if (TouchControl.TouchEvent == ETouсhSign.RightOneTouch && ElementManager.NewElement != null)// (Input.GetKeyDown(KeyCode.RightArrow))
         {
             if(turning.Action(ElementManager.NewElement, turn.right, Speed.TimeRotate))
                 CorrectIndex(-90);           
         }
 
-        if(TouchControl.TouchEvent == touсhSign.Swipe_LeftUp)//(Input.GetKeyDown(KeyCode.A))
+        if(TouchControl.TouchEvent == ETouсhSign.Swipe_LeftUp)//(Input.GetKeyDown(KeyCode.A))
         {
             moving.Action(ElementManager.NewElement, A[indexTable], Speed.TimeMove);
             if (MoveTutorial)
                 Messenger<move>.Broadcast("MOVE", A[0]);
         }
-        if (TouchControl.TouchEvent == touсhSign.Swipe_LeftDown)// (Input.GetKeyDown(KeyCode.S))
+        if (TouchControl.TouchEvent == ETouсhSign.Swipe_LeftDown)// (Input.GetKeyDown(KeyCode.S))
         {
             moving.Action(ElementManager.NewElement, S[indexTable], Speed.TimeMove);
             if (MoveTutorial)
                 Messenger<move>.Broadcast("MOVE", S[0]);
         }
-        if (TouchControl.TouchEvent == touсhSign.Swipe_RightDown)//(Input.GetKeyDown(KeyCode.D))
+        if (TouchControl.TouchEvent == ETouсhSign.Swipe_RightDown)//(Input.GetKeyDown(KeyCode.D))
         {
             moving.Action(ElementManager.NewElement, D[indexTable], Speed.TimeMove);
             if (MoveTutorial)
                 Messenger<move>.Broadcast("MOVE", D[0]);
         }
-        if (TouchControl.TouchEvent == touсhSign.Swipe_RightUp)//(Input.GetKeyDown(KeyCode.W))
+        if (TouchControl.TouchEvent == ETouсhSign.Swipe_RightUp)//(Input.GetKeyDown(KeyCode.W))
         {
             moving.Action(ElementManager.NewElement, W[indexTable], Speed.TimeMove);
             if (MoveTutorial)
@@ -71,29 +72,30 @@ public class ControllerScript : MonoBehaviour
         }
 
         // обнуляем переменную поскольку мы уже все определили
-        TouchControl.TouchEvent = touсhSign.empty;
+        TouchControl.TouchEvent = ETouсhSign.empty;
     }
 
 
-    public void Turn() {
+    public void Turn(ETouсhSign touch) {
     
-        if ( TouchControl.TouchEvent == touсhSign.LeftOneTouch && ElementManager.NewElement !=null)
+        if ( TouchControl.TouchEvent == ETouсhSign.LeftOneTouch && ElementManager.NewElement !=null)
         {
             if( turning.Action(ElementManager.NewElement, turn.left, Speed.TimeRotate))
                 CorrectIndex(90);           
         }
 
-        if (TouchControl.TouchEvent == touсhSign.RightOneTouch && ElementManager.NewElement != null)
+        if (TouchControl.TouchEvent == ETouсhSign.RightOneTouch && ElementManager.NewElement != null)
         {
             if(turning.Action(ElementManager.NewElement, turn.right, Speed.TimeRotate))
                 CorrectIndex(-90);           
         }
     }
 
-    public void Move() {
-        
+    public void Move( ETouсhSign touch) {
+            
     }
-    public void CorrectIndex( int degree) {
+    
+    private void CorrectIndex( int degree) {
         _rotY += degree;
         if (_rotY == 360 || _rotY == -360)
             _rotY = 0;

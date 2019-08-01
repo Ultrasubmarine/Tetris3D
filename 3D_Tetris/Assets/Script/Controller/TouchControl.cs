@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public enum touсhSign {
+public enum ETouсhSign {
     empty,
 
     // swipe
@@ -19,9 +19,14 @@ public enum touсhSign {
     RightOneTouch,
 }
 
+public enum ETouchType
+{
+    OneClick,
+    Swipe,
+}
 public class TouchControl : MonoBehaviour {
 
-    public static touсhSign TouchEvent;
+    public static ETouсhSign TouchEvent;
 
     Vector3 _fp;
     Vector3 _lp;
@@ -30,7 +35,10 @@ public class TouchControl : MonoBehaviour {
     bool _isTouchUI;
 
     private float _halfWight;
-
+    
+    public readonly string ONE_TOUCH = ETouchType.OneClick.ToString();
+    public readonly string SWIPE = ETouchType.Swipe.ToString();
+    
     void Awake() {
         _halfWight = Screen.width / 2;
     }
@@ -69,7 +77,8 @@ public class TouchControl : MonoBehaviour {
         float swipeLength = Mathf.Sqrt(Mathf.Pow(_lp.x - _fp.x, 2) + Mathf.Pow(_lp.y - _fp.y, 2)); // scrt( ( x2- x1)^2 + ( y2- y1)^2 )
 
         if (swipeLength < _minSwipeLength) {
-            TouchEvent = _lp.x < _halfWight ? touсhSign.LeftOneTouch : touсhSign.RightOneTouch;
+            TouchEvent = _lp.x < _halfWight ? ETouсhSign.LeftOneTouch : ETouсhSign.RightOneTouch;
+            Messenger<ETouсhSign>.Broadcast(ONE_TOUCH, TouchEvent);
             return;
         }
 
@@ -82,12 +91,14 @@ public class TouchControl : MonoBehaviour {
 
         //right sector 
         if (_lp.x > _fp.x) {
-            TouchEvent = _lp.y < _fp.y ? touсhSign.Swipe_RightDown : touсhSign.Swipe_RightUp;
+            TouchEvent = _lp.y < _fp.y ? ETouсhSign.Swipe_RightDown : ETouсhSign.Swipe_RightUp;
         }
 
         //left sector
         else if (_lp.x < _fp.x) {
-            TouchEvent = _lp.y < _fp.y ? touсhSign.Swipe_LeftDown : touсhSign.Swipe_LeftUp;
+            TouchEvent = _lp.y < _fp.y ? ETouсhSign.Swipe_LeftDown : ETouсhSign.Swipe_LeftUp;
         }
+        
+        Messenger<ETouсhSign>.Broadcast(SWIPE, TouchEvent);
     }
 }
