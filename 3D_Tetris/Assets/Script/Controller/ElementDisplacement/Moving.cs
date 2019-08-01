@@ -18,7 +18,7 @@ public class Moving: MonoBehaviour {
 
         if (CheckOpportunity(element, direction)) {
 
-            if (!_StateMachine.ChangeState(GameState2.Move, false))
+            if (!_StateMachine.ChangeState(EMachineState.Move, false))
                 return;
 
             Logic( direction, element);
@@ -114,7 +114,7 @@ public class Moving: MonoBehaviour {
 
         finalPosBlock.Clear();
 
-        _StateMachine.ChangeState(GameState2.NewElement, false);
+        _StateMachine.ChangeState(EMachineState.NewElement, false);
     }
 
     public bool MomentaryActionForGenerator( Element element, move direction)

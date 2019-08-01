@@ -37,11 +37,11 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     }
 
     private void Start() {
-        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.Collection, CheckCollections);
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Collection, CheckCollections);
     }
 
     private void OnDestroy() {
-        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.Collection, CheckCollections);
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Collection, CheckCollections);
     }
 
     public void SetLimitHeight( int limit) {
@@ -112,9 +112,9 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     #region сбор коллекций в слоях матрицы
     private void CheckCollections() {
         if (CollectLayers())
-            machine.ChangeState(GameState2.DropAllElements);
+            machine.ChangeState(EMachineState.DropAllElements);
         else 
-            machine.ChangeState(GameState2.Empty);
+            machine.ChangeState(EMachineState.Empty);
         
     }
     private bool CollectLayers() {

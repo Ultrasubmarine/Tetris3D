@@ -22,14 +22,14 @@ public class HeightHandler : MonoBehaviour {
         _matrix = PlaneMatrix.Instance;
         _matrix.SetLimitHeight(_LimitHeight);
 
-        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.Merge, ChangeStateOutOfHeights);
-        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, CheckHeight);
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Merge, ChangeStateOutOfHeights);
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, CheckHeight);
     }
 
     void OnDestroy()
     {
-        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.Merge, ChangeStateOutOfHeights);
-        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.DropAllElements, CheckHeight);
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Merge, ChangeStateOutOfHeights);
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, CheckHeight);
     }
 
     public void ChangeStateOutOfHeights() {
@@ -37,7 +37,7 @@ public class HeightHandler : MonoBehaviour {
             Debug.Log("END GAME");
         }
         else {            
-            _Machine.ChangeState(GameState2.Collection);
+            _Machine.ChangeState(EMachineState.Collection);
         }
     }
 

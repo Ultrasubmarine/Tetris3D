@@ -25,7 +25,7 @@ public class ControllerScript : MonoBehaviour
 
     private void Start()
     {
-        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.Move, Popo);
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Move, Popo);
     }
 
     // Update is called once per frame

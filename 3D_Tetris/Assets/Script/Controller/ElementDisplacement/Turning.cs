@@ -25,7 +25,7 @@ public class Turning : MonoBehaviour{
 
         if (CheckOpportunity(direction, element)) {
 
-            if (!_StateMachine.ChangeState(GameState2.Turn, false))
+            if (!_StateMachine.ChangeState(EMachineState.Turn, false))
                 return false;
 
             Logic(direction, element);
@@ -123,7 +123,7 @@ public class Turning : MonoBehaviour{
             _rotY = 0;
 
         _gameCamera.Rotation = _rotY;
-        _StateMachine.ChangeState(GameState2.NewElement, false);
+        _StateMachine.ChangeState(EMachineState.NewElement, false);
     }
 
     IEnumerator TurnElement(Element element, int angle, float time, GameObject target) {

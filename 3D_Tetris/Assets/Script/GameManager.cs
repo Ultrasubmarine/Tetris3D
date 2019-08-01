@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour {
     public void StartGame() {
 
         Debug.Log("666 START 666");
-        machine.ChangeState(GameState2.Empty);
+        machine.ChangeState(EMachineState.Empty);
     }
 
     private void RepleyGame() {

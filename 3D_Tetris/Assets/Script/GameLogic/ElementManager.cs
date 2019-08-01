@@ -20,17 +20,17 @@ public class ElementManager : MonoBehaviour {
         _matrix = PlaneMatrix.Instance;
         _myTransform = this.transform;
 
-        Messenger.AddListener( StateMachine.StateMachineKey + GameState2.Empty, GenerateElement);
-        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.NewElement, StartDropElement);
+        Messenger.AddListener( StateMachine.StateMachineKey + EMachineState.Empty, GenerateElement);
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
 
-        Messenger.AddListener(StateMachine.StateMachineKey + GameState2.DropAllElements, AfterCollectElement);
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
     }
 
     private void OnDestroy() {
-        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.Empty, GenerateElement);
-        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.NewElement, StartDropElement);
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Empty, GenerateElement);
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
 
-        Messenger.RemoveListener(StateMachine.StateMachineKey + GameState2.DropAllElements, AfterCollectElement);
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
     }
 
     public void GenerateElement() {
@@ -38,7 +38,7 @@ public class ElementManager : MonoBehaviour {
         NewElement = _Generator.GenerationNewElement(_myTransform);
         NewElement.MyTransform.parent = _myTransform;
 
-        machine.ChangeState(GameState2.NewElement);
+        machine.ChangeState(EMachineState.NewElement);
         Messenger<Element>.Broadcast(GameEvent.CREATE_NEW_ELEMENT.ToString(), NewElement);
     }
 
@@ -50,7 +50,7 @@ public class ElementManager : MonoBehaviour {
     private IEnumerator DropElement() {
 
         while (true) {
-            while (machine.State != GameState2.NewElement){
+            while (machine.State != EMachineState.NewElement){
                 yield return null;
             }
             bool empty = _matrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0)); 
@@ -67,14 +67,14 @@ public class ElementManager : MonoBehaviour {
 
 //        Destroy(_Generator.examleElement);
 
-        while (machine.State != GameState2.NewElement) {
+        while (machine.State != EMachineState.NewElement) {
             yield return null;
         }
         
         Messenger<Element>.Broadcast(GameEvent.END_DROP_ELEMENT.ToString(), NewElement);
         MergeElement(NewElement);
         NewElement = null;
-        machine.ChangeState(GameState2.Merge);
+        machine.ChangeState(EMachineState.Merge);
         
         yield break;
     }
@@ -180,7 +180,7 @@ public class ElementManager : MonoBehaviour {
         while (flagDrop); // проверяем что бы все упало, пока оно может падать
 
         //   myProj.CreateCeiling();
-        machine.ChangeState(GameState2.Collection);
+        machine.ChangeState(EMachineState.Collection);
 
         yield return null;
     }

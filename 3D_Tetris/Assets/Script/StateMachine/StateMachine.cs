@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public enum GameState2 {
+public enum EMachineState {
     NotActive,
 
     Empty,
@@ -26,27 +27,25 @@ public class StateMachine : MonoBehaviour {
 
     public const string StateMachineKey = "STATE MACHINE <GAME> ";
 
-    [SerializeField, HideInInspector] List<bool> StateTable = new List<bool>();
-    private GameState2 _currState;
-
+    [FormerlySerializedAs("StateTable")] [SerializeField, HideInInspector] List<bool> _StateTable = new List<bool>();
+    private EMachineState _currState;
     private int _countState;
-    [SerializeField] bool setText;
-    public Text UIText;
-    public GameState2 State { get { return _currState; } }
+    
+    [FormerlySerializedAs("UIText")] public Text _UiText;
+    public EMachineState State { get { return _currState; } }
 
     void Start () {
-        _countState = Enum.GetValues(typeof(GameState2)).Length;
-        _currState = GameState2.NotActive;
-        // SetState(GameState2.Empty);
+        _countState = Enum.GetValues(typeof(EMachineState)).Length;
+        _currState = EMachineState.NotActive;
     }
 
     public void ChangeState(int newState) {
-        ChangeState((GameState2)newState);    
+        ChangeState((EMachineState)newState);    
     }
 
-    public bool ChangeState(GameState2 newState, bool broadcust = true) {
+    public bool ChangeState(EMachineState newState, bool broadcust = true) {
         
-        if (StateTable[GetIndex(newState)]) {
+        if (_StateTable[GetIndex(newState)]) {
             SetState(newState, broadcust);
             return true;
         }
@@ -54,14 +53,14 @@ public class StateMachine : MonoBehaviour {
         return false;
     }
 
-    private void SetState(GameState2 newState, bool broadcust = true) {
+    private void SetState(EMachineState newState, bool broadcust = true) {
         _currState = newState;
         if(broadcust)
             Messenger.Broadcast(StateMachineKey + newState.ToString(), MessengerMode.REQUIRE_LISTENER);
-        UIText.text = newState.ToString();
+        _UiText.text = newState.ToString();
     }
 
-    private int GetIndex( GameState2 newState ) {
+    private int GetIndex( EMachineState newState ) {
 
         return (int)_currState * _countState + (int)newState;
     }

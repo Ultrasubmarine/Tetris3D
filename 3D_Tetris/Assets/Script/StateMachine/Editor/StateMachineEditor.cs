@@ -16,7 +16,7 @@ public class StateMachineEditor : Editor {
     private void OnEnable() {
         table = serializedObject.FindProperty("StateTable");
         text1 = serializedObject.FindProperty("UIText");
-        _needCount = Enum.GetValues(typeof(GameState2)).Length ;
+        _needCount = Enum.GetValues(typeof(EMachineState)).Length ;
 
         component = (StateMachine)target;
     }
@@ -33,7 +33,7 @@ public class StateMachineEditor : Editor {
         for (int row = 0; row < _needCount; row++) {
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(((GameState2)row).ToString());
+            EditorGUILayout.LabelField(((EMachineState)row).ToString());
             for (int column = 0; column < _needCount; column++) {
 
                var yach = table.GetArrayElementAtIndex(row * _needCount + column);
@@ -43,7 +43,7 @@ public class StateMachineEditor : Editor {
             EditorGUILayout.EndHorizontal();
         }
 
-        component.UIText = (Text)EditorGUILayout.ObjectField("State Text", component.UIText, typeof(Text), true);
+        component._UiText = (Text)EditorGUILayout.ObjectField("State Text", component._UiText, typeof(Text), true);
         serializedObject.ApplyModifiedProperties();
     }
 
