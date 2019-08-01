@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum move
+{
+    x = 0,
+    z = 1,
+    _x = 2,
+    _z = 3
+}
+
 public class Moving: MonoBehaviour {
 
     PlaneMatrix _matrix;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 enum GameState {
     Play,
@@ -9,24 +10,15 @@ enum GameState {
 }
 
 public class GameManager : MonoBehaviour {
-    PlaneScript PlaneGame;
-    [SerializeField] StateMachine machine; 
-
-    void Start() {
-        PlaneGame = PlaneScript.Instance;
-    }
-
+    
+    [FormerlySerializedAs("machine")] [SerializeField] StateMachine _machine;
     public void StartGame() {
 
-        Debug.Log("666 START 666");
-        machine.ChangeState(EMachineState.Empty);
+        _machine.ChangeState(EMachineState.Empty);
     }
 
     private void RepleyGame() {
-        //_ElementManager.DestroyAllElements();
-        //_HeightHandler.CheckHeight();
         StartGame();
-        //  Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT, _LimitHeight, 0);
     }
 
 

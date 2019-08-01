@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+public enum turn
+{
+    left,
+    right
+}
+
 public class Turning : MonoBehaviour{
 
     // for camera

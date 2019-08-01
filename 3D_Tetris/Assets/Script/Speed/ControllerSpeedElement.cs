@@ -27,13 +27,13 @@ public class ControllerSpeedElement: MonoBehaviour { //Listener<int> {
         var speed = ScoreAndTime.Find(s => s.x < score).y;
         if (_afterTime < speed)
         {
-            ChengeTimeDrop(speed);
+            ChangeTimeDrop(speed);
             _afterTime = speed;
         }
     }
 
-    public void ChengeTimeDrop( float timeDrop)
+    public void ChangeTimeDrop( float timeDrop)
     {
-        Messenger<float>.Broadcast(GameEvent.CHANGE_TIME_DROP.ToString(), timeDrop);
+      //  Messenger<float>.Broadcast(GameEvent.CHANGE_TIME_DROP.ToString(), timeDrop);
     }
 }

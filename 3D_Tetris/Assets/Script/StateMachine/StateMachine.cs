@@ -20,8 +20,8 @@ public enum EMachineState {
 
     Win,
     End,
-
 }
+
 [ExecuteInEditMode]
 public class StateMachine : MonoBehaviour {
 
