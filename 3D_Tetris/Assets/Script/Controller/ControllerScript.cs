@@ -25,7 +25,7 @@ public class ControllerScript : MonoBehaviour
 
     private void Start()
     {
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Move, Popo);
+//        Messenger.AddListener( , Popo);
     }
 
     // Update is called once per frame
@@ -33,37 +33,37 @@ public class ControllerScript : MonoBehaviour
     {
 
         // поворот сцены влево
-        if ( TouchControll.TouchEvent == touсhSign.LeftOneTouch && ElementManager.NewElement !=null)//(Input.GetKeyDown(KeyCode.LeftArrow))
+        if ( TouchControl.TouchEvent == touсhSign.LeftOneTouch && ElementManager.NewElement !=null)//(Input.GetKeyDown(KeyCode.LeftArrow))
         {
             if( turning.Action(ElementManager.NewElement, turn.left, Speed.TimeRotate))
                 CorrectIndex(90);           
         }
         // поворот сцены вправо
-        if (TouchControll.TouchEvent == touсhSign.RightOneTouch && ElementManager.NewElement != null)// (Input.GetKeyDown(KeyCode.RightArrow))
+        if (TouchControl.TouchEvent == touсhSign.RightOneTouch && ElementManager.NewElement != null)// (Input.GetKeyDown(KeyCode.RightArrow))
         {
             if(turning.Action(ElementManager.NewElement, turn.right, Speed.TimeRotate))
                 CorrectIndex(-90);           
         }
 
-        if(TouchControll.TouchEvent == touсhSign.Swipe_LeftUp)//(Input.GetKeyDown(KeyCode.A))
+        if(TouchControl.TouchEvent == touсhSign.Swipe_LeftUp)//(Input.GetKeyDown(KeyCode.A))
         {
             moving.Action(ElementManager.NewElement, A[indexTable], Speed.TimeMove);
             if (MoveTutorial)
                 Messenger<move>.Broadcast("MOVE", A[0]);
         }
-        if (TouchControll.TouchEvent == touсhSign.Swipe_LeftDown)// (Input.GetKeyDown(KeyCode.S))
+        if (TouchControl.TouchEvent == touсhSign.Swipe_LeftDown)// (Input.GetKeyDown(KeyCode.S))
         {
             moving.Action(ElementManager.NewElement, S[indexTable], Speed.TimeMove);
             if (MoveTutorial)
                 Messenger<move>.Broadcast("MOVE", S[0]);
         }
-        if (TouchControll.TouchEvent == touсhSign.Swipe_RightDown)//(Input.GetKeyDown(KeyCode.D))
+        if (TouchControl.TouchEvent == touсhSign.Swipe_RightDown)//(Input.GetKeyDown(KeyCode.D))
         {
             moving.Action(ElementManager.NewElement, D[indexTable], Speed.TimeMove);
             if (MoveTutorial)
                 Messenger<move>.Broadcast("MOVE", D[0]);
         }
-        if (TouchControll.TouchEvent == touсhSign.Swipe_RightUp)//(Input.GetKeyDown(KeyCode.W))
+        if (TouchControl.TouchEvent == touсhSign.Swipe_RightUp)//(Input.GetKeyDown(KeyCode.W))
         {
             moving.Action(ElementManager.NewElement, W[indexTable], Speed.TimeMove);
             if (MoveTutorial)
@@ -71,9 +71,28 @@ public class ControllerScript : MonoBehaviour
         }
 
         // обнуляем переменную поскольку мы уже все определили
-        TouchControll.TouchEvent = touсhSign.empty;
+        TouchControl.TouchEvent = touсhSign.empty;
     }
 
+
+    public void Turn() {
+    
+        if ( TouchControl.TouchEvent == touсhSign.LeftOneTouch && ElementManager.NewElement !=null)
+        {
+            if( turning.Action(ElementManager.NewElement, turn.left, Speed.TimeRotate))
+                CorrectIndex(90);           
+        }
+
+        if (TouchControl.TouchEvent == touсhSign.RightOneTouch && ElementManager.NewElement != null)
+        {
+            if(turning.Action(ElementManager.NewElement, turn.right, Speed.TimeRotate))
+                CorrectIndex(-90);           
+        }
+    }
+
+    public void Move() {
+        
+    }
     public void CorrectIndex( int degree) {
         _rotY += degree;
         if (_rotY == 360 || _rotY == -360)
@@ -84,8 +103,5 @@ public class ControllerScript : MonoBehaviour
         else
             indexTable = ((int)_rotY + 360) / 90;
     }
-    
-    public void Popo() {
 
-    }
 }

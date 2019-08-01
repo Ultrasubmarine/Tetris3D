@@ -11,18 +11,20 @@ enum GameState {
 
 public class GameManager : MonoBehaviour {
     
-    [FormerlySerializedAs("machine")] [SerializeField] StateMachine _machine;
+    [SerializeField] StateMachine _Machine;
+    [SerializeField] GameObject _Controller;
     public void StartGame() {
 
-        _machine.ChangeState(EMachineState.Empty);
+        _Controller.SetActive( true );
+        _Machine.ChangeState(EMachineState.Empty);
     }
 
     private void RepleyGame() {
         StartGame();
     }
 
-
     public void End() {
+        _Controller.SetActive(false);
     }
 
     public void Restart() {
