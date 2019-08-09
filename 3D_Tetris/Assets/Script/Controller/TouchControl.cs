@@ -17,7 +17,7 @@ public enum ETouсhSign {
 
 public class TouchControl : MonoBehaviour {
 
-     ETouсhSign _touchEvent;
+    ETouсhSign _touchEvent;
 
     Vector3 _fp;
     Vector3 _lp;

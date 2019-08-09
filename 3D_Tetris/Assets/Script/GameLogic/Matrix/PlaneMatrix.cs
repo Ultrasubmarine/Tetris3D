@@ -62,7 +62,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
                 if (newCoordinat.OutOfCoordinatLimit()) 
                     return false;               
 
-                if (_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()] != null) {
+                if ( !ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()],null)) {
                     if (!element.IsBind)
                         return false;
                     if (!element.MyBlocks.Contains(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()])) 
@@ -74,7 +74,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     }
 
     public bool CheckEmptyPlace( int x_index, int y_index, int z_index) {
-        return _matrix[x_index, y_index, z_index] == null;   
+        return ReferenceEquals( _matrix[x_index, y_index, z_index] ,null);   
     }
 
     #region привязка/отвязка эл-та к матрице
@@ -82,7 +82,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
         int x, y, z;
         foreach (Block item in element.MyBlocks) {
-            if (item == null || item.IsDestroy)
+            if (ReferenceEquals(item,null) || item.IsDestroy)
                 continue;
             x = item.Coordinates.x;
             y = item.Coordinates.y;
@@ -97,7 +97,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
         int x, y, z;
         foreach (Block item in element.MyBlocks) {
-            if (item == null || item.IsDestroy)
+            if ( ReferenceEquals(item,null) || item.IsDestroy)
                 continue;
             x = item.Coordinates.x;
             y = item.Coordinates.y;
@@ -132,7 +132,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
         for (int x = 0; x < Wight; x++) {
             for (int z = 0; z < Wight; z++) {
-                if (_matrix[x, layer, z] == null)
+                if ( ReferenceEquals(  _matrix[x, layer, z], null ) )
                 {
                     return false;    
                 }
@@ -175,7 +175,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     {
         for (int y = _matrix.GetUpperBound(1) - 1; y >= 0; --y)
         {
-            if (_matrix[x_index, y, z_index] != null)
+            if ( !ReferenceEquals(  _matrix[x_index, y, z_index], null ) )
                 return y+1;
         }
         return 0;        

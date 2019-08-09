@@ -55,7 +55,7 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
     public T CreateObject( Vector3 position) {
 
         var returnObj = _pool.FirstOrDefault(obj => !obj.GObj.active);
-        if( returnObj == null)
+        if( ReferenceEquals(returnObj, null))
         {
             InstantiateObject();
             returnObj = _pool[_pool.Count - 1];
@@ -69,7 +69,7 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
 	public void DestroyObject( T obj) {
 
         var returnContainer = _pool.FirstOrDefault(s => s.Object == obj);
-        if (returnContainer == null)
+        if (ReferenceEquals(returnContainer, null))
             return;
         
         returnContainer.SetActive(false);

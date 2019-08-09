@@ -42,7 +42,7 @@ public class ControllerScript : MonoBehaviour
                 CorrectIndex(90);             
         }
         else { //ETouсhSign.OneTouch_Right
-            if( _Turning.Action(ElementManager.NewElement, turn.left, Speed.TimeRotate))
+            if( _Turning.Action(ElementManager.NewElement, turn.right, Speed.TimeRotate))
                 CorrectIndex(90);    
         }
     }
