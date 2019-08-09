@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
 public enum ETouсhSign {
     empty,
@@ -15,18 +10,14 @@ public enum ETouсhSign {
     Swipe_RightDown,
 
     // touch
-    LeftOneTouch,
-    RightOneTouch,
+    OneTouch_Left,
+    OneTouch_Right,
 }
 
-public enum ETouchType
-{
-    OneClick,
-    Swipe,
-}
+
 public class TouchControl : MonoBehaviour {
 
-    public static ETouсhSign TouchEvent;
+     ETouсhSign _touchEvent;
 
     Vector3 _fp;
     Vector3 _lp;
@@ -34,10 +25,15 @@ public class TouchControl : MonoBehaviour {
 
     bool _isTouchUI;
 
-    private float _halfWight;
+    private float _halfWight;    
+    private enum ETouchType
+    {
+        OneClick,
+        Swipe,
+    }
     
-    public readonly string ONE_TOUCH = ETouchType.OneClick.ToString();
-    public readonly string SWIPE = ETouchType.Swipe.ToString();
+    public static readonly string ONE_TOUCH = ETouchType.OneClick.ToString();
+    public static readonly string SWIPE = ETouchType.Swipe.ToString();
     
     void Awake() {
         _halfWight = Screen.width / 2;
@@ -48,23 +44,12 @@ public class TouchControl : MonoBehaviour {
 
         switch (Input.touches[0].phase) {
             case TouchPhase.Began: {
-                if (EventSystem.current.IsPointerOverGameObject()) {
-                    _isTouchUI = true;
-                }
-                else
-                    _fp = Input.touches[0].position;
-
+                _fp = Input.touches[0].position;
                 break;
             }
             case TouchPhase.Ended: {
-                if (_isTouchUI) {
-                    _isTouchUI = !_isTouchUI;
-                }
-                else {
-                    _lp = Input.touches[0].position;
-                    CheckSwipe();
-                }
-
+                _lp = Input.touches[0].position;
+                CheckSwipe();
                 break;
             }
             default:
@@ -77,8 +62,8 @@ public class TouchControl : MonoBehaviour {
         float swipeLength = Mathf.Sqrt(Mathf.Pow(_lp.x - _fp.x, 2) + Mathf.Pow(_lp.y - _fp.y, 2)); // scrt( ( x2- x1)^2 + ( y2- y1)^2 )
 
         if (swipeLength < _minSwipeLength) {
-            TouchEvent = _lp.x < _halfWight ? ETouсhSign.LeftOneTouch : ETouсhSign.RightOneTouch;
-            Messenger<ETouсhSign>.Broadcast(ONE_TOUCH, TouchEvent);
+            _touchEvent = _lp.x < _halfWight ? ETouсhSign.OneTouch_Left : ETouсhSign.OneTouch_Right;
+            Messenger<ETouсhSign>.Broadcast(ONE_TOUCH, _touchEvent);
             return;
         }
 
@@ -91,14 +76,14 @@ public class TouchControl : MonoBehaviour {
 
         //right sector 
         if (_lp.x > _fp.x) {
-            TouchEvent = _lp.y < _fp.y ? ETouсhSign.Swipe_RightDown : ETouсhSign.Swipe_RightUp;
+            _touchEvent = _lp.y < _fp.y ? ETouсhSign.Swipe_RightDown : ETouсhSign.Swipe_RightUp;
         }
 
         //left sector
         else if (_lp.x < _fp.x) {
-            TouchEvent = _lp.y < _fp.y ? ETouсhSign.Swipe_LeftDown : ETouсhSign.Swipe_LeftUp;
+            _touchEvent = _lp.y < _fp.y ? ETouсhSign.Swipe_LeftDown : ETouсhSign.Swipe_LeftUp;
         }
         
-        Messenger<ETouсhSign>.Broadcast(SWIPE, TouchEvent);
+        Messenger<ETouсhSign>.Broadcast(SWIPE, _touchEvent);
     }
 }
