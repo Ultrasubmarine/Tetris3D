@@ -102,6 +102,10 @@ public class GameCamera : MonoBehaviour {
             timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-//        Messenger.Broadcast(GameEvent.PLAY_GAME.ToString());
+    }
+
+    public void ResetRotation() {
+        _rotY = 0;
+        CheckStabilization( PlaneMatrix.Instance.LimitHeight, 0);
     }
 }

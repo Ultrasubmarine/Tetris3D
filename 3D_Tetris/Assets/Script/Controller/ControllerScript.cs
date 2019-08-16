@@ -24,12 +24,16 @@ public class ControllerScript : MonoBehaviour
     {
         Messenger<ETouсhSign>.AddListener( TouchControl.SWIPE, Move);
         Messenger<ETouсhSign>.AddListener( TouchControl.ONE_TOUCH, Turn);
+            
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
     }
 
     void OnDestroy()
     {
         Messenger<ETouсhSign>.RemoveListener( TouchControl.SWIPE, Move);
         Messenger<ETouсhSign>.RemoveListener( TouchControl.ONE_TOUCH, Turn);
+        
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
     }
 
     public void Turn(ETouсhSign touch)
@@ -88,4 +92,7 @@ public class ControllerScript : MonoBehaviour
             _indexTable = ((int)_rotY + 360) / 90;
     }
 
+    public void ResetRotation() {
+        _rotY = 0;
+    }
 }

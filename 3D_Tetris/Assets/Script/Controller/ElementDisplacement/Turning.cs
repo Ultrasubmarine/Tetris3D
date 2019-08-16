@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -20,6 +21,14 @@ public class Turning : MonoBehaviour{
     [SerializeField] private GameObject _ObjectLook;
 
     private PlaneMatrix _matrix;
+
+    void Awake() {
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive,ResetTurn);
+    }
+
+    void OnDestroy() {
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive,ResetTurn);
+    }
 
     private void Start() {
         _offset = Vector3.zero - _Camera.transform.position; // сохраняем расстояние между камерой и полем
@@ -151,5 +160,23 @@ public class Turning : MonoBehaviour{
 
             yield return null;
         } while (angle > 0 && countAngle < angle || angle < 0 && countAngle > angle);
+    }
+
+    private void ResetTurn() {
+        
+        turn need;
+        if (_rotY < 0)
+            need = turn.left;
+        else
+            need = turn.right;
+        
+        Quaternion rotationEnd = Quaternion.Euler(0, 0, 0);
+        _Camera.transform.position = Vector3.zero - rotationEnd * _offset;
+        _Camera.transform.LookAt(_ObjectLook.transform.position);
+        
+        _gameCamera.Rotation = 0;
+        _rotY = 0;
+
+        _gameCamera.ResetRotation();
     }
 }

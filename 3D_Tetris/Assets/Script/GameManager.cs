@@ -19,20 +19,17 @@ public class GameManager : MonoBehaviour {
     
     public void StartGame() {
 
-        _Controller.SetActive( true );
+        _Controller.SetActive(true);
         _Machine.ChangeState(EMachineState.Empty);
     }
 
     public void ReplayGame() {
         _Machine.ChangeState(EMachineState.NotActive);
         Messenger.Broadcast(CLEAR_ALL);
-        StartGame();
     }
 
     public void End() {
         _Controller.SetActive(false);
     }
-
-    public void Restart() {
-    }
+    
 }

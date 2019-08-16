@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ElementManager : MonoBehaviour {
 
     PlaneMatrix _matrix;
     [SerializeField] Generator _Generator;
-    [SerializeField] StateMachine machine;
+    [FormerlySerializedAs("machine")] [SerializeField] StateMachine _Machine;
 
     List<Element> _elementMarger;
 
     static public Element NewElement;
     Transform _myTransform;
 
-    // Use this for initialization
     void Start () {
         _elementMarger = new List<Element>();
         _matrix = PlaneMatrix.Instance;
@@ -24,8 +24,7 @@ public class ElementManager : MonoBehaviour {
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
 
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
-        
-//        Messenger.AddListener(GameManager.CLEAR_ALL, DeleteAllElements);
+ 
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
     }
 
@@ -38,25 +37,25 @@ public class ElementManager : MonoBehaviour {
         Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
     }
 
-    public void GenerateElement() {
+    void GenerateElement() {
 
         NewElement = _Generator.GenerationNewElement(_myTransform);
         NewElement.MyTransform.parent = _myTransform;
 
-        machine.ChangeState(EMachineState.NewElement);
+        _Machine.ChangeState(EMachineState.NewElement);
         Messenger<Element>.Broadcast(GameEvent.CREATE_NEW_ELEMENT.ToString(), NewElement);
     }
 
     #region  функции падения нового эл-та ( и его слияние)
-    public void StartDropElement() {
+
+    void StartDropElement() {
         StartCoroutine(DropElement());
     }
     
     private IEnumerator DropElement() {
 
-        Debug.Log("drop");
         while (true) {
-            while (machine.State != EMachineState.NewElement){
+            while (_Machine.State != EMachineState.NewElement){
                 yield return null;
             }
             bool empty = _matrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0)); 
@@ -73,14 +72,14 @@ public class ElementManager : MonoBehaviour {
 
 //        Destroy(_Generator.examleElement);
 
-        while (machine.State != EMachineState.NewElement) {
+        while (_Machine.State != EMachineState.NewElement) {
             yield return null;
         }
         
         Messenger<Element>.Broadcast(GameEvent.END_DROP_ELEMENT.ToString(), NewElement);
         MergeElement(NewElement);
         NewElement = null;
-        machine.ChangeState(EMachineState.Merge);
+        _Machine.ChangeState(EMachineState.Merge);
         
         yield break;
     }
@@ -92,9 +91,9 @@ public class ElementManager : MonoBehaviour {
         newElement.transform.parent = this.gameObject.transform;
         _elementMarger.Add(newElement);
     }
-    #endregion 
-  
-    public void AfterCollectElement() {
+    #endregion
+
+    void AfterCollectElement() {
         
         ClearElementsAfterDeletedBlocks();
         CutElement();
@@ -134,8 +133,8 @@ public class ElementManager : MonoBehaviour {
             }
         }
     }
-    
-    public void DeleteAllElements() {
+
+    void DeleteAllElements() {
         while (_elementMarger.Count > 0) {
             Element tmp = _elementMarger[0];
             
@@ -197,7 +196,7 @@ public class ElementManager : MonoBehaviour {
         while (flagDrop); // проверяем что бы все упало, пока оно может падать
 
         //   myProj.CreateCeiling();
-        machine.ChangeState(EMachineState.Collection);
+        _Machine.ChangeState(EMachineState.Collection);
 
         yield return null;
     }

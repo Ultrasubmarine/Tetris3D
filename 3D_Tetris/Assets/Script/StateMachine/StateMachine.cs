@@ -28,7 +28,7 @@ public class StateMachine : MonoBehaviour {
     public const string StateMachineKey = "STATE MACHINE <GAME> ";
 
     [FormerlySerializedAs("StateTable")] [SerializeField, HideInInspector] List<bool> _StateTable = new List<bool>();
-    private EMachineState _currState;
+    [SerializeField] private EMachineState _currState;
     private int _countState;
     
     [FormerlySerializedAs("UIText")] public Text _UiText;
@@ -49,7 +49,7 @@ public class StateMachine : MonoBehaviour {
             SetState(newState, broadcust);
             return true;
         }
-        Debug.Log("Can'T change");
+        Debug.Log("Can'T change/ current:" + State.ToString() + " you want: " + newState.ToString());
         return false;
     }
 
@@ -61,7 +61,7 @@ public class StateMachine : MonoBehaviour {
     }
 
     private int GetIndex( EMachineState newState ) {
-
+        
         return (int)_currState * _countState + (int)newState;
     }
 }
