@@ -14,8 +14,8 @@ public class StateMachineEditor : Editor {
     int _needCount;
 
     private void OnEnable() {
-        table = serializedObject.FindProperty("StateTable");
-        text1 = serializedObject.FindProperty("UIText");
+        table = serializedObject.FindProperty("_StateTable");
+        text1 = serializedObject.FindProperty("_UIText");
         _needCount = Enum.GetValues(typeof(EMachineState)).Length ;
 
         component = (StateMachine)target;
@@ -38,7 +38,6 @@ public class StateMachineEditor : Editor {
 
                var yach = table.GetArrayElementAtIndex(row * _needCount + column);
                 yach.boolValue = GUILayout.Toggle(yach.boolValue,"");
-
             }
             EditorGUILayout.EndHorizontal();
         }

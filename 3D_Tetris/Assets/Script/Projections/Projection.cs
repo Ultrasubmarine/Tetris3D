@@ -5,21 +5,22 @@ using System.Linq;
 
 using IntegerExtension;
 using UnityEngine.Networking.NetworkSystem;
+using UnityEngine.Serialization;
 
 public class Projection : MonoBehaviour {
 
     PlaneMatrix _matrix;
 
-    public const int PROECTIONS = 1;
+    public const int PROJECTIONS = 1;
     public const int CEILING = 2;
 
     [Header(" Проекция ")]
     [SerializeField] GameObjectPool _PoolProjection;
-    [SerializeField] float _HeightProection = 0.1f;
-    private List<GameObject> _proectionsList = new List<GameObject>();
-
-    [Header(" Потолок ")] // ceiling - потолок
-    [SerializeField] GameObjectPool _PoolСeiling;
+    [SerializeField] float _HeightProjection = 0.1f;
+    private List<GameObject> _projectionsList = new List<GameObject>();
+    
+    [Header(" Потолок ")] 
+    [SerializeField] GameObjectPool _PoolCeiling;
     [SerializeField] int _MinimumLayerHeight;
     private List<GameObject> _ceilingList = new List<GameObject>();
 
@@ -31,6 +32,8 @@ public class Projection : MonoBehaviour {
         Messenger<int,int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CreateCeiling);
 
         Messenger<Element>.AddListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
+        
+        Messenger.AddListener(GameManager.CLEAR_ALL, ClearAllProjections);
     }
 
     private void OnDestroy() {
@@ -41,28 +44,30 @@ public class Projection : MonoBehaviour {
         Messenger<int,int>.RemoveListener(GameEvent.CURRENT_HEIGHT.ToString(), CreateCeiling);
        
         Messenger<Element>.RemoveListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
+        
+        Messenger.RemoveListener(GameManager.CLEAR_ALL, ClearAllProjections);
     }
 
-    private void Start() {
+    void Start() {
         _matrix = PlaneMatrix.Instance;
     }
 
-    public void CreateProjection(Element obj) {
+    void CreateProjection(Element obj) {
 
-        Destroy(PROECTIONS);
+        Destroy(PROJECTIONS);
 
         var positionProjection = obj.MyBlocks.Select(b => b.XZ).Distinct();
         foreach (var item in positionProjection)
         {
             float y = _matrix.MinHeightInCoordinates(item.x.ToIndex(), item.z.ToIndex());
 
-            var posProjection = new Vector3(item.x, (y + _HeightProection), item.z);
+            var posProjection = new Vector3(item.x, (y + _HeightProjection), item.z);
 
-           _proectionsList.Add(_PoolProjection.CreateObject(posProjection));
+           _projectionsList.Add(_PoolProjection.CreateObject(posProjection));
         }
     }
 
-    public void CreateCeiling(int limit, int current) {
+    void CreateCeiling(int limit, int current) {
 
         Destroy(CEILING);
 
@@ -74,28 +79,28 @@ public class Projection : MonoBehaviour {
                 
                 int y = _matrix.MinHeightInCoordinates(x, z);
                 if(y >= _MinimumLayerHeight)
-                   _ceilingList.Add(_PoolСeiling.CreateObject( new Vector3(x.ToCoordinat(),_matrix.LimitHeight + _HeightProection,z.ToCoordinat()) ));
+                   _ceilingList.Add(_PoolCeiling.CreateObject( new Vector3(x.ToCoordinat(),_matrix.LimitHeight + _HeightProjection,z.ToCoordinat()) ));
             }
         }
     }
 
-    public void DeleteProjection(Element element)
+    void DeleteProjection(Element element)
     {
-        Destroy(PROECTIONS);
+        Destroy(PROJECTIONS);
     }
-    private void Destroy(int typeObject /* const PROECTIONS or CEILING*/ ) {
+    void Destroy(int typeObject /* const PROECTIONS or CEILING*/ ) {
         List<GameObject> list;
         GameObjectPool pool;
 
         switch (typeObject) {
-            case PROECTIONS: {
-                    list = _proectionsList;
+            case PROJECTIONS: {
+                    list = _projectionsList;
                     pool = _PoolProjection;
                     break;
                 }
             case CEILING: {
                     list = _ceilingList;
-                    pool = _PoolСeiling;
+                    pool = _PoolCeiling;
                     break;
                 }
             default: {
@@ -107,10 +112,15 @@ public class Projection : MonoBehaviour {
         DestroyList(list, pool);
     }
 
-    private void DestroyList(List<GameObject> list, GameObjectPool pool) {
+    void DestroyList(List<GameObject> list, GameObjectPool pool) {
         foreach (var item in list) {
             pool.DestroyObject(item);
         }
         list.Clear();
+    }
+
+    void ClearAllProjections() {
+        Destroy(PROJECTIONS);
+        Destroy(CEILING);
     }
 }

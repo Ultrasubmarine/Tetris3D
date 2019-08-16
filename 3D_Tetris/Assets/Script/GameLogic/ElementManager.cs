@@ -24,6 +24,9 @@ public class ElementManager : MonoBehaviour {
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
 
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
+        
+//        Messenger.AddListener(GameManager.CLEAR_ALL, DeleteAllElements);
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
     }
 
     private void OnDestroy() {
@@ -31,6 +34,8 @@ public class ElementManager : MonoBehaviour {
         Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
 
         Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
+        
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
     }
 
     public void GenerateElement() {
@@ -49,6 +54,7 @@ public class ElementManager : MonoBehaviour {
     
     private IEnumerator DropElement() {
 
+        Debug.Log("drop");
         while (true) {
             while (machine.State != EMachineState.NewElement){
                 yield return null;
@@ -135,8 +141,19 @@ public class ElementManager : MonoBehaviour {
             
             _matrix.UnbindToMatrix(tmp);
             _elementMarger.Remove(tmp);
+            
+            ClearDeleteBlocks( tmp.MyBlocks.ToArray() );
+            tmp.DeleteBlocksInList( tmp.MyBlocks.ToArray() );
             _Generator.DeleteElement(tmp);
         }
+        if (!Equals(NewElement, null)) {
+            
+            ClearDeleteBlocks(NewElement.MyBlocks.ToArray());
+            NewElement.DeleteBlocksInList( NewElement.MyBlocks.ToArray() );
+            _Generator.DeleteElement(NewElement);
+            NewElement = null;
+        }
+            
     }
     #endregion
     

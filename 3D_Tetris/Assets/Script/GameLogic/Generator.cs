@@ -175,6 +175,12 @@ public class Generator : MonoBehaviour {
     }
 
     public void DeleteElement(Element element) {
+        if (element.MyBlocks.Count > 0) {
+            foreach (var block in element.MyBlocks) {
+                DeleteBlock(block);
+                Debug.Log("Delete Block IN ");
+            }
+        }
         _ElementPool.DestroyObject(element);
     }
     

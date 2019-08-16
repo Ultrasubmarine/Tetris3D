@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -13,16 +11,19 @@ public class Score : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER.ToString(), ScoreeIncrement);
+        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER.ToString(), ScoreIncrement);
+        Messenger.AddListener(GameManager.CLEAR_ALL, ClearScore);
+        
         _ScoreText.text = _CurrentScore.ToString() + "/" + _ScoreForWin.ToString() + " m";
     }
 
     void OnDestroy()
     {
-        Messenger<int>.RemoveListener(GameEvent.DESTROY_LAYER.ToString(), ScoreeIncrement);
+        Messenger<int>.RemoveListener(GameEvent.DESTROY_LAYER.ToString(), ScoreIncrement);
+        Messenger.RemoveListener(GameManager.CLEAR_ALL, ClearScore);
     }
 
-    public void ScoreeIncrement(int layer)
+    void ScoreIncrement(int layer)
     {
         _CurrentScore += 9;
         _ScoreText.text = _CurrentScore.ToString() + "/" + _ScoreForWin.ToString() + " m";
@@ -30,12 +31,15 @@ public class Score : MonoBehaviour {
         CheckWin();
     }
 
-    public void CheckWin()
+    void CheckWin()
     {
-        if(_CurrentScore >= _ScoreForWin)
-        {
-            Messenger.Broadcast(GameEvent.WIN_GAME.ToString());
-            Debug.Log("WIN");
-        }
+        if (_CurrentScore < _ScoreForWin) return;
+        Messenger.Broadcast(GameEvent.WIN_GAME.ToString());
+        Debug.Log("WIN");
+    }
+
+    private void ClearScore() {
+        _CurrentScore = 0;
+        _ScoreText.text = _CurrentScore.ToString() + "/" + _ScoreForWin.ToString() + " m";
     }
 }
