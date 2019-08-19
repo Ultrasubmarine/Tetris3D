@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum ETouсhSign {
     empty,
@@ -42,6 +43,8 @@ public class TouchControl : MonoBehaviour {
     void Update() {
         if (Input.touchCount != 1) return;
 
+        if(EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId)) return;
+        
         switch (Input.touches[0].phase) {
             case TouchPhase.Began: {
                 _fp = Input.touches[0].position;
