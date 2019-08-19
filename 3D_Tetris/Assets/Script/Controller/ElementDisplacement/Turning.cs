@@ -177,6 +177,6 @@ public class Turning : MonoBehaviour{
         _gameCamera.Rotation = 0;
         _rotY = 0;
 
-        _gameCamera.ResetRotation();
+        _gameCamera.ResetSettings();
     }
 }

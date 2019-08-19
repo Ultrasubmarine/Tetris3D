@@ -55,6 +55,8 @@ public class GameCamera : MonoBehaviour {
     }
 
     public IEnumerator ChangeDistance(int limit, int current) {
+        
+        Debug.Log("ChangeDistance) ");
         Vector3 needPosition = Vector3.Lerp(_MinDistance.position, _MaxDistance.position, current / (float) limit);
 
         float t = 0;
@@ -88,6 +90,8 @@ public class GameCamera : MonoBehaviour {
         _myTransform.LookAt(_ObjectLook.position);
     }
 
+  
+
     public void FirstAnimation() {
         StartCoroutine(ChangeCameraSize());
     }
@@ -103,9 +107,19 @@ public class GameCamera : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
     }
-
-    public void ResetRotation() {
+    
+    public void ResetSettings() {
         _rotY = 0;
-        CheckStabilization( PlaneMatrix.Instance.LimitHeight, 0);
+        
+        _offset = Vector3.zero - _MinDistance.position;;
+        Quaternion rotation = Quaternion.Euler(0, _rotY, 0);
+        
+        Vector3 finishP = Vector3.zero - (rotation * _offset);
+
+        _myTransform.position = finishP;
+        _camera.orthographicSize = _MinSize;
+        _ObjectLook.transform.position = _MinLookAt.position;
+        _myTransform.LookAt(_ObjectLook.position);
     }
+    
 }
