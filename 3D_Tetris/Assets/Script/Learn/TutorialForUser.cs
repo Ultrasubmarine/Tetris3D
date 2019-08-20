@@ -30,12 +30,12 @@ public class TutorialForUser: Listener<move>
 
     private void OnEnable()
     {
-        ControllerScript.MoveTutorial = true;
+        GameController.MoveTutorial = true;
     }
 
     private void OnDisable()
     {
-        ControllerScript.MoveTutorial = false;
+        GameController.MoveTutorial = false;
     }
     public void HideAfterWait( GameObject obj)
     {
