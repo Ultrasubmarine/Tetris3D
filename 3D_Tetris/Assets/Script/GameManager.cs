@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 enum GameState {
@@ -16,9 +18,17 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GameObject _Controller;
 
     static public string CLEAR_ALL = "CLEAR_ALL";
-    
-    public void StartGame() {
 
+    [SerializeField] UnityEvent EndGame;
+    void Awake() {
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.End, End);
+    }
+
+    void OnDestroy() {
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.End, End);
+    }
+
+    public void StartGame() {
         _Controller.SetActive(true);
         _Machine.ChangeState(EMachineState.Empty);
     }
@@ -29,7 +39,9 @@ public class GameManager : MonoBehaviour {
     }
 
     public void End() {
+        Debug.Log("GAME MANAGER KNOW");
         _Controller.SetActive(false);
+        EndGame.Invoke();
     }
     
 }

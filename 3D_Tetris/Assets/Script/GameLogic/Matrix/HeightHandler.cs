@@ -34,6 +34,7 @@ public class HeightHandler : MonoBehaviour {
 
     public void ChangeStateOutOfHeights() {
         if(CheckOutOfLimit()) {
+            _Machine.ChangeState(EMachineState.End);
             Debug.Log("END GAME");
         }
         else {            

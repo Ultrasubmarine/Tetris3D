@@ -56,7 +56,6 @@ public class GameCamera : MonoBehaviour {
 
     public IEnumerator ChangeDistance(int limit, int current) {
         
-        Debug.Log("ChangeDistance) ");
         Vector3 needPosition = Vector3.Lerp(_MinDistance.position, _MaxDistance.position, current / (float) limit);
 
         float t = 0;

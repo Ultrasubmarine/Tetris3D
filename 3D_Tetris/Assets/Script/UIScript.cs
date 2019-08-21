@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIScript : MonoBehaviour {
     static bool _musicState = true;
 
+    
     public void UI_StartGame() {
         Messenger.Broadcast(GameEvent.UI_PLAY.ToString());
     }

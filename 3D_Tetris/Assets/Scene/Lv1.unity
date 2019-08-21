@@ -2121,6 +2121,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Machine: {fileID: 661031969}
   _Controller: {fileID: 860787689}
+  EndGame:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1057993025}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!4 &311359820
 Transform:
   m_ObjectHideFlags: 0
@@ -4121,7 +4137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4b4870961c12fa4c98757ff3dcc0920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _StateTable: 01010000000000000000010101000000000000000101000101010000000001000100000000000000010001000000000000000101000000000100000001010000000000010000010000000000010000000100000000000000000001000000000000000000
+  _StateTable: 01010000000000000000010101000000000000010101000101010000000101000100000000000001010001000000000000010101000000000100000101010000000000010001010000000000010000010100000000000000000101000000000000000000
   _currState: 0
   _UiText: {fileID: 96414937}
 --- !u!1 &677358396
@@ -5894,10 +5910,10 @@ RectTransform:
   m_Father: {fileID: 1152037280}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.22628126}
-  m_AnchorMax: {x: 1, y: 0.77900004}
-  m_AnchoredPosition: {x: 0, y: 212}
-  m_SizeDelta: {x: 0, y: -135.30005}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0.02002}
+  m_SizeDelta: {x: 1080, y: 1106.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1057993027
 MonoBehaviour:
@@ -5916,7 +5932,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 70.6
+  m_Spacing: 171.26
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -13451,7 +13467,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -627.9059}
+  m_AnchoredPosition: {x: 540, y: -677.98}
   m_SizeDelta: {x: 490.8, y: 78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1891046973
@@ -13639,7 +13655,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -479.3059}
+  m_AnchoredPosition: {x: 540, y: -428.71997}
   m_SizeDelta: {x: 490.8, y: 78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1900896832
