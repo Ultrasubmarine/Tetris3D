@@ -30,8 +30,7 @@ public class StateMachine : MonoBehaviour {
     [FormerlySerializedAs("StateTable")] [SerializeField, HideInInspector] List<bool> _StateTable = new List<bool>();
     [SerializeField] private EMachineState _currState;
     private int _countState;
-    
-    [FormerlySerializedAs("UIText")] public Text _UiText;
+
     public EMachineState State { get { return _currState; } }
 
     void Start () {
@@ -43,21 +42,20 @@ public class StateMachine : MonoBehaviour {
         ChangeState((EMachineState)newState);    
     }
 
-    public bool ChangeState(EMachineState newState, bool broadcust = true) {
+    public bool ChangeState(EMachineState newState, bool broadcast = true) {
         
         if (_StateTable[GetIndex(newState)]) {
-            SetState(newState, broadcust);
+            SetState(newState, broadcast);
             return true;
         }
         Debug.Log("Can'T change/ current:" + State.ToString() + " you want: " + newState.ToString());
         return false;
     }
 
-    private void SetState(EMachineState newState, bool broadcust = true) {
+    private void SetState(EMachineState newState, bool broadcast = true) {
         _currState = newState;
-        if(broadcust)
+        if(broadcast)
             Messenger.Broadcast(StateMachineKey + newState.ToString(), MessengerMode.REQUIRE_LISTENER);
-        _UiText.text = newState.ToString();
     }
 
     private int GetIndex( EMachineState newState ) {

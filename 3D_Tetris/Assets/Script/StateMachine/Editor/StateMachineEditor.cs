@@ -26,7 +26,7 @@ public class StateMachineEditor : Editor {
         serializedObject.Update();
 
         if (table.arraySize != _needCount * _needCount)
-            ChengeTable();
+            ChangeTable();
 
         EditorGUILayout.LabelField("Таблица переходов:");
 
@@ -41,12 +41,11 @@ public class StateMachineEditor : Editor {
             }
             EditorGUILayout.EndHorizontal();
         }
-
-        component._UiText = (Text)EditorGUILayout.ObjectField("State Text", component._UiText, typeof(Text), true);
+        
         serializedObject.ApplyModifiedProperties();
     }
 
-    private void ChengeTable() {
+    private void ChangeTable() {
         table.arraySize = _needCount* _needCount;      
     }
 }
