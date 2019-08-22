@@ -4,8 +4,6 @@ using UnityEngine;
 
 public enum GameEvent
 {
-   PLAY_GAME, 
-   REPEAT_GAME,
    END_GAME,
    WIN_GAME,
 

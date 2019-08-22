@@ -17,17 +17,6 @@ public class GameManager : MonoBehaviour {
     [SerializeField] StateMachine _Machine;
     [SerializeField] GameObject _Controller;
 
-    static public string CLEAR_ALL = "CLEAR_ALL";
-
-    [SerializeField] UnityEvent EndGame;
-    void Awake() {
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.End, End);
-    }
-
-    void OnDestroy() {
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.End, End);
-    }
-
     public void StartGame() {
         _Controller.SetActive(true);
         _Machine.ChangeState(EMachineState.Empty);
@@ -35,13 +24,6 @@ public class GameManager : MonoBehaviour {
 
     public void ReplayGame() {
         _Machine.ChangeState(EMachineState.NotActive);
-        Messenger.Broadcast(CLEAR_ALL);
     }
 
-    public void End() {
-        Debug.Log("GAME MANAGER KNOW");
-        _Controller.SetActive(false);
-        EndGame.Invoke();
-    }
-    
 }
