@@ -14,7 +14,6 @@ public class ChangeAnimation : MonoBehaviour {
 
     public void Hide() {
         HideScreen.Invoke();
-//        GameCamera.GetComponent<GameCameraScript>().FirstAnimation();
         _gameCamera.FirstAnimation();
     }
 

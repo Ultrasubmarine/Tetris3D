@@ -105,6 +105,8 @@ public class GameCamera : MonoBehaviour {
             timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+        
+        Messenger.Broadcast(GameEvent.END_CAMERA_ANIMATION.ToString());
     }
     
     public void ResetSettings() {

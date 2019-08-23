@@ -33,7 +33,6 @@ public class Projection : MonoBehaviour {
 
         Messenger<Element>.AddListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
         
-        
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearAllProjections);
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Win, ClearAllProjections);
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.End, ClearAllProjections);

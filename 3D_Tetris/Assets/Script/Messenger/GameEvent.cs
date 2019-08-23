@@ -19,4 +19,6 @@ public enum GameEvent
     MOVE_ELEMENT,
     END_DROP_ELEMENT,
     //
+    
+    END_CAMERA_ANIMATION,
 }
