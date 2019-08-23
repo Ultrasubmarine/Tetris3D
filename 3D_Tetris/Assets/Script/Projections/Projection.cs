@@ -33,7 +33,10 @@ public class Projection : MonoBehaviour {
 
         Messenger<Element>.AddListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
         
+        
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearAllProjections);
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Win, ClearAllProjections);
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.End, ClearAllProjections);
     }
 
     private void OnDestroy() {
@@ -46,6 +49,8 @@ public class Projection : MonoBehaviour {
         Messenger<Element>.RemoveListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
         
         Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearAllProjections);
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Win, ClearAllProjections);
+        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.End, ClearAllProjections);
     }
 
     void Start() {
