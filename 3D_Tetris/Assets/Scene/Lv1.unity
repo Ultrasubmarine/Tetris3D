@@ -1842,8 +1842,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -337.6, y: -91.9}
-  m_SizeDelta: {x: 628.3, y: 160.8}
+  m_AnchoredPosition: {x: -358.3, y: -99.3}
+  m_SizeDelta: {x: 669.8, y: 112.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &281668137
 MonoBehaviour:
@@ -3192,6 +3192,7 @@ GameObject:
   - component: {fileID: 547163892}
   - component: {fileID: 547163891}
   - component: {fileID: 547163894}
+  - component: {fileID: 547163895}
   m_Layer: 5
   m_Name: PausePanel
   m_TagString: Untagged
@@ -3282,7 +3283,7 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 547163889}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 2faaecd03656ac04f99f85327ab32624, type: 2}
   m_CullingMode: 0
@@ -3293,6 +3294,17 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &547163895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 547163889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b489d633cafbf32498e46a9f22621809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &556433572
 GameObject:
   m_ObjectHideFlags: 0
@@ -5551,6 +5563,7 @@ GameObject:
   - component: {fileID: 1152037279}
   - component: {fileID: 1152037278}
   - component: {fileID: 1152037277}
+  - component: {fileID: 1152037281}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -5642,6 +5655,34 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1152037281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1152037276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea94906e0c399d74d85a7c583d226250, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Timer: 1
+  _InvokeAfterTime:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1798878326}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1297716033
 GameObject:
   m_ObjectHideFlags: 0
@@ -11957,6 +11998,11 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1791912925}
   m_CullTransparentMesh: 0
+--- !u!1 &1798878326 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1735232570177864, guid: c4e7311714ff94a4382631a9616bf709,
+    type: 2}
+  m_PrefabInternal: {fileID: 1818086912}
 --- !u!1 &1799707008
 GameObject:
   m_ObjectHideFlags: 0
@@ -12142,6 +12188,10 @@ Prefab:
     - target: {fileID: 1735232570177864, guid: c4e7311714ff94a4382631a9616bf709, type: 2}
       propertyPath: m_Name
       value: Button_Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735232570177864, guid: c4e7311714ff94a4382631a9616bf709, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114354185397423796, guid: c4e7311714ff94a4382631a9616bf709, type: 2}
