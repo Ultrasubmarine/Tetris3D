@@ -26,6 +26,8 @@ public class ElementManager : MonoBehaviour {
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
  
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
+        
+        Messenger.AddListener("EndVizual", DropElement);
     }
 
     private void OnDestroy() {
@@ -49,39 +51,38 @@ public class ElementManager : MonoBehaviour {
     #region  функции падения нового эл-та ( и его слияние)
 
     void StartDropElement() {
-        StartCoroutine(DropElement());
+        DropElement();
     }
     
-    private IEnumerator DropElement() {
+    private void DropElement() {
 
-        while (true) {
-            while (_Machine.State != EMachineState.NewElement){
-                yield return null;
-            }
-            bool empty = _matrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0)); 
-
-            if (empty)
-            {
-                NewElement.LogicDrop(); 
-            }
-            else
-                break;
-
-            yield return StartCoroutine(NewElement.VisualDrop(Speed.TimeDrop));
+        Debug.Log( " open Drop Element");
+//        while (true) {
+//            while (_Machine.State != EMachineState.NewElement){
+//                yield return null;
+//            }
+        bool empty = _matrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0));
+        if (empty)
+        {
+            NewElement.DropInOneLayer();
+            return;
         }
+
+//            yield return StartCoroutine(NewElement.VisualDrop(Speed.TimeDrop));
+//        }
 
 //        Destroy(_Generator.examleElement);
 
-        while (_Machine.State != EMachineState.NewElement) {
-            yield return null;
-        }
+//        while (_Machine.State != EMachineState.NewElement) {
+//            yield return null;
+//        }
         
         Messenger<Element>.Broadcast(GameEvent.END_DROP_ELEMENT.ToString(), NewElement);
         MergeElement(NewElement);
         NewElement = null;
         _Machine.ChangeState(EMachineState.Merge);
         
-        yield break;
+//        yield break;
     }
 
     private void MergeElement( Element newElement) {
@@ -212,7 +213,7 @@ public class ElementManager : MonoBehaviour {
 
                 flagDrop = true;
                 item.LogicDrop();
-                StartCoroutine(item.VisualDrop(Speed.TimeDropAfterDestroy)); // запускает падение элемента
+                item.VisualDrop(Speed.TimeDropAfterDestroy); // запускает падение элемента
             }
             else {
                 if (!item.IsBind)

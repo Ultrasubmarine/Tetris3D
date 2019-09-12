@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -34,21 +35,26 @@ public class Element : MonoBehaviour {
     }
 
     #region ФУНКЦИИ ПАДЕНИЯ
+
+    public void DropInOneLayer() {
+        LogicDrop();
+        VisualDrop(Speed.TimeDrop);
+    }
+    
     public void LogicDrop() {
         foreach (Block item in MyBlocks)
             item.OffsetCoordinates(0,  -1, 0);//item.Coordinates.y--;
     }
 
-    public IEnumerator VisualDrop( float time) {
-    
+    public void VisualDrop(float time) {
         IsDrop = true;
-        yield return StartCoroutine(VizualRelocation( Vector3.down, time));
-        IsDrop = false;
-    }
+        StartCoroutine(VizualRelocation(Vector3.down, time, () => { IsDrop = false; Messenger.Broadcast("EndVizual"); }) );
+}
     #endregion
 
-    private IEnumerator VizualRelocation( Vector3 offset, float time) {
+    private IEnumerator VizualRelocation( Vector3 offset, float time, Action callBack) {
 
+        Debug.Log("Start vizual coroutine");
         Vector3 startPosition = MyTransform.position;
         Vector3 finalPosition = startPosition + offset;
 
@@ -60,6 +66,12 @@ public class Element : MonoBehaviour {
         } while (timer <= time);
 
         MyTransform.position = finalPosition;
+
+        Debug.Log("end coroutine");
+        if (Equals(callBack)) {
+            callBack.Invoke();
+        }
+        Debug.Log("end callback");
     }
 
     public bool CheckEmpty() {
