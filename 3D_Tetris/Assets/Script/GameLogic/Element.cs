@@ -48,13 +48,12 @@ public class Element : MonoBehaviour {
 
     public void VisualDrop(float time) {
         IsDrop = true;
-        StartCoroutine(VizualRelocation(Vector3.down, time, () => { IsDrop = false; Messenger.Broadcast("EndVizual"); }) );
+        StartCoroutine(VizualRelocation(Vector3.down, time, () => { IsDrop = false; Messenger.Broadcast("EndVizual");}) );
 }
     #endregion
 
     private IEnumerator VizualRelocation( Vector3 offset, float time, Action callBack) {
 
-        Debug.Log("Start vizual coroutine");
         Vector3 startPosition = MyTransform.position;
         Vector3 finalPosition = startPosition + offset;
 
@@ -67,11 +66,9 @@ public class Element : MonoBehaviour {
 
         MyTransform.position = finalPosition;
 
-        Debug.Log("end coroutine");
-        if (Equals(callBack)) {
+        if (!Equals(callBack)) {
             callBack.Invoke();
         }
-        Debug.Log("end callback");
     }
 
     public bool CheckEmpty() {

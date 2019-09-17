@@ -15,6 +15,8 @@ public class ElementManager : MonoBehaviour {
     static public Element NewElement;
     Transform _myTransform;
 
+    private bool _defferedDrop;
+    
     void Start () {
         _elementMarger = new List<Element>();
         _matrix = PlaneMatrix.Instance;
@@ -26,8 +28,8 @@ public class ElementManager : MonoBehaviour {
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
  
         Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
-        
-        Messenger.AddListener("EndVizual", DropElement);
+        Messenger.AddListener("EndVizual", AfterEndVisual);
+        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.EndInfluence, CheckDelayDrop);
     }
 
     private void OnDestroy() {
@@ -53,10 +55,27 @@ public class ElementManager : MonoBehaviour {
     void StartDropElement() {
         DropElement();
     }
+
+    public void AfterEndVisual()
+    {
+        if (_Machine.State != EMachineState.NewElement)
+        {
+            Debug.Log("ADD deferred Drop");
+            _defferedDrop = true;
+            return;
+        }
+        DropElement();
+    }
     
     private void DropElement() {
 
-        Debug.Log( " open Drop Element");
+        if (_Machine.State != EMachineState.NewElement)
+        {
+            Debug.Log("ADD deferred Drop");
+            _defferedDrop = true;
+            return;
+        }
+        
 //        while (true) {
 //            while (_Machine.State != EMachineState.NewElement){
 //                yield return null;
@@ -83,6 +102,18 @@ public class ElementManager : MonoBehaviour {
         _Machine.ChangeState(EMachineState.Merge);
         
 //        yield break;
+    }
+
+    public void CheckDelayDrop()
+    {
+        _Machine.ChangeState(EMachineState.NewElement, false);
+        Debug.Log(" CheckDelayDrop");
+        if (_defferedDrop)
+        {
+            _defferedDrop = false;
+            Debug.Log("USE deferred drop");
+            DropElement();
+        }
     }
 
     private void MergeElement( Element newElement) {

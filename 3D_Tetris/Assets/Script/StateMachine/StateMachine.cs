@@ -10,6 +10,7 @@ public enum EMachineState {
 
     Empty,
     NewElement,
+    EndInfluence,
 
     Turn,
     Move,
@@ -52,10 +53,19 @@ public class StateMachine : MonoBehaviour {
         return false;
     }
 
-    private void SetState(EMachineState newState, bool broadcast = true) {
+    private void SetState(EMachineState newState, bool broadcast = true)
+    {
         _currState = newState;
         if(broadcast)
             Messenger.Broadcast(StateMachineKey + newState.ToString(), MessengerMode.REQUIRE_LISTENER);
+    }
+    
+    private void SetStateWithBroadcastLastState(EMachineState newState, bool broadcast = true)
+    {
+        var lastState = _currState;
+        _currState = newState;
+        if(broadcast)
+            Messenger<EMachineState>.Broadcast(StateMachineKey + newState.ToString(), lastState, MessengerMode.REQUIRE_LISTENER);
     }
 
     private int GetIndex( EMachineState newState ) {

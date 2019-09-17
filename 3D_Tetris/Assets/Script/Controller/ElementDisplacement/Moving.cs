@@ -122,7 +122,7 @@ public class Moving: MonoBehaviour {
 
         finalPosBlock.Clear();
 
-        _StateMachine.ChangeState(EMachineState.NewElement, false);
+        _StateMachine.ChangeState(EMachineState.EndInfluence);
     }
 
     public bool MomentaryActionForGenerator( Element element, move direction)

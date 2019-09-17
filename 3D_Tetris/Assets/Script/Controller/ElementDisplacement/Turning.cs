@@ -138,7 +138,7 @@ public class Turning : MonoBehaviour{
             _rotY = 0;
 
         _gameCamera.Rotation = _rotY;
-        _StateMachine.ChangeState(EMachineState.NewElement, false);
+        _StateMachine.ChangeState(EMachineState.EndInfluence);
     }
 
     IEnumerator TurnElement(Element element, int angle, float time, GameObject target) {
