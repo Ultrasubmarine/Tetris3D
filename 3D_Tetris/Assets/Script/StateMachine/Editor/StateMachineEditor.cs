@@ -24,10 +24,7 @@ public class StateMachineEditor : Editor {
         
         
     }
-
-    InitializationStates() {
-        
-    }
+    
     
     public override void OnInspectorGUI() {
 

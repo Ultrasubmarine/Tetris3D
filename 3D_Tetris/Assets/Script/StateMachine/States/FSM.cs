@@ -3,21 +3,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FSM : IFSM<States> {
+public enum TetrisState
+{
+	Empty,
+	GenerateElement,
+	
+	Drop,
+	Move,
+	Turn,
+	
+	WaitInfluence,
+	EndInfluence,
+	
+	MergeElement,
+	
+}
+public class FSM : IFSM<TetrisState> {
 	
 	// TODO DO DO
+	Dictionary<TetrisState, IState<TetrisState>> _statesDictionary;
 	
-	public States CurrentState {
+	public TetrisState CurrentState {
 		get;
 		set;
 	}
-	
-	public event Action<States, States> StateChanged;
 
-	public void SetState(States newState) {
+	private TetrisState _last;
+	private TetrisState _current;
+
+	public event Action<TetrisState, TetrisState> StateChanged;
+
+	public void InitFSM()
+	{
+	}
+
+	public void SetNewState(TetrisState newState) {
+		
+		_statesDictionary[CurrentState ].Exit();
 		States last = CurrentState;
 		CurrentState = newState;
-		
-//		SetNewState.Invoke( last, newState);
+
+		StateChanged.Invoke(last, newState);
 	}
+	
 }

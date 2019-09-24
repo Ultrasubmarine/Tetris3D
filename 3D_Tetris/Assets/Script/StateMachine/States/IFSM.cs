@@ -9,6 +9,9 @@ public interface IFSM<T>
 	T CurrentState { get; set; }
 	
 	event Action<T,T> StateChanged;
-	void SetState(T newState);
+	
+	void InitFSM();
+	void SetNewState(T newState);
+
 }
 
