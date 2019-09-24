@@ -6,14 +6,13 @@ using UnityEngine;
 public class FSM : IFSM<States> {
 	
 	// TODO DO DO
-	public States CurrentState { get; set; }
 	
-	IFSM<States> _ifsmImplementation;
-	public event Action<States, States> SetNewState {
-		add { _ifsmImplementation.SetNewState += value; }
-		remove { _ifsmImplementation.SetNewState -= value; }
+	public States CurrentState {
+		get;
+		set;
 	}
-
+	
+	public event Action<States, States> StateChanged;
 
 	public void SetState(States newState) {
 		States last = CurrentState;

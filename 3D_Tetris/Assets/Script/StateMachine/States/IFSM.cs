@@ -8,7 +8,7 @@ public interface IFSM<T>
 {
 	T CurrentState { get; set; }
 	
-	event Action<T,T> SetNewState;
+	event Action<T,T> StateChanged;
 	void SetState(T newState);
 }
 
