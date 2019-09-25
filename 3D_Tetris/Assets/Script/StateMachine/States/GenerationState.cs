@@ -6,6 +6,6 @@ using UnityEngine;
 
 public class GenerationState : MonobehaviourState<TetrisState> {
 	void Awake() {
-		_myState = Tet
+	
 	}
 }

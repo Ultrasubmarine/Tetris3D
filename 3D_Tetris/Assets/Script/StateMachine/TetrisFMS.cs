@@ -19,6 +19,6 @@ public enum TetrisState
 	
 }
 
-public class TetrisFMS : {
+public class TetrisFMS  {
 
 }
