@@ -9,17 +9,15 @@ namespace Script.StateMachine.MonoBehaviourShell
 
 		[SerializeField] protected UnityEvent _OnEnter;
 		[SerializeField] protected UnityEvent _OnExit;
+		private IState<T> _StateImplementation;
 
-		public T State {
-			get { return _myState; }
-			set { Debug.LogError("You try change state in IState object"); }
-		}
+		public T GetState () { return _myState; }
 
-		public virtual void Enter(IState<T> last, Element element = null) {
+		public virtual void Enter(T last) {
 			_OnEnter.Invoke();
 		}
 
-		public virtual void Exit(IState<T> last, Element element = null) {
+		public virtual void Exit(T last) {
 			_OnExit.Invoke();
 		}
 	}

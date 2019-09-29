@@ -6,11 +6,8 @@ using UnityEngine;
 
 public interface IFSM<T>
 {
-	T CurrentState { get; set; }
-	
-	event Action<T,T> StateChanged;
-	
-	void InitFSM();
+	T GetCurrentState();
+
 	void SetNewState(T newState);
 
 }

@@ -4,33 +4,20 @@ using UnityEngine;
 
 namespace Script.StateMachine.MonoBehaviourShell
 {
-	public class FSM<T> /*: IFSM<T> */{
+	public class FSM<T> : MonoBehaviour,  IFSM<T> {
 	
 		// TODO DO DO
-		Dictionary<T, IState<T>> _statesDictionary;
+		protected Dictionary<T, IState<T>> _statesDictionary;
 		
-		public T CurrentState {
-			get { return _current;}
-			set { Debug.LogError("You try change IFSM.CurrentState in object to: " + value);}
-		}
+		protected T _last;
+		protected T _current;
+		
+		public T GetCurrentState() { return _current;}
 
-		private T _last;
-		private T _current;
-
-		public event Action<T, T> StateChanged;
-
-		public virtual void InitFSM()
+		public virtual void SetNewState(T newState)
 		{
+			throw new NotImplementedException();
 		}
 
-		public virtual void SetNewState(TetrisState newState) {
-		
-//			_statesDictionary[CurrentState].Exit( newState);
-//			States last = CurrentState;
-//			CurrentState = newState;
-//
-//			StateChanged.Invoke(last, newState);
-		}
-	
 	}
 }
