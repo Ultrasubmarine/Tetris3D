@@ -1,13 +1,9 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections;
-using System.Collections.Generic;
-using Script.StateMachine.MonoBehaviourShell;
+﻿using Helper.Patterns.FSM;
 using UnityEngine;
 
-public class GenerationState : MonobehaviourState<TetrisState>
+public class GenerationState : AbstractState<TetrisState> 
 {
-	FSM<TetrisState> myFSM;
+	AbstractFSM<TetrisState> _MyAbstractFsm;
 	
 	Generator _generator;
 	ElementManager _elementManager;
@@ -23,11 +19,10 @@ public class GenerationState : MonobehaviourState<TetrisState>
 		var element = _generator.GenerationNewElement( _elementManager.transform);
 		ElementManager.NewElement = element;
 		
-		
 		Debug.Log("Generate new element");
 //		_OnEnter.Invoke();
 		
-		myFSM.SetNewState( TetrisState.Drop);
+		_MyAbstractFsm.SetNewState( TetrisState.Drop);
 	}
 
 	public override void Exit(TetrisState last) {

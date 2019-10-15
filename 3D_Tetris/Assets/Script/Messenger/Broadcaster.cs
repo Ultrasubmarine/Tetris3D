@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
-public class Broadcaster : MonoBehaviour {
-    [SerializeField] GameEvent _BroadcastEventName;
+namespace Helper.Patterns.Messenger
+{
+    public class Broadcaster<T> : MonoBehaviour {
     
-    public void Broadcast()
-    {
-        Messenger.Broadcast(_BroadcastEventName.ToString());
+        [SerializeField] T _BroadcastEventName;
+        public void Broadcast()
+        {
+            Messenger.Broadcast(_BroadcastEventName.ToString());
+        }
     }
 }

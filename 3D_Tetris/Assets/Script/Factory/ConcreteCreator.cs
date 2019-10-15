@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class ConcreteCreator<BaseClass, Concrete> : AbstractCreator<BaseClass>  where BaseClass : class
-																				where Concrete : BaseClass, new()
+﻿namespace Helper.Patterns.Factory
 {
-
-	public override BaseClass Create()
+	public class ConcreteCreator<BaseClass, Concrete> : AbstractCreator<BaseClass>  where BaseClass : class
+		where Concrete : BaseClass, new() 
 	{
-		return new Concrete();
+		public override BaseClass Create()
+		{
+			return new Concrete();
+		}
 	}
 }
