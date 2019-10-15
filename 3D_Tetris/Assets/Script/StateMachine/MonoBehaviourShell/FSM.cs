@@ -14,6 +14,10 @@ namespace Script.StateMachine.MonoBehaviourShell
 		
 		public T GetCurrentState() { return _current;}
 
+		void Awake() {
+			_statesDictionary = new Dictionary<T, IState<T>>();
+		}
+
 		public virtual void SetNewState(T newState)
 		{
 			throw new NotImplementedException();

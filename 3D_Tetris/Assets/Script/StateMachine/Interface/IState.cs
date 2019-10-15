@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using System;
 
-public interface IState<T>
+public interface IState<T> 
 {
 	T GetState();
 	void Enter(T last);

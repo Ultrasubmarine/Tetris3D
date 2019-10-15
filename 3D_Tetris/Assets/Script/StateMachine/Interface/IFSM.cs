@@ -10,5 +10,6 @@ public interface IFSM<T>
 
 	void SetNewState(T newState);
 
+	void AddListener(T state, )
 }
 
