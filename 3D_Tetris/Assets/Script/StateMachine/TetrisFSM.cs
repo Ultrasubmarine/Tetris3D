@@ -14,18 +14,27 @@ public enum TetrisState
 	EndInfluence,
 	
 	MergeElement,
-	
+	Collection,
+	DropAllElements,
+	WinCheck,
+
 }
 
 public class TetrisFSM  :  AbstractFSM<TetrisState>
 {
 	private void Start()
 	{
+		AbstractState<TetrisState>.SetMainFSM(this);
+		
 		_statesDictionary.Add( TetrisState.GenerateElement, new GenerationState() );
-		_statesDictionary.Add( TetrisState.Drop, new GenerationState() );
+		_statesDictionary.Add( TetrisState.Drop, new DropState());
+		_statesDictionary.Add( TetrisState.MergeElement, new MergeState());
+
 		
 		Debug.Log(" Load fms");
-		Invoke( "StartFSM", 1.0f);
+		
+
+//		Invoke( "StartFSM", 1.0f);
 	}
 	
 	public override void StartFSM() {

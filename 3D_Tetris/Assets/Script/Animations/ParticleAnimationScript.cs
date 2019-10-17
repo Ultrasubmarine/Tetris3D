@@ -5,11 +5,11 @@ using UnityEngine;
 public class ParticleAnimationScript : MonoBehaviour {
     [SerializeField] GameObjectPool _Pool;
     private void Awake() {
-        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER.ToString(), StartAnimationParticle);
+//        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER.ToString(), StartAnimationParticle);
     }
 
     private void OnDestroy() {
-        Messenger<int>.RemoveListener(GameEvent.DESTROY_LAYER.ToString(), StartAnimationParticle);
+//        Messenger<int>.RemoveListener(GameEvent.DESTROY_LAYER.ToString(), StartAnimationParticle);
     }
 
     void StartAnimationParticle(int layer) {

@@ -2,6 +2,7 @@
 using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
+using Helper.Patterns.Factory;
 
 
 enum TestEnumName

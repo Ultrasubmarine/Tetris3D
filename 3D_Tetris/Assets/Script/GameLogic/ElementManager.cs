@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
-public class ElementManager : MonoBehaviour {
-
+public class ElementManager : MonoBehaviour
+{
+    private TetrisFSM myFSM;
     PlaneMatrix _matrix;
     [SerializeField] Generator _Generator;
-    [FormerlySerializedAs("machine")] [SerializeField] StateMachine _Machine;
+//    [FormerlySerializedAs("machine")] [SerializeField] StateMachine _Machine;
 
     List<Element> _elementMarger;
 
@@ -22,43 +25,36 @@ public class ElementManager : MonoBehaviour {
         _matrix = PlaneMatrix.Instance;
         _myTransform = this.transform;
 
-        Messenger.AddListener( StateMachine.StateMachineKey + EMachineState.Empty, GenerateElement);
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
+        myFSM = RealizationBox.Instance.FSM;
 
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
- 
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
-        Messenger.AddListener("EndVizual", AfterEndVisual);
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.EndInfluence, CheckDelayDrop);
+//        Messenger.AddListener( StateMachine.StateMachineKey + EMachineState.Empty, GenerateElement);
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
+//
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
+// 
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
+//        Messenger.AddListener("EndVizual", AfterEndVisual);
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.EndInfluence, CheckDelayDrop);
     }
 
     private void OnDestroy() {
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Empty, GenerateElement);
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
-
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
-        
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
-    }
-
-    void GenerateElement() {
-
-        NewElement = _Generator.GenerationNewElement(_myTransform);
-        NewElement.MyTransform.parent = _myTransform;
-
-        _Machine.ChangeState(EMachineState.NewElement);
-        Messenger<Element>.Broadcast(GameEvent.CREATE_NEW_ELEMENT.ToString(), NewElement);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Empty, GenerateElement);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
+//
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
+//        
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
     }
 
     #region  функции падения нового эл-та ( и его слияние)
 
-    void StartDropElement() {
+    public void StartDropElement() {
         DropElement();
     }
 
     public void AfterEndVisual()
     {
-        if (_Machine.State != EMachineState.NewElement)
+//        if (_Machine.State != EMachineState.NewElement)
         {
             Debug.Log("ADD deferred Drop");
             _defferedDrop = true;
@@ -68,45 +64,21 @@ public class ElementManager : MonoBehaviour {
     }
     
     private void DropElement() {
-
-        if (_Machine.State != EMachineState.NewElement)
-        {
-            Debug.Log("ADD deferred Drop");
-            _defferedDrop = true;
-            return;
-        }
         
-//        while (true) {
-//            while (_Machine.State != EMachineState.NewElement){
-//                yield return null;
-//            }
-        bool empty = _matrix.CheckEmptyPlaсe(NewElement, new Vector3Int(0, -1, 0));
-        if (empty)
-        {
-            NewElement.DropInOneLayer();
-            return;
-        }
-
-//            yield return StartCoroutine(NewElement.VisualDrop(Speed.TimeDrop));
-//        }
-
-//        Destroy(_Generator.examleElement);
-
-//        while (_Machine.State != EMachineState.NewElement) {
-//            yield return null;
-//        }
-        
-        Messenger<Element>.Broadcast(GameEvent.END_DROP_ELEMENT.ToString(), NewElement);
-        MergeElement(NewElement);
-        NewElement = null;
-        _Machine.ChangeState(EMachineState.Merge);
-        
-//        yield break;
+        NewElement.LogicDrop();
+        // TODO change DOTween method
+        NewElement.transform.DOMove( NewElement.transform.position +  Vector3.down, Speed.TimeDrop).SetEase( Ease.Linear).OnComplete( CallFSMDrop);//.DropInOneLayer();
     }
 
+    private void CallFSMDrop()
+    {
+        Debug.Log(" отложенный вызов отложенного дропа");
+        myFSM.SetNewState(TetrisState.Drop);
+    }
+    
     public void CheckDelayDrop()
     {
-        _Machine.ChangeState(EMachineState.NewElement, false);
+//        _Machine.ChangeState(EMachineState.NewElement, false);
         Debug.Log(" CheckDelayDrop");
         if (_defferedDrop)
         {
@@ -116,12 +88,12 @@ public class ElementManager : MonoBehaviour {
         }
     }
 
-    private void MergeElement( Element newElement) {
+    public void MergeNewElement() {
 
-        _matrix.BindToMatrix(newElement);
-
-        newElement.transform.parent = this.gameObject.transform;
-        _elementMarger.Add(newElement);
+        _matrix.BindToMatrix(NewElement);
+        
+        _elementMarger.Add(NewElement);
+        NewElement = null;
     }
     #endregion
 
@@ -228,7 +200,7 @@ public class ElementManager : MonoBehaviour {
         while (flagDrop); // проверяем что бы все упало, пока оно может падать
 
         //   myProj.CreateCeiling();
-        _Machine.ChangeState(EMachineState.Collection);
+//        _Machine.ChangeState(EMachineState.Collection);
 
         yield return null;
     }

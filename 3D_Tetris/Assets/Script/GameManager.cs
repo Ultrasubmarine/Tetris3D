@@ -14,16 +14,16 @@ enum GameState {
 
 public class GameManager : MonoBehaviour {
     
-    [SerializeField] StateMachine _Machine;
+//    [SerializeField] StateMachine _Machine;
     [SerializeField] GameObject _Controller;
 
     public void StartGame() {
         _Controller.SetActive(true);
-        _Machine.ChangeState(EMachineState.Empty);
+//        _Machine.ChangeState(EMachineState.Empty);
     }
 
     public void ReplayGame() {
-        _Machine.ChangeState(EMachineState.NotActive);
+//        _Machine.ChangeState(EMachineState.NotActive);
     }
 
 }

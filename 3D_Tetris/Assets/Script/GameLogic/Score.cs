@@ -1,4 +1,6 @@
 ﻿using System;
+using Helper.Patterns.Messenger;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -10,24 +12,24 @@ public class Score : MonoBehaviour {
 
     [FormerlySerializedAs("ScoreText")] [SerializeField] Text _ScoreText;
 
-    StateMachine _machine;
+//    StateMachine _machine;
 
     void Awake() {
-        _machine = FindObjectOfType<StateMachine>();
+//        _machine = FindObjectOfType<StateMachine>();
     }
 
     // Use this for initialization
 	void Start () {
-        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER.ToString(), ScoreIncrement);
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearScore);
+//        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER.ToString(), ScoreIncrement);
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearScore);
         
         _ScoreText.text = _CurrentScore.ToString() + "/" + _ScoreForWin.ToString() + " m";
     }
 
     void OnDestroy()
     {
-        Messenger<int>.RemoveListener(GameEvent.DESTROY_LAYER.ToString(), ScoreIncrement);
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearScore);
+//        Messenger<int>.RemoveListener(GameEvent.DESTROY_LAYER.ToString(), ScoreIncrement);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearScore);
     }
 
     void ScoreIncrement(int layer)
@@ -41,7 +43,7 @@ public class Score : MonoBehaviour {
     void CheckWin()
     {
         if (_CurrentScore < _ScoreForWin) return;
-        _machine.ChangeState(EMachineState.Win);
+//        _machine.ChangeState(EMachineState.Win);
     }
 
     private void ClearScore() {

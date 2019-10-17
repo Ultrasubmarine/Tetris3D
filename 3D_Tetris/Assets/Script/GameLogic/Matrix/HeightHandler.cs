@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 public class HeightHandler : MonoBehaviour {
 
     // DELETE
-    [FormerlySerializedAs("machine")] [SerializeField] StateMachine _Machine;
+//    [FormerlySerializedAs("machine")] [SerializeField] StateMachine _Machine;
     //
     PlaneMatrix _matrix;
 
@@ -22,23 +22,23 @@ public class HeightHandler : MonoBehaviour {
         _matrix = PlaneMatrix.Instance;
         _matrix.SetLimitHeight(_LimitHeight);
 
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Merge, ChangeStateOutOfHeights);
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, CheckHeight);
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Merge, ChangeStateOutOfHeights);
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, CheckHeight);
     }
 
     void OnDestroy()
     {
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Merge, ChangeStateOutOfHeights);
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, CheckHeight);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Merge, ChangeStateOutOfHeights);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, CheckHeight);
     }
 
     public void ChangeStateOutOfHeights() {
         if(CheckOutOfLimit()) {
-            _Machine.ChangeState(EMachineState.End);
+//            _Machine.ChangeState(EMachineState.End);
             Debug.Log("END GAME");
         }
         else {            
-            _Machine.ChangeState(EMachineState.Collection);
+//            _Machine.ChangeState(EMachineState.Collection);
         }
     }
 
@@ -62,7 +62,7 @@ public class HeightHandler : MonoBehaviour {
                 }
             }
         }
-        Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT.ToString(), _LimitHeight, _CurrentHeight +1);
+//        Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT.ToString(), _LimitHeight, _CurrentHeight +1);
     }
 
     private bool OutOfLimitHeight( ) {

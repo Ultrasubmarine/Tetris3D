@@ -19,7 +19,7 @@ public class WanderCamera : MonoBehaviour {
     
     private void Awake() {
         _myTransform = GetComponent<Transform>();
-        Messenger.AddListener(GameEvent.UI_PLAY.ToString(), StartGame);
+//        Messenger.AddListener(GameEvent.UI_PLAY.ToString(), StartGame);
     }
 
     private void Start()

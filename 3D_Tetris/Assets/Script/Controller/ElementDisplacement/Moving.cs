@@ -13,7 +13,7 @@ public enum move
 public class Moving: MonoBehaviour {
 
     PlaneMatrix _matrix;
-    [SerializeField] StateMachine _StateMachine;
+//    [SerializeField] StateMachine _StateMachine;
 
     private void Start() {
         _matrix = PlaneMatrix.Instance;
@@ -26,14 +26,14 @@ public class Moving: MonoBehaviour {
 
         if (CheckOpportunity(element, direction)) {
 
-            if (!_StateMachine.ChangeState(EMachineState.Move, false))
-                return;
+//            if (!_StateMachine.ChangeState(EMachineState.Move, false))
+//                return;
 
             Logic( direction, element);
 
             Vector3 vectorDirection = SetVectorMove(direction);
             Vizual(element, vectorDirection, time);
-            Messenger<Element>.Broadcast(GameEvent.MOVE_ELEMENT.ToString(), element);
+//            Messenger<Element>.Broadcast(GameEvent.MOVE_ELEMENT.ToString(), element);
         }
     }
 
@@ -122,7 +122,7 @@ public class Moving: MonoBehaviour {
 
         finalPosBlock.Clear();
 
-        _StateMachine.ChangeState(EMachineState.EndInfluence);
+//        _StateMachine.ChangeState(EMachineState.EndInfluence);
     }
 
     public bool MomentaryActionForGenerator( Element element, move direction)

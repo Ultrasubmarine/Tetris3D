@@ -7,7 +7,7 @@ using IntegerExtension;
 public class PlaneMatrix : Singleton<PlaneMatrix> {
 
     // DELETE
-    [SerializeField] StateMachine machine;
+//    [SerializeField] StateMachine machine;
     [SerializeField] HeightHandler _HeightHandler;
     //
     public Block[,,] _matrix;
@@ -41,7 +41,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     }
 
     private void OnDestroy() {
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Collection, CheckCollections);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Collection, CheckCollections);
     }
 
     public void SetLimitHeight( int limit) {
@@ -111,13 +111,13 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
 
     #region сбор коллекций в слоях матрицы
     private void CheckCollections() {
-        if (CollectLayers())
-            machine.ChangeState(EMachineState.DropAllElements);
-        else 
-            machine.ChangeState(EMachineState.Empty);
+//        if (CollectLayers())
+//            machine.ChangeState(EMachineState.DropAllElements);
+//        else 
+//            machine.ChangeState(EMachineState.Empty);
         
     }
-    private bool CollectLayers() {
+    public bool CollectLayers() {
 
         bool flag = false; ;
         for (int y = 0; y < _limitHeight; y++) {
@@ -143,7 +143,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     
     private void DestroyLayer(int layer)
     {
-        Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER.ToString(), layer);
+//        Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER.ToString(), layer);
         for (int x = 0; x < Wight; x++) {
             for (int z = 0; z < Wight; z++) {
                 _matrix[x, layer, z].IsDestroy = true;

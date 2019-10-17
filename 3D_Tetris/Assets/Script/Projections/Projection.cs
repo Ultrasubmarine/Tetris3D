@@ -25,31 +25,31 @@ public class Projection : MonoBehaviour {
     private List<GameObject> _ceilingList = new List<GameObject>();
 
     private void Awake() {
-        Messenger<Element>.AddListener(GameEvent.CREATE_NEW_ELEMENT.ToString(), CreateProjection);
-        Messenger<Element>.AddListener(GameEvent.TURN_ELEMENT.ToString(), CreateProjection);
-        Messenger<Element>.AddListener(GameEvent.MOVE_ELEMENT.ToString(), CreateProjection);
-        
-        Messenger<int,int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CreateCeiling);
-
-        Messenger<Element>.AddListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
-        
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearAllProjections);
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Win, ClearAllProjections);
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.End, ClearAllProjections);
+//        Messenger<Element>.AddListener(GameEvent.CREATE_NEW_ELEMENT.ToString(), CreateProjection);
+//        Messenger<Element>.AddListener(GameEvent.TURN_ELEMENT.ToString(), CreateProjection);
+//        Messenger<Element>.AddListener(GameEvent.MOVE_ELEMENT.ToString(), CreateProjection);
+//        
+//        Messenger<int,int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CreateCeiling);
+//
+//        Messenger<Element>.AddListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
+//        
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearAllProjections);
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Win, ClearAllProjections);
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.End, ClearAllProjections);
     }
 
     private void OnDestroy() {
-        Messenger<Element>.RemoveListener(GameEvent.CREATE_NEW_ELEMENT.ToString(), CreateProjection);
-        Messenger<Element>.RemoveListener(GameEvent.TURN_ELEMENT.ToString(), CreateProjection);
-        Messenger<Element>.RemoveListener(GameEvent.MOVE_ELEMENT.ToString(), CreateProjection);
-        
-        Messenger<int,int>.RemoveListener(GameEvent.CURRENT_HEIGHT.ToString(), CreateCeiling);
-       
-        Messenger<Element>.RemoveListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
-        
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearAllProjections);
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Win, ClearAllProjections);
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.End, ClearAllProjections);
+//        Messenger<Element>.RemoveListener(GameEvent.CREATE_NEW_ELEMENT.ToString(), CreateProjection);
+//        Messenger<Element>.RemoveListener(GameEvent.TURN_ELEMENT.ToString(), CreateProjection);
+//        Messenger<Element>.RemoveListener(GameEvent.MOVE_ELEMENT.ToString(), CreateProjection);
+//        
+//        Messenger<int,int>.RemoveListener(GameEvent.CURRENT_HEIGHT.ToString(), CreateCeiling);
+//       
+//        Messenger<Element>.RemoveListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
+//        
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearAllProjections);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Win, ClearAllProjections);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.End, ClearAllProjections);
     }
 
     void Start() {

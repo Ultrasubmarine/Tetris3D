@@ -2,7 +2,7 @@
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] StateMachine _StateMachine;
+//    [SerializeField] StateMachine _StateMachine;
 
     [SerializeField] Moving _Moving;
     [SerializeField] Turning _Turning;
@@ -22,18 +22,18 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        Messenger<ETouсhSign>.AddListener( TouchControl.SWIPE, Move);
-        Messenger<ETouсhSign>.AddListener( TouchControl.ONE_TOUCH, Turn);
-            
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
+//        Messenger<ETouсhSign>.AddListener( TouchControl.SWIPE, Move);
+//        Messenger<ETouсhSign>.AddListener( TouchControl.ONE_TOUCH, Turn);
+//            
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
     }
 
     void OnDestroy()
     {
-        Messenger<ETouсhSign>.RemoveListener( TouchControl.SWIPE, Move);
-        Messenger<ETouсhSign>.RemoveListener( TouchControl.ONE_TOUCH, Turn);
-        
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
+//        Messenger<ETouсhSign>.RemoveListener( TouchControl.SWIPE, Move);
+//        Messenger<ETouсhSign>.RemoveListener( TouchControl.ONE_TOUCH, Turn);
+//        
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
     }
 
     void Turn(ETouсhSign touch)

@@ -19,7 +19,7 @@ public class Listener <T> : MonoBehaviour{
 
     private void Start()    {
 //        Debug.Log("I Lissten " + EventName + "tttt");
-        Messenger<T>.AddListener(EventName, CallDelegate);
+//        Messenger<T>.AddListener(EventName, CallDelegate);
     }
 
     private void OnEnable() {
@@ -36,12 +36,12 @@ public class Listener<T, M> : MonoBehaviour
 
     private void Start()
     {
-        Messenger<T,M>.AddListener(EventName, CallDelegate.Invoke);
+//        Messenger<T,M>.AddListener(EventName, CallDelegate.Invoke);
     }
 
     private void OnEnable()
     {
-        Messenger<T,M>.RemoveListener(EventName, CallDelegate.Invoke);
+//        Messenger<T,M>.RemoveListener(EventName, CallDelegate.Invoke);
     }
 
 }

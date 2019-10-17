@@ -8,7 +8,7 @@ public class PauseUI : MonoBehaviour {
     static bool _musicState = true;
     
     public void UI_StartGame() {
-        Messenger.Broadcast(GameEvent.UI_PLAY.ToString());
+//        Messenger.Broadcast(GameEvent.UI_PLAY.ToString());
     }
 
     public void UI_PauseGame(bool change) {

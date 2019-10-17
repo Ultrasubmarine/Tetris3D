@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Helper.Patterns.Messenger;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,17 +19,17 @@ public class Turning : MonoBehaviour{
     private float _rotY; // поворот камеры
     [SerializeField] GameObject _Camera;
     GameCamera _gameCamera;
-    [SerializeField] StateMachine _StateMachine;
+//    [SerializeField] StateMachine _StateMachine;
     [SerializeField] private GameObject _ObjectLook;
 
     private PlaneMatrix _matrix;
 
     void Awake() {
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive,ResetTurn);
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive,ResetTurn);
     }
 
     void OnDestroy() {
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive,ResetTurn);
+//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive,ResetTurn);
     }
 
     private void Start() {
@@ -40,8 +42,8 @@ public class Turning : MonoBehaviour{
 
         if (CheckOpportunity(direction, element)) {
 
-            if (!_StateMachine.ChangeState(EMachineState.Turn, false))
-                return false;
+//            if (!_StateMachine.ChangeState(EMachineState.Turn, false))
+//                return false;
 
             Logic(direction, element);
             Vizual(direction, element, time);
@@ -138,7 +140,7 @@ public class Turning : MonoBehaviour{
             _rotY = 0;
 
         _gameCamera.Rotation = _rotY;
-        _StateMachine.ChangeState(EMachineState.EndInfluence);
+//        _StateMachine.ChangeState(EMachineState.EndInfluence);
     }
 
     IEnumerator TurnElement(Element element, int angle, float time, GameObject target) {

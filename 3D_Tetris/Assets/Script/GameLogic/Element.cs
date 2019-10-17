@@ -48,7 +48,7 @@ public class Element : MonoBehaviour {
 
     public void VisualDrop(float time) {
         IsDrop = true;
-        StartCoroutine(VizualRelocation(Vector3.down, time, () => { IsDrop = false; Messenger.Broadcast("EndVizual");}) );
+        StartCoroutine(VizualRelocation(Vector3.down, time, () => { IsDrop = false; RealizationBox.Instance.FSM.SetNewState(TetrisState.Drop);}) );
 }
     #endregion
 

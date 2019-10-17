@@ -66,7 +66,7 @@ public class TouchControl : MonoBehaviour {
 
         if (swipeLength < _minSwipeLength) {
             _touchEvent = _lp.x < _halfWight ? ETouсhSign.OneTouch_Left : ETouсhSign.OneTouch_Right;
-            Messenger<ETouсhSign>.Broadcast(ONE_TOUCH, _touchEvent);
+//            Messenger<ETouсhSign>.Broadcast(ONE_TOUCH, _touchEvent);
             return;
         }
 
@@ -87,6 +87,6 @@ public class TouchControl : MonoBehaviour {
             _touchEvent = _lp.y < _fp.y ? ETouсhSign.Swipe_LeftDown : ETouсhSign.Swipe_LeftUp;
         }
         
-        Messenger<ETouсhSign>.Broadcast(SWIPE, _touchEvent);
+//        Messenger<ETouсhSign>.Broadcast(SWIPE, _touchEvent);
     }
 }
