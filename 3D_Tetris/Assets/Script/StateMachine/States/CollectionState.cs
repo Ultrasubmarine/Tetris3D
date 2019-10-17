@@ -17,7 +17,7 @@ public class CollectionState : AbstractState<TetrisState>
         if (_matrix.CollectLayers())
         {
             Debug.Log(" Собрали коллекцию");
-            _FSM.SetNewState(TetrisState.DropAllElements);
+          _FSM.SetNewState(TetrisState.AllElementsDrop);
         }
         else
         {
@@ -26,8 +26,5 @@ public class CollectionState : AbstractState<TetrisState>
         }
     }
 
-    public override void Exit(TetrisState last)
-    {
-        throw new System.NotImplementedException();
-    }
+    public override void Exit(TetrisState last) { }
 }

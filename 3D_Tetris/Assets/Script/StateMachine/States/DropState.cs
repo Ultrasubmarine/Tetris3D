@@ -30,7 +30,6 @@ public class DropState : AbstractState<TetrisState>
     }
 
     public override void Exit(TetrisState last) {
-//		_OnExit.Invoke();
     }
 
  

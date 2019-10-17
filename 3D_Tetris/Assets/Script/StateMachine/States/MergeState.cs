@@ -11,11 +11,10 @@ public class MergeState : AbstractState<TetrisState>
     public override void Enter(TetrisState last)
     {
         _elementManager.MergeNewElement();
-//        _FSM.SetNewState(TetrisState.Collection);
+        _FSM.SetNewState(TetrisState.Collection);
     }
 
     public override void Exit(TetrisState last)
     {
-        throw new System.NotImplementedException();
     }
 }

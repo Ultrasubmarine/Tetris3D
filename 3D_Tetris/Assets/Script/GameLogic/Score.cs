@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class Score : MonoBehaviour {
 
-    [FormerlySerializedAs("ScoreForWin")] [SerializeField] int _ScoreForWin;
-    [FormerlySerializedAs("CurrentScore")] [SerializeField] int _CurrentScore;
+   [SerializeField] int _ScoreForWin;
+   [SerializeField] int _CurrentScore;
 
     [FormerlySerializedAs("ScoreText")] [SerializeField] Text _ScoreText;
 
@@ -37,12 +37,12 @@ public class Score : MonoBehaviour {
         _CurrentScore += 9;
         _ScoreText.text = _CurrentScore.ToString() + "/" + _ScoreForWin.ToString() + " m";
         Messenger<int>.Broadcast(GameEvent.CURRENT_SCORE.ToString(), _CurrentScore);
-        CheckWin();
+//        CheckWin();
     }
 
-    void CheckWin()
+    public bool CheckWin()
     {
-        if (_CurrentScore < _ScoreForWin) return;
+        return _CurrentScore >= _ScoreForWin;
 //        _machine.ChangeState(EMachineState.Win);
     }
 

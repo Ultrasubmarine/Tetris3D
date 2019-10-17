@@ -67,7 +67,7 @@ public class ElementManager : MonoBehaviour
         
         NewElement.LogicDrop();
         // TODO change DOTween method
-        NewElement.transform.DOMove( NewElement.transform.position +  Vector3.down, Speed.TimeDrop).SetEase( Ease.Linear).OnComplete( CallFSMDrop);//.DropInOneLayer();
+        NewElement.transform.DOMoveY( NewElement.transform.position.y +  Vector3.down.y, Speed.TimeDrop).SetEase( Ease.Linear).OnComplete( CallFSMDrop);//.DropInOneLayer();
     }
 
     private void CallFSMDrop()
@@ -97,7 +97,7 @@ public class ElementManager : MonoBehaviour
     }
     #endregion
 
-    void AfterCollectElement() {
+    public void AfterCollectElement() {
         
         ClearElementsAfterDeletedBlocks();
         CutElement();
@@ -105,7 +105,8 @@ public class ElementManager : MonoBehaviour
     }
 
     #region функции удаления
-    private void ClearElementsAfterDeletedBlocks() {
+
+    public void ClearElementsAfterDeletedBlocks() {
         
         foreach (var element in _elementMarger) {
             var deletedList = element.MyBlocks.Where(s => s.IsDestroy).ToArray();
@@ -159,8 +160,8 @@ public class ElementManager : MonoBehaviour
             
     }
     #endregion
-    
-    private void CutElement() {
+
+    public void CutElement() {
 
         int k = 0;
         int countK = _elementMarger.Count;
@@ -188,7 +189,7 @@ public class ElementManager : MonoBehaviour
     
     #region  функции падения всех эл-тов ( после уничтожения слоев)
 
-    private IEnumerator StartDropAllElements() {
+    public IEnumerator StartDropAllElements() {
         bool flagDrop = false;
         do {
             flagDrop = DropAllElements();
@@ -200,9 +201,9 @@ public class ElementManager : MonoBehaviour
         while (flagDrop); // проверяем что бы все упало, пока оно может падать
 
         //   myProj.CreateCeiling();
-//        _Machine.ChangeState(EMachineState.Collection);
 
         yield return null;
+        RealizationBox.Instance.FSM.SetNewState( TetrisState.Collection);
     }
 
     private bool DropAllElements() {

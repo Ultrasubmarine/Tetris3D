@@ -9,9 +9,12 @@ public class RealizationBox : Singleton<RealizationBox>
 	[SerializeField] Generator _Ganerator;
 	[SerializeField] ElementManager _ElementManager;
 	[SerializeField] private TetrisFSM _FSM;
+	[SerializeField] private Score _Score;
+	
 	public PlaneMatrix Matrix() { return _Matrix; }
 	public Generator ElementGenerator() { return _Ganerator; }
 
 	public ElementManager ElementManager() { return _ElementManager; }
 	public TetrisFSM FSM => _FSM;
+	public Score Score => _Score;
 }

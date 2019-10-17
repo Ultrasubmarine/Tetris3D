@@ -37,7 +37,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix> {
     }
     
     private void Start() {
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Collection, CheckCollections);
+//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Collection, CheckCollections);
     }
 
     private void OnDestroy() {
