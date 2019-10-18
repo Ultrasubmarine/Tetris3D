@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public class ElementManager : MonoBehaviour
 {
-    private TetrisFSM myFSM;
-    PlaneMatrix _matrix;
-    [SerializeField] Generator _Generator;
-//    [FormerlySerializedAs("machine")] [SerializeField] StateMachine _Machine;
+    private TetrisFSM _myFSM;
+    private PlaneMatrix _matrix;
+    private Generator _generator;
 
     List<Element> _elementMarger;
 
@@ -22,59 +19,32 @@ public class ElementManager : MonoBehaviour
     
     void Start () {
         _elementMarger = new List<Element>();
-        _matrix = PlaneMatrix.Instance;
+     
         _myTransform = this.transform;
 
-        myFSM = RealizationBox.Instance.FSM;
-
-//        Messenger.AddListener( StateMachine.StateMachineKey + EMachineState.Empty, GenerateElement);
-//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
-//
-//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
-// 
-//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
-//        Messenger.AddListener("EndVizual", AfterEndVisual);
+        _matrix = RealizationBox.Instance.Matrix();
+        _myFSM = RealizationBox.Instance.FSM;
+        _generator = RealizationBox.Instance.ElementGenerator();
 //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.EndInfluence, CheckDelayDrop);
     }
-
+    
     private void OnDestroy() {
-//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Empty, GenerateElement);
-//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NewElement, StartDropElement);
-//
-//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, AfterCollectElement);
-//        
+
 //        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
     }
 
     #region  функции падения нового эл-та ( и его слияние)
 
     public void StartDropElement() {
-        DropElement();
-    }
-
-    public void AfterEndVisual()
-    {
-//        if (_Machine.State != EMachineState.NewElement)
-        {
-            Debug.Log("ADD deferred Drop");
-            _defferedDrop = true;
-            return;
-        }
-        DropElement();
-    }
-    
-    private void DropElement() {
         
         NewElement.LogicDrop();
-        // TODO change DOTween method
-        NewElement.transform.DOMoveY( NewElement.transform.position.y +  Vector3.down.y, Speed.TimeDrop).SetEase( Ease.Linear).OnComplete( CallFSMDrop);//.DropInOneLayer();
+        
+        var newPosition = NewElement.MyTransform.position.y - 1;
+        NewElement.MyTransform.DOMoveY( newPosition, Speed.TimeDrop).SetEase( Ease.Linear).
+            OnComplete(CallDrop);
     }
 
-    private void CallFSMDrop()
-    {
-        Debug.Log(" отложенный вызов отложенного дропа");
-        myFSM.SetNewState(TetrisState.Drop);
-    }
+    private void CallDrop() => _myFSM.SetNewState(TetrisState.Drop);
     
     public void CheckDelayDrop()
     {
@@ -84,7 +54,7 @@ public class ElementManager : MonoBehaviour
         {
             _defferedDrop = false;
             Debug.Log("USE deferred drop");
-            DropElement();
+            StartDropElement();
         }
     }
 
@@ -96,13 +66,6 @@ public class ElementManager : MonoBehaviour
         NewElement = null;
     }
     #endregion
-
-    public void AfterCollectElement() {
-        
-        ClearElementsAfterDeletedBlocks();
-        CutElement();
-        StartCoroutine(StartDropAllElements());
-    }
 
     #region функции удаления
 
@@ -120,7 +83,7 @@ public class ElementManager : MonoBehaviour
     
     private void ClearDeleteBlocks(Block[] deletedList) {
         foreach (var item in deletedList) {
-            _Generator.DeleteBlock(item);
+            _generator.DeleteBlock(item);
         }        
     }
     
@@ -131,7 +94,7 @@ public class ElementManager : MonoBehaviour
                 Element tmp = _elementMarger[i];
                 _elementMarger.Remove(_elementMarger[i]);
                
-                _Generator.DeleteElement(tmp); 
+                _generator.DeleteElement(tmp); 
             }
             else {
                 i++;
@@ -148,13 +111,13 @@ public class ElementManager : MonoBehaviour
             
             ClearDeleteBlocks( tmp.MyBlocks.ToArray() );
             tmp.DeleteBlocksInList( tmp.MyBlocks.ToArray() );
-            _Generator.DeleteElement(tmp);
+            _generator.DeleteElement(tmp);
         }
         if (!Equals(NewElement, null)) {
             
             ClearDeleteBlocks(NewElement.MyBlocks.ToArray());
             NewElement.DeleteBlocksInList( NewElement.MyBlocks.ToArray() );
-            _Generator.DeleteElement(NewElement);
+            _generator.DeleteElement(NewElement);
             NewElement = null;
         }
             
@@ -168,7 +131,7 @@ public class ElementManager : MonoBehaviour
         while (k < countK) {
             List<Block> cutBlocks = _elementMarger[k].CheckUnion();
             if (cutBlocks != null) {
-                Element newElement = _Generator.CreateEmptyElement();
+                Element newElement = _generator.CreateEmptyElement();
                 newElement.MyTransform.position = _elementMarger[k].MyTransform.position;
                 newElement.MyBlocks = cutBlocks;
                 foreach (var block in newElement.MyBlocks)
@@ -217,7 +180,10 @@ public class ElementManager : MonoBehaviour
 
                 flagDrop = true;
                 item.LogicDrop();
-                item.VisualDrop(Speed.TimeDropAfterDestroy); // запускает падение элемента
+                
+                var newPosition = item.MyTransform.position.y - 1;
+                item.MyTransform.DOMoveY( newPosition, Speed.TimeDropAfterDestroy).
+                    SetEase(Ease.Linear).OnComplete( () => item.IsDrop = false);
             }
             else {
                 if (!item.IsBind)

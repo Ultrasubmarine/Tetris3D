@@ -26,7 +26,7 @@ public class Generator : MonoBehaviour {
     Element _answerElement;
     private void Start()
     {
-        _matrix = PlaneMatrix.Instance;
+        _matrix = RealizationBox.Instance.Matrix();
         _castMatrix = new bool[3, 3, 3];
     }
     
@@ -62,7 +62,7 @@ public class Generator : MonoBehaviour {
             for (int z = 0; z < 3; z++) {
                 barrier = _matrix.MinHeightInCoordinates(x,z);
                 for (int y = min + 3 - 1; y >= min; y--) {
-                    castMatrix[x, y - min, z] = y < barrier ? false : true ;               
+                    castMatrix[x, y - min, z] = y >= barrier ;               
                 }
             }
         }
@@ -81,7 +81,7 @@ public class Generator : MonoBehaviour {
         CreateBlock(lastPoint, createElement, indexMat);
         Debug.ClearDeveloperConsole();
         List<Vector3Int> freePlaces;
-        int index;
+
         for (int i = 0; i < 3; i++) {
             freePlaces = FoundFreePlacesAround(lastPoint);
             if( freePlaces.Count == 0)

@@ -12,8 +12,6 @@ public class CollectionState : AbstractState<TetrisState>
     
     public override void Enter(TetrisState last)
     {
-        Debug.Log(" Перешли в сбор коллекций ");
-        
         if (_matrix.CollectLayers())
         {
             Debug.Log(" Собрали коллекцию");

@@ -33,25 +33,12 @@ public class Element : MonoBehaviour {
         foreach (Block item in MyBlocks)
             item.OffsetCoordinates(0,  height - maxElement, 0); //item.Coordinates.y += height - maxElement;
     }
-
-    #region ФУНКЦИИ ПАДЕНИЯ
-
-    public void DropInOneLayer() {
-        LogicDrop();
-        VisualDrop(Speed.TimeDrop);
-    }
     
     public void LogicDrop() {
         foreach (Block item in MyBlocks)
-            item.OffsetCoordinates(0,  -1, 0);//item.Coordinates.y--;
+            item.OffsetCoordinates(0,  -1, 0);
     }
-
-    public void VisualDrop(float time) {
-        IsDrop = true;
-        StartCoroutine(VizualRelocation(Vector3.down, time, () => { IsDrop = false; RealizationBox.Instance.FSM.SetNewState(TetrisState.Drop);}) );
-}
-    #endregion
-
+    
     private IEnumerator VizualRelocation( Vector3 offset, float time, Action callBack) {
 
         Vector3 startPosition = MyTransform.position;
