@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using DG.Tweening.Core;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class ElementManager : MonoBehaviour
 {
@@ -25,6 +27,11 @@ public class ElementManager : MonoBehaviour
         _matrix = RealizationBox.Instance.Matrix();
         _myFSM = RealizationBox.Instance.FSM;
         _generator = RealizationBox.Instance.ElementGenerator();
+        
+       
+        DOTween.Init(true, false);
+        DOTween.defaultAutoKill = false;
+        DOTween.defaultEaseType = Ease.Linear;
 //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.EndInfluence, CheckDelayDrop);
     }
     
@@ -181,6 +188,7 @@ public class ElementManager : MonoBehaviour
                 flagDrop = true;
                 item.LogicDrop();
                 
+                item.IsDrop = true;
                 var newPosition = item.MyTransform.position.y - 1;
                 item.MyTransform.DOMoveY( newPosition, Speed.TimeDropAfterDestroy).
                     SetEase(Ease.Linear).OnComplete( () => item.IsDrop = false);
