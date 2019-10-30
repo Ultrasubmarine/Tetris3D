@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
+using Script.ObjectEngine;
 using UnityEngine;
 
 public class ElementManager : MonoBehaviour
@@ -16,7 +15,10 @@ public class ElementManager : MonoBehaviour
     Transform _myTransform;
 
     private bool _defferedDrop;
-    
+    private InfluenceManager _influence;
+
+    private int _dropElementCount;
+    private int _endDrop;
     void Start () {
         _elementMarger = new List<Element>();
      
@@ -25,7 +27,7 @@ public class ElementManager : MonoBehaviour
         _matrix = RealizationBox.Instance.Matrix();
         _myFSM = RealizationBox.Instance.FSM;
         _generator = RealizationBox.Instance.ElementGenerator();
-//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.EndInfluence, CheckDelayDrop);
+        _influence = RealizationBox.Instance.InfluenceManager;
     }
     
     private void OnDestroy() {
@@ -36,12 +38,8 @@ public class ElementManager : MonoBehaviour
     #region  функции падения нового эл-та ( и его слияние)
 
     public void StartDropElement() {
-        
         NewElement.LogicDrop();
-        
-        var newPosition = NewElement.MyTransform.position.y - 1;
-        NewElement.MyTransform.DOMoveY( newPosition, Speed.TimeDrop).SetEase( Ease.Linear).
-            OnComplete(CallDrop);
+        _influence.AddMove( NewElement.MyTransform, Vector3.down, Speed.TimeDrop, CallDrop);
     }
 
     private void CallDrop() => _myFSM.SetNewState(TetrisState.Drop);
@@ -152,25 +150,18 @@ public class ElementManager : MonoBehaviour
     
     #region  функции падения всех эл-тов ( после уничтожения слоев)
 
-    public IEnumerator StartDropAllElements() {
-        bool flagDrop = false;
-        do {
-            flagDrop = DropAllElements();
+    public void StartDropAllElements() {
+  
+        var countDropElements= DropAllElements();
+        if (countDropElements > 0)
+            return;
 
-            if(flagDrop)                
-                yield return new WaitUntil(CheckAllElementsDrop);
-            yield return new WaitForSeconds( Speed.TimeDelay); // слишком резко уничтожаются 
-        }
-        while (flagDrop); // проверяем что бы все упало, пока оно может падать
-
-        //   myProj.CreateCeiling();
-
-        yield return null;
         RealizationBox.Instance.FSM.SetNewState( TetrisState.Collection);
     }
 
-    private bool DropAllElements() {
-        bool flagDrop = false;
+    private int DropAllElements()
+    {
+        _dropElementCount = 0;
         foreach (var item in _elementMarger) {
             var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
             if (empty) //если коллизии нет, элемент может падать вниз
@@ -178,28 +169,24 @@ public class ElementManager : MonoBehaviour
                 if (item.IsBind)
                     _matrix.UnbindToMatrix(item);
 
-                flagDrop = true;
+                _dropElementCount++;
                 item.LogicDrop();
                 
-                var newPosition = item.MyTransform.position.y - 1;
-                item.MyTransform.DOMoveY( newPosition, Speed.TimeDropAfterDestroy).
-                    SetEase(Ease.Linear).OnComplete( () => item.IsDrop = false);
+                _influence.AddMove( item.MyTransform, Vector3.down, Speed.TimeDropAfterDestroy, DecrementDropElementsCount);
             }
             else {
                 if (!item.IsBind)
                     _matrix.BindToMatrix(item);
             }
         }
-        return flagDrop;
+        return _dropElementCount;
     }
 
-    private bool CheckAllElementsDrop() {
-        foreach (var item in _elementMarger) {
-            if (item.IsDrop) {
-                return false;
-            }
-        }
-        return true;     
+    private void DecrementDropElementsCount()
+    {
+        _dropElementCount--;
+        if (_dropElementCount == 0)
+            StartDropAllElements();
     }
 
     #endregion

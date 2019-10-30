@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Script.ObjectEngine
@@ -14,14 +15,14 @@ namespace Script.ObjectEngine
             _influences = new List<Influence>();
         }
 
-        public void AddMove()
+        public void AddFakeMove()
         {
-            Move(testObj, Vector3.right, 1);
+            AddMove(testObj, Vector3.right, 1);
         }
     
-        public void Move(Transform obj, Vector3 direction, float speed)
+        public void AddMove(Transform obj, Vector3 offset, float speed, Action callBack = null)
         {
-            var info = new Influence(obj, obj.position + direction, speed, InfluenceMode.Move);
+            var info = new Influence(obj, obj.position + offset, speed, InfluenceMode.Move, callBack);
             _influences.Add( info);
         }
 

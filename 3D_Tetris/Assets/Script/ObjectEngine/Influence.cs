@@ -20,8 +20,9 @@ namespace Script.ObjectEngine
         private float _currentTime;
 
         private Func<bool> _action;
-
-        public Influence(Transform transform, Vector3 finish, float allTime, InfluenceMode mode) : this()
+        private Action _callBack;
+        
+        public Influence(Transform transform, Vector3 finish, float allTime, InfluenceMode mode, Action callBack = null ) : this()
         {
             _transform = transform;
 
@@ -49,6 +50,8 @@ namespace Script.ObjectEngine
                     break;
                 }
             }
+
+            _callBack = callBack;
         }
     
         /// <summary>
@@ -56,7 +59,12 @@ namespace Script.ObjectEngine
         /// </summary>
         public bool Update()
         {
-            return _action.Invoke();
+            if( _action.Invoke()) 
+            {
+                _callBack?.Invoke();
+                return true;
+            }
+            return false;
         }
 
         private bool Turn()
