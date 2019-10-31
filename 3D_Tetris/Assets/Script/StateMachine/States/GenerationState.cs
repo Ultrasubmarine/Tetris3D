@@ -1,4 +1,5 @@
 ﻿using Helper.Patterns.FSM;
+using Script.GameLogic.TetrisElement;
 using UnityEngine;
 
 public class GenerationState : AbstractState<TetrisState> 
@@ -15,8 +16,8 @@ public class GenerationState : AbstractState<TetrisState>
 
 		var element = _generator.GenerationNewElement( _elementManager.transform);
 		
-		ElementManager.NewElement = element;
-		ElementManager.NewElement.MyTransform.parent = _elementManager.transform;
+		ElementData.NewElement = element;
+		ElementData.NewElement.MyTransform.parent = _elementManager.transform;
 
 		_FSM.SetNewState( TetrisState.Drop);
 	}

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Script.GameLogic.TetrisElement;
+using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
@@ -38,44 +39,44 @@ public class GameController : MonoBehaviour
 
     void Turn(ETouсhSign touch)
     {
-        if (Equals( ElementManager.NewElement) )
+        if (Equals( ElementData.NewElement) )
             return;
 
         if(touch == ETouсhSign.OneTouch_Left) {
-            if( _Turning.Action(ElementManager.NewElement, turn.left, Speed.TimeRotate))
+            if( _Turning.Action(ElementData.NewElement, turn.left, Speed.TimeRotate))
                 CorrectIndex(90);             
         }
         else { //ETouсhSign.OneTouch_Right
-            if( _Turning.Action(ElementManager.NewElement, turn.right, Speed.TimeRotate))
+            if( _Turning.Action(ElementData.NewElement, turn.right, Speed.TimeRotate))
                 CorrectIndex(90);    
         }
     }
 
     void Move( ETouсhSign touch) {
         
-        if (Equals( ElementManager.NewElement) )
+        if (Equals( ElementData.NewElement) )
             return;
 
         switch (touch)
         {
             case ETouсhSign.Swipe_LeftUp:
             {
-                _Moving.Action(ElementManager.NewElement, A[_indexTable], Speed.TimeMove);
+                _Moving.Action(ElementData.NewElement, A[_indexTable], Speed.TimeMove);
                 break;
             }
             case ETouсhSign.Swipe_LeftDown:
             {
-                _Moving.Action(ElementManager.NewElement, S[_indexTable], Speed.TimeMove);
+                _Moving.Action(ElementData.NewElement, S[_indexTable], Speed.TimeMove);
                 break;
             }
             case ETouсhSign.Swipe_RightDown:
             {
-                _Moving.Action(ElementManager.NewElement, D[_indexTable], Speed.TimeMove);
+                _Moving.Action(ElementData.NewElement, D[_indexTable], Speed.TimeMove);
                 break;
             }
             case ETouсhSign.Swipe_RightUp:
             {
-                _Moving.Action(ElementManager.NewElement, W[_indexTable], Speed.TimeMove);
+                _Moving.Action(ElementData.NewElement, W[_indexTable], Speed.TimeMove);
                 break;
             }
         }

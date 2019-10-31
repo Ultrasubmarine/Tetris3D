@@ -77,7 +77,6 @@ namespace Script.ObjectEngine
             _currentTime += Time.deltaTime;
             _transform.position = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
 
-            Debug.Log("Move update");
             if (_currentTime >= _allTime)
             {
                 _transform.position = _finish;

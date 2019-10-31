@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
@@ -9,7 +7,6 @@ public class Element : MonoBehaviour {
     public List<Block> MyBlocks = new List<Block>();
 
     public bool IsBind = false;
-    public bool IsDrop = false;
     public Transform MyTransform { get; private set; }
     
     void Awake() {
@@ -39,25 +36,6 @@ public class Element : MonoBehaviour {
             item.OffsetCoordinates(0,  -1, 0);
     }
     
-    private IEnumerator VizualRelocation( Vector3 offset, float time, Action callBack) {
-
-        Vector3 startPosition = MyTransform.position;
-        Vector3 finalPosition = startPosition + offset;
-
-        float timer = 0;
-        do {
-            timer += Time.deltaTime;
-            MyTransform.position = Vector3.Lerp(startPosition, finalPosition, timer / time);
-            yield return null;
-        } while (timer <= time);
-
-        MyTransform.position = finalPosition;
-
-        if (!Equals(callBack)) {
-            callBack.Invoke();
-        }
-    }
-
     public bool CheckEmpty() {
         if( MyBlocks.Count > 0)
                 return false; 
@@ -70,7 +48,7 @@ public class Element : MonoBehaviour {
     }
     
     #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
-    public List<Block> CheckUnion() {
+    public List<Block> GetNotAttachedBlocks() {
         if (MyBlocks.Count == 0)
             return null;
         List<Block> contactList = new List<Block>();
@@ -108,7 +86,7 @@ public class Element : MonoBehaviour {
         }
     }
 
-    public bool CheckContact(Block b1, Block b2) {
+    private bool CheckContact(Block b1, Block b2) {
         Vector3 b1p = new Vector3(b1.Coordinates.x, b1.Coordinates.y, b1.Coordinates.z);
         Vector3 b2p = new Vector3(b2.Coordinates.x, b2.Coordinates.y, b2.Coordinates.z);
 
