@@ -9,7 +9,6 @@ namespace Script.GameLogic.TetrisElement
     {
         private TetrisFSM _myFSM;
         private PlaneMatrix _matrix;
-        private Generator _generator;
 
         Transform _myTransform;
 
@@ -23,7 +22,6 @@ namespace Script.GameLogic.TetrisElement
 
             _matrix = RealizationBox.Instance.Matrix();
             _myFSM = RealizationBox.Instance.FSM;
-            _generator = RealizationBox.Instance.ElementGenerator();
             _influence = RealizationBox.Instance.InfluenceManager;
         }
     
@@ -56,9 +54,7 @@ namespace Script.GameLogic.TetrisElement
         public void MergeNewElement() {
 
             _matrix.BindToMatrix(ElementData.NewElement);
-
-            ElementData.AddElement(ElementData.NewElement);
-            ElementData.NewElement = null;
+            ElementData.MergeNewElement();
         }
         #endregion
         
@@ -76,7 +72,7 @@ namespace Script.GameLogic.TetrisElement
         private int DropAllElements()
         {
             _dropElementCount = 0;
-            foreach (var item in ElementData.MergerElement) {
+            foreach (var item in ElementData.MergerElements) {
                 var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
                 if (empty) //если коллизии нет, элемент может падать вниз
                 {

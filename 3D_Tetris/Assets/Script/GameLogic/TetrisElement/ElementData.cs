@@ -1,27 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Script.GameLogic.TetrisElement
 {
     public static class ElementData
     {
+        public static Element NewElement { get; private set;}
+        
+        public static Func<Element> Loader;
+        public static List<Element> MergerElements => _mergerElements;
+        
         private static List<Element> _mergerElements;
-        public static List<Element> MergerElement => _mergerElements;
-
-        public static Element NewElement { get; set;}
 
         static ElementData()
         {
             _mergerElements = new List<Element>();    
         }
-        
-        public static void AddElement(Element element)
+
+        public static void LoadNewElement()
         {
-            _mergerElements.Add(element);
+            NewElement = Loader.Invoke();
         }
         
-        public static void RemoveElement(Element element)
+        public static void MergeNewElement()
+        {
+            _mergerElements.Add(NewElement);
+            NewElement = null;
+        }
+
+        public static void RemoveMergedElement(Element element)
         {
             _mergerElements.Remove(element);
+        }
+        
+        public static void RemoveAll()
+        {
+            _mergerElements.Clear();
+            NewElement = null;
         }
     }
 }

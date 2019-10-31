@@ -14,9 +14,7 @@ public class GenerationState : AbstractState<TetrisState>
 
 	public override void Enter(TetrisState last) {
 
-		var element = _generator.GenerationNewElement( _elementManager.transform);
-		
-		ElementData.NewElement = element;
+		ElementData.LoadNewElement();
 		ElementData.NewElement.MyTransform.parent = _elementManager.transform;
 
 		_FSM.SetNewState( TetrisState.Drop);

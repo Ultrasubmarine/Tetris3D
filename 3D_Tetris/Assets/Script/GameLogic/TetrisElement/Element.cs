@@ -2,10 +2,10 @@
 using UnityEngine;
 using System.Linq;
 
-
 public class Element : MonoBehaviour {
+    
     public List<Block> MyBlocks = new List<Block>();
-
+    
     public bool IsBind = false;
     public Transform MyTransform { get; private set; }
     
@@ -17,38 +17,42 @@ public class Element : MonoBehaviour {
     {
         MyTransform.rotation = Quaternion.identity;
         MyTransform.position = Vector3.zero;
-        gameObject.name = "element";
     }
 
-    public void AddBlock(Block newBlock) {
+    public void AddBlock(Block newBlock) 
+    {
         MyBlocks.Add(newBlock);
     }
 
-    public void InitializationAfterGeneric(int height) {
+    public void InitializationAfterGeneric(int height) 
+    {
         int maxElement = MyBlocks.Max(s => s.Coordinates.y);
 
         foreach (Block item in MyBlocks)
             item.OffsetCoordinates(0,  height - maxElement, 0); //item.Coordinates.y += height - maxElement;
     }
     
-    public void LogicDrop() {
+    public void LogicDrop() 
+    {
         foreach (Block item in MyBlocks)
             item.OffsetCoordinates(0,  -1, 0);
     }
     
-    public bool CheckEmpty() {
+    public bool CheckEmpty() 
+    {
         if( MyBlocks.Count > 0)
                 return false; 
         return true;
     }
 
-    public void DeleteBlocksInList(Block[] massBlock)
+    public void RemoveBlocksInList(Block[] massBlock)
     {
-        MyBlocks = MyBlocks.Except( massBlock).ToList();
+        MyBlocks = MyBlocks.Except(massBlock).ToList();
     }
     
     #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
-    public List<Block> GetNotAttachedBlocks() {
+    public List<Block> GetNotAttachedBlocks() 
+    {
         if (MyBlocks.Count == 0)
             return null;
         List<Block> contactList = new List<Block>();
@@ -86,9 +90,10 @@ public class Element : MonoBehaviour {
         }
     }
 
-    private bool CheckContact(Block b1, Block b2) {
-        Vector3 b1p = new Vector3(b1.Coordinates.x, b1.Coordinates.y, b1.Coordinates.z);
-        Vector3 b2p = new Vector3(b2.Coordinates.x, b2.Coordinates.y, b2.Coordinates.z);
+    private bool CheckContact(Block b1, Block b2) 
+    {
+        var b1p = new Vector3Int(b1.Coordinates.x, b1.Coordinates.y, b1.Coordinates.z);
+        var b2p = new Vector3Int(b2.Coordinates.x, b2.Coordinates.y, b2.Coordinates.z);
 
         if (b1p.x == b2p.x && b1p.y == b2p.y && b1p.z == b2p.z + 1)
             return true;

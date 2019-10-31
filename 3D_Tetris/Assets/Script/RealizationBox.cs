@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Script.GameLogic.TetrisElement;
 using Script.ObjectEngine;
@@ -24,4 +25,12 @@ public class RealizationBox : Singleton<RealizationBox>
 
 	public InfluenceManager InfluenceManager => _InfluenceManager;
 	public ElementCleaner ElementCleaner => _elementCleaner;
+
+	private void Start()
+	{
+		ElementData.Loader = () =>
+		{
+			return _Ganerator.GenerationNewElement(_ElementManager.transform);
+		};
+	}
 }
