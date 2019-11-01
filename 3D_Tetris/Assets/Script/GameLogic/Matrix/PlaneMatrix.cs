@@ -2,33 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using IntegerExtension;
+using UnityEngine.Serialization;
 
 public class PlaneMatrix : Singleton<PlaneMatrix>
 {
-    [SerializeField] private HeightHandler _HeightHandler;
-    public Block[,,] _matrix;
+    [SerializeField] private HeightHandler _heightHandler;
+    private Block[,,] _matrix;
 
     [Header("Size plane")] private int _limitHeight = 18;
-    [SerializeField] private int _Wight;
-    [SerializeField] private int _Height;
+    [SerializeField] private int _wight;
+    [SerializeField] private int _height;
 
-    public int Wight => _Wight;
+    public int wight => _wight;
 
-    public int Height // высота отсчитывается от 0
-        =>
-            _Height - 1;
+    public int height // высота отсчитывается от 0
+        => _height - 1;
 
-    public int LimitHeight => _limitHeight;
-    public int CurrentHeight => _HeightHandler.CurrentHeight;
+    public int limitHeight => _limitHeight;
+    public int currentHeight => _heightHandler.CurrentHeight;
 
     protected override void Init()
     {
-        ExtensionMetodsForMatrix.SetSizePlane(_Wight);
-        _matrix = new Block[_Wight, _Height, _Wight];
+        ExtensionMetodsForMatrix.SetSizePlane(_wight);
+        _matrix = new Block[_wight, _height, _wight];
 
-        for (var i = 0; i < _Wight; i++)
-        for (var j = 0; j < _Height; j++)
-        for (var k = 0; k < _Wight; k++)
+        for (var i = 0; i < _wight; i++)
+        for (var j = 0; j < _height; j++)
+        for (var k = 0; k < _wight; k++)
             _matrix[i, j, k] = null;
     }
 
@@ -125,8 +125,8 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
 
     private bool CheckCollectedInLayer(int layer)
     {
-        for (var x = 0; x < Wight; x++)
-        for (var z = 0; z < Wight; z++)
+        for (var x = 0; x < wight; x++)
+        for (var z = 0; z < wight; z++)
             if (ReferenceEquals(_matrix[x, layer, z], null))
                 return false;
         return true;
@@ -135,8 +135,8 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     private void DestroyLayer(int layer)
     {
 //        Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER.ToString(), layer);
-        for (var x = 0; x < Wight; x++)
-        for (var z = 0; z < Wight; z++)
+        for (var x = 0; x < wight; x++)
+        for (var z = 0; z < wight; z++)
         {
             _matrix[x, layer, z].IsDestroy = true;
             _matrix[x, layer, z] = null;
@@ -147,13 +147,13 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
 
     public Vector3Int FindLowerAccessiblePlace()
     {
-        var min = Height - 1;
+        var min = height - 1;
         int curr_min;
 
         var min_point = new Vector3Int(0, min, 0);
 
-        for (var x = 0; x < Wight && min != 0; ++x)
-        for (var z = 0; z < Wight && min != 0; ++z)
+        for (var x = 0; x < wight && min != 0; ++x)
+        for (var z = 0; z < wight && min != 0; ++z)
         {
             curr_min = MinHeightInCoordinates(x, z);
             if (curr_min < min)

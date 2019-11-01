@@ -68,7 +68,7 @@ public class Turning : MonoBehaviour
                 x = item.Coordinates.z;
                 z = -item.Coordinates.x;
 
-                if (_matrix._matrix[x + 1, item.Coordinates.y, z + 1] != null)
+//                if (_matrix._matrix[x + 1, item.Coordinates.y, z + 1] != null)
                     return false;
             }
         else
@@ -78,7 +78,7 @@ public class Turning : MonoBehaviour
                 x = -item.Coordinates.z;
                 z = item.Coordinates.x;
 
-                if (_matrix._matrix[x + 1, item.Coordinates.y, z + 1] != null)
+//                if (_matrix._matrix[x + 1, item.Coordinates.y, z + 1] != null)
                     return false;
             }
 

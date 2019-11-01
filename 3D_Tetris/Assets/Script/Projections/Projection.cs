@@ -80,13 +80,13 @@ public class Projection : MonoBehaviour
         if (current < _MinimumLayerHeight)
             return;
 
-        for (var x = 0; x < _matrix.Wight; x++)
-        for (var z = 0; z < _matrix.Wight; z++)
+        for (var x = 0; x < _matrix.wight; x++)
+        for (var z = 0; z < _matrix.wight; z++)
         {
             var y = _matrix.MinHeightInCoordinates(x, z);
             if (y >= _MinimumLayerHeight)
                 _ceilingList.Add(_PoolCeiling.CreateObject(new Vector3(x.ToCoordinat(),
-                    _matrix.LimitHeight + _HeightProjection, z.ToCoordinat())));
+                    _matrix.limitHeight + _HeightProjection, z.ToCoordinat())));
         }
     }
 

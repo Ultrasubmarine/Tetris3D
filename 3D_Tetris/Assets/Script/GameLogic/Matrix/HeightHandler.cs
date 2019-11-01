@@ -56,8 +56,8 @@ public class HeightHandler : MonoBehaviour
         _CurrentHeight = 0;
         int check;
 
-        for (var x = 0; x < _matrix.Wight && !OutOfLimitHeight(); x++)
-        for (var z = 0; z < _matrix.Wight && !OutOfLimitHeight(); z++)
+        for (var x = 0; x < _matrix.wight && !OutOfLimitHeight(); x++)
+        for (var z = 0; z < _matrix.wight && !OutOfLimitHeight(); z++)
         {
             check = _matrix.MinHeightInCoordinates(x, z);
             if (check > _CurrentHeight) _CurrentHeight = check;

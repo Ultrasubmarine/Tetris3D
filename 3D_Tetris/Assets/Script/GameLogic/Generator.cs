@@ -35,14 +35,14 @@ public class Generator : MonoBehaviour
 //       CreateDuplicate(newElement);
 
         var pos = elementParent.position;
-        newElement.InitializationAfterGeneric(_matrix.Height);
+        newElement.InitializationAfterGeneric(_matrix.height);
 
         // выравниваем элемент относительно координат y 
         var min_y = newElement.MyBlocks.Min(s => s.Coordinates.y);
         var max_y = newElement.MyBlocks.Max(s => s.Coordinates.y);
 
         var size = max_y - min_y;
-        newElement.MyTransform.position = new Vector3(pos.x, pos.y + _matrix.Height - size, pos.z);
+        newElement.MyTransform.position = new Vector3(pos.x, pos.y + _matrix.height - size, pos.z);
 
         //ConfuseElement(newElement);//, plane.gameObject);
         return newElement;
