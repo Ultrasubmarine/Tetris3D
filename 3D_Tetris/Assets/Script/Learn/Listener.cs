@@ -9,30 +9,32 @@ using UnityEngine.Events;
 
 // if you want chenge call in Inspector Unity. 
 [Serializable]
-public class ListenerFunc2 : UnityEvent<int> { }
+public class ListenerFunc2 : UnityEvent<int>
+{
+}
 
 [Serializable]
-public class Listener <T> : MonoBehaviour{
-
+public class Listener<T> : MonoBehaviour
+{
     public string EventName;
-    public Action<T> CallDelegate  ;
+    public Action<T> CallDelegate;
 
-    private void Start()    {
+    private void Start()
+    {
 //        Debug.Log("I Lissten " + EventName + "tttt");
 //        Messenger<T>.AddListener(EventName, CallDelegate);
     }
 
-    private void OnEnable() {
-    //    Messenger<T>.RemoveListener(EventName, CallDelegate);
+    private void OnEnable()
+    {
+        //    Messenger<T>.RemoveListener(EventName, CallDelegate);
     }
-
 }
 
 public class Listener<T, M> : MonoBehaviour
 {
-
-    [SerializeField] string EventName;
-    Action<T,M> CallDelegate;
+    [SerializeField] private string EventName;
+    private Action<T, M> CallDelegate;
 
     private void Start()
     {
@@ -43,5 +45,4 @@ public class Listener<T, M> : MonoBehaviour
     {
 //        Messenger<T,M>.RemoveListener(EventName, CallDelegate.Invoke);
     }
-
 }

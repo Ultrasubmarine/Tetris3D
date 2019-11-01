@@ -5,23 +5,23 @@ namespace Script.GameLogic.TetrisElement
 {
     public static class ElementData
     {
-        public static Element NewElement { get; private set;}
-        
+        public static Element NewElement { get; private set; }
+
         public static Func<Element> Loader;
         public static List<Element> MergerElements => _mergerElements;
-        
+
         private static List<Element> _mergerElements;
 
         static ElementData()
         {
-            _mergerElements = new List<Element>();    
+            _mergerElements = new List<Element>();
         }
 
         public static void LoadNewElement()
         {
             NewElement = Loader.Invoke();
         }
-        
+
         public static void MergeNewElement()
         {
             _mergerElements.Add(NewElement);
@@ -32,7 +32,7 @@ namespace Script.GameLogic.TetrisElement
         {
             _mergerElements.Remove(element);
         }
-        
+
         public static void RemoveAll()
         {
             _mergerElements.Clear();

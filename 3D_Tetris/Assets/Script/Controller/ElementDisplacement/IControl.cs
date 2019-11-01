@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ControlBase<T>: MonoBehaviour {
-
-    public bool Action( T parametr) {
-        if (CheckOpportunity(parametr)) {
+public abstract class ControlBase<T> : MonoBehaviour
+{
+    public bool Action(T parametr)
+    {
+        if (CheckOpportunity(parametr))
+        {
             Logic(parametr);
             Vizual(parametr);
             return true;
         }
-        return false;
 
+        return false;
     }
 
-    abstract protected bool CheckOpportunity( T parametr);
+    protected abstract bool CheckOpportunity(T parametr);
 
-    abstract protected void Logic( T parametr);
-    abstract protected void Vizual( T parametr);
-    
+    protected abstract void Logic(T parametr);
+    protected abstract void Vizual(T parametr);
 }

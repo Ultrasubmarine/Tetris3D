@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElementPool : ObjectPool<Element> {
-
+public class ElementPool : ObjectPool<Element>
+{
 }

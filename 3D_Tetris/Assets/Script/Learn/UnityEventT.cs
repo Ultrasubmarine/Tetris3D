@@ -5,9 +5,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [Serializable]
-public class UnityEventT <T> : UnityEvent<T> {
-
-
+public class UnityEventT<T> : UnityEvent<T>
+{
 }
-
-

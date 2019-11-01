@@ -2,25 +2,26 @@
 using Script.GameLogic.TetrisElement;
 using UnityEngine;
 
-public class GenerationState : AbstractState<TetrisState> 
+public class GenerationState : AbstractState<TetrisState>
 {
-	Generator _generator;
-	ElementManager _elementManager;
+    private Generator _generator;
+    private ElementManager _elementManager;
 
-	public GenerationState() {
-		_generator = RealizationBox.Instance.ElementGenerator();
-		_elementManager = RealizationBox.Instance.ElementManager();
-	}
+    public GenerationState()
+    {
+        _generator = RealizationBox.Instance.generator;
+        _elementManager = RealizationBox.Instance.elementManager;
+    }
 
-	public override void Enter(TetrisState last) {
+    public override void Enter(TetrisState last)
+    {
+        ElementData.LoadNewElement();
+        ElementData.NewElement.MyTransform.parent = _elementManager.transform;
 
-		ElementData.LoadNewElement();
-		ElementData.NewElement.MyTransform.parent = _elementManager.transform;
+        _FSM.SetNewState(TetrisState.Drop);
+    }
 
-		_FSM.SetNewState( TetrisState.Drop);
-	}
-
-	public override void Exit(TetrisState last) {
-	}
-	
+    public override void Exit(TetrisState last)
+    {
+    }
 }

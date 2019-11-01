@@ -9,7 +9,7 @@ namespace Script.ObjectEngine
         Turn,
         Drop,
     }
-    
+
     public struct Influence
     {
         private readonly Transform _transform;
@@ -21,8 +21,9 @@ namespace Script.ObjectEngine
 
         private Func<bool> _action;
         private Action _callBack;
-        
-        public Influence(Transform transform, Vector3 finish, float allTime, InfluenceMode mode, Action callBack = null ) : this()
+
+        public Influence(Transform transform, Vector3 finish, float allTime, InfluenceMode mode,
+            Action callBack = null) : this()
         {
             _transform = transform;
 
@@ -53,17 +54,18 @@ namespace Script.ObjectEngine
 
             _callBack = callBack;
         }
-    
+
         /// <summary>
         ///   <para> Return true if move finish </para>
         /// </summary>
         public bool Update()
         {
-            if( _action.Invoke()) 
+            if (_action.Invoke())
             {
                 _callBack?.Invoke();
                 return true;
             }
+
             return false;
         }
 
@@ -82,9 +84,10 @@ namespace Script.ObjectEngine
                 _transform.position = _finish;
                 return true;
             }
+
             return false;
         }
-        
+
         private bool Drop()
         {
             return false;

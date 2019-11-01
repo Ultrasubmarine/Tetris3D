@@ -19,23 +19,23 @@ namespace Script.ObjectEngine
         {
             AddMove(testObj, Vector3.right, 1);
         }
-    
+
         public void AddMove(Transform obj, Vector3 offset, float speed, Action callBack = null)
         {
             var info = new Influence(obj, obj.position + offset, speed, InfluenceMode.Move, callBack);
-            _influences.Add( info);
+            _influences.Add(info);
         }
 
         private void Update()
         {
-            int i = 0;
-            while(i < _influences.Count)
+            var i = 0;
+            while (i < _influences.Count)
             {
                 var item = _influences[i];
-            
+
                 if (item.Update())
                     _influences.Remove(item);
-                else 
+                else
                     i++;
             }
         }

@@ -3,12 +3,13 @@ using Script.GameLogic.TetrisElement;
 
 public class MergeState : AbstractState<TetrisState>
 {
-    ElementManager _elementManager;
-    
+    private ElementManager _elementManager;
+
     public MergeState()
     {
-        _elementManager = RealizationBox.Instance.ElementManager();        
+        _elementManager = RealizationBox.Instance.elementManager;
     }
+
     public override void Enter(TetrisState last)
     {
         _elementManager.MergeNewElement();

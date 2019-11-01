@@ -6,33 +6,31 @@ using UnityEngine;
 
 public class DropState : AbstractState<TetrisState>
 {
-    Generator _generator;
-    ElementManager _elementManager;
+    private Generator _generator;
+    private ElementManager _elementManager;
     private PlaneMatrix _matrix;
 
     public DropState()
     {
         _myState = TetrisState.Drop;
-        
-        _elementManager = RealizationBox.Instance.ElementManager();
-        _matrix = RealizationBox.Instance.Matrix();
+
+        _elementManager = RealizationBox.Instance.elementManager;
+        _matrix = RealizationBox.Instance.matrix;
     }
 
     public override void Enter(TetrisState last)
     {
-        bool empty = _matrix.CheckEmptyPlaсe(ElementData.NewElement, new Vector3Int(0, -1, 0));
+        var empty = _matrix.CheckEmptyPlaсe(ElementData.NewElement, new Vector3Int(0, -1, 0));
         if (empty)
         {
             _elementManager.StartDropElement();
             return;
         }
-        
-        _FSM.SetNewState( TetrisState.MergeElement);
+
+        _FSM.SetNewState(TetrisState.MergeElement);
     }
 
-    public override void Exit(TetrisState last) {
+    public override void Exit(TetrisState last)
+    {
     }
-
- 
-    
 }

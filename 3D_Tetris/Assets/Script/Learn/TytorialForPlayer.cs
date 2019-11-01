@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TytorialForPlayer /*: Listener*/ {
-                  //TODO Tutorial
-    [SerializeField] GameObject Gametytorial;
-
+public class TytorialForPlayer /*: Listener*/
+{
+    //TODO Tutorial
+    [SerializeField] private GameObject Gametytorial;
 }

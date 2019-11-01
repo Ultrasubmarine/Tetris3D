@@ -7,12 +7,13 @@ public class AllElementsDropState : AbstractState<TetrisState>
 {
     private ElementManager _elementManager;
     private ElementCleaner _elementCleaner;
+
     public AllElementsDropState()
     {
-        _elementManager = RealizationBox.Instance.ElementManager();
-        _elementCleaner = RealizationBox.Instance.ElementCleaner;
+        _elementManager = RealizationBox.Instance.elementManager;
+        _elementCleaner = RealizationBox.Instance.elementCleaner;
     }
-    
+
     public override void Enter(TetrisState last)
     {
         _elementCleaner.ClearElementsFromDeletedBlocks();

@@ -6,15 +6,17 @@ using UnityEngine.Events;
 
 public class WaitBeforeEvent : MonoBehaviour
 {
-	[SerializeField] float _Timer;
-	[SerializeField] UnityEvent _InvokeAfterTime;
+    [SerializeField] private float _Timer;
+    [SerializeField] private UnityEvent _InvokeAfterTime;
 
-	void Start() {
-		StartCoroutine(Timer());
-	}
+    private void Start()
+    {
+        StartCoroutine(Timer());
+    }
 
-	IEnumerator Timer() {
-		yield return new WaitForSeconds( _Timer);
-		_InvokeAfterTime.Invoke();
-	}
+    private IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(_Timer);
+        _InvokeAfterTime.Invoke();
+    }
 }

@@ -14,7 +14,8 @@ namespace Roulette.Scripts.UI
     [AddComponentMenu("UI/Effects/Extensions/UI Particle System")]
     public class UIParticleRenderer : MaskableGraphic
     {
-        [Tooltip("Having this enabled run the system in LateUpdate rather than in Update making it faster but less precise (more clunky)")]
+        [Tooltip(
+            "Having this enabled run the system in LateUpdate rather than in Update making it faster but less precise (more clunky)")]
         public bool fixedTime = true;
 
         private Transform _transform;
@@ -31,51 +32,36 @@ namespace Roulette.Scripts.UI
 
         private Texture currentTexture;
 
-        #if UNITY_5_5_OR_NEWER
+#if UNITY_5_5_OR_NEWER
         private ParticleSystem.MainModule mainModule;
-        #endif
+#endif
 
-        public override Texture mainTexture
-        {
-            get
-            {
-                return currentTexture;
-            }
-        }
+        public override Texture mainTexture => currentTexture;
 
         protected bool Initialize()
         {
             // initialize members
-            if (_transform == null)
-            {
-                _transform = transform;
-            }
+            if (_transform == null) _transform = transform;
             if (pSystem == null)
             {
                 pSystem = GetComponent<ParticleSystem>();
 
-                if (pSystem == null)
-                {
-                    return false;
-                }
+                if (pSystem == null) return false;
 
-                #if UNITY_5_5_OR_NEWER
+#if UNITY_5_5_OR_NEWER
                 mainModule = pSystem.main;
-                if (pSystem.main.maxParticles > 14000)
-                {
-                    mainModule.maxParticles = 14000;
-                }
-                #else
+                if (pSystem.main.maxParticles > 14000) mainModule.maxParticles = 14000;
+#else
                     if (pSystem.maxParticles > 14000)
                         pSystem.maxParticles = 14000;
-                #endif
+#endif
 
                 pRenderer = pSystem.GetComponent<ParticleSystemRenderer>();
                 if (pRenderer != null)
                     pRenderer.enabled = false;
-                
-                Shader foundShader = Shader.Find("UI/Particles/Additive");
-                Material pMaterial = new Material(foundShader);
+
+                var foundShader = Shader.Find("UI/Particles/Additive");
+                var pMaterial = new Material(foundShader);
 
                 if (material == null)
                     material = pMaterial;
@@ -87,23 +73,24 @@ namespace Roulette.Scripts.UI
                     if (currentTexture == null)
                         currentTexture = Texture2D.whiteTexture;
                 }
+
                 material = currentMaterial;
                 // automatically set scaling
-                #if UNITY_5_5_OR_NEWER
+#if UNITY_5_5_OR_NEWER
                 mainModule.scalingMode = ParticleSystemScalingMode.Hierarchy;
-                #else
+#else
                     pSystem.scalingMode = ParticleSystemScalingMode.Hierarchy;
-                #endif
+#endif
 
                 particles = null;
             }
-            #if UNITY_5_5_OR_NEWER
+#if UNITY_5_5_OR_NEWER
             if (particles == null)
                 particles = new ParticleSystem.Particle[pSystem.main.maxParticles];
-            #else
+#else
                 if (particles == null)
                     particles = new ParticleSystem.Particle[pSystem.maxParticles];
-            #endif
+#endif
 
             imageUV = new Vector4(0, 0, 1, 1);
 
@@ -114,7 +101,8 @@ namespace Roulette.Scripts.UI
             if (textureSheetAnimation.enabled)
             {
                 textureSheetAnimationFrames = textureSheetAnimation.numTilesX * textureSheetAnimation.numTilesY;
-                textureSheetAnimationFrameSize = new Vector2(1f / textureSheetAnimation.numTilesX, 1f / textureSheetAnimation.numTilesY);
+                textureSheetAnimationFrameSize = new Vector2(1f / textureSheetAnimation.numTilesX,
+                    1f / textureSheetAnimation.numTilesY);
             }
 
             return true;
@@ -127,72 +115,69 @@ namespace Roulette.Scripts.UI
                 enabled = false;
         }
 
-        
+
         protected override void OnPopulateMesh(VertexHelper vh)
         {
 #if UNITY_EDITOR
             if (!Application.isPlaying)
-            {
                 if (!Initialize())
-                {
                     return;
-                }
-            }
 #endif
             // prepare vertices
             vh.Clear();
 
-            if (!gameObject.activeInHierarchy)
-            {
-                return;
-            }
+            if (!gameObject.activeInHierarchy) return;
 
-            Vector2 temp = Vector2.zero;
-            Vector2 corner1 = Vector2.zero;
-            Vector2 corner2 = Vector2.zero;
+            var temp = Vector2.zero;
+            var corner1 = Vector2.zero;
+            var corner2 = Vector2.zero;
             // iterate through current particles
-            int count = pSystem.GetParticles(particles);
+            var count = pSystem.GetParticles(particles);
 
-            for (int i = 0; i < count; ++i)
+            for (var i = 0; i < count; ++i)
             {
-                ParticleSystem.Particle particle = particles[i];
+                var particle = particles[i];
 
                 // get particle properties
-                #if UNITY_5_5_OR_NEWER
-                Vector2 position = (mainModule.simulationSpace == ParticleSystemSimulationSpace.Local ? particle.position : _transform.InverseTransformPoint(particle.position));
-                #else
-                    Vector2 position = (pSystem.simulationSpace == ParticleSystemSimulationSpace.Local ? particle.position : _transform.InverseTransformPoint(particle.position));
-                #endif  
-                float rotation = -particle.rotation * Mathf.Deg2Rad;
-                float rotation90 = rotation + Mathf.PI / 2;
-                Color32 color = particle.GetCurrentColor(pSystem);
-                float size = particle.GetCurrentSize(pSystem) * 0.5f;
+#if UNITY_5_5_OR_NEWER
+                Vector2 position = mainModule.simulationSpace == ParticleSystemSimulationSpace.Local
+                    ? particle.position
+                    : _transform.InverseTransformPoint(particle.position);
+#else
+                    Vector2 position =
+ (pSystem.simulationSpace == ParticleSystemSimulationSpace.Local ? particle.position : _transform.InverseTransformPoint(particle.position));
+#endif
+                var rotation = -particle.rotation * Mathf.Deg2Rad;
+                var rotation90 = rotation + Mathf.PI / 2;
+                var color = particle.GetCurrentColor(pSystem);
+                var size = particle.GetCurrentSize(pSystem) * 0.5f;
 
                 // apply scale
-                #if UNITY_5_5_OR_NEWER
+#if UNITY_5_5_OR_NEWER
                 if (mainModule.scalingMode == ParticleSystemScalingMode.Shape)
                     position /= canvas.scaleFactor;
-                #else
+#else
                     if (pSystem.scalingMode == ParticleSystemScalingMode.Shape)
                         position /= canvas.scaleFactor;
-                #endif
+#endif
 
                 // apply texture sheet animation
-                Vector4 particleUV = imageUV;
+                var particleUV = imageUV;
                 if (textureSheetAnimation.enabled)
                 {
-                    #if UNITY_5_5_OR_NEWER
-                    float frameProgress = textureSheetAnimation.frameOverTime.curveMin.Evaluate(1 - (particle.remainingLifetime / particle.startLifetime));
-                    #else
+#if UNITY_5_5_OR_NEWER
+                    var frameProgress =
+                        textureSheetAnimation.frameOverTime.curveMin.Evaluate(
+                            1 - particle.remainingLifetime / particle.startLifetime);
+#else
                     float frameProgress = 1 - (particle.lifetime / particle.startLifetime);
-                    #endif
+#endif
 
                     frameProgress = Mathf.Repeat(frameProgress * textureSheetAnimation.cycleCount, 1);
-                    int frame = 0;
+                    var frame = 0;
 
                     switch (textureSheetAnimation.animation)
                     {
-
                         case ParticleSystemAnimationType.WholeSheet:
                             frame = Mathf.FloorToInt(frameProgress * textureSheetAnimationFrames);
                             break;
@@ -200,19 +185,19 @@ namespace Roulette.Scripts.UI
                         case ParticleSystemAnimationType.SingleRow:
                             frame = Mathf.FloorToInt(frameProgress * textureSheetAnimation.numTilesX);
 
-                            int row = textureSheetAnimation.rowIndex;
+                            var row = textureSheetAnimation.rowIndex;
                             //                    if (textureSheetAnimation.useRandomRow) { // FIXME - is this handled internally by rowIndex?
                             //                        row = Random.Range(0, textureSheetAnimation.numTilesY, using: particle.randomSeed);
                             //                    }
                             frame += row * textureSheetAnimation.numTilesX;
                             break;
-
                     }
 
                     frame %= textureSheetAnimationFrames;
 
-                    particleUV.x = (frame % textureSheetAnimation.numTilesX) * textureSheetAnimationFrameSize.x;
-                    particleUV.y = Mathf.FloorToInt(frame / textureSheetAnimation.numTilesX) * textureSheetAnimationFrameSize.y;
+                    particleUV.x = frame % textureSheetAnimation.numTilesX * textureSheetAnimationFrameSize.x;
+                    particleUV.y = Mathf.FloorToInt(frame / textureSheetAnimation.numTilesX) *
+                                   textureSheetAnimationFrameSize.y;
                     particleUV.z = particleUV.x + textureSheetAnimationFrameSize.x;
                     particleUV.w = particleUV.y + textureSheetAnimationFrameSize.y;
                 }
@@ -266,8 +251,8 @@ namespace Roulette.Scripts.UI
                 else
                 {
                     // apply rotation
-                    Vector2 right = new Vector2(Mathf.Cos(rotation), Mathf.Sin(rotation)) * size;
-                    Vector2 up = new Vector2(Mathf.Cos(rotation90), Mathf.Sin(rotation90)) * size;
+                    var right = new Vector2(Mathf.Cos(rotation), Mathf.Sin(rotation)) * size;
+                    var up = new Vector2(Mathf.Cos(rotation90), Mathf.Sin(rotation90)) * size;
 
                     _quad[0].position = position - right - up;
                     _quad[1].position = position - right + up;
@@ -279,15 +264,15 @@ namespace Roulette.Scripts.UI
             }
         }
 
-        void Update()
+        private void Update()
         {
             if (!fixedTime && Application.isPlaying)
             {
                 pSystem.Simulate(Time.unscaledDeltaTime, false, false, true);
                 SetAllDirty();
 
-                if ((currentMaterial!= null && currentTexture != currentMaterial.mainTexture) ||
-                    (material!=null && currentMaterial != null && material.shader != currentMaterial.shader))
+                if (currentMaterial != null && currentTexture != currentMaterial.mainTexture ||
+                    material != null && currentMaterial != null && material.shader != currentMaterial.shader)
                 {
                     pSystem = null;
                     Initialize();
@@ -295,7 +280,7 @@ namespace Roulette.Scripts.UI
             }
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             if (!Application.isPlaying)
             {
@@ -307,15 +292,16 @@ namespace Roulette.Scripts.UI
                 {
                     pSystem.Simulate(Time.unscaledDeltaTime, false, false, true);
                     SetAllDirty();
-                    if ((currentMaterial != null && currentTexture != currentMaterial.mainTexture) ||
-                        (material != null && currentMaterial != null && material.shader != currentMaterial.shader))
+                    if (currentMaterial != null && currentTexture != currentMaterial.mainTexture ||
+                        material != null && currentMaterial != null && material.shader != currentMaterial.shader)
                     {
                         pSystem = null;
                         Initialize();
                     }
                 }
             }
-            if (material == currentMaterial) 
+
+            if (material == currentMaterial)
                 return;
             pSystem = null;
             Initialize();

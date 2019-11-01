@@ -1,78 +1,77 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Script.ObjectEngine;
+﻿using Script.ObjectEngine;
 using UnityEngine;
 
 namespace Script.GameLogic.TetrisElement
 {
     public class ElementManager : MonoBehaviour
     {
-        private TetrisFSM _myFSM;
+        private TetrisFSM _fsm;
         private PlaneMatrix _matrix;
 
-        Transform _myTransform;
+        private Transform _transform;
 
         private bool _defferedDrop;
         private InfluenceManager _influence;
 
         private int _dropElementCount;
         private int _endDrop;
-        void Start () {
-            _myTransform = this.transform;
 
-            _matrix = RealizationBox.Instance.Matrix();
-            _myFSM = RealizationBox.Instance.FSM;
-            _influence = RealizationBox.Instance.InfluenceManager;
-        }
-    
-        private void OnDestroy() {
+        private void Start()
+        {
+            _transform = transform;
 
-//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, DeleteAllElements);
+            _matrix = RealizationBox.Instance.matrix;
+            _fsm = RealizationBox.Instance.FSM;
+            _influence = RealizationBox.Instance.influenceManager;
         }
 
         #region  функции падения нового эл-та ( и его слияние)
 
-        public void StartDropElement() {
+        public void StartDropElement()
+        {
             ElementData.NewElement.LogicDrop();
-            _influence.AddMove( ElementData.NewElement.MyTransform, Vector3.down, Speed.TimeDrop, CallDrop);
+            _influence.AddMove(ElementData.NewElement.MyTransform, Vector3.down, Speed.TimeDrop, CallDrop);
         }
 
-        private void CallDrop() => _myFSM.SetNewState(TetrisState.Drop);
-    
+        private void CallDrop()
+        {
+            _fsm.SetNewState(TetrisState.Drop);
+        }
+
         public void CheckDelayDrop()
         {
 //        _Machine.ChangeState(EMachineState.NewElement, false);
-            Debug.Log(" CheckDelayDrop");
             if (_defferedDrop)
             {
                 _defferedDrop = false;
-                Debug.Log("USE deferred drop");
                 StartDropElement();
             }
         }
 
-        public void MergeNewElement() {
-
+        public void MergeNewElement()
+        {
             _matrix.BindToMatrix(ElementData.NewElement);
             ElementData.MergeNewElement();
         }
+
         #endregion
-        
+
         #region  функции падения всех эл-тов ( после уничтожения слоев)
 
-        public void StartDropAllElements() {
-  
-            var countDropElements= DropAllElements();
+        public void StartDropAllElements()
+        {
+            var countDropElements = DropAllElements();
             if (countDropElements > 0)
                 return;
 
-            RealizationBox.Instance.FSM.SetNewState( TetrisState.Collection);
+            RealizationBox.Instance.FSM.SetNewState(TetrisState.Collection);
         }
 
         private int DropAllElements()
         {
             _dropElementCount = 0;
-            foreach (var item in ElementData.MergerElements) {
+            foreach (var item in ElementData.MergerElements)
+            {
                 var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
                 if (empty) //если коллизии нет, элемент может падать вниз
                 {
@@ -81,14 +80,17 @@ namespace Script.GameLogic.TetrisElement
 
                     _dropElementCount++;
                     item.LogicDrop();
-                
-                    _influence.AddMove( item.MyTransform, Vector3.down, Speed.TimeDropAfterDestroy, DecrementDropElementsCount);
+
+                    _influence.AddMove(item.MyTransform, Vector3.down, Speed.TimeDropAfterDestroy,
+                        DecrementDropElementsCount);
                 }
-                else {
+                else
+                {
                     if (!item.IsBind)
                         _matrix.BindToMatrix(item);
                 }
             }
+
             return _dropElementCount;
         }
 

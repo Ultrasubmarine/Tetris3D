@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class GameCamera : MonoBehaviour {
-    
+public class GameCamera : MonoBehaviour
+{
     [SerializeField] private Transform _MaxDistance;
     [SerializeField] private Transform _MinDistance;
 
@@ -25,20 +25,26 @@ public class GameCamera : MonoBehaviour {
 
     private Vector3 _offset; // положение между камерой и площадкой
     private float _rotY;
-    public float Rotation{ set { _rotY = value; } }
-    
-    [Space(15)]
-    [Header("First Animation")]
-    [SerializeField] private float _Time = 1;
+
+    public float Rotation
+    {
+        set => _rotY = value;
+    }
+
+    [Space(15)] [Header("First Animation")] [SerializeField]
+    private float _Time = 1;
+
     [SerializeField] private float _FirstOrthographicSize = 15;
 
-    private void Awake() {
+    private void Awake()
+    {
 //        Messenger<int, int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CheckStabilization);
         _myTransform = transform;
     }
 
     // Use this for initialization
-    private void Start() {
+    private void Start()
+    {
         _offset = Vector3.zero - transform.position;
         _myTransform.LookAt(_ObjectLook.transform.position);
 
@@ -46,7 +52,8 @@ public class GameCamera : MonoBehaviour {
         _myTransform.LookAt(_ObjectLook.position);
     }
 
-    public void CheckStabilization(int limit, int height) {
+    public void CheckStabilization(int limit, int height)
+    {
         if (_currentHeight == height)
             return;
 
@@ -54,25 +61,26 @@ public class GameCamera : MonoBehaviour {
         StartCoroutine(ChangeDistance(limit, height));
     }
 
-    public IEnumerator ChangeDistance(int limit, int current) {
-        
-        Vector3 needPosition = Vector3.Lerp(_MinDistance.position, _MaxDistance.position, current / (float) limit);
+    public IEnumerator ChangeDistance(int limit, int current)
+    {
+        var needPosition = Vector3.Lerp(_MinDistance.position, _MaxDistance.position, current / (float) limit);
 
         float t = 0;
-      
+
         _offset = Vector3.zero - needPosition;
-        Quaternion rotation = Quaternion.Euler(0, _rotY, 0);
+        var rotation = Quaternion.Euler(0, _rotY, 0);
 
-        Vector3 startP = _myTransform.position;
-        Vector3 finishP = Vector3.zero - (rotation * _offset);
+        var startP = _myTransform.position;
+        var finishP = Vector3.zero - rotation * _offset;
 
-        float startS = _camera.orthographicSize;
-        float finishS = Mathf.Lerp(_MinSize, _MaxSize, current / (float) limit);
+        var startS = _camera.orthographicSize;
+        var finishS = Mathf.Lerp(_MinSize, _MaxSize, current / (float) limit);
 
-        Vector3 startLookAt = _ObjectLook.position;
-        Vector3 finishLookAt = Vector3.Lerp(_MinLookAt.position, _MaxLookAt.position,current / (float) limit);
+        var startLookAt = _ObjectLook.position;
+        var finishLookAt = Vector3.Lerp(_MinLookAt.position, _MaxLookAt.position, current / (float) limit);
 
-        while (t < _TimeStabilization) {
+        while (t < _TimeStabilization)
+        {
             _myTransform.position = Vector3.Lerp(startP, finishP, t / _TimeStabilization);
             _camera.orthographicSize = Mathf.Lerp(startS, finishS, t / _TimeStabilization);
 
@@ -89,38 +97,41 @@ public class GameCamera : MonoBehaviour {
         _myTransform.LookAt(_ObjectLook.position);
     }
 
-  
 
-    public void FirstAnimation() {
+    public void FirstAnimation()
+    {
         StartCoroutine(ChangeCameraSize());
     }
 
-    public IEnumerator ChangeCameraSize() {
+    public IEnumerator ChangeCameraSize()
+    {
         float timer = 0;
 
-        float startS = _FirstOrthographicSize;
-        float finishS = _MinSize;
-        while (timer < _Time) {
+        var startS = _FirstOrthographicSize;
+        var finishS = _MinSize;
+        while (timer < _Time)
+        {
             _camera.orthographicSize = Mathf.Lerp(startS, finishS, timer / _Time);
             timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        
+
 //        Messenger.Broadcast(GameEvent.END_CAMERA_ANIMATION.ToString());
     }
-    
-    public void ResetSettings() {
+
+    public void ResetSettings()
+    {
         _rotY = 0;
-        
-        _offset = Vector3.zero - _MinDistance.position;;
-        Quaternion rotation = Quaternion.Euler(0, _rotY, 0);
-        
-        Vector3 finishP = Vector3.zero - (rotation * _offset);
+
+        _offset = Vector3.zero - _MinDistance.position;
+        ;
+        var rotation = Quaternion.Euler(0, _rotY, 0);
+
+        var finishP = Vector3.zero - rotation * _offset;
 
         _myTransform.position = finishP;
         _camera.orthographicSize = _MinSize;
         _ObjectLook.transform.position = _MinLookAt.position;
         _myTransform.LookAt(_ObjectLook.position);
     }
-    
 }

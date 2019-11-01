@@ -1,36 +1,32 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Script.GameLogic.TetrisElement;
+﻿using Script.GameLogic.TetrisElement;
 using Script.ObjectEngine;
 using UnityEngine;
 
 public class RealizationBox : Singleton<RealizationBox>
 {
+    [SerializeField] private TetrisFSM _FSM;
+    [Space(5)] 
+    [SerializeField] private PlaneMatrix _matrix;
+    [SerializeField] private Generator _generator;
+    [SerializeField] private GameLogicPool _gameLogicPool;
+    [Space(5)] 
+    [SerializeField] private ElementManager _elementManager;
+    [SerializeField] private ElementCleaner _elementCleaner;
+    [Space(5)] 
+    [SerializeField] private Score _score;
+    [SerializeField] private InfluenceManager _influenceManager;
 
-	[SerializeField] PlaneMatrix _Matrix;
-	[SerializeField] Generator _Ganerator;
-	[SerializeField] ElementManager _ElementManager;
-	[SerializeField] private TetrisFSM _FSM;
-	[SerializeField] private Score _Score;
-	[SerializeField] private InfluenceManager _InfluenceManager;
-	[SerializeField] private ElementCleaner _elementCleaner;
-	public PlaneMatrix Matrix() { return _Matrix; }
-	public Generator ElementGenerator() { return _Ganerator; }
-
-	public ElementManager ElementManager() { return _ElementManager; }
-	public TetrisFSM FSM => _FSM;
-	public Score Score => _Score;
-
-
-	public InfluenceManager InfluenceManager => _InfluenceManager;
-	public ElementCleaner ElementCleaner => _elementCleaner;
-
-	private void Start()
-	{
-		ElementData.Loader = () =>
-		{
-			return _Ganerator.GenerationNewElement(_ElementManager.transform);
-		};
-	}
+    public TetrisFSM FSM => _FSM;
+    public PlaneMatrix matrix => _matrix;
+    public Generator generator => _generator;
+    public GameLogicPool gameLogicPool => _gameLogicPool;
+    public ElementManager elementManager => _elementManager;
+    public ElementCleaner elementCleaner => _elementCleaner;
+    public Score score => _score;
+    public InfluenceManager influenceManager => _influenceManager;
+    
+    private void Start()
+    {
+        ElementData.Loader = () => { return _generator.GenerationNewElement(_elementManager.transform); };
+    }
 }

@@ -12,36 +12,41 @@ public enum turn
     right
 }
 
-public class Turning : MonoBehaviour{
-
+public class Turning : MonoBehaviour
+{
     // for camera
     private Vector3 _offset; // начальное положение между камерой и площадкой
     private float _rotY; // поворот камеры
-    [SerializeField] GameObject _Camera;
-    GameCamera _gameCamera;
+    [SerializeField] private GameObject _Camera;
+
+    private GameCamera _gameCamera;
+
 //    [SerializeField] StateMachine _StateMachine;
     [SerializeField] private GameObject _ObjectLook;
 
     private PlaneMatrix _matrix;
 
-    void Awake() {
+    private void Awake()
+    {
 //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive,ResetTurn);
     }
 
-    void OnDestroy() {
+    private void OnDestroy()
+    {
 //        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive,ResetTurn);
     }
 
-    private void Start() {
+    private void Start()
+    {
         _offset = Vector3.zero - _Camera.transform.position; // сохраняем расстояние между камерой и полем
         _matrix = PlaneMatrix.Instance;
         _gameCamera = _Camera.GetComponent<GameCamera>();
     }
 
-    public bool Action(Element element, turn direction, float time) {
-
-        if (CheckOpportunity(direction, element)) {
-
+    public bool Action(Element element, turn direction, float time)
+    {
+        if (CheckOpportunity(direction, element))
+        {
 //            if (!_StateMachine.ChangeState(EMachineState.Turn, false))
 //                return false;
 
@@ -49,14 +54,16 @@ public class Turning : MonoBehaviour{
             Vizual(direction, element, time);
             return true;
         }
+
         return false;
     }
 
-    bool CheckOpportunity(turn direction, Element element) {
-
+    private bool CheckOpportunity(turn direction, Element element)
+    {
         int x, z;
-        if (direction == turn.left) {
-            foreach (var item in element.MyBlocks) {
+        if (direction == turn.left)
+            foreach (var item in element.MyBlocks)
+            {
                 // по правилу поворота
                 x = item.Coordinates.z;
                 z = -item.Coordinates.x;
@@ -64,9 +71,9 @@ public class Turning : MonoBehaviour{
                 if (_matrix._matrix[x + 1, item.Coordinates.y, z + 1] != null)
                     return false;
             }
-        }
-        else {
-            foreach (var item in element.MyBlocks) {
+        else
+            foreach (var item in element.MyBlocks)
+            {
                 // по правилу поворота
                 x = -item.Coordinates.z;
                 z = item.Coordinates.x;
@@ -74,29 +81,28 @@ public class Turning : MonoBehaviour{
                 if (_matrix._matrix[x + 1, item.Coordinates.y, z + 1] != null)
                     return false;
             }
-        }
 
-        return true;        
+        return true;
     }
 
-    void Logic(turn direction, Element element) {
-            if (direction == turn.left)
+    private void Logic(turn direction, Element element)
+    {
+        if (direction == turn.left)
+            foreach (var item in element.MyBlocks)
             {
-                foreach (Block item in element.MyBlocks) {
-                    int temp = item.Coordinates.x;
-                    item.SetCoordinates(item.Coordinates.z, item.Coordinates.y, -item.Coordinates.x );
-                }
+                var temp = item.Coordinates.x;
+                item.SetCoordinates(item.Coordinates.z, item.Coordinates.y, -item.Coordinates.x);
             }
-            else {
-                foreach (Block item in element.MyBlocks) {
-                    int temp = item.Coordinates.x;
-                    item.SetCoordinates(-item.Coordinates.z, item.Coordinates.y, item.Coordinates.x );
-                }
+        else
+            foreach (var item in element.MyBlocks)
+            {
+                var temp = item.Coordinates.x;
+                item.SetCoordinates(-item.Coordinates.z, item.Coordinates.y, item.Coordinates.x);
             }
     }
 
-    void Vizual(turn direction, Element element, float time) {
-
+    private void Vizual(turn direction, Element element, float time)
+    {
         int angle;
         if (direction == turn.left)
             angle = 90;
@@ -105,12 +111,12 @@ public class Turning : MonoBehaviour{
 
         StartCoroutine(TurnElement(element, angle, time, _ObjectLook));
         StartCoroutine(TurnCamera(direction, time));
-        
-        Messenger<Element>.Broadcast(GameEvent.TURN_ELEMENT.ToString() , element);
+
+        Messenger<Element>.Broadcast(GameEvent.TURN_ELEMENT.ToString(), element);
     }
 
-    IEnumerator TurnCamera(turn direction, float time) {
-
+    private IEnumerator TurnCamera(turn direction, float time)
+    {
         int angle;
         if (direction == turn.left)
             angle = 90;
@@ -118,19 +124,21 @@ public class Turning : MonoBehaviour{
             angle = -90;
 
         // начальный и конечный поворот
-        Quaternion rotationStart = Quaternion.Euler(0, _rotY, 0);
+        var rotationStart = Quaternion.Euler(0, _rotY, 0);
         _rotY += angle;
-        Quaternion rotationEnd = Quaternion.Euler(0, _rotY, 0);
+        var rotationEnd = Quaternion.Euler(0, _rotY, 0);
 
         float countTime = 0;
-        while (countTime < time) {
-            if ((countTime + Time.deltaTime) < time)
+        while (countTime < time)
+        {
+            if (countTime + Time.deltaTime < time)
                 countTime += Time.deltaTime;
             else
                 countTime = time;
 
             _Camera.transform.position = Vector3.zero -
-                                 Quaternion.LerpUnclamped(rotationStart, rotationEnd, countTime / time) * _offset;
+                                         Quaternion.LerpUnclamped(rotationStart, rotationEnd, countTime / time) *
+                                         _offset;
 
             _Camera.transform.LookAt(_ObjectLook.transform.position);
             yield return new WaitForEndOfFrame();
@@ -143,20 +151,24 @@ public class Turning : MonoBehaviour{
 //        _StateMachine.ChangeState(EMachineState.EndInfluence);
     }
 
-    IEnumerator TurnElement(Element element, int angle, float time, GameObject target) {
-
+    private IEnumerator TurnElement(Element element, int angle, float time, GameObject target)
+    {
         float deltaAngle;
         float countAngle = 0;
 
-        do {
+        do
+        {
             deltaAngle = angle * (Time.deltaTime / time);
-            if (angle > 0 && countAngle + deltaAngle > angle || angle < 0 && countAngle + deltaAngle < angle) // если мы уже достаточно повернули и в ту и в другую сторону
+            if (angle > 0 && countAngle + deltaAngle > angle || angle < 0 && countAngle + deltaAngle < angle
+            ) // если мы уже достаточно повернули и в ту и в другую сторону
             {
                 deltaAngle = angle - countAngle; // узнаем сколько нам не хватает на самом деле  
                 countAngle = angle;
             }
             else
+            {
                 countAngle += deltaAngle;
+            }
 
             element.MyTransform.Rotate(target.transform.position, deltaAngle);
 
@@ -164,18 +176,18 @@ public class Turning : MonoBehaviour{
         } while (angle > 0 && countAngle < angle || angle < 0 && countAngle > angle);
     }
 
-    private void ResetTurn() {
-        
+    private void ResetTurn()
+    {
         turn need;
         if (_rotY < 0)
             need = turn.left;
         else
             need = turn.right;
-        
-        Quaternion rotationEnd = Quaternion.Euler(0, 0, 0);
+
+        var rotationEnd = Quaternion.Euler(0, 0, 0);
         _Camera.transform.position = Vector3.zero - rotationEnd * _offset;
         _Camera.transform.LookAt(_ObjectLook.transform.position);
-        
+
         _gameCamera.Rotation = 0;
         _rotY = 0;
 

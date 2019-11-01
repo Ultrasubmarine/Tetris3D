@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockPool : ObjectPool<Block> {
-
+public class BlockPool : ObjectPool<Block>
+{
 }
