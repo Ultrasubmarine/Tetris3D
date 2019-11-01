@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class AllElementsDropState : AbstractState<TetrisState>
 {
-    private ElementManager _elementManager;
+    private ElementDropper _elementDropper;
     private ElementCleaner _elementCleaner;
 
     public AllElementsDropState()
     {
-        _elementManager = RealizationBox.Instance.elementManager;
+        _elementDropper = RealizationBox.Instance.elementDropper;
         _elementCleaner = RealizationBox.Instance.elementCleaner;
     }
 
@@ -18,7 +18,7 @@ public class AllElementsDropState : AbstractState<TetrisState>
     {
         _elementCleaner.ClearElementsFromDeletedBlocks();
         _elementCleaner.CutElement();
-        _elementManager.StartDropAllElements();
+        _elementDropper.StartDropAllElements();
     }
 
     public override void Exit(TetrisState last)

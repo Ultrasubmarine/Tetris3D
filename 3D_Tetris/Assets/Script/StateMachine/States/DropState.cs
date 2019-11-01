@@ -7,14 +7,14 @@ using UnityEngine;
 public class DropState : AbstractState<TetrisState>
 {
     private Generator _generator;
-    private ElementManager _elementManager;
+    private ElementDropper _elementDropper;
     private PlaneMatrix _matrix;
 
     public DropState()
     {
         _myState = TetrisState.Drop;
 
-        _elementManager = RealizationBox.Instance.elementManager;
+        _elementDropper = RealizationBox.Instance.elementDropper;
         _matrix = RealizationBox.Instance.matrix;
     }
 
@@ -23,7 +23,7 @@ public class DropState : AbstractState<TetrisState>
         var empty = _matrix.CheckEmptyPlaсe(ElementData.NewElement, new Vector3Int(0, -1, 0));
         if (empty)
         {
-            _elementManager.StartDropElement();
+            _elementDropper.StartDropElement();
             return;
         }
 

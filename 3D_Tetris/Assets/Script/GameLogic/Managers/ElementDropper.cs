@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Script.GameLogic.TetrisElement
 {
-    public class ElementManager : MonoBehaviour
+    public class ElementDropper : MonoBehaviour
     {
         private TetrisFSM _fsm;
         private PlaneMatrix _matrix;
@@ -14,7 +14,6 @@ namespace Script.GameLogic.TetrisElement
         private InfluenceManager _influence;
 
         private int _dropElementCount;
-        private int _endDrop;
 
         private void Start()
         {
@@ -47,17 +46,9 @@ namespace Script.GameLogic.TetrisElement
                 StartDropElement();
             }
         }
-
-        public void MergeNewElement()
-        {
-            _matrix.BindToMatrix(ElementData.NewElement);
-            ElementData.MergeNewElement();
-        }
-
         #endregion
 
         #region  функции падения всех эл-тов ( после уничтожения слоев)
-
         public void StartDropAllElements()
         {
             var countDropElements = DropAllElements();

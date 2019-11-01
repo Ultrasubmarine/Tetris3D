@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using Script.GameLogic.TetrisElement;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BBC : Singleton<BBC>
 {
     [SerializeField] private PlaneMatrix _Matrix;
-    [SerializeField] private ElementManager _ElementManager;
+    [FormerlySerializedAs("_ElementManager")] [SerializeField] private ElementDropper elementDropper;
     [SerializeField] private Generator _Generator;
 
     private PlaneMatrix Matrix()
@@ -14,9 +15,9 @@ public class BBC : Singleton<BBC>
         return _Matrix;
     }
 
-    private ElementManager ElementManager()
+    private ElementDropper ElementManager()
     {
-        return _ElementManager;
+        return elementDropper;
     }
 
     private Generator Generator()
