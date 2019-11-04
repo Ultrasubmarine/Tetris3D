@@ -6,23 +6,29 @@ namespace Script.ObjectEngine
 {
     public class InfluenceManager : MonoBehaviour
     {
-        private List<Influence> _influences;
+        private List<IInfluence> _influences;
 
         [SerializeField] private Transform testObj;
 
         private void Awake()
         {
-            _influences = new List<Influence>();
+            _influences = new List<IInfluence>();
         }
 
         public void AddFakeMove()
         {
-            AddMove(testObj, Vector3.right, 1);
+            AddDrop(testObj, Vector3.right, 1);
         }
 
-        public void AddMove(Transform obj, Vector3 offset, float speed, Action callBack = null)
+        public void AddDrop(Transform obj, Vector3 offset, float speed, Action callBack = null)
         {
-            var info = new Influence(obj, obj.position + offset, speed, InfluenceMode.Move, callBack);
+            var info = new DropInfluence(obj,offset, speed, callBack);
+            _influences.Add(info);
+        }
+        
+        public void AddMove(Element element, Vector3 offset, float speed, Action callBack = null)
+        {
+            var info = new MoveInfluence(element,offset, speed, callBack);
             _influences.Add(info);
         }
 

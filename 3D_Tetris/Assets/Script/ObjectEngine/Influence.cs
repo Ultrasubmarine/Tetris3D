@@ -10,48 +10,19 @@ namespace Script.ObjectEngine
         Drop,
     }
 
-    public struct Influence
+    public interface IInfluence
     {
-        private readonly Transform _transform;
-        private readonly Vector3 _start;
-        private readonly Vector3 _finish;
+        bool Update();
+    }
 
-        private readonly float _allTime;
-        private float _currentTime;
-
+    public struct Influence<T>
+    {
         private Func<bool> _action;
         private Action _callBack;
 
-        public Influence(Transform transform, Vector3 finish, float allTime, InfluenceMode mode,
-            Action callBack = null) : this()
+        public Influence(Transform transform, T finish, float allTime, Action callBack = null): this()
         {
-            _transform = transform;
-
-            _start = transform.position;
-            _finish = finish;
-
-            _allTime = allTime;
-            _currentTime = 0;
-
-            switch (mode)
-            {
-                case InfluenceMode.Drop:
-                {
-                    _action = Drop;
-                    break;
-                }
-                case InfluenceMode.Move:
-                {
-                    _action = Move;
-                    break;
-                }
-                case InfluenceMode.Turn:
-                {
-                    _action = Turn;
-                    break;
-                }
-            }
-
+            _action = null;
             _callBack = callBack;
         }
 
@@ -68,25 +39,8 @@ namespace Script.ObjectEngine
 
             return false;
         }
-
-        private bool Turn()
-        {
-            return false;
-        }
-
-        private bool Move()
-        {
-            _currentTime += Time.deltaTime;
-            _transform.position = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
-
-            if (_currentTime >= _allTime)
-            {
-                _transform.position = _finish;
-                return true;
-            }
-
-            return false;
-        }
+        
+       
 
         private bool Drop()
         {

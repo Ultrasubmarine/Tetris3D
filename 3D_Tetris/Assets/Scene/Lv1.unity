@@ -2304,9 +2304,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dc08314a562ec04a946c886abc1f15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _HeightHandler: {fileID: 824329424}
-  _Wight: 3
-  _Height: 18
+  _heightHandler: {fileID: 824329424}
+  _wight: 3
+  _height: 18
 --- !u!4 &385851846
 Transform:
   m_ObjectHideFlags: 0
@@ -3356,9 +3356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b489d633cafbf32498e46a9f22621809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
 --- !u!1 &556433572
 GameObject:
   m_ObjectHideFlags: 0
@@ -5880,7 +5877,7 @@ MonoBehaviour:
   _matrix: {fileID: 385851845}
   _generator: {fileID: 1634487027}
   _gameLogicPool: {fileID: 1476940814}
-  _elementManager: {fileID: 39482331}
+  _elementDropper: {fileID: 39482331}
   _elementCleaner: {fileID: 1171712453}
   _score: {fileID: 188220915}
   _influenceManager: {fileID: 770432238}
