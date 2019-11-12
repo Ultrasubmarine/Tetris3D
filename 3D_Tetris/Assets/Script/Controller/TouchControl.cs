@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Helper.Patterns.Messenger;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public enum ETouсhSign
@@ -91,6 +92,6 @@ public class TouchControl : MonoBehaviour
         //left sector
         else if (_lp.x < _fp.x) _touchEvent = _lp.y < _fp.y ? ETouсhSign.Swipe_LeftDown : ETouсhSign.Swipe_LeftUp;
 
-//        Messenger<ETouсhSign>.Broadcast(SWIPE, _touchEvent);
+        Messenger<ETouсhSign>.Broadcast(SWIPE, _touchEvent);
     }
 }

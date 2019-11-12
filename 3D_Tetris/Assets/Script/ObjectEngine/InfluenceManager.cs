@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Script.GameLogic.TetrisElement;
 using UnityEngine;
 
 namespace Script.ObjectEngine
@@ -25,7 +26,11 @@ namespace Script.ObjectEngine
             var info = new DropInfluence(obj,offset, speed, callBack);
             _influences.Add(info);
         }
-        
+
+        public void Move()
+        {
+            AddMove(ElementData.NewElement, Vector3.left, 1);
+        }
         public void AddMove(Element element, Vector3 offset, float speed, Action callBack = null)
         {
             var info = new MoveInfluence(element,offset, speed, callBack);

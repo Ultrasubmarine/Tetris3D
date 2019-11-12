@@ -20,10 +20,18 @@ public class DropState : AbstractState<TetrisState>
 
     public override void Enter(TetrisState last)
     {
+        if (last != TetrisState.WaitInfluence && last != TetrisState.EndInfluence && last != TetrisState.GenerateElement)
+        {
+            Debug.Log($"DELAY DROP (Last ={last})");
+            InfluenceData.delayedDrop = true;
+            return;
+        }
+        
         var empty = _matrix.CheckEmptyPlaсe(ElementData.NewElement, new Vector3Int(0, -1, 0));
         if (empty)
         {
             _elementDropper.StartDropElement();
+            _FSM.SetNewState(TetrisState.WaitInfluence);
             return;
         }
 

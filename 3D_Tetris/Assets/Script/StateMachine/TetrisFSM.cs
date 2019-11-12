@@ -1,4 +1,5 @@
 ﻿using Helper.Patterns.FSM;
+using Script.StateMachine.States;
 using UnityEngine;
 
 public enum TetrisState
@@ -33,6 +34,10 @@ public class TetrisFSM : AbstractFSM<TetrisState>
         _statesDictionary.Add(TetrisState.Collection, new CollectionState());
         _statesDictionary.Add(TetrisState.WinCheck, new WinCheckState());
         _statesDictionary.Add(TetrisState.AllElementsDrop, new AllElementsDropState());
+        
+        _statesDictionary.Add(TetrisState.WaitInfluence, new WaitInfluenceState());
+        _statesDictionary.Add(TetrisState.EndInfluence, new EndInfluenceState());
+        _statesDictionary.Add(TetrisState.Move, new MoveState());
 
         Debug.Log(" Load fms");
 //		Invoke( "StartFSM", 1.0f);

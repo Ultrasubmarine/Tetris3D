@@ -1,11 +1,10 @@
-﻿using Script.GameLogic.TetrisElement;
+﻿using Helper.Patterns.Messenger;
+using Script.GameLogic.TetrisElement;
+using Script.StateMachine.States;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-//    [SerializeField] StateMachine _StateMachine;
-
-    [SerializeField] private Moving _Moving;
     [SerializeField] private Turning _Turning;
 
     // таблица для перемещения блоков в зависимости от угла обзора.
@@ -23,7 +22,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-//        Messenger<ETouсhSign>.AddListener( TouchControl.SWIPE, Move);
+        Messenger<ETouсhSign>.AddListener( TouchControl.SWIPE, Move);
 //        Messenger<ETouсhSign>.AddListener( TouchControl.ONE_TOUCH, Turn);
 //            
 //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
@@ -64,25 +63,28 @@ public class GameController : MonoBehaviour
         {
             case ETouсhSign.Swipe_LeftUp:
             {
-                _Moving.Action(ElementData.NewElement, A[_indexTable], Speed.TimeMove);
+                InfluenceData.direction = A[_indexTable];
                 break;
             }
             case ETouсhSign.Swipe_LeftDown:
             {
-                _Moving.Action(ElementData.NewElement, S[_indexTable], Speed.TimeMove);
+                InfluenceData.direction = S[_indexTable];
                 break;
             }
             case ETouсhSign.Swipe_RightDown:
             {
-                _Moving.Action(ElementData.NewElement, D[_indexTable], Speed.TimeMove);
+                InfluenceData.direction = D[_indexTable];
                 break;
             }
             case ETouсhSign.Swipe_RightUp:
             {
-                _Moving.Action(ElementData.NewElement, W[_indexTable], Speed.TimeMove);
+                InfluenceData.direction = W[_indexTable];
                 break;
             }
         }
+        var fsm = RealizationBox.Instance.FSM;
+        if(fsm.GetCurrentState() == TetrisState.WaitInfluence)
+            fsm.SetNewState(TetrisState.Move);
     }
 
     private void CorrectIndex(int degree)

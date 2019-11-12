@@ -25,7 +25,7 @@ namespace Helper.Patterns.FSM
 
         public virtual void SetNewState(T newState)
         {
-//			_statesDictionary[_current].Exit(newState);
+			_statesDictionary[_current].Exit(newState);
 
             _last = _current;
             _current = newState;

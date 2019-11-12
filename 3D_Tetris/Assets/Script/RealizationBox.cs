@@ -18,6 +18,8 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private Score _score;
     [SerializeField] private InfluenceManager _influenceManager;
 
+    [SerializeField] private GameObject _controller;
+    
     public TetrisFSM FSM => _FSM;
     public PlaneMatrix matrix => _matrix;
     public Generator generator => _generator;
@@ -26,6 +28,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public ElementCleaner elementCleaner => _elementCleaner;
     public Score score => _score;
     public InfluenceManager influenceManager => _influenceManager;
+    public GameObject controller => _controller;
     
     private void Start()
     {
