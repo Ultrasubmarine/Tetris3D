@@ -4,6 +4,7 @@ using System.Linq;
 using Helper.Patterns;
 using IntegerExtension;
 using Script.GameLogic.TetrisElement;
+using UnityEngine.Serialization;
 
 public class Projection : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class Projection : MonoBehaviour
     private PlaneMatrix _matrix;
 
     [SerializeField] private GameObject _prefab;
-    [SerializeField] private float _HeightProjection = 0.1f;
+    [SerializeField] private float _heightProjection = 0.1f;
 
     private List<GameObject> _projectionsList = new List<GameObject>();
     private Pool<GameObject> _pool;
@@ -45,7 +46,7 @@ public class Projection : MonoBehaviour
         {
             float y = _matrix.MinHeightInCoordinates(item.x.ToIndex(), item.z.ToIndex());
 
-            var posProjection = new Vector3(item.x, y + _HeightProjection, item.z);
+            var posProjection = new Vector3(item.x, y + _heightProjection, item.z);
 
             var o = _pool.Pop(true);
             o.transform.position = posProjection;
