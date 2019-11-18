@@ -20,6 +20,7 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private InfluenceManager _influenceManager;
 
     [SerializeField] private GameObject _controller;
+    [SerializeField] private HeightHandler _heightHandler;
     
     public TetrisFSM FSM => _FSM;
     public PlaneMatrix matrix => _matrix;
@@ -30,6 +31,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public Score score => _score;
     public InfluenceManager influenceManager => _influenceManager;
     public GameObject controller => _controller;
+    public HeightHandler haightHandler => _heightHandler;
     
     private void Start()
     {

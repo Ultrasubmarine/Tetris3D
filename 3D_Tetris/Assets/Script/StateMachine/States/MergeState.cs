@@ -1,13 +1,16 @@
 ﻿using Helper.Patterns.FSM;
 using Script.GameLogic.TetrisElement;
+using UnityEngine;
 
 public class MergeState : AbstractState<TetrisState>
 {
     private PlaneMatrix _matrix;
+    private HeightHandler _heightHandler;
     
     public MergeState()
     {
         _matrix = RealizationBox.Instance.matrix;
+        _heightHandler = RealizationBox.Instance.haightHandler;
     }
 
     public override void Enter(TetrisState last)
@@ -16,7 +19,10 @@ public class MergeState : AbstractState<TetrisState>
         ElementData.MergeNewElement();
         
         base.Enter(last);
-        _FSM.SetNewState(TetrisState.Collection);
+        if(!_heightHandler.CheckOutOfLimit())
+            _FSM.SetNewState(TetrisState.Collection);
+        else
+            Debug.Log("end game");
     }
 
     public override void Exit(TetrisState last)

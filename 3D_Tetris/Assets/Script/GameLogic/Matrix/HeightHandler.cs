@@ -45,7 +45,7 @@ public class HeightHandler : MonoBehaviour
         }
     }
 
-    private bool CheckOutOfLimit()
+    public bool CheckOutOfLimit()
     {
         CheckHeight();
         return OutOfLimitHeight();

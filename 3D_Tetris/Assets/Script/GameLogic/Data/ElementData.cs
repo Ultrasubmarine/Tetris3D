@@ -22,7 +22,6 @@ namespace Script.GameLogic.TetrisElement
         public static void LoadNewElement()
         {
             NewElement = Loader.Invoke();
-            Debug.Log("New load element");
             NewElementUpdate?.Invoke();
         }
 
