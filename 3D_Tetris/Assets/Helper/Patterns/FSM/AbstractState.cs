@@ -9,7 +9,10 @@ namespace Helper.Patterns.FSM
         protected T _myState;
         public event Action AdditionalActions;
 
-        public abstract void Enter(T last);
+        public virtual void Enter(T last)
+        {
+            AdditionalActions?.Invoke();
+        }
 
         public abstract void Exit(T last);
 

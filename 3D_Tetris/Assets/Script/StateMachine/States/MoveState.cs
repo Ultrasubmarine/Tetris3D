@@ -1,5 +1,6 @@
 ﻿using Helper.Patterns.FSM;
 using Script.GameLogic.TetrisElement;
+using Script.Influence;
 using Script.ObjectEngine;
 using UnityEngine;
 
@@ -34,9 +35,13 @@ namespace Script.StateMachine.States
 
                 _influence.AddMove(ElementData.NewElement, vectorDirection, Speed.TimeMove,
                     () => { _FSM.SetNewState(TetrisState.EndInfluence); });
+                base.Enter(last);
             }
             else
+            {
+                base.Enter(last);
                 _FSM.SetNewState(TetrisState.WaitInfluence);
+            }
         }
 
         public override void Exit(TetrisState last)

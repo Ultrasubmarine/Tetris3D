@@ -15,11 +15,12 @@ namespace Script.StateMachine.States
             if (InfluenceData.delayedDrop)
             {
                 InfluenceData.delayedDrop = false;
-                Debug.Log("EndInfluense check");
                 _FSM.SetNewState(TetrisState.Drop);
             }
             else
                 _FSM.SetNewState(TetrisState.WaitInfluence);
+            
+            base.Enter(last);
         }
 
         public override void Exit(TetrisState last)

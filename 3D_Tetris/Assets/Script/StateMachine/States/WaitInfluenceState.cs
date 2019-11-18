@@ -14,6 +14,7 @@ namespace Script.StateMachine.States
         
         public override void Enter(TetrisState last)
         {
+            base.Enter(last);
             _gameObject.SetActive(true);
         }
 

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Helper.Patterns.FSM;
+﻿using Helper.Patterns.FSM;
 using Script.GameLogic.TetrisElement;
 using UnityEngine;
 
@@ -20,9 +18,10 @@ public class DropState : AbstractState<TetrisState>
 
     public override void Enter(TetrisState last)
     {
+        base.Enter(last);
+        
         if (last != TetrisState.WaitInfluence && last != TetrisState.EndInfluence && last != TetrisState.GenerateElement)
         {
-            Debug.Log($"DELAY DROP (Last ={last})");
             InfluenceData.delayedDrop = true;
             return;
         }

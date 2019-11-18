@@ -19,6 +19,8 @@ public class AllElementsDropState : AbstractState<TetrisState>
         _elementCleaner.ClearElementsFromDeletedBlocks();
         _elementCleaner.CutElement();
         _elementDropper.StartDropAllElements();
+        
+        base.Enter(last);
     }
 
     public override void Exit(TetrisState last)

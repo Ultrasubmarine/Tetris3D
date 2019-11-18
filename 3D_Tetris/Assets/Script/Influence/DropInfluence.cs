@@ -1,4 +1,5 @@
 ﻿using System;
+using Script.Influence;
 using UnityEngine;
 
 namespace Script.ObjectEngine

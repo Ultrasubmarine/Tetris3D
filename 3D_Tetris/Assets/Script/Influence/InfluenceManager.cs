@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Script.GameLogic.TetrisElement;
+using Script.ObjectEngine;
 using UnityEngine;
 
-namespace Script.ObjectEngine
+namespace Script.Influence
 {
     public class InfluenceManager : MonoBehaviour
     {
@@ -16,21 +16,12 @@ namespace Script.ObjectEngine
             _influences = new List<IInfluence>();
         }
 
-        public void AddFakeMove()
-        {
-            AddDrop(testObj, Vector3.right, 1);
-        }
-
         public void AddDrop(Transform obj, Vector3 offset, float speed, Action callBack = null)
         {
             var info = new DropInfluence(obj,offset, speed, callBack);
             _influences.Add(info);
         }
 
-        public void Move()
-        {
-            AddMove(ElementData.NewElement, Vector3.left, 1);
-        }
         public void AddMove(Element element, Vector3 offset, float speed, Action callBack = null)
         {
             var info = new MoveInfluence(element,offset, speed, callBack);

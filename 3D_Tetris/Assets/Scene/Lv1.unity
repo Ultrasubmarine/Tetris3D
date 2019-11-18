@@ -2938,7 +2938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55812ed972d55bc409f6a7dc94820275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _PoolProjection: {fileID: 343842832}
+  _prefab: {fileID: 1583937087}
   _HeightProjection: 0.1
   _PoolCeiling: {fileID: 1843248900}
   _MinimumLayerHeight: 2
@@ -4748,7 +4748,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac3b5262a4eda344bcc84e9d04f3190, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Moving: {fileID: 363865033}
   _Turning: {fileID: 1890531350}
 --- !u!4 &860787691
 Transform:
@@ -5881,6 +5880,7 @@ MonoBehaviour:
   _elementCleaner: {fileID: 1171712453}
   _score: {fileID: 188220915}
   _influenceManager: {fileID: 770432238}
+  _controller: {fileID: 860787689}
 --- !u!4 &1237479897
 Transform:
   m_ObjectHideFlags: 0

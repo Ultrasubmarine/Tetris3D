@@ -16,6 +16,8 @@ public class CollectionState : AbstractState<TetrisState>
             _FSM.SetNewState(TetrisState.AllElementsDrop);
         else
             _FSM.SetNewState(TetrisState.WinCheck);
+        
+        base.Enter(last);
     }
 
     public override void Exit(TetrisState last)

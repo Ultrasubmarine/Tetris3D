@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Script.ObjectEngine
+namespace Script.Influence
 {
     public enum InfluenceMode
     {

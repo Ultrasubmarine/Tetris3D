@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Script.GameLogic.TetrisElement
 {
     public static class ElementData
     {
+        public static event Action  NewElementUpdate;
         public static Element NewElement { get; private set; }
 
         public static Func<Element> Loader;
         public static List<Element> MergerElements => _mergerElements;
 
         private static List<Element> _mergerElements;
-
+        
         static ElementData()
         {
             _mergerElements = new List<Element>();
@@ -20,6 +22,8 @@ namespace Script.GameLogic.TetrisElement
         public static void LoadNewElement()
         {
             NewElement = Loader.Invoke();
+            Debug.Log("New load element");
+            NewElementUpdate?.Invoke();
         }
 
         public static void MergeNewElement()

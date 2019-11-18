@@ -12,6 +12,8 @@ public class WinCheckState : AbstractState<TetrisState>
 
     public override void Enter(TetrisState last)
     {
+        base.Enter(last);
+        
         if (_score.CheckWin())
             Debug.Log("Win");
         else

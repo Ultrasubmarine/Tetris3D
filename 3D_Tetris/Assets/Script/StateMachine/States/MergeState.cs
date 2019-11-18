@@ -14,6 +14,8 @@ public class MergeState : AbstractState<TetrisState>
     {
         _matrix.BindToMatrix(ElementData.NewElement);
         ElementData.MergeNewElement();
+        
+        base.Enter(last);
         _FSM.SetNewState(TetrisState.Collection);
     }
 

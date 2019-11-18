@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Helper.Patterns;
 using IntegerExtension;
-using UnityEngine.Networking.NetworkSystem;
-using UnityEngine.Serialization;
+using Script.GameLogic.TetrisElement;
 
 public class Projection : MonoBehaviour
 {
@@ -13,16 +12,17 @@ public class Projection : MonoBehaviour
     public const int PROJECTIONS = 1;
     public const int CEILING = 2;
 
-    [Header(" Проекция ")] [SerializeField]
-    private GameObjectPool _PoolProjection;
-
+    [SerializeField] private GameObject _prefab;
     [SerializeField] private float _HeightProjection = 0.1f;
+    
     private List<GameObject> _projectionsList = new List<GameObject>();
-
+    private Pool<GameObject> _pPool;
+    
     [Header(" Потолок ")] [SerializeField] private GameObjectPool _PoolCeiling;
     [SerializeField] private int _MinimumLayerHeight;
     private List<GameObject> _ceilingList = new List<GameObject>();
 
+    private TetrisFSM _fsm;
     private void Awake()
     {
 //        Messenger<Element>.AddListener(GameEvent.CREATE_NEW_ELEMENT.ToString(), CreateProjection);
@@ -37,7 +37,6 @@ public class Projection : MonoBehaviour
 //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Win, ClearAllProjections);
 //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.End, ClearAllProjections);
     }
-
     private void OnDestroy()
     {
 //        Messenger<Element>.RemoveListener(GameEvent.CREATE_NEW_ELEMENT.ToString(), CreateProjection);
@@ -56,20 +55,42 @@ public class Projection : MonoBehaviour
     private void Start()
     {
         _matrix = PlaneMatrix.Instance;
+        _fsm = RealizationBox.Instance.FSM;
+
+        _pPool = new Pool<GameObject>(_prefab);
+        Invoke(nameof(LastStart), 1f);
     }
 
-    private void CreateProjection(Element obj)
+    private void LastStart()
     {
-        Destroy(PROJECTIONS);
+        ElementData.NewElementUpdate += CreateProjection;
+        
+        _fsm.AddListener(TetrisState.Move, CreateProjection);
+        _fsm.AddListener(TetrisState.MergeElement, () => Destroy(PROJECTIONS));
+    }
+    
+    
+    private void CreateProjection()
+    {
+        Element obj = ElementData.NewElement;
 
+        foreach (var item in _projectionsList)
+        {
+            _pPool.Push(item);
+        }
+        _projectionsList.Clear();
+        
         var positionProjection = obj.MyBlocks.Select(b => b.XZ).Distinct();
+        
         foreach (var item in positionProjection)
         {
             float y = _matrix.MinHeightInCoordinates(item.x.ToIndex(), item.z.ToIndex());
 
             var posProjection = new Vector3(item.x, y + _HeightProjection, item.z);
 
-            _projectionsList.Add(_PoolProjection.CreateObject(posProjection));
+            var o = _pPool.Pop(true);
+            o.transform.position = posProjection;
+            _projectionsList.Add(o);
         }
     }
 
@@ -104,8 +125,11 @@ public class Projection : MonoBehaviour
         {
             case PROJECTIONS:
             {
-                list = _projectionsList;
-                pool = _PoolProjection;
+                foreach (var item in _projectionsList)
+                {
+                    _pPool.Push(item);
+                }
+                _projectionsList.Clear();
                 break;
             }
             case CEILING:
@@ -121,8 +145,6 @@ public class Projection : MonoBehaviour
                 break;
             }
         }
-
-        DestroyList(list, pool);
     }
 
     private void DestroyList(List<GameObject> list, GameObjectPool pool)

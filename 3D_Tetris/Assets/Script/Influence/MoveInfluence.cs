@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-
-namespace Script.ObjectEngine
+namespace Script.Influence
 {
     public struct MoveInfluence : IInfluence
     {
