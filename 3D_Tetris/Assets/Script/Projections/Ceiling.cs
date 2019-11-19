@@ -17,30 +17,6 @@ namespace Script.Projections
         
         private List<GameObject> _ceilingList = new List<GameObject>();
         private Pool<GameObject> _pool;
-        
-
-        private void Awake()
-        { 
-    //        Messenger<int,int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CreateCeiling);
-    //
-    //        Messenger<Element>.AddListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
-    //        
-    //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearAllProjections);
-    //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Win, ClearAllProjections);
-    //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.End, ClearAllProjections);
-        }
-
-        private void OnDestroy()
-        {
-            //        
-    //        Messenger<int,int>.RemoveListener(GameEvent.CURRENT_HEIGHT.ToString(), CreateCeiling);
-    //       
-    //        Messenger<Element>.RemoveListener(GameEvent.END_DROP_ELEMENT.ToString(), DeleteProjection);
-    //        
-    //        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearAllProjections);
-    //        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Win, ClearAllProjections);
-    //        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.End, ClearAllProjections);
-        }
 
         private void Start()
         {
@@ -58,10 +34,8 @@ namespace Script.Projections
         
         private void CreateCeiling()
         {
-            Debug.Log("coco");
             Destroy();
             
-            Debug.Log($" currentHeight {_matrix.currentHeight} < _min {_MinimumLayerHeight}");
             if (_matrix.currentHeight < _MinimumLayerHeight)
                 return;
 
