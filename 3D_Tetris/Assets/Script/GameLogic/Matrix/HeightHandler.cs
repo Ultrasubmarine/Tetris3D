@@ -1,14 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using IntegerExtension;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
 public class HeightHandler : MonoBehaviour
 {
-    // DELETE
-//    [FormerlySerializedAs("machine")] [SerializeField] StateMachine _Machine;
-    //
     private PlaneMatrix _matrix;
 
     [SerializeField] [Space(20)] private int _LimitHeight;
@@ -21,30 +14,8 @@ public class HeightHandler : MonoBehaviour
     {
         _matrix = PlaneMatrix.Instance;
         _matrix.SetLimitHeight(_LimitHeight);
-
-//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Merge, ChangeStateOutOfHeights);
-//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, CheckHeight);
     }
-
-    private void OnDestroy()
-    {
-//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Merge, ChangeStateOutOfHeights);
-//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, CheckHeight);
-    }
-
-    public void ChangeStateOutOfHeights()
-    {
-        if (CheckOutOfLimit())
-        {
-//            _Machine.ChangeState(EMachineState.End);
-            Debug.Log("END GAME");
-        }
-        else
-        {
-//            _Machine.ChangeState(EMachineState.Collection);
-        }
-    }
-
+    
     public bool CheckOutOfLimit()
     {
         CheckHeight();
@@ -62,9 +33,7 @@ public class HeightHandler : MonoBehaviour
             check = _matrix.MinHeightInCoordinates(x, z);
             if (check > _CurrentHeight) _CurrentHeight = check;
         }
-
-//        Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT.ToString(), _LimitHeight, _CurrentHeight +1);
-    }
+   }
 
     private bool OutOfLimitHeight()
     {
