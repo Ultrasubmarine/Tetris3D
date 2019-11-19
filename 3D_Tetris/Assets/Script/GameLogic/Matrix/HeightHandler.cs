@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class HeightHandler : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class HeightHandler : MonoBehaviour
     [SerializeField] [Space(20)] private int _LimitHeight;
     [SerializeField] private int _CurrentHeight;
 
+    public event Action<int, int> OnHeightChange;
+    
     public int LimitHeight => _LimitHeight;
     public int CurrentHeight => _CurrentHeight;
 
@@ -18,11 +21,11 @@ public class HeightHandler : MonoBehaviour
     
     public bool CheckOutOfLimit()
     {
-        CheckHeight();
+        CalculateHeight();
         return OutOfLimitHeight();
     }
 
-    public void CheckHeight()
+    public void CalculateHeight()
     {
         _CurrentHeight = 0;
         int check;
