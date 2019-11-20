@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using IntegerExtension;
@@ -21,6 +22,8 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     public int limitHeight => _limitHeight;
     public int currentHeight => _heightHandler.CurrentHeight;
 
+    public event Action<int> OnDestroyLayer;
+    
     protected override void Init()
     {
         ExtensionMetodsForMatrix.SetSizePlane(_wight);
@@ -135,6 +138,8 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     private void DestroyLayer(int layer)
     {
 //        Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER.ToString(), layer);
+        OnDestroyLayer?.Invoke(layer);
+        
         for (var x = 0; x < wight; x++)
         for (var z = 0; z < wight; z++)
         {

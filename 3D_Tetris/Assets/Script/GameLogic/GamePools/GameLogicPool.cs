@@ -7,8 +7,8 @@ public class GameLogicPool : MonoBehaviour
     [SerializeField] private GameObject _elementPrefab;
     [SerializeField] private GameObject _blockPrefab;
     
-    [SerializeField] private Pool<Element> _elementPool;
-    [SerializeField] private Pool<Block>   _blockPool;
+    private Pool<Element> _elementPool;
+    private Pool<Block>   _blockPool;
 
     public Element CreateEmptyElement()
     {
@@ -56,42 +56,4 @@ public class GameLogicPool : MonoBehaviour
         _elementPool = new Pool<Element>(_elementPrefab.GetComponent<Element>());
         _blockPool = new Pool<Block>(_blockPrefab.GetComponent<Block>());
     }
-
-/*    public Element CreateEmptyElement()
-    {
-        return _elementPool.Pop();
-    }
-
-    public void CreateBlock(Vector3Int position, Element element, Material material)
-    {
-        var currBlock = _blockPool.Pop();
-        currBlock.Mesh.material = material;
-        currBlock.SetCoordinates(position.x.ToCoordinat(), position.y, position.z.ToCoordinat());
-
-        currBlock.MyTransform.parent = element.MyTransform;
-        SetBlockPosition(currBlock);
-        element.AddBlock(currBlock);
-    }
-
-    private void SetBlockPosition(Block block)
-    {
-        var position = new Vector3(block.Coordinates.x, block.Coordinates.y, block.Coordinates.z);
-        block.gameObject.transform.localPosition = position;
-    }
-
-    public void DeleteElement(Element element)
-    {
-        if (element.MyBlocks.Count > 0)
-            foreach (var block in element.MyBlocks)
-            {
-                DeleteBlock(block);
-            }
-
-        _elementPool.Push(element);
-    }
-
-    public void DeleteBlock(Block block)
-    {
-        _blockPool.Push(block);
-    }*/
 }
