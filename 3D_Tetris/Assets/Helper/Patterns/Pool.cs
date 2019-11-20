@@ -103,7 +103,6 @@ namespace Helper.Patterns
                     return;
             }
 
-            Debug.Log("false");
             gameObject.SetActive(false);
             gameObject.transform.SetParent(_parent, false);
             gameObject.transform.localPosition = Vector3.zero;

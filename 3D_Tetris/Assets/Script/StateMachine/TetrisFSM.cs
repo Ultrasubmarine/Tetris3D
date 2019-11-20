@@ -39,7 +39,6 @@ public class TetrisFSM : AbstractFSM<TetrisState>
         _statesDictionary.Add(TetrisState.EndInfluence, new EndInfluenceState());
         _statesDictionary.Add(TetrisState.Move, new MoveState());
 
-        Debug.Log(" Load fms");
 //		Invoke( "StartFSM", 1.0f);
     }
 
