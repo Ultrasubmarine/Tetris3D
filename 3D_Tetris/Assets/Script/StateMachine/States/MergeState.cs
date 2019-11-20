@@ -22,7 +22,7 @@ public class MergeState : AbstractState<TetrisState>
         if(!_heightHandler.CheckOutOfLimit())
             _FSM.SetNewState(TetrisState.Collection);
         else
-            Debug.Log("end game");
+            _FSM.SetNewState(TetrisState.LoseGame);
     }
 
     public override void Exit(TetrisState last)

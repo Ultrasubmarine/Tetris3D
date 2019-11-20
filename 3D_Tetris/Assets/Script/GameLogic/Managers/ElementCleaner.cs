@@ -80,7 +80,7 @@ namespace Script.GameLogic.TetrisElement
                 }
         }
 
-        private void DeleteAllElements()
+        public void DeleteAllElements()
         {
             var elements = ElementData.MergerElements;
             foreach (var item in elements)

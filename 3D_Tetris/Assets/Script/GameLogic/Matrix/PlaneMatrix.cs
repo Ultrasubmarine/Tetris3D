@@ -178,4 +178,9 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
                 return y + 1;
         return 0;
     }
+
+    public void Clear()
+    {
+        _matrix = new Block[_wight, _height, _wight];
+    }
 }

@@ -18,6 +18,9 @@ public enum TetrisState
     Collection,
     AllElementsDrop,
     WinCheck,
+    
+    LoseGame,
+    WinGame,
 }
 
 public class TetrisFSM : AbstractFSM<TetrisState>
@@ -39,6 +42,7 @@ public class TetrisFSM : AbstractFSM<TetrisState>
         _statesDictionary.Add(TetrisState.EndInfluence, new EndInfluenceState());
         _statesDictionary.Add(TetrisState.Move, new MoveState());
 
+        _statesDictionary.Add(TetrisState.LoseGame, new LoseGameState());
 //		Invoke( "StartFSM", 1.0f);
     }
 

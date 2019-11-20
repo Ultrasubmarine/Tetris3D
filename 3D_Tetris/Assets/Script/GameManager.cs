@@ -1,31 +1,43 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
-
-internal enum GameState
-{
-    Play,
-    Replay,
-    Win,
-    End,
-}
+﻿using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-//    [SerializeField] StateMachine _Machine;
-    [SerializeField] private GameObject _Controller;
+    [SerializeField] private GameObject _losePanel;
+    [SerializeField] private GameObject _winPanel;
+    
+    private TetrisFSM _fsm;
+
+    private void Start()
+    {
+        _fsm = RealizationBox.Instance.FSM;
+        Invoke( nameof(LastStart), 1f);
+    }
+
+    private void LastStart()
+    {
+        _fsm.AddListener(TetrisState.LoseGame, OnLoseGame);
+    }
 
     public void StartGame()
     {
-        _Controller.SetActive(true);
-//        _Machine.ChangeState(EMachineState.Empty);
+        _fsm.StartFSM();
     }
 
+    private void OnLoseGame()
+    {
+        _losePanel.SetActive(true);
+    }
+    
+    private void OnWinGame()
+    {
+        _winPanel.SetActive(true);
+    }
+    
     public void ReplayGame()
     {
-//        _Machine.ChangeState(EMachineState.NotActive);
+        RealizationBox.Instance.elementCleaner.DeleteAllElements();
+        RealizationBox.Instance.matrix.Clear();
+        
+        _fsm.StartFSM();
     }
 }
