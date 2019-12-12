@@ -30,6 +30,7 @@ namespace Script.Projections
         private void LastStart()
         {
             _fsm.AddListener(TetrisState.Collection, CreateCeiling);
+            RealizationBox.Instance.elementCleaner.onDeleteAllElements += Destroy;
         }
         
         private void CreateCeiling()

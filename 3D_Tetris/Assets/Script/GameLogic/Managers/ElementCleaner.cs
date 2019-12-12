@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Script.GameLogic.TetrisElement
 {
     public class ElementCleaner : MonoBehaviour
     {
+        public event Action onDeleteAllElements;
+        
         private PlaneMatrix _matrix;
         private GameLogicPool _pool;
 
@@ -100,6 +103,8 @@ namespace Script.GameLogic.TetrisElement
                 _pool.DeleteElement(ElementData.NewElement);
 //                ElementData.NewElement = null;
             }
+            
+            onDeleteAllElements?.Invoke();
         }
     }
 }
