@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using IntegerExtension;
-using UnityEngine.Serialization;
 
 public class PlaneMatrix : Singleton<PlaneMatrix>
 {

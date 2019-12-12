@@ -1,57 +1,38 @@
-﻿using System;
-using Helper.Patterns.Messenger;
-using UnityEditorInternal;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
     [SerializeField] private int _ScoreForWin;
-    [SerializeField] private int _CurrentScore;
-
-    [FormerlySerializedAs("ScoreText")] [SerializeField]
-    private Text _ScoreText;
-
-//    StateMachine _machine;
-
-    private void Awake()
-    {
-//        _machine = FindObjectOfType<StateMachine>();
-    }
-
-    // Use this for initialization
-    private void Start()
-    {
-//        Messenger<int>.AddListener(GameEvent.DESTROY_LAYER.ToString(), ScoreIncrement);
-//        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearScore);
-
-        _ScoreText.text = _CurrentScore.ToString() + "/" + _ScoreForWin.ToString() + " m";
-    }
-
-    private void OnDestroy()
-    {
-//        Messenger<int>.RemoveListener(GameEvent.DESTROY_LAYER.ToString(), ScoreIncrement);
-//        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ClearScore);
-    }
-
-    private void ScoreIncrement(int layer)
-    {
-        _CurrentScore += 9;
-        _ScoreText.text = _CurrentScore.ToString() + "/" + _ScoreForWin.ToString() + " m";
-        Messenger<int>.Broadcast(GameEvent.CURRENT_SCORE.ToString(), _CurrentScore);
-//        CheckWin();
-    }
-
+    
+    [SerializeField] private Text _ScoreText;
+    
+    
+    private int _CurrentScore = 0;
+    
+    
     public bool CheckWin()
     {
         return _CurrentScore >= _ScoreForWin;
-//        _machine.ChangeState(EMachineState.Win);
+    }
+    
+    private void Start()
+    {
+        _ScoreText.text = _CurrentScore+ "/" + _ScoreForWin + " m";
+        
+        RealizationBox.Instance.matrix.OnDestroyLayer += ScoreIncrement;
+        RealizationBox.Instance.elementCleaner.onDeleteAllElements += ClearScore;
+    }
+    
+    private void ScoreIncrement(int layer)
+    {
+        _CurrentScore += 9;
+        _ScoreText.text = _CurrentScore + "/" + _ScoreForWin + " m";
     }
 
     private void ClearScore()
     {
         _CurrentScore = 0;
-        _ScoreText.text = _CurrentScore.ToString() + "/" + _ScoreForWin.ToString() + " m";
+        _ScoreText.text = _CurrentScore + "/" + _ScoreForWin + " m";
     }
 }
