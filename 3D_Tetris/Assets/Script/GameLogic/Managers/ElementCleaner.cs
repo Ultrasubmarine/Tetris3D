@@ -91,17 +91,7 @@ namespace Script.GameLogic.TetrisElement
                 _pool.DeleteElement(item);
             }
 
-            while (ElementData.MergerElements.Count > 0)
-            {
-                var tmp = ElementData.MergerElements[0];
-
-                _matrix.UnbindToMatrix(tmp);
-                ElementData.MergerElements.Remove(tmp);
-
-                ClearDeletedBlocks(tmp.MyBlocks.ToArray());
-                tmp.RemoveBlocksInList(tmp.MyBlocks.ToArray());
-                _pool.DeleteElement(tmp);
-            }
+            ElementData.RemoveAll();
 
             if (!Equals(ElementData.NewElement, null))
             {
