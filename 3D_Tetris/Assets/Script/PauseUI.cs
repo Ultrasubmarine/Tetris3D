@@ -1,23 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 
 public class PauseUI : MonoBehaviour
 {
-    private static bool _musicState = true;
+    private Animator _animator;
 
-    public void UI_StartGame()
+    private float _lastTimeScale;
+
+    
+    private const string _show = "Show";
+    
+    private const string _hide = "Hide";
+    
+    
+    private void Awake()
     {
-//        Messenger.Broadcast(GameEvent.UI_PLAY.ToString());
+        _animator = GetComponent<Animator>();
     }
 
-    public void UI_PauseGame(bool change)
+    public void Close()
     {
-        Time.timeScale = change ? 0 : 1;
+        Time.timeScale = _lastTimeScale;
+        gameObject.SetActive(false);
     }
 
-    public void UI_MusicChange()
+    public void SetPauseGame(bool isPause)
     {
+        if(isPause)
+            Show();
+        else
+            Hide();
+    }
+
+    
+    private void Show()
+    {
+        _lastTimeScale = Time.timeScale;
+        Time.timeScale = 0;
+        
+        gameObject.SetActive(true);
+        
+        _animator.Play(_show);    
+    }
+
+    private void Hide()
+    {
+        _animator.Play(_hide);
     }
 }
