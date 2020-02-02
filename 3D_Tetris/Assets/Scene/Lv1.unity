@@ -1436,7 +1436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 525719d0e2e98a74492245316ccb7361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ScoreForWin: 15
+  _ScoreForWin: 1500
   _ScoreText: {fileID: 281668137}
 --- !u!1001 &208940747
 PrefabInstance:
@@ -6016,6 +6016,7 @@ MonoBehaviour:
   _influenceManager: {fileID: 770432238}
   _controller: {fileID: 860787689}
   _heightHandler: {fileID: 824329424}
+  _gameCamera: {fileID: 1836002388}
 --- !u!4 &1237479897
 Transform:
   m_ObjectHideFlags: 0
@@ -12853,7 +12854,7 @@ MonoBehaviour:
   _MinSize: 8.1
   _MaxLookAt: {fileID: 927616624}
   _MinLookAt: {fileID: 935007193}
-  _TimeStabilization: 0.2
+  _TimeStabilization: 0.6
   _ObjectLook: {fileID: 159109175}
   _Time: 1
   _FirstOrthographicSize: 15

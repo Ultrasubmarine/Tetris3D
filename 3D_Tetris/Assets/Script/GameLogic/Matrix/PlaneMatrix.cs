@@ -4,6 +4,7 @@ using IntegerExtension;
 
 public class PlaneMatrix : Singleton<PlaneMatrix>
 {
+    // TODO why matrix contains HaighHandler ref? delete this 2.02.20
     [SerializeField] private HeightHandler _heightHandler;
     private Block[,,] _matrix;
 

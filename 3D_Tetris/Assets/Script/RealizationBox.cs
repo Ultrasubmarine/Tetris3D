@@ -1,6 +1,5 @@
 ﻿using Script.GameLogic.TetrisElement;
 using Script.Influence;
-using Script.ObjectEngine;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -21,6 +20,8 @@ public class RealizationBox : Singleton<RealizationBox>
 
     [SerializeField] private GameObject _controller;
     [SerializeField] private HeightHandler _heightHandler;
+
+    [SerializeField] private GameCamera _gameCamera;
     
     public TetrisFSM FSM => _FSM;
     public PlaneMatrix matrix => _matrix;
@@ -32,6 +33,8 @@ public class RealizationBox : Singleton<RealizationBox>
     public InfluenceManager influenceManager => _influenceManager;
     public GameObject controller => _controller;
     public HeightHandler haightHandler => _heightHandler;
+    public GameCamera gameCamera => _gameCamera;
+    
     
     private void Start()
     {

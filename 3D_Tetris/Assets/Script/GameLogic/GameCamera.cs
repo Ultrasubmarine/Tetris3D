@@ -26,6 +26,8 @@ public class GameCamera : MonoBehaviour
     private Vector3 _offset; // положение между камерой и площадкой
     private float _rotY;
 
+    private HeightHandler _heightHandler;
+    
     public float Rotation
     {
         set => _rotY = value;
@@ -50,9 +52,16 @@ public class GameCamera : MonoBehaviour
 
         _camera = GetComponent<Camera>();
         _myTransform.LookAt(_ObjectLook.position);
+
+        _heightHandler = RealizationBox.Instance.haightHandler;
     }
 
-    public void CheckStabilization(int limit, int height)
+    public void SetStabilization()
+    {
+        CheckStabilization(_heightHandler.LimitHeight, _heightHandler.CurrentHeight);
+    }
+    
+    private void CheckStabilization(int limit, int height)
     {
         if (_currentHeight == height)
             return;
