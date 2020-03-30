@@ -38,6 +38,9 @@ public class GameManager : MonoBehaviour
         RealizationBox.Instance.elementCleaner.DeleteAllElements();
         RealizationBox.Instance.matrix.Clear();
         
+        RealizationBox.Instance.haightHandler.CalculateHeight();
+        RealizationBox.Instance.gameCamera.SetStabilization();
+        
         _fsm.StartFSM();
     }
 }
