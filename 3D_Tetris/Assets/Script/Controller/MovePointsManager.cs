@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class TouchForMoveUI : MonoBehaviour
+public class MovePointsManager : MonoBehaviour
 {
-    [SerializeField] private TouchForMove _touchForMove;
+    public List<MovePointUi> points => _points;
+        
+    [SerializeField] private MoveTouchController _moveTouchController;
 
     [SerializeField] private float _radius  = Screen.width * 0.5f;
 
-    [SerializeField] private List<Image> _images;
+    [SerializeField] private List<MovePointUi> _points;
 
-
+    [Space(10)]
     [SerializeField] private Canvas _canvas;
 
     [SerializeField] private RectTransform _center;
@@ -19,30 +20,31 @@ public class TouchForMoveUI : MonoBehaviour
     
     private void Awake()
     {
-        _touchForMove.onStateChanged += TouchStateChange;
+        _moveTouchController.onStateChanged += OnMoveTouchControllerStateChange;
+        _moveTouchController.ListenPoints(_points);
+        
         _deltaSize = _canvas.GetComponent<RectTransform>().sizeDelta;
-    }
-
-    private void TouchStateChange( TouchForMove.StateTouch lastState, TouchForMove.StateTouch newState )
-    {
-        ShowParticals();
-        switch (newState)
+        
+        for (var i = 0; i < _points.Count; i++)
         {
-            case TouchForMove.StateTouch.timeOpen:
-                ShowParticals();
-                break;    
+            _points[i].SetIndex(i);
         }
     }
 
-    private void CreatePoints()
+    private void OnMoveTouchControllerStateChange( MoveTouchController.StateTouch lastState, MoveTouchController.StateTouch newState )
     {
-        var mainPoint = Input.GetTouch(0).position;
-        
-    //    angle 
-        
+        switch (newState)
+        {
+            case MoveTouchController.StateTouch.timeOpen:
+                ShowPoints();
+                break;    
+            case MoveTouchController.StateTouch.movedInPoint:
+                ShowPoints();
+                break;    
+        }
     }
     
-    private void ShowParticals()
+    private void ShowPoints()
     {
         const float angle = 40f;
         var center = Input.GetTouch(0).position;
@@ -60,7 +62,7 @@ public class TouchForMoveUI : MonoBehaviour
             var pos = new Vector2(center.x + _radius * Mathf.Cos(ang) * _deltaSize.x / Screen.width, 
                 (center.y + _radius * Mathf.Sin(ang) * _deltaSize.y / Screen.height));
             
-            _images[i].GetComponent<RectTransform>().position = pos ;
+            _points[i].GetComponent<RectTransform>().position = pos ;
         }
     }
 }

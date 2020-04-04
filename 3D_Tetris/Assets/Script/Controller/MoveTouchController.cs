@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class TouchForMove : MonoBehaviour
+public class MoveTouchController : MonoBehaviour
 {
+    public event Action onMoved;
     public event Action<StateTouch, StateTouch> onStateChanged; // 1-last, 2-new
 
     public StateTouch currentState => _state;
@@ -17,12 +19,22 @@ public class TouchForMove : MonoBehaviour
 
     private Vector2 _lastPosition;
 
+    private Vector2 _openPoint;
+    
     // Start is called before the first frame update
     void Start()
     {
 
     }
 
+
+    public void ListenPoints(List<MovePointUi> points)
+    {
+        foreach (var point in points)
+        {
+            point.onPointEnter += OnMovedInPoint;
+        }
+    }
     
     // Update is called once per frame
     void Update()
@@ -43,8 +55,11 @@ public class TouchForMove : MonoBehaviour
         }
 
         if (touch.phase == TouchPhase.Ended)
+        {
             OnBreak();
-        
+            return;
+        }
+
         if (_state == StateTouch.waitInOnePoint)
         {
             if (Vector2.Distance(_lastPosition, touch.position) < Screen.width * 0.05f)
@@ -60,7 +75,6 @@ public class TouchForMove : MonoBehaviour
         
         _timer = 0;
         _lastPosition = Input.GetTouch(0).position;
-
     }
 
     private void OnWaitInOnePoint()
@@ -87,6 +101,15 @@ public class TouchForMove : MonoBehaviour
     {
         SetState(StateTouch.none);
     }
+
+    private void OnMovedInPoint()
+    {
+        if (currentState == StateTouch.timeOpen || currentState == StateTouch.movedInPoint)
+        {
+            SetState(StateTouch.movedInPoint);
+            onMoved?.Invoke();
+        }
+    }
     
     private void SetState(StateTouch newState)
     {
@@ -100,5 +123,6 @@ public class TouchForMove : MonoBehaviour
         waitInOnePoint,
         timeOpen,
         swipe,
+        movedInPoint,
     }
 }
