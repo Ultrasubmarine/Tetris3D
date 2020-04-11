@@ -9,12 +9,11 @@ public class MoveTouchController : MonoBehaviour
     {
         none,
         waitInOnePoint,
-        timeOpen,
+        open,
         swipe,
     }
     
-    public event Action<move> onMoved;
-    public event Action<StateTouch, StateTouch> onStateChanged; // 1-last, 2-new
+    public event Action<StateTouch> onStateChanged;
 
     public StateTouch currentState => _state;
     
@@ -41,6 +40,9 @@ public class MoveTouchController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(currentState == StateTouch.open && Input.touches.Length != 1)
+            OnBreak();
+            
         if (_fsm.GetCurrentState() != TetrisState.WaitInfluence)
             return;
         
@@ -97,8 +99,7 @@ public class MoveTouchController : MonoBehaviour
 
     private void OnTouchOpen()
     {
-        SetState(StateTouch.timeOpen);
-        Debug.Log("Open");
+        SetState(StateTouch.open);
         _fsm.SetNewState(TetrisState.MoveMode);
     }
 
@@ -109,7 +110,8 @@ public class MoveTouchController : MonoBehaviour
 
     private void SetState(StateTouch newState)
     {
-        onStateChanged?.Invoke(_state, newState);
         _state = newState;
+        onStateChanged?.Invoke(_state);
+        
     }
 }

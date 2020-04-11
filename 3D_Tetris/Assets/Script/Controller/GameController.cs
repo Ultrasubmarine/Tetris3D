@@ -25,7 +25,6 @@ public class GameController : MonoBehaviour
     {
         Messenger<ETouсhSign>.AddListener( TouchControl.SWIPE, Move);
 
-        RealizationBox.Instance.moveTouchController.onMoved += Move;
 //        Messenger<ETouсhSign>.AddListener( TouchControl.ONE_TOUCH, Turn);
 //            
 //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);

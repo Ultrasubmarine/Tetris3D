@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MovePointsManager : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class MovePointsManager : MonoBehaviour
     [SerializeField] private Canvas _canvas;
     
     [SerializeField] private RectTransform _center;
+
+    [SerializeField] private GameObject _pointsParent;
+    
     
     private Vector2 _deltaSize;
     
@@ -23,6 +27,8 @@ public class MovePointsManager : MonoBehaviour
         {
             _points[i].SetIndex(i);
         }
+
+        HidePoints();
     }
     
     public void ShowPoints()
@@ -44,7 +50,15 @@ public class MovePointsManager : MonoBehaviour
                 (center.y + _radius * Mathf.Sin(ang) * _deltaSize.y / Screen.height));
             
             _points[i].GetComponent<RectTransform>().position = pos ;
+            _points[i].GetComponent<Image>().enabled = true;
         }
     }
-    
+
+    public void HidePoints()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            _points[i].GetComponent<Image>().enabled = false;
+        }
+    }
 }

@@ -41,21 +41,10 @@ namespace Script.Influence
 
         private void Update()
         {
-            
             var i = 0;
-            if(_fsm.GetCurrentState() == TetrisState.WaitInfluence)
-                while (i < _influences.Count)
-                {
-                    var item = _influences[i];
-
-                    if (item.Update())
-                        _influences.Remove(item);
-                    else
-                        i++;
-                }
-
-            i = 0;
-            if(_fsm.GetCurrentState() == TetrisState.Move)
+            if(_fsm.GetCurrentState() == TetrisState.Move ||
+               _fsm.GetCurrentState() == TetrisState.MoveMode)
+            {
                 while (i < _moveInfluences.Count)
                 {
                     var item = _moveInfluences[i];
@@ -65,6 +54,19 @@ namespace Script.Influence
                     else
                         i++;
                 }
+                return;
+            }
+            
+            i = 0;
+            while (i < _influences.Count)
+            {
+                var item = _influences[i];
+
+                if (item.Update())
+                    _influences.Remove(item);
+                else
+                    i++;
+            }
         }
     }
 }
