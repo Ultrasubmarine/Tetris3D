@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
-using Script.StateMachine.States;
+using Script.Controller;
 
 public class TutorialForUser : Listener<move>
 {

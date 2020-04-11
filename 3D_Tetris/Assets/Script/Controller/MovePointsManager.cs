@@ -4,25 +4,19 @@ using UnityEngine;
 public class MovePointsManager : MonoBehaviour
 {
     public List<MovePointUi> points => _points;
-        
-    [SerializeField] private MoveTouchController _moveTouchController;
-
+    
     [SerializeField] private float _radius  = Screen.width * 0.5f;
-
+    
     [SerializeField] private List<MovePointUi> _points;
 
-    [Space(10)]
     [SerializeField] private Canvas _canvas;
-
+    
     [SerializeField] private RectTransform _center;
     
     private Vector2 _deltaSize;
     
     private void Awake()
     {
-        _moveTouchController.onStateChanged += OnMoveTouchControllerStateChange;
-        _moveTouchController.ListenPoints(_points);
-        
         _deltaSize = _canvas.GetComponent<RectTransform>().sizeDelta;
         
         for (var i = 0; i < _points.Count; i++)
@@ -30,21 +24,8 @@ public class MovePointsManager : MonoBehaviour
             _points[i].SetIndex(i);
         }
     }
-
-    private void OnMoveTouchControllerStateChange( MoveTouchController.StateTouch lastState, MoveTouchController.StateTouch newState )
-    {
-        switch (newState)
-        {
-            case MoveTouchController.StateTouch.timeOpen:
-                ShowPoints();
-                break;    
-            case MoveTouchController.StateTouch.movedInPoint:
-                ShowPoints();
-                break;    
-        }
-    }
     
-    private void ShowPoints()
+    public void ShowPoints()
     {
         const float angle = 40f;
         var center = Input.GetTouch(0).position;
@@ -65,4 +46,5 @@ public class MovePointsManager : MonoBehaviour
             _points[i].GetComponent<RectTransform>().position = pos ;
         }
     }
+    
 }

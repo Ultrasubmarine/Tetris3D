@@ -1,13 +1,14 @@
 ﻿using System;
+using Script.Controller;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class MovePointUi : MonoBehaviour, IPointerEnterHandler
 {
-    public event Action onPointEnter;
+    public event Action<move> onPointEnter;
     public RectTransform _rectTransform { get; private set; }
     
-    public int index { get; private set; }
+    public move direction { get; private set; }
 
     private void Awake()
     {
@@ -16,12 +17,12 @@ public class MovePointUi : MonoBehaviour, IPointerEnterHandler
 
     public void SetIndex(int i)
     {
-        index = i;
+        direction = (move)i;
     }
     
     public void OnPointerEnter(PointerEventData eventData)
     {
-        onPointEnter?.Invoke();
+        onPointEnter?.Invoke(direction);
         Debug.Log("Hand me");
     }
     

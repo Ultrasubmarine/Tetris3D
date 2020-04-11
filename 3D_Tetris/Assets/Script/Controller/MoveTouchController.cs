@@ -1,10 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using Script.Controller;
 using UnityEngine;
 
 public class MoveTouchController : MonoBehaviour
 {
-    public event Action onMoved;
+    public enum StateTouch
+    {
+        none,
+        waitInOnePoint,
+        timeOpen,
+        swipe,
+    }
+    
+    public event Action<move> onMoved;
     public event Action<StateTouch, StateTouch> onStateChanged; // 1-last, 2-new
 
     public StateTouch currentState => _state;
@@ -20,25 +29,21 @@ public class MoveTouchController : MonoBehaviour
     private Vector2 _lastPosition;
 
     private Vector2 _openPoint;
-    
+
+    private TetrisFSM _fsm;
     // Start is called before the first frame update
     void Start()
     {
-
+        _fsm = RealizationBox.Instance.FSM;
     }
-
-
-    public void ListenPoints(List<MovePointUi> points)
-    {
-        foreach (var point in points)
-        {
-            point.onPointEnter += OnMovedInPoint;
-        }
-    }
+    
     
     // Update is called once per frame
     void Update()
     {
+        if (_fsm.GetCurrentState() != TetrisState.WaitInfluence)
+            return;
+        
         if (Input.touches.Length != 1)
         {
             if(_state != StateTouch.none) 
@@ -88,13 +93,13 @@ public class MoveTouchController : MonoBehaviour
     private void OnNotWaitInOnePoint()
     {
         SetState(StateTouch.swipe);
-        Debug.Log("Swipe");
     }
 
     private void OnTouchOpen()
     {
         SetState(StateTouch.timeOpen);
         Debug.Log("Open");
+        _fsm.SetNewState(TetrisState.MoveMode);
     }
 
     private void OnBreak()
@@ -102,27 +107,9 @@ public class MoveTouchController : MonoBehaviour
         SetState(StateTouch.none);
     }
 
-    private void OnMovedInPoint()
-    {
-        if (currentState == StateTouch.timeOpen || currentState == StateTouch.movedInPoint)
-        {
-            SetState(StateTouch.movedInPoint);
-            onMoved?.Invoke();
-        }
-    }
-    
     private void SetState(StateTouch newState)
     {
         onStateChanged?.Invoke(_state, newState);
         _state = newState;
-    }
-    
-    public enum StateTouch
-    {
-        none,
-        waitInOnePoint,
-        timeOpen,
-        swipe,
-        movedInPoint,
     }
 }

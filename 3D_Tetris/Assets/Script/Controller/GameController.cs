@@ -1,4 +1,5 @@
 ﻿using Helper.Patterns.Messenger;
+using Script.Controller;
 using Script.GameLogic.TetrisElement;
 using Script.StateMachine.States;
 using UnityEngine;
@@ -23,6 +24,8 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         Messenger<ETouсhSign>.AddListener( TouchControl.SWIPE, Move);
+
+        RealizationBox.Instance.moveTouchController.onMoved += Move;
 //        Messenger<ETouсhSign>.AddListener( TouchControl.ONE_TOUCH, Turn);
 //            
 //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
@@ -56,27 +59,60 @@ public class GameController : MonoBehaviour
 
     private void Move(ETouсhSign touch)
     {
+//        if (Equals(ElementData.NewElement))
+//            return;
+//
+//        switch (touch)
+//        {
+//            case ETouсhSign.Swipe_LeftUp:
+//            {
+//                InfluenceData.direction = A[_indexTable];
+//                break;
+//            }
+//            case ETouсhSign.Swipe_LeftDown:
+//            {
+//                InfluenceData.direction = S[_indexTable];
+//                break;
+//            }
+//            case ETouсhSign.Swipe_RightDown:
+//            {
+//                InfluenceData.direction = D[_indexTable];
+//                break;
+//            }
+//            case ETouсhSign.Swipe_RightUp:
+//            {
+//                InfluenceData.direction = W[_indexTable];
+//                break;
+//            }
+//        }
+//        var fsm = RealizationBox.Instance.FSM;
+//        if(fsm.GetCurrentState() == TetrisState.WaitInfluence)
+//            fsm.SetNewState(TetrisState.Move);
+    }
+    
+    private void Move(move touch)
+    {
         if (Equals(ElementData.NewElement))
             return;
 
         switch (touch)
         {
-            case ETouсhSign.Swipe_LeftUp:
+            case move._z:
             {
                 InfluenceData.direction = A[_indexTable];
                 break;
             }
-            case ETouсhSign.Swipe_LeftDown:
+            case move.x:
             {
                 InfluenceData.direction = S[_indexTable];
                 break;
             }
-            case ETouсhSign.Swipe_RightDown:
+            case move.z:
             {
                 InfluenceData.direction = D[_indexTable];
                 break;
             }
-            case ETouсhSign.Swipe_RightUp:
+            case move._x:
             {
                 InfluenceData.direction = W[_indexTable];
                 break;
@@ -86,6 +122,8 @@ public class GameController : MonoBehaviour
         if(fsm.GetCurrentState() == TetrisState.WaitInfluence)
             fsm.SetNewState(TetrisState.Move);
     }
+    
+    
 
     private void CorrectIndex(int degree)
     {

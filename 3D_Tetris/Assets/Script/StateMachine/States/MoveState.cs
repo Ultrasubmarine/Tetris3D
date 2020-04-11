@@ -1,4 +1,5 @@
 ﻿using Helper.Patterns.FSM;
+using Script.Controller;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
 using Script.ObjectEngine;
@@ -6,14 +7,6 @@ using UnityEngine;
 
 namespace Script.StateMachine.States
 {
-    public enum move
-    {
-        x = 0,
-        z = 1,
-        _x = 2,
-        _z = 3
-    }
-    
     public class MoveState : AbstractState<TetrisState>
     {
         private InfluenceManager _influence;
