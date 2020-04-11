@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using Helper.Patterns.Messenger;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public enum turn
 {

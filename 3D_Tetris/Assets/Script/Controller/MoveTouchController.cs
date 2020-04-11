@@ -16,10 +16,8 @@ public class MoveTouchController : MonoBehaviour
     public event Action<StateTouch> onStateChanged;
 
     public StateTouch currentState => _state;
-    
-    
-    [SerializeField] private float _timeOpen;
 
+    [SerializeField] private float _timeOpen;
     
     private StateTouch _state = StateTouch.none;
 
@@ -112,6 +110,5 @@ public class MoveTouchController : MonoBehaviour
     {
         _state = newState;
         onStateChanged?.Invoke(_state);
-        
     }
 }

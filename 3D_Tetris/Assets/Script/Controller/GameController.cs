@@ -119,10 +119,7 @@ public class GameController : MonoBehaviour
         }
         var fsm = RealizationBox.Instance.FSM;
         if(fsm.GetCurrentState() == TetrisState.MoveMode)
-        {
-            Debug.Log("move on");
             fsm.SetNewState(TetrisState.Move);
-        }
     }
     
     
