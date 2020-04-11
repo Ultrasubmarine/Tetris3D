@@ -9,10 +9,13 @@ namespace Script.StateMachine.States
         private List<MovePointUi> _movePointUi;
 
         private MovePointsManager _movePointsManager;
+
+        private GameController _gameController;
         
         public MoveModeState()
         {
             _movePointsManager = RealizationBox.Instance.movePointsManager;
+            _gameController = RealizationBox.Instance.gameController;
             _movePointUi = _movePointsManager.points;
         }
         
@@ -39,6 +42,7 @@ namespace Script.StateMachine.States
         private void onPointTouch(move direction)
         {
             _movePointsManager.ShowPoints();
+            _gameController.Move(direction);
         }
 
         private void onBreakTouch()

@@ -57,7 +57,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void Move(ETouсhSign touch)
+    public void Move(ETouсhSign touch)
     {
 //        if (Equals(ElementData.NewElement))
 //            return;
@@ -90,7 +90,7 @@ public class GameController : MonoBehaviour
 //            fsm.SetNewState(TetrisState.Move);
     }
     
-    private void Move(move touch)
+    public void Move(move touch)
     {
         if (Equals(ElementData.NewElement))
             return;
@@ -119,8 +119,11 @@ public class GameController : MonoBehaviour
             }
         }
         var fsm = RealizationBox.Instance.FSM;
-        if(fsm.GetCurrentState() == TetrisState.WaitInfluence)
+        if(fsm.GetCurrentState() == TetrisState.MoveMode)
+        {
+            Debug.Log("move on");
             fsm.SetNewState(TetrisState.Move);
+        }
     }
     
     
