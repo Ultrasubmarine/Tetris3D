@@ -42,7 +42,7 @@ public class MovePointsManager : MonoBehaviour
 
         _clickAnimationSequence = DOTween.Sequence().SetAutoKill(false);
 
-        _clickAnimationSequence.Append(_fakeApply.DOScale(12, 0.3f).From(1.24f, false))
+        _clickAnimationSequence.Append(_fakeApply.DOScale(8, 0.3f).From(1.24f, false))
             .Join(_fakeApplyImage.DOFade(0, 0.3f).From(0.26f, false));
     }
     
@@ -92,6 +92,7 @@ public class MovePointsManager : MonoBehaviour
         _applyPointInCycle = true;
         
         _fakeApply.position = point.transform.position;
+        _clickAnimationSequence.Rewind();
         _clickAnimationSequence.Play();
         onPointEnter?.Invoke(point.direction);
     }
