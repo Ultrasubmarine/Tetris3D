@@ -122,7 +122,6 @@ public class GameController : MonoBehaviour
             fsm.SetNewState(TetrisState.Move);
     }
     
-    
 
     private void CorrectIndex(int degree)
     {

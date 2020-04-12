@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Helper.Patterns.FSM;
+﻿using Helper.Patterns.FSM;
 using Script.Controller;
 using UnityEngine;
 
@@ -7,8 +6,6 @@ namespace Script.StateMachine.States
 {
     public class MoveModeState : AbstractState<TetrisState>
     {
-        private List<MovePointUi> _movePointUi;
-
         private MovePointsManager _movePointsManager;
 
         private GameController _gameController;
@@ -20,20 +17,16 @@ namespace Script.StateMachine.States
             _movePointsManager = RealizationBox.Instance.movePointsManager;
             _gameController = RealizationBox.Instance.gameController;
             _moveTouchController = RealizationBox.Instance.moveTouchController;
-            
-            _movePointUi = _movePointsManager.points;
-            
         }
         
         public override void Enter(TetrisState last)
         {
             base.Enter(last);
 
-            foreach (var point in _movePointUi)
-            {
-                point.onPointEnter += OnPointTouch;
-            }
-
+            if (Input.touchCount != 1)
+                OnBreakMode();
+            
+            _movePointsManager.onPointEnter += OnPointTouch;
             _movePointsManager.ShowPoints();
             _moveTouchController.onStateChanged += OnMoveTouchControllerStateChange;
             
@@ -41,10 +34,7 @@ namespace Script.StateMachine.States
 
         public override void Exit(TetrisState last)
         {
-            foreach (var point in _movePointUi)
-            {
-                point.onPointEnter -= OnPointTouch;
-            }
+            _movePointsManager.onPointEnter -= OnPointTouch;
             _moveTouchController.onStateChanged -= OnMoveTouchControllerStateChange;
             _movePointsManager.HidePoints();
         }
