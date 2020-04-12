@@ -13915,6 +13915,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1845957923}
+  - component: {fileID: 1845957924}
   m_Layer: 0
   m_Name: Environment (iise lvl)
   m_TagString: Untagged
@@ -13960,6 +13961,20 @@ Transform:
   m_Father: {fileID: 513714267}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 17, z: 0}
+--- !u!114 &1845957924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845957922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 333bc1d7ee8a2b94fac1f93b2b2e22a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotationObject: {fileID: 1845957923}
+  _speed: 0.4
 --- !u!1 &1852809463
 GameObject:
   m_ObjectHideFlags: 0
