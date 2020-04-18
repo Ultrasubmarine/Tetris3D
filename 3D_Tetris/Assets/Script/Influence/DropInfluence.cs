@@ -19,8 +19,8 @@ namespace Script.ObjectEngine
         {
             _transform = transform;
             
-            _start = transform.position;
-            _finish = transform.position + direction;
+            _start = transform.localPosition;
+            _finish = transform.localPosition + direction;
             
             _allTime = allTime;
             _currentTime = 0;
@@ -41,11 +41,11 @@ namespace Script.ObjectEngine
         private bool Drop(float speed = 1)
         {
             _currentTime += Time.deltaTime * speed;
-            _transform.position = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
+            _transform.localPosition = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
 
             if (_currentTime >= _allTime)
             {
-                _transform.position = _finish;
+                _transform.localPosition = _finish;
                 return true;
             }
 

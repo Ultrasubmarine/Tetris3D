@@ -23,7 +23,7 @@ public class RealizationBox : Singleton<RealizationBox>
 
     [SerializeField] private GameCamera _gameCamera;
     [SerializeField] private MoveTouchController _moveTouchController;
-    [SerializeField] private MovePointsManager _movePointsManager;
+    [FormerlySerializedAs("_movePointsManager")] [SerializeField] private PointJoystick _pointJoystick;
     [SerializeField] private GameController _gameController;
 
     [SerializeField] private SlowManager _slowManager;
@@ -40,7 +40,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public HeightHandler haightHandler => _heightHandler;
     public GameCamera gameCamera => _gameCamera;
     public MoveTouchController moveTouchController => _moveTouchController;
-    public MovePointsManager movePointsManager => _movePointsManager;
+    public PointJoystick pointJoystick => _pointJoystick;
     public GameController gameController => _gameController;
     public SlowManager slowManager => _slowManager;
     

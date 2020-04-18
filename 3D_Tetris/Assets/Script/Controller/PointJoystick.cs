@@ -5,7 +5,7 @@ using Script.Controller;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MovePointsManager : MonoBehaviour
+public class PointJoystick : MonoBehaviour
 {
     public event Action<move> onPointEnter;
 

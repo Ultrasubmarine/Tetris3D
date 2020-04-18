@@ -44,14 +44,14 @@ namespace Script.Influence
                 var deltaVector = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
 
                 foreach (var block in element.MyBlocks)
-                    block.MyTransform.position += deltaVector - _lastDeltaVector;
+                    block.MyTransform.localPosition += deltaVector - _lastDeltaVector;
                 _lastDeltaVector = deltaVector;
                 return false;
             }
 
             for (var i = 0; i < element.MyBlocks.Count; i++)
-                element.MyBlocks[i].MyTransform.position =
-                    new Vector3(_finalPosBlock[i].x, element.MyBlocks[i].transform.position.y, _finalPosBlock[i].z);
+                element.MyBlocks[i].MyTransform.localPosition =
+                    new Vector3(_finalPosBlock[i].x, element.MyBlocks[i].transform.localPosition.y, _finalPosBlock[i].z);
             return true;
         }
 
