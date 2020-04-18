@@ -30,6 +30,7 @@ namespace Helper.Patterns.FSM
             _last = _current;
             _current = newState;
 
+         Debug.Log("new state " + newState);
             _statesDictionary[_current].Enter(_last);
         }
 

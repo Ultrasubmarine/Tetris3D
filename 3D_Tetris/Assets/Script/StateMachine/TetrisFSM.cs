@@ -8,7 +8,6 @@ public enum TetrisState
     GenerateElement,
 
     Drop,
-    MoveMode,
     Move,
     Turn,
 
@@ -42,7 +41,6 @@ public class TetrisFSM : AbstractFSM<TetrisState>
         _statesDictionary.Add(TetrisState.WaitInfluence, new WaitInfluenceState());
         _statesDictionary.Add(TetrisState.EndInfluence, new EndInfluenceState());
         _statesDictionary.Add(TetrisState.Move, new MoveState());
-        _statesDictionary.Add(TetrisState.MoveMode, new MoveModeState());
 
         _statesDictionary.Add(TetrisState.LoseGame, new LoseGameState());
 //		Invoke( "StartFSM", 1.0f);

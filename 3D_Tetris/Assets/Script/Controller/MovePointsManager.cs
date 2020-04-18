@@ -102,9 +102,9 @@ public class MovePointsManager : MonoBehaviour
         _fakeApply.position = point.transform.position;
         _clickAnimationSequence.Rewind();
         _clickAnimationSequence.Play();
-        Debug.Log("point");
         
         onPointEnter?.Invoke(point.direction);
+        ShowPoints();
     }
 
     private void OnMoveTouchControllerStateChange( MoveTouchController.StateTouch stateTouch)

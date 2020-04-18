@@ -46,7 +46,7 @@ public class SlowManager : MonoBehaviour
         CalculateSlow();
     }
     
-    public void AddedMoveModeSlow(float time, float value)
+    private void AddedMoveModeSlow(float time, float value)
     {
         var timer = TimersKeeper.Schedule(time);
         var slow = new Slow(timer, value);
@@ -61,7 +61,7 @@ public class SlowManager : MonoBehaviour
         CalculateSlow();
     }
 
-    public void RemoveMoveModeSlow()
+    private void RemoveMoveModeSlow()
     {
         if (MoveModeSlow == null)
             return;
@@ -109,7 +109,7 @@ public class SlowManager : MonoBehaviour
         {
             case MoveTouchController.StateTouch.open:
             {
-                AddedMoveModeSlow(3, 0.8f);
+                AddedMoveModeSlow(3, 0.95f);
                 break;
             }
             case MoveTouchController.StateTouch.none:

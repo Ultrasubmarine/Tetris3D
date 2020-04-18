@@ -30,14 +30,13 @@ namespace Script.StateMachine.States
                     () =>
                     {
                         _FSM.SetNewState(TetrisState.EndInfluence);
-                      //  _FSM.SetNewState(TetrisState.MoveMode);
                     });
                 base.Enter(last);
             }
             else
             {
                 base.Enter(last);
-                _FSM.SetNewState(TetrisState.MoveMode);
+                _FSM.SetNewState(TetrisState.EndInfluence);
             }
         }
 

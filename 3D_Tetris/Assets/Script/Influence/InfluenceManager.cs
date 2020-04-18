@@ -53,8 +53,7 @@ namespace Script.Influence
         private void Update()
         {
             var i = 0;
-            if(_fsm.GetCurrentState() == TetrisState.Move ||
-               _fsm.GetCurrentState() == TetrisState.MoveMode )
+            if(_fsm.GetCurrentState() == TetrisState.Move)
             {
                 while (i < _moveInfluences.Count)
                 {
@@ -65,8 +64,6 @@ namespace Script.Influence
                     else
                         i++;
                 }
-
-                return;
             }
             
             i = 0;
@@ -83,7 +80,6 @@ namespace Script.Influence
 
         public void CalculateSpeed()
         {
-            Debug.Log("Update value");
             currentSpeed = speed - _slowler.slow;
         }
     }
