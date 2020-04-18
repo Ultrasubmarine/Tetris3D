@@ -27,9 +27,10 @@ namespace Script.ObjectEngine
             _callBack = action;
         }
         
-        public bool Update()
+        public bool Update(float speed = 1)
         {
-            if (Drop())
+           // Debug.Log("drop update");
+            if (Drop(speed))
             {
                 _callBack?.Invoke();
                 return true;
@@ -37,9 +38,9 @@ namespace Script.ObjectEngine
             return false;
         }
 
-        private bool Drop()
+        private bool Drop(float speed = 1)
         {
-            _currentTime += Time.deltaTime;
+            _currentTime += Time.deltaTime * speed;
             _transform.position = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
 
             if (_currentTime >= _allTime)

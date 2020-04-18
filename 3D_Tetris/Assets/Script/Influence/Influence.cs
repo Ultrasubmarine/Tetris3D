@@ -12,7 +12,7 @@ namespace Script.Influence
 
     public interface IInfluence
     {
-        bool Update();
+        bool Update(float speed = 1); 
     }
 
     public struct Influence<T>

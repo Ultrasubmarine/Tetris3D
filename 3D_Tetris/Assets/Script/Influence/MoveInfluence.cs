@@ -35,11 +35,11 @@ namespace Script.Influence
             _callBack = action;
         }
         
-        public bool Move()
+        public bool Move(float speed = 1)
         {
             if (_currentTime + Time.deltaTime < _allTime)
             {
-                _currentTime += Time.deltaTime;
+                _currentTime += Time.deltaTime * speed;
                 
                 var deltaVector = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
 
@@ -55,7 +55,7 @@ namespace Script.Influence
             return true;
         }
 
-        public bool Update()
+        public bool Update(float speed = 1)
         {
             if (Move())
             {

@@ -1,29 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using Script.ObjectEngine;
+using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.Influence
 {
     public class InfluenceManager : MonoBehaviour
     {
+        private float currentSpeed = 1;
+        public float speed { get; set; } = 1;
+        
+        [SerializeField] private Transform _testObj;
+        
         private List<IInfluence> _influences;
 
         private List<IInfluence> _moveInfluences;
-        
-        [SerializeField] private Transform testObj;
 
         private TetrisFSM _fsm;
-        
+
+        private SlowManager _slowler;
+
         private void Awake()
         {
             _influences = new List<IInfluence>();
             _moveInfluences = new List<IInfluence>();
+            
         }
 
         private void Start()
         {
             _fsm = RealizationBox.Instance.FSM;
+            _slowler = RealizationBox.Instance.slowManager;
+
+            _slowler.onUpdateValue += CalculateSpeed;
         }
 
         public void AddDrop(Transform obj, Vector3 offset, float speed, Action callBack = null)
@@ -43,7 +54,7 @@ namespace Script.Influence
         {
             var i = 0;
             if(_fsm.GetCurrentState() == TetrisState.Move ||
-               _fsm.GetCurrentState() == TetrisState.MoveMode)
+               _fsm.GetCurrentState() == TetrisState.MoveMode )
             {
                 while (i < _moveInfluences.Count)
                 {
@@ -54,6 +65,7 @@ namespace Script.Influence
                     else
                         i++;
                 }
+
                 return;
             }
             
@@ -62,11 +74,17 @@ namespace Script.Influence
             {
                 var item = _influences[i];
 
-                if (item.Update())
+                if (item.Update(currentSpeed))
                     _influences.Remove(item);
                 else
                     i++;
             }
+        }
+
+        public void CalculateSpeed()
+        {
+            Debug.Log("Update value");
+            currentSpeed = speed - _slowler.slow;
         }
     }
 }

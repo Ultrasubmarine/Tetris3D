@@ -11,36 +11,46 @@ namespace Script.StateMachine.States
         private GameController _gameController;
 
         private MoveTouchController _moveTouchController;
+
+        private SlowManager _slowManager;
+
         
         public MoveModeState()
         {
             _movePointsManager = RealizationBox.Instance.movePointsManager;
             _gameController = RealizationBox.Instance.gameController;
             _moveTouchController = RealizationBox.Instance.moveTouchController;
+            _slowManager = RealizationBox.Instance.slowManager;
         }
         
         public override void Enter(TetrisState last)
         {
             base.Enter(last);
 
-            if (Input.touchCount != 1)
-                OnBreakMode();
-            
-            _movePointsManager.onPointEnter += OnPointTouch;
-            _movePointsManager.ShowPoints();
-            _moveTouchController.onStateChanged += OnMoveTouchControllerStateChange;
-            
+//            
+//            if (Input.touchCount != 1)
+//                OnBreakMode();
+//            
+//            _movePointsManager.onPointEnter += OnPointTouch;
+////            _movePointsManager.ShowPoints();
+//            _moveTouchController.onStateChanged += OnMoveTouchControllerStateChange;
+//            
+//            _slowManager.AddedMoveModeSlow(3, 0.5f);
         }
 
         public override void Exit(TetrisState last)
         {
-            _movePointsManager.onPointEnter -= OnPointTouch;
-            _moveTouchController.onStateChanged -= OnMoveTouchControllerStateChange;
-            _movePointsManager.HidePoints();
+//            _movePointsManager.onPointEnter -= OnPointTouch;
+//            _moveTouchController.onStateChanged -= OnMoveTouchControllerStateChange;
+//            _movePointsManager.HidePoints();
+//            
+//            if( last != TetrisState.Move)
+//                _slowManager.RemoveMoveModeSlow();
         }
 
         private void OnPointTouch(move direction)
         {
+            Debug.Log("MOVE DIRECTION");
             _gameController.Move(direction);
         }
 

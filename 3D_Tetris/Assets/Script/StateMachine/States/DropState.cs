@@ -20,7 +20,7 @@ public class DropState : AbstractState<TetrisState>
     {
         base.Enter(last);
         
-        if (last != TetrisState.WaitInfluence && last != TetrisState.EndInfluence && last != TetrisState.GenerateElement)
+        if (last != TetrisState.WaitInfluence && last != TetrisState.EndInfluence && last != TetrisState.GenerateElement && last != TetrisState.MoveMode )
         {
             InfluenceData.delayedDrop = true;
             return;
@@ -30,7 +30,14 @@ public class DropState : AbstractState<TetrisState>
         if (empty)
         {
             _elementDropper.StartDropElement();
-            _FSM.SetNewState(TetrisState.WaitInfluence);
+
+            if (last == TetrisState.MoveMode)
+            {
+                Debug.Log("return in hell");
+                _FSM.SetNewState(TetrisState.MoveMode);
+            }
+            else
+                _FSM.SetNewState(TetrisState.WaitInfluence);
             return;
         }
 

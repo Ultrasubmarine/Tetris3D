@@ -27,7 +27,11 @@ namespace Script.StateMachine.States
                 Vector3Int vectorDirection = SetVectorMove(InfluenceData.direction);
 
                 _influence.AddMove(ElementData.NewElement, vectorDirection, Speed.TimeMove,
-                    () => { _FSM.SetNewState(TetrisState.MoveMode); });
+                    () =>
+                    {
+                        _FSM.SetNewState(TetrisState.EndInfluence);
+                      //  _FSM.SetNewState(TetrisState.MoveMode);
+                    });
                 base.Enter(last);
             }
             else

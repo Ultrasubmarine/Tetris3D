@@ -28,6 +28,8 @@ public class MovePointsManager : MonoBehaviour
     private Vector2 _deltaSize;
 
     private bool _applyPointInCycle = false;
+
+    private MoveTouchController _moveTouchController;
     
     private void Awake()
     {
@@ -45,8 +47,14 @@ public class MovePointsManager : MonoBehaviour
         _clickAnimationSequence.Append(_fakeApply.DOScale(8, 0.3f).From(1.24f, false))
             .Join(_fakeApplyImage.DOFade(0, 0.3f).From(0.26f, false));
     }
+
+    private void Start()
+    {
+        _moveTouchController = RealizationBox.Instance.moveTouchController;
+        _moveTouchController.onStateChanged += OnMoveTouchControllerStateChange;
+    }
     
-    public void ShowPoints()
+    private void ShowPoints()
     {
         _applyPointInCycle = false;
         const float angle = 40f;
@@ -74,7 +82,7 @@ public class MovePointsManager : MonoBehaviour
         _pointsParent.DOFade(1, _timeShowAnimations);
     }
 
-    public void HidePoints()
+    private void HidePoints()
     {
         _pointsParent.DOFade(0, _timeShowAnimations);
         
@@ -94,6 +102,25 @@ public class MovePointsManager : MonoBehaviour
         _fakeApply.position = point.transform.position;
         _clickAnimationSequence.Rewind();
         _clickAnimationSequence.Play();
+        Debug.Log("point");
+        
         onPointEnter?.Invoke(point.direction);
+    }
+
+    private void OnMoveTouchControllerStateChange( MoveTouchController.StateTouch stateTouch)
+    {
+        switch (stateTouch)
+        {
+            case MoveTouchController.StateTouch.open:
+            {
+                ShowPoints();
+                break;
+            }
+            case MoveTouchController.StateTouch.none:
+            {
+                HidePoints();
+                break;
+            }
+        }
     }
 }

@@ -25,6 +25,8 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private MoveTouchController _moveTouchController;
     [SerializeField] private MovePointsManager _movePointsManager;
     [SerializeField] private GameController _gameController;
+
+    [SerializeField] private SlowManager _slowManager;
     
     public TetrisFSM FSM => _FSM;
     public PlaneMatrix matrix => _matrix;
@@ -40,6 +42,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public MoveTouchController moveTouchController => _moveTouchController;
     public MovePointsManager movePointsManager => _movePointsManager;
     public GameController gameController => _gameController;
+    public SlowManager slowManager => _slowManager;
     
     private void Start()
     {

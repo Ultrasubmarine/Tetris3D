@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Script.Controller;
 using UnityEngine;
 
 public class MoveTouchController : MonoBehaviour
@@ -98,7 +96,7 @@ public class MoveTouchController : MonoBehaviour
     private void OnTouchOpen()
     {
         SetState(StateTouch.open);
-        _fsm.SetNewState(TetrisState.MoveMode);
+//        _fsm.SetNewState(TetrisState.MoveMode);
     }
 
     private void OnBreak()

@@ -20,7 +20,7 @@ namespace Script.StateMachine.States
 
         public override void Exit(TetrisState last)
         {
-            _gameObject.SetActive(false);
+         //   _gameObject.SetActive(false);
         }
     }
 }

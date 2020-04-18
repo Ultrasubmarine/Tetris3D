@@ -21,10 +21,14 @@ public class GameController : MonoBehaviour
     public static bool MoveTutorial { get; set; }
     public static bool TurnTutorial { get; set; }
 
+    private MovePointsManager _movePointsManager;
+    
     private void Start()
     {
         Messenger<ETouсhSign>.AddListener( TouchControl.SWIPE, Move);
 
+        _movePointsManager = RealizationBox.Instance.movePointsManager;
+        _movePointsManager.onPointEnter += Move;
 //        Messenger<ETouсhSign>.AddListener( TouchControl.ONE_TOUCH, Turn);
 //            
 //        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
