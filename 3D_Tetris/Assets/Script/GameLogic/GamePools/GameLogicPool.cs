@@ -6,6 +6,9 @@ public class GameLogicPool : MonoBehaviour
 {
     [SerializeField] private GameObject _elementPrefab;
     [SerializeField] private GameObject _blockPrefab;
+
+    [SerializeField] private Transform _elementPoolParent;
+    [SerializeField] private Transform _blockPoolParent;
     
     private Pool<Element> _elementPool;
     private Pool<Block>   _blockPool;
@@ -53,7 +56,7 @@ public class GameLogicPool : MonoBehaviour
     
     private void Start()
     {
-        _elementPool = new Pool<Element>(_elementPrefab.GetComponent<Element>());
-        _blockPool = new Pool<Block>(_blockPrefab.GetComponent<Block>());
+        _elementPool = new Pool<Element>(_elementPrefab.GetComponent<Element>(), _elementPoolParent);
+        _blockPool = new Pool<Block>(_blockPrefab.GetComponent<Block>(), _blockPoolParent);
     }
 }

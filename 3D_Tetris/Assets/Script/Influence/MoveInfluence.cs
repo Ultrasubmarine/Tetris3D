@@ -28,7 +28,7 @@ namespace Script.Influence
             _finalPosBlock = new Vector3[element.MyBlocks.Count];
 
             for (var i = 0; i < element.MyBlocks.Count; i++) 
-                _finalPosBlock[i] = element.MyBlocks[i].MyTransform.position + direction;
+                _finalPosBlock[i] = element.MyBlocks[i].MyTransform.localPosition + direction;
             
             _allTime = allTime;
             _currentTime = 0;

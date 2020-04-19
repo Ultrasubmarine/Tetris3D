@@ -23,7 +23,7 @@ namespace Script.Projections
             _matrix = PlaneMatrix.Instance;
             _fsm = RealizationBox.Instance.FSM;
 
-            _pool = new Pool<GameObject>(_prefab);
+            _pool = new Pool<GameObject>(_prefab, transform);
             Invoke(nameof(LastStart), 1f);
         }
 
@@ -47,7 +47,7 @@ namespace Script.Projections
                 if (y >= _MinimumLayerHeight)
                 {
                     var o = _pool.Pop();
-                    o.transform.position = 
+                    o.transform.localPosition = 
                         new Vector3(x.ToCoordinat(), _matrix.limitHeight + _HeightProjection, z.ToCoordinat());
 
                     _ceilingList.Add(o);

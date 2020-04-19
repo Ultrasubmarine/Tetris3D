@@ -1,4 +1,5 @@
-﻿using Helper.Patterns.FSM;
+﻿using DG.Tweening;
+using Helper.Patterns.FSM;
 using Script.Influence;
 using UnityEngine;
 
@@ -10,11 +11,15 @@ namespace Script.StateMachine.States
         private InfluenceManager _influence;
 
         private Transform _place;
-        
+
+        private float _timeTurn = 0.5f;
+
+        private int _rotate = 0;
         
         public TurningState()
         {
             _influence = RealizationBox.Instance.influenceManager;
+            _place = RealizationBox.Instance.place;
         }
         
         public override void Enter(TetrisState last)
@@ -22,31 +27,13 @@ namespace Script.StateMachine.States
             base.Enter(last);
 
             _influence.enabled = false;
-            
-            
-            
-            if (last != TetrisState.WaitInfluence && last != TetrisState.EndInfluence && last != TetrisState.GenerateElement)
-            {
-                InfluenceData.delayedDrop = true;
-                return;
-            }
-        
-            var empty = _matrix.CheckEmptyPlaсe(ElementData.NewElement, new Vector3Int(0, -1, 0));
-            if (empty)
-            {
-                _elementDropper.StartDropElement();
-            
-            
-                _FSM.SetNewState(TetrisState.WaitInfluence);
-                return;
-            }
 
-            _FSM.SetNewState(TetrisState.MergeElement);
+            _rotate = (_rotate + 90) % 360;
+            _place.DORotate(new Vector3(0, _rotate, 0), _timeTurn).OnComplete( () => _FSM.SetNewState(last));
         }
         public override void Exit(TetrisState last)
         {
             _influence.enabled = true;
-            throw new System.NotImplementedException();
         }
     }
 }

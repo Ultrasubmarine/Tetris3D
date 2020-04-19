@@ -22,7 +22,7 @@ public class Projection : MonoBehaviour
         _matrix = PlaneMatrix.Instance;
         _fsm = RealizationBox.Instance.FSM;
 
-        _pool = new Pool<GameObject>(_prefab);
+        _pool = new Pool<GameObject>(_prefab, transform);
         Invoke(nameof(LastStart), 1f);
     }
 
@@ -49,7 +49,7 @@ public class Projection : MonoBehaviour
             var posProjection = new Vector3(item.x, y + _heightProjection, item.z);
 
             var o = _pool.Pop(true);
-            o.transform.position = posProjection;
+            o.transform.localPosition = posProjection;
             _projectionsList.Add(o);
         }
     }

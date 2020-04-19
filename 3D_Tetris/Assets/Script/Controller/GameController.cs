@@ -1,23 +1,33 @@
-﻿using Helper.Patterns.Messenger;
+﻿using DG.Tweening;
+using Helper.Patterns.Messenger;
 using Script.Controller;
 using Script.GameLogic.TetrisElement;
-using Script.StateMachine.States;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] private Turning _Turning;
 
+    [SerializeField] private float _timeTurn = 0.3f;
+    
     // таблица для перемещения блоков в зависимости от угла обзора.
-    private move[] A = {move._z, move._x, move.z, move.x};
-    private move[] S = {move.x, move._z, move._x, move.z};
-    private move[] D = {move.z, move.x, move._z, move._x};
-    private move[] W = {move._x, move.z, move.x, move._z};
-    private int _indexTable;
+    /*private move[] left_up = {move._z, move._x, move.z, move.x};
+    private move[] left_down = {move.x, move._z, move._x, move.z};
+    private move[] right_down = {move.z, move.x, move._z, move._x};
+    private move[] right_up = {move._x, move.z, move.x, move._z};*/
+    
+    private move[] left_up = {move._z, move.x, move.z, move._x};
+    private move[] left_down = {move.x, move.z, move._x, move._z};
+    private move[] right_down = {move.z, move._x, move._z, move.x};
+    private move[] right_up = {move._x, move._z, move.x, move.z};
+    private int _indexTable = 0;
 
     private Vector3 _offset; // начальное положение между камерой и площадкой
     private float _rotY; // поворот камеры
-
+    private int _rotate = 0;
+    private Transform _place;
+    private bool _isTurn = false;
+    
     public static bool MoveTutorial { get; set; }
     public static bool TurnTutorial { get; set; }
 
@@ -42,6 +52,7 @@ public class GameController : MonoBehaviour
 //        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
     }
 
+    /*
     private void Turn(ETouсhSign touch)
     {
         if (Equals(ElementData.NewElement))
@@ -59,6 +70,7 @@ public class GameController : MonoBehaviour
                 CorrectIndex(90);
         }
     }
+*/
 
     public void Move(ETouсhSign touch)
     {
@@ -98,26 +110,27 @@ public class GameController : MonoBehaviour
         if (Equals(ElementData.NewElement))
             return;
 
+        Debug.Log("touch " );
         switch (touch)
         {
             case move._z:
             {
-                InfluenceData.direction = A[_indexTable];
+                InfluenceData.direction = left_up[_indexTable];
                 break;
             }
             case move.x:
             {
-                InfluenceData.direction = S[_indexTable];
+                InfluenceData.direction = left_down[_indexTable];
                 break;
             }
             case move.z:
             {
-                InfluenceData.direction = D[_indexTable];
+                InfluenceData.direction = right_down[_indexTable];
                 break;
             }
             case move._x:
             {
-                InfluenceData.direction = W[_indexTable];
+                InfluenceData.direction = right_up[_indexTable];
                 break;
             }
         }
@@ -127,20 +140,44 @@ public class GameController : MonoBehaviour
     }
     
 
-    private void CorrectIndex(int degree)
+    private void CorrectIndex()
     {
-        _rotY += degree;
-        if (_rotY > 360 || _rotY < -360)
-            _rotY = 0;
-
-        if (_rotY > -1)
-            _indexTable = (int) _rotY / 90;
-        else
-            _indexTable = ((int) _rotY + 360) / 90;
+        _rotate = (_rotate + 90) % 360;
+        _indexTable = (_indexTable + 1) % 4;
+    //    _indexTable = ((int) _rotate + 360) / 90;
+     //   if (_rotate > -1)
+        //    _indexTable = (int) _rotate / 90;
+        /*else
+            _indexTable = ((int) _rotate + 360) / 90;*/
     }
 
     private void ResetRotation()
     {
         _rotY = 0;
+    }
+
+    public void Turn()
+    {
+        if (_isTurn)
+            return;
+        
+        _isTurn = true;
+        var _influence = RealizationBox.Instance.influenceManager;
+        _place = RealizationBox.Instance.place;
+        _influence.enabled = false;
+
+      // _rotate = (_rotate + 90) % 360;
+       CorrectIndex();
+        _place.DORotate(new Vector3(0, _rotate, 0), _timeTurn).OnComplete( () =>
+        {
+            _influence.enabled = true;
+            _isTurn = false;
+        });
+        
+        /*
+              
+               var fsm = RealizationBox.Instance.FSM;
+               if(fsm.GetCurrentState() != TetrisState.Turn)
+                   fsm.SetNewState(TetrisState.Turn);*/
     }
 }

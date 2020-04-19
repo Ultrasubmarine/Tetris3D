@@ -27,6 +27,7 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private GameController _gameController;
 
     [SerializeField] private SlowManager _slowManager;
+    [SerializeField] private Transform _place;
     
     public TetrisFSM FSM => _FSM;
     public PlaneMatrix matrix => _matrix;
@@ -43,6 +44,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public PointJoystick pointJoystick => _pointJoystick;
     public GameController gameController => _gameController;
     public SlowManager slowManager => _slowManager;
+    public Transform place => _place;
     
     private void Start()
     {
