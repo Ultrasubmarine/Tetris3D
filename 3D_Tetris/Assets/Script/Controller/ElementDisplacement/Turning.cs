@@ -143,7 +143,7 @@ public class Turning : MonoBehaviour
         if (_rotY >= 360 || _rotY <= -360)
             _rotY = 0;
 
-        _gameCamera.Rotation = _rotY;
+//        _gameCamera.Rotation = _rotY;
 //        _StateMachine.ChangeState(EMachineState.EndInfluence);
     }
 
@@ -184,9 +184,9 @@ public class Turning : MonoBehaviour
         _Camera.transform.position = Vector3.zero - rotationEnd * _offset;
         _Camera.transform.LookAt(_ObjectLook.transform.position);
 
-        _gameCamera.Rotation = 0;
+//        _gameCamera.Rotation = 0;
         _rotY = 0;
 
-        _gameCamera.ResetSettings();
+      //  _gameCamera.ResetSettings();
     }
 }
