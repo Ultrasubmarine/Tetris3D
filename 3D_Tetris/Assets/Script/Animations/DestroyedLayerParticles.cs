@@ -19,6 +19,7 @@ public class DestroyedLayerParticles : MonoBehaviour
         var boom = _pool.Pop();
         boom.transform.position = new Vector3(0, layer + 0.5f);
         
+        
         StartCoroutine( DestroyParticle(boom));
     }
 

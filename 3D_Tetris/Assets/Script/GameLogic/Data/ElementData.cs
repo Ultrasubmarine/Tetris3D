@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Script.GameLogic.TetrisElement
 {
     public static class ElementData
     {
-        public static event Action  NewElementUpdate;
+        public static event Action NewElementUpdate;
         public static Element NewElement { get; private set; }
 
         public static Func<Element> Loader;

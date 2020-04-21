@@ -10,6 +10,7 @@ namespace Script.StateMachine.States
         {
             
         }
+        
         public override void Enter(TetrisState last)
         {
             if (InfluenceData.delayedDrop)

@@ -4369,14 +4369,13 @@ GameObject:
   - component: {fileID: 640033096}
   - component: {fileID: 640033095}
   - component: {fileID: 640033094}
-  - component: {fileID: 640033093}
   m_Layer: 5
-  m_Name: ScreenChenge (first start)
+  m_Name: ScreenChanger (first start)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &640033092
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4396,25 +4395,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &640033093
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 640033091}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 43e5c1679726d3f4b868c1b38b8b89ee, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &640033094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4427,12 +4407,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f386aa1d21ff8f46a66b129e180da22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HideScreen:
+  _screen: {fileID: 640033095}
+  _duration: 1
+  _onHideScreen:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1844162807}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1844162808}
+        m_MethodName: StopAnimation
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4452,7 +4434,29 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  EndScreenChange:
+      - m_Target: {fileID: 1836002382}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1836002388}
+        m_MethodName: FirstAnimation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  _onEndScreenChange:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 640033091}
@@ -4466,7 +4470,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  GameCamera: {fileID: 1836002385}
 --- !u!114 &640033095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4481,7 +4484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -13762,7 +13765,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 640033091}
+      objectReference: {fileID: 640033094}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 224703361864988532, guid: c4e7311714ff94a4382631a9616bf709,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -13881,7 +13894,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1836002383
 AudioListener:
   m_ObjectHideFlags: 0
@@ -13981,14 +13994,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a66a86f31f476c64b8edc861d71b9cf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _MaxDistance: {fileID: 1297716034}
-  _MinDistance: {fileID: 587036168}
-  _MaxSize: 10.6
-  _MinSize: 8.1
-  _MaxLookAt: {fileID: 927616624}
-  _MinLookAt: {fileID: 935007193}
-  _TimeStabilization: 0.6
-  _ObjectLook: {fileID: 159109175}
+  _maxDistance: {fileID: 1297716034}
+  _minDistance: {fileID: 587036168}
+  _maxSize: 13
+  _minSize: 8
+  _maxLookAt: {fileID: 927616624}
+  _minLookAt: {fileID: 935007193}
+  _timeStabilization: 0.3
+  _objectLook: {fileID: 159109175}
   _Time: 1
   _FirstOrthographicSize: 15
 --- !u!1 &1844162807
@@ -14026,9 +14039,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ef0c377dd2c5e498e868c23254f7c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _DegreesPerSecond: 5
-  _Direction: 0
-  _ObjectLook: {fileID: 556433576}
+  _degreesPerSecond: 5
+  _direction: 0
+  _objectLook: {fileID: 556433576}
 --- !u!81 &1844162809
 AudioListener:
   m_ObjectHideFlags: 0
@@ -15446,7 +15459,7 @@ GameObject:
   - component: {fileID: 2073917335}
   - component: {fileID: 2073917334}
   m_Layer: 5
-  m_Name: ScreenChenge (replay)
+  m_Name: ScreenChanger (replay)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15502,7 +15515,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f386aa1d21ff8f46a66b129e180da22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HideScreen:
+  _screen: {fileID: 2073917336}
+  _duration: 1
+  _onHideScreen:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 311359819}
@@ -15527,7 +15542,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  EndScreenChange:
+  _onEndScreenChange:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2073917332}
@@ -15541,7 +15556,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  GameCamera: {fileID: 1836002385}
 --- !u!114 &2073917336
 MonoBehaviour:
   m_ObjectHideFlags: 0
