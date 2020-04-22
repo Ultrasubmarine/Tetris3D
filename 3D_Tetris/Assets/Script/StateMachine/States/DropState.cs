@@ -26,7 +26,7 @@ public class DropState : AbstractState<TetrisState>
             return;
         }
         
-        var empty = _matrix.CheckEmptyPlaсe(ElementData.NewElement, new Vector3Int(0, -1, 0));
+        var empty = _matrix.CheckEmptyPlaсe(ElementData.newElement, new Vector3Int(0, -1, 0));
         if (empty)
         {
             _elementDropper.StartDropElement();

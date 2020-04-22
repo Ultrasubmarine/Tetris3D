@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
 public struct CoordinatXZ
 {
@@ -17,19 +14,20 @@ public struct CoordinatXZ
 
 public class Block : MonoBehaviour
 {
-    public Vector3Int Coordinates => _coordinates;
+    public Vector3Int coordinates => _coordinates;
+    
     private Vector3Int _coordinates;
-    public CoordinatXZ XZ => new CoordinatXZ(Coordinates.x, Coordinates.z);
+    public CoordinatXZ xz => new CoordinatXZ(coordinates.x, coordinates.z);
 
-    public bool IsDestroy { get; set; }
+    public bool isDestroy { get; set; }
 
-    public Transform MyTransform { get; private set; }
-    public MeshRenderer Mesh { get; private set; }
+    public Transform myTransform { get; private set; }
+    public MeshRenderer mesh { get; private set; }
 
     private void Awake()
     {
-        MyTransform = transform;
-        Mesh = GetComponent<MeshRenderer>();
+        myTransform = transform;
+        mesh = GetComponent<MeshRenderer>();
     }
 
     public Block()
@@ -57,8 +55,8 @@ public class Block : MonoBehaviour
 
     private void OnDisable()
     {
-        IsDestroy = false;
-        MyTransform.position = Vector3.zero;
-        MyTransform.rotation = Quaternion.identity;
+        isDestroy = false;
+        myTransform.position = Vector3.zero;
+        myTransform.rotation = Quaternion.identity;
     }
 }

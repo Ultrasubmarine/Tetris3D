@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Script.ObjectEngine;
-using TMPro.EditorUtilities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script.Influence
 {
@@ -47,7 +45,6 @@ namespace Script.Influence
         {
             var info = new MoveInfluence(element,offset, speed, callBack);
             _moveInfluences.Add(info);
-//            _influences.Add(info);
         }
 
         private void Update()

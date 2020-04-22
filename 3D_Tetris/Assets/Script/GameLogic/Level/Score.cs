@@ -1,24 +1,24 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
-    [SerializeField] private int _ScoreForWin;
+    [FormerlySerializedAs("_ScoreForWin")] [SerializeField] private int _scoreForWin;
     
-    [SerializeField] private Text _ScoreText;
+    [FormerlySerializedAs("_ScoreText")] [SerializeField] private Text _scoreText;
     
-    
-    private int _CurrentScore = 0;
+    private int _currentScore = 0;
     
     
     public bool CheckWin()
     {
-        return _CurrentScore >= _ScoreForWin;
+        return _currentScore >= _scoreForWin;
     }
     
     private void Start()
     {
-        _ScoreText.text = _CurrentScore+ "/" + _ScoreForWin + " m";
+        _scoreText.text = _currentScore+ "/" + _scoreForWin + " m";
         
         RealizationBox.Instance.matrix.OnDestroyLayer += ScoreIncrement;
         RealizationBox.Instance.elementCleaner.onDeleteAllElements += ClearScore;
@@ -26,13 +26,13 @@ public class Score : MonoBehaviour
     
     private void ScoreIncrement(int layer)
     {
-        _CurrentScore += 9;
-        _ScoreText.text = _CurrentScore + "/" + _ScoreForWin + " m";
+        _currentScore += 9;
+        _scoreText.text = _currentScore + "/" + _scoreForWin + " m";
     }
 
     private void ClearScore()
     {
-        _CurrentScore = 0;
-        _ScoreText.text = _CurrentScore + "/" + _ScoreForWin + " m";
+        _currentScore = 0;
+        _scoreText.text = _currentScore + "/" + _scoreForWin + " m";
     }
 }

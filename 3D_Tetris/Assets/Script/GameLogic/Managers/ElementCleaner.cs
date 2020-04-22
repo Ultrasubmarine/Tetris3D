@@ -24,22 +24,22 @@ namespace Script.GameLogic.TetrisElement
         public void CutElement()
         {
             var k = 0;
-            var countK = ElementData.MergerElements.Count;
+            var countK = ElementData.mergerElements.Count;
             while (k < countK)
             {
-                var cutBlocks = ElementData.MergerElements[k].GetNotAttachedBlocks();
+                var cutBlocks = ElementData.mergerElements[k].GetNotAttachedBlocks();
                 if (cutBlocks != null)
                 {
                     var newElement = _pool.CreateEmptyElement();
-                    newElement.MyTransform.position = ElementData.MergerElements[k].MyTransform.position;
-                    newElement.MyBlocks = cutBlocks;
-                    foreach (var block in newElement.MyBlocks) block.MyTransform.parent = newElement.MyTransform;
+                    newElement.myTransform.position = ElementData.mergerElements[k].myTransform.position;
+                    newElement.SetBlocks(cutBlocks);
+                    foreach (var block in newElement.blocks) block.myTransform.parent = newElement.myTransform;
 
                     _matrix.UnbindToMatrix(newElement);
-                    _matrix.UnbindToMatrix(ElementData.MergerElements[k]);
+                    _matrix.UnbindToMatrix(ElementData.mergerElements[k]);
 
-                    ElementData.MergerElements.Add(newElement);
-                    newElement.MyTransform.parent = _myTransform;
+                    ElementData.mergerElements.Add(newElement);
+                    newElement.myTransform.parent = _myTransform;
                     countK++;
                 }
                 
@@ -49,9 +49,9 @@ namespace Script.GameLogic.TetrisElement
 
         public void ClearElementsFromDeletedBlocks()
         {
-            foreach (var element in ElementData.MergerElements)
+            foreach (var element in ElementData.mergerElements)
             {
-                var deletedList = element.MyBlocks.Where(s => s.IsDestroy).ToArray();
+                var deletedList = element.blocks.Where(s => s.isDestroy).ToArray();
                 if (deletedList.ToArray().Length > 0)
                 {
                     element.RemoveBlocksInList(deletedList);
@@ -69,12 +69,12 @@ namespace Script.GameLogic.TetrisElement
 
         private void DeleteEmptyElement()
         {
-            var elements = ElementData.MergerElements;
+            var elements = ElementData.mergerElements;
             for (var i = 0; i < elements.Count;)
                 if (elements[i].CheckEmpty())
                 {
                     var tmp = elements[i];
-                    ElementData.MergerElements.Remove(elements[i]);
+                    ElementData.mergerElements.Remove(elements[i]);
                     _pool.DeleteElement(tmp);
                 }
                 else
@@ -85,22 +85,22 @@ namespace Script.GameLogic.TetrisElement
 
         public void DeleteAllElements()
         {
-            var elements = ElementData.MergerElements;
+            var elements = ElementData.mergerElements;
             foreach (var item in elements)
             {
                 _matrix.UnbindToMatrix(item);
-                ClearDeletedBlocks(item.MyBlocks.ToArray());
-                item.RemoveBlocksInList(item.MyBlocks.ToArray());
+                ClearDeletedBlocks(item.blocks.ToArray());
+                item.RemoveBlocksInList(item.blocks.ToArray());
                 _pool.DeleteElement(item);
             }
 
             ElementData.RemoveAll();
 
-            if (!Equals(ElementData.NewElement, null))
+            if (!Equals(ElementData.newElement, null))
             {
-                ClearDeletedBlocks(ElementData.NewElement.MyBlocks.ToArray());
-                ElementData.NewElement.RemoveBlocksInList(ElementData.NewElement.MyBlocks.ToArray());
-                _pool.DeleteElement(ElementData.NewElement);
+                ClearDeletedBlocks(ElementData.newElement.blocks.ToArray());
+                ElementData.newElement.RemoveBlocksInList(ElementData.newElement.blocks.ToArray());
+                _pool.DeleteElement(ElementData.newElement);
 //                ElementData.NewElement = null;
             }
             

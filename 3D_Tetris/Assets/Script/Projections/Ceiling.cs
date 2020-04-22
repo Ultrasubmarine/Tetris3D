@@ -9,6 +9,7 @@ namespace Script.Projections
     {
         private TetrisFSM _fsm;
         private PlaneMatrix _matrix;
+        private HeightHandler _heightHandler;
         
         [SerializeField] private GameObject _prefab;
         
@@ -17,12 +18,14 @@ namespace Script.Projections
         
         private List<GameObject> _ceilingList = new List<GameObject>();
         private Pool<GameObject> _pool;
+        
 
         private void Start()
         {
             _matrix = PlaneMatrix.Instance;
             _fsm = RealizationBox.Instance.FSM;
-
+            _heightHandler = RealizationBox.Instance.haightHandler;
+            
             _pool = new Pool<GameObject>(_prefab, transform);
             Invoke(nameof(LastStart), 1f);
         }
@@ -37,7 +40,7 @@ namespace Script.Projections
         {
             Destroy();
             
-            if (_matrix.currentHeight < _MinimumLayerHeight)
+            if (_heightHandler.currentHeight < _MinimumLayerHeight)
                 return;
 
             for (var x = 0; x < _matrix.wight; x++)

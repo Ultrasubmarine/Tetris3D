@@ -4,8 +4,6 @@ using IntegerExtension;
 
 public class PlaneMatrix : Singleton<PlaneMatrix>
 {
-    // TODO why matrix contains HaighHandler ref? delete this 2.02.20
-    [SerializeField] private HeightHandler _heightHandler;
     private Block[,,] _matrix;
 
     [Header("Size plane")] private int _limitHeight = 18;
@@ -18,7 +16,6 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         => _height - 1;
 
     public int limitHeight => _limitHeight;
-    public int currentHeight => _heightHandler.CurrentHeight;
 
     public event Action<int> OnDestroyLayer;
     
@@ -40,23 +37,23 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
 
     public bool CheckEmptyPlaсe(Element element, Vector3Int direction)
     {
-        if (element.MyBlocks.Count == 0)
+        if (element.blocks.Count == 0)
             return false;
 
         Vector3Int newCoordinat;
-        foreach (var item in element.MyBlocks)
-            if (!item.IsDestroy)
+        foreach (var item in element.blocks)
+            if (!item.isDestroy)
             {
-                newCoordinat = new Vector3Int(item.Coordinates.x, item.Coordinates.y, item.Coordinates.z) + direction;
+                newCoordinat = new Vector3Int(item.coordinates.x, item.coordinates.y, item.coordinates.z) + direction;
 
                 if (newCoordinat.OutOfCoordinatLimit())
                     return false;
 
                 if (!ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()], null))
                 {
-                    if (!element.IsBind)
+                    if (!element._isBind)
                         return false;
-                    if (!element.MyBlocks.Contains(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y,
+                    if (!element.blocks.Contains(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y,
                         newCoordinat.z.ToIndex()]))
                         return false;
                 }
@@ -75,35 +72,35 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     public void BindToMatrix(Element element)
     {
         int x, y, z;
-        foreach (var item in element.MyBlocks)
+        foreach (var item in element.blocks)
         {
-            if (ReferenceEquals(item, null) || item.IsDestroy)
+            if (ReferenceEquals(item, null) || item.isDestroy)
                 continue;
-            x = item.Coordinates.x;
-            y = item.Coordinates.y;
-            z = item.Coordinates.z;
+            x = item.coordinates.x;
+            y = item.coordinates.y;
+            z = item.coordinates.z;
 
             _matrix[x.ToIndex(), y, z.ToIndex()] = item;
         }
 
-        element.IsBind = true;
+        element._isBind = true;
     }
 
     public void UnbindToMatrix(Element element)
     {
         int x, y, z;
-        foreach (var item in element.MyBlocks)
+        foreach (var item in element.blocks)
         {
-            if (ReferenceEquals(item, null) || item.IsDestroy)
+            if (ReferenceEquals(item, null) || item.isDestroy)
                 continue;
-            x = item.Coordinates.x;
-            y = item.Coordinates.y;
-            z = item.Coordinates.z;
+            x = item.coordinates.x;
+            y = item.coordinates.y;
+            z = item.coordinates.z;
 
             _matrix[x.ToIndex(), y, z.ToIndex()] = null;
         }
 
-        element.IsBind = false;
+        element._isBind = false;
     }
 
     #endregion
@@ -135,13 +132,12 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
 
     private void DestroyLayer(int layer)
     {
-//        Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER.ToString(), layer);
         OnDestroyLayer?.Invoke(layer);
         
         for (var x = 0; x < wight; x++)
         for (var z = 0; z < wight; z++)
         {
-            _matrix[x, layer, z].IsDestroy = true;
+            _matrix[x, layer, z].isDestroy = true;
             _matrix[x, layer, z] = null;
         }
     }

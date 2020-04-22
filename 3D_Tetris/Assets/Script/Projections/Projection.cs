@@ -28,7 +28,7 @@ public class Projection : MonoBehaviour
 
     private void LastStart()
     {
-        ElementData.NewElementUpdate += CreateProjection;
+        ElementData.onNewElementUpdate += CreateProjection;
 
         _fsm.AddListener(TetrisState.Move, CreateProjection);
         _fsm.AddListener(TetrisState.MergeElement, () => Destroy());
@@ -36,11 +36,11 @@ public class Projection : MonoBehaviour
 
     private void CreateProjection()
     {
-        var obj = ElementData.NewElement;
+        var obj = ElementData.newElement;
 
         Destroy();
 
-        var positionProjection = obj.MyBlocks.Select(b => b.XZ).Distinct();
+        var positionProjection = obj.blocks.Select(b => b.xz).Distinct();
 
         foreach (var item in positionProjection)
         {

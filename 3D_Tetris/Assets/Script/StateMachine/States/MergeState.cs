@@ -15,7 +15,7 @@ public class MergeState : AbstractState<TetrisState>
 
     public override void Enter(TetrisState last)
     {
-        _matrix.BindToMatrix(ElementData.NewElement);
+        _matrix.BindToMatrix(ElementData.newElement);
         ElementData.MergeNewElement();
         
         base.Enter(last);

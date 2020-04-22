@@ -38,11 +38,11 @@ public class Generator : MonoBehaviour
         newElement.InitializationAfterGeneric(_matrix.height);
 
         // выравниваем элемент относительно координат y 
-        var min_y = newElement.MyBlocks.Min(s => s.Coordinates.y);
-        var max_y = newElement.MyBlocks.Max(s => s.Coordinates.y);
+        var min_y = newElement.blocks.Min(s => s.coordinates.y);
+        var max_y = newElement.blocks.Max(s => s.coordinates.y);
 
         var size = max_y - min_y;
-        newElement.MyTransform.position = new Vector3(pos.x, pos.y + _matrix.height - size, pos.z);
+        newElement.myTransform.position = new Vector3(pos.x, pos.y + _matrix.height - size, pos.z);
 
         //ConfuseElement(newElement);//, plane.gameObject);
         return newElement;

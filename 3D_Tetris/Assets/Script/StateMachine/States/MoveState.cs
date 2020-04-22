@@ -20,13 +20,13 @@ namespace Script.StateMachine.States
         
         public override void Enter(TetrisState last)
         {
-            if (CheckOpportunity(ElementData.NewElement, InfluenceData.direction))
+            if (CheckOpportunity(ElementData.newElement, InfluenceData.direction))
             {
-                Logic(InfluenceData.direction, ElementData.NewElement);
+                Logic(InfluenceData.direction, ElementData.newElement);
 
                 Vector3Int vectorDirection = SetVectorMove(InfluenceData.direction);
 
-                _influence.AddMove(ElementData.NewElement, vectorDirection, Speed.TimeMove,
+                _influence.AddMove(ElementData.newElement, vectorDirection, Speed.TimeMove,
                     () =>
                     {
                         _FSM.SetNewState(TetrisState.EndInfluence);
@@ -69,16 +69,16 @@ namespace Script.StateMachine.States
         private void Logic(move direction, Element element)
         {
             if (direction == move.x)
-                foreach (var item in element.MyBlocks)
+                foreach (var item in element.blocks)
                     item.OffsetCoordinates(1, 0, 0);
             else if (direction == move._x)
-                foreach (var item in element.MyBlocks)
+                foreach (var item in element.blocks)
                     item.OffsetCoordinates(-1, 0, 0);
             else if (direction == move.z)
-                foreach (var item in element.MyBlocks)
+                foreach (var item in element.blocks)
                     item.OffsetCoordinates(0, 0, 1);
             else if (direction == move._z)
-                foreach (var item in element.MyBlocks)
+                foreach (var item in element.blocks)
                     item.OffsetCoordinates(0, 0, -1);
         }
     }

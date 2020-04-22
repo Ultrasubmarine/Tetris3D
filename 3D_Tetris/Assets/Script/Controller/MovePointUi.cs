@@ -1,9 +1,7 @@
 ﻿using System;
-using DG.Tweening;
 using Script.Controller;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class MovePointUi : MonoBehaviour, IPointerEnterHandler
 {

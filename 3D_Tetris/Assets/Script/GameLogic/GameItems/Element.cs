@@ -1,72 +1,82 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Serialization;
 
 public class Element : MonoBehaviour
 {
-    public List<Block> MyBlocks = new List<Block>();
-
-    public bool IsBind = false;
-    public Transform MyTransform { get; private set; }
+    public List<Block> blocks => _blocks;
+    
+    public bool _isBind = false;
+    
+    public Transform myTransform { get; private set; }
+    
+    [SerializeField] private List<Block> _blocks = new List<Block>();
+    
 
     private void Awake()
     {
-        MyTransform = transform;
+        myTransform = transform;
     }
 
     private void OnDisable()
     {
-        MyTransform.rotation = Quaternion.identity;
-        MyTransform.position = Vector3.zero;
+        myTransform.localRotation = Quaternion.identity;
+        myTransform.localPosition = Vector3.zero;
     }
 
     public void AddBlock(Block newBlock)
     {
-        MyBlocks.Add(newBlock);
+        _blocks.Add(newBlock);
     }
 
+    public void SetBlocks(List<Block> blocks)
+    {
+        this._blocks = blocks;
+    }
+    
     public void InitializationAfterGeneric(int height)
     {
-        var maxElement = MyBlocks.Max(s => s.Coordinates.y);
+        var maxElement = _blocks.Max(s => s.coordinates.y);
 
-        foreach (var item in MyBlocks)
+        foreach (var item in _blocks)
             item.OffsetCoordinates(0, height - maxElement, 0); //item.Coordinates.y += height - maxElement;
     }
 
     public void LogicDrop()
     {
-        foreach (var item in MyBlocks)
+        foreach (var item in _blocks)
             item.OffsetCoordinates(0, -1, 0);
     }
 
     public bool CheckEmpty()
     {
-        if (MyBlocks.Count > 0)
+        if (_blocks.Count > 0)
             return false;
         return true;
     }
 
     public void RemoveBlocksInList(Block[] massBlock)
     {
-        MyBlocks = MyBlocks.Except(massBlock).ToList();
+        _blocks = _blocks.Except(massBlock).ToList();
     }
 
     #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
 
     public List<Block> GetNotAttachedBlocks()
     {
-        if (MyBlocks.Count == 0)
+        if (_blocks.Count == 0)
             return null;
         var contactList = new List<Block>();
 
-        var curr = MyBlocks[0];
+        var curr = _blocks[0];
 
         contactList.Add(curr);
-        foreach (var item in MyBlocks)
+        foreach (var item in _blocks)
             if (CheckContact(curr, item))
                 contactList.Add(item);
 
-        if (contactList.Count == MyBlocks.Count)
+        if (contactList.Count == _blocks.Count)
         {
             return null;
         }
@@ -76,7 +86,7 @@ public class Element : MonoBehaviour
             var countK = contactList.Count;
             while (k < countK)
             {
-                var remainingBlocks = MyBlocks.Except(contactList).ToList();
+                var remainingBlocks = _blocks.Except(contactList).ToList();
                 for (var i = 0; i < remainingBlocks.Count; i++)
                     if (CheckContact(remainingBlocks[i], contactList[k]))
                     {
@@ -87,10 +97,10 @@ public class Element : MonoBehaviour
                 k++;
             }
 
-            if (contactList.Count < MyBlocks.Count)
+            if (contactList.Count < _blocks.Count)
             {
-                var notContact = MyBlocks.Except(contactList).ToList();
-                MyBlocks = contactList;
+                var notContact = _blocks.Except(contactList).ToList();
+                _blocks = contactList;
                 return notContact;
             }
             else
@@ -102,8 +112,8 @@ public class Element : MonoBehaviour
 
     private bool CheckContact(Block b1, Block b2)
     {
-        var b1p = new Vector3Int(b1.Coordinates.x, b1.Coordinates.y, b1.Coordinates.z);
-        var b2p = new Vector3Int(b2.Coordinates.x, b2.Coordinates.y, b2.Coordinates.z);
+        var b1p = new Vector3Int(b1.coordinates.x, b1.coordinates.y, b1.coordinates.z);
+        var b2p = new Vector3Int(b2.coordinates.x, b2.coordinates.y, b2.coordinates.z);
 
         if (b1p.x == b2p.x && b1p.y == b2p.y && b1p.z == b2p.z + 1)
             return true;

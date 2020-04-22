@@ -29,7 +29,6 @@ namespace Script.ObjectEngine
         
         public bool Update(float speed = 1)
         {
-           // Debug.Log("drop update");
             if (Drop(speed))
             {
                 _callBack?.Invoke();

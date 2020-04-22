@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Script.Controller;
 using UnityEngine;
 
 public class WanderCamera : MonoBehaviour

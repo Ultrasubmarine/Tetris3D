@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -43,7 +42,7 @@ public class GameCamera : MonoBehaviour
     
     public void SetStabilization()
     {
-        CheckStabilization(_heightHandler.LimitHeight, _heightHandler.CurrentHeight);
+        CheckStabilization(_heightHandler.limitHeight, _heightHandler.currentHeight);
     }
     
     private void Awake()
