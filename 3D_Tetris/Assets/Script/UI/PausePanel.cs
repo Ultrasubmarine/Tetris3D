@@ -1,5 +1,4 @@
-﻿using System;
-using Script.Influence;
+﻿using Script.Influence;
 using UnityEngine;
 
 namespace Script.UI

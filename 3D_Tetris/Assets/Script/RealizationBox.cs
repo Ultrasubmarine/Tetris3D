@@ -10,7 +10,6 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private PlaneMatrix _matrix;
     [SerializeField] private Generator _generator;
     [SerializeField] private GameLogicPool _gameLogicPool;
-    [FormerlySerializedAs("_elementManager")]
     [Space(5)] 
     [SerializeField] private ElementDropper _elementDropper;
     [SerializeField] private ElementCleaner _elementCleaner;
@@ -23,7 +22,7 @@ public class RealizationBox : Singleton<RealizationBox>
 
     [SerializeField] private GameCamera _gameCamera;
     [SerializeField] private MoveTouchController _moveTouchController;
-    [FormerlySerializedAs("_movePointsManager")] [SerializeField] private PointJoystick _pointJoystick;
+    [SerializeField] private PointJoystick _pointJoystick;
     [SerializeField] private GameController _gameController;
 
     [SerializeField] private SlowManager _slowManager;

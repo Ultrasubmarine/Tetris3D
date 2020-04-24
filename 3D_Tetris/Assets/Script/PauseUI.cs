@@ -1,5 +1,4 @@
-﻿using Script.Influence;
-using Script.UI;
+﻿using Script.UI;
 using UnityEngine;
 
 public class PauseUI : MonoBehaviour

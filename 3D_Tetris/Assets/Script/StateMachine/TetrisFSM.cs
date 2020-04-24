@@ -40,6 +40,8 @@ public class TetrisFSM : AbstractFSM<TetrisState>
         _statesDictionary.Add(TetrisState.Move, new MoveState());
 
         _statesDictionary.Add(TetrisState.LoseGame, new LoseGameState());
+
+        RealizationBox.Instance.gameCamera.onFirstAnimationEnd += StartFSM;
 //		Invoke( "StartFSM", 1.0f);
     }
 

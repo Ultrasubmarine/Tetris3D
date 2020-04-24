@@ -31,7 +31,8 @@ namespace Script.GameLogic.TetrisElement
                 if (cutBlocks != null)
                 {
                     var newElement = _pool.CreateEmptyElement();
-                    newElement.myTransform.position = ElementData.mergerElements[k].myTransform.position;
+                    newElement.name = "your is be true";
+                    newElement.myTransform.localPosition = ElementData.mergerElements[k].myTransform.localPosition;
                     newElement.SetBlocks(cutBlocks);
                     foreach (var block in newElement.blocks) block.myTransform.parent = newElement.myTransform;
 

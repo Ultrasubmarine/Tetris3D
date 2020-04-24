@@ -34,6 +34,7 @@ public class GameCamera : MonoBehaviour
     [SerializeField] private float _FirstOrthographicSize = 15;
 
     
+    
     public void FirstAnimation()
     {
         _camera.DOOrthoSize(_minSize, _Time).From(_FirstOrthographicSize)

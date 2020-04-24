@@ -6,6 +6,8 @@ namespace Helper.Patterns.FSM
 {
     public abstract class AbstractFSM<T> : MonoBehaviour where T : Enum
     {
+        public Action<T> onStateChange;
+        
         protected Dictionary<T, AbstractState<T>> _statesDictionary;
 
         protected T _last;
@@ -32,6 +34,7 @@ namespace Helper.Patterns.FSM
 //
 //         Debug.Log("new state " + newState);
             _statesDictionary[_current].Enter(_last);
+            onStateChange?.Invoke(newState);
         }
 
         public void AddListener(T state, Action callMethod)

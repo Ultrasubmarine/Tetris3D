@@ -2,12 +2,15 @@
 using Script.Controller;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] private float _timeTurn = 0.3f;
-  
+    [SerializeField] private Button _turnButton;
+    
     private move[] left_up = {move._z, move.x, move.z, move._x};
     private move[] left_down = {move.x, move.z, move._x, move._z};
     private move[] right_down = {move.z, move._x, move._z, move.x};
@@ -33,6 +36,14 @@ public class GameController : MonoBehaviour
         _influence = RealizationBox.Instance.influenceManager;
         _place = RealizationBox.Instance.place;
         _fsm = RealizationBox.Instance.FSM;
+
+    //    _fsm.onStateChange += OnFsmStateChange;
+        /*_fsm.AddListener(TetrisState.Drop, () => _turnButton.interactable = true);
+        _fsm.AddListener(TetrisState.MergeElement, () => _turnButton.interactable = false);
+        _fsm.AddListener(TetrisState.Move, () => _turnButton.interactable = false);
+        _fsm.AddListener(TetrisState.Collection, () => _turnButton.interactable = false);
+        _fsm.AddListener(TetrisState.AllElementsDrop, () => _turnButton.interactable = false);*/
+     
     }
     
 
@@ -85,5 +96,17 @@ public class GameController : MonoBehaviour
             _influence.enabled = true;
             _isTurn = false;
         });
+    }
+
+    private void OnFsmStateChange(TetrisState newState)
+    {
+        _fsm.AddListener(TetrisState.Drop, () => _turnButton.interactable = true);
+        _fsm.AddListener(TetrisState.MergeElement, () => _turnButton.interactable = false);
+        _fsm.AddListener(TetrisState.Move, () => _turnButton.interactable = false);
+        
+        /*if (newState == TetrisState.MergeElement;
+            _turnButton.interactable = false;
+        else if (newState == TetrisState.GenerateElement)
+            _turnButton.interactable = true;*/
     }
 }
