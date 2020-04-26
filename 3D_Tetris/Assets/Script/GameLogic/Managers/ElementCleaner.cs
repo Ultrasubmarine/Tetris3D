@@ -31,13 +31,12 @@ namespace Script.GameLogic.TetrisElement
                 if (cutBlocks != null)
                 {
                     var newElement = _pool.CreateEmptyElement();
-                    newElement.name = "your is be true";
+                    newElement.name = ElementData.mergerElements[k] + "1" ;
                     newElement.myTransform.localPosition = ElementData.mergerElements[k].myTransform.localPosition;
                     newElement.SetBlocks(cutBlocks);
                     foreach (var block in newElement.blocks) block.myTransform.parent = newElement.myTransform;
 
-                    _matrix.UnbindToMatrix(newElement);
-                    _matrix.UnbindToMatrix(ElementData.mergerElements[k]);
+                    newElement._isBind = true;
 
                     ElementData.mergerElements.Add(newElement);
                     newElement.myTransform.parent = _myTransform;

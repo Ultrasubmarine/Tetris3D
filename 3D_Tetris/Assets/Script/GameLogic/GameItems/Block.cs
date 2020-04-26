@@ -14,9 +14,10 @@ public struct CoordinatXZ
 
 public class Block : MonoBehaviour
 {
+  //  public Vector3Int xyz;
     public Vector3Int coordinates => _coordinates;
     
-    private Vector3Int _coordinates;
+    public Vector3Int _coordinates;
     public CoordinatXZ xz => new CoordinatXZ(coordinates.x, coordinates.z);
 
     public bool isDestroy { get; set; }
@@ -37,6 +38,7 @@ public class Block : MonoBehaviour
     public Block(int x, int y, int z)
     {
         _coordinates = new Vector3Int(x, y, z);
+ //       xyz = _coordinates;
     }
 
     public void SetCoordinates(int x, int y, int z)

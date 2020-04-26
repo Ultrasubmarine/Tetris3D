@@ -2,7 +2,6 @@
 using Script.Controller;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
