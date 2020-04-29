@@ -65,6 +65,9 @@ public class GameCamera : MonoBehaviour
     {
         if (_currentHeight == height)
             return;
+
+        _currentHeight = height;
+        
         
         var finishP = Vector3.Lerp(_minDistance.position, _maxDistance.position, height / (float) limit);
         var finishS = Mathf.Lerp(_minSize, _maxSize, height / (float) limit);

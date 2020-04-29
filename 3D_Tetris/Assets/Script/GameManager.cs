@@ -32,15 +32,13 @@ public class GameManager : MonoBehaviour
     {
         _winPanel.SetActive(true);
     }
-    
-    public void ReplayGame()
+
+    public void ClearPlace()
     {
         RealizationBox.Instance.elementCleaner.DeleteAllElements();
         RealizationBox.Instance.matrix.Clear();
         
         RealizationBox.Instance.haightHandler.CalculateHeight();
         RealizationBox.Instance.gameCamera.SetStabilization();
-        
-        _fsm.StartFSM();
     }
 }
