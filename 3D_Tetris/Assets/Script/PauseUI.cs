@@ -1,41 +1,39 @@
-﻿using System;
-using Script.Influence;
-using Script.UI;
+﻿using Script.Influence;
 using UnityEngine;
 
 public class PauseUI : MonoBehaviour
 {
-    [SerializeField] private PausePanel _pausePanel;
-
-    [SerializeField] private BottomPanelAnimation _pausePanel2;
+    [SerializeField] private BottomPanelAnimation _pausePanel;
     
     [SerializeField] private BottomPanelAnimation _gamePanel;
-    
-    [SerializeField] private GameObject _pauseIcon;
 
+    private MoveTouchController _moveTouchController;
     private InfluenceManager _influenceManager;
 
     private void Awake()
     {
         _influenceManager = RealizationBox.Instance.influenceManager;
+        _moveTouchController = RealizationBox.Instance.moveTouchController;
     }
 
     public void SetPauseGame(bool isPause)
     {
-        /*_pauseIcon.SetActive(!isPause);
-        _pausePanel.SetPauseGame(isPause);*/
-
         _influenceManager.enabled = !isPause;
         
         if (isPause)
         {
-            _pausePanel2.Show();
+            _pausePanel.Show();
             _gamePanel.Hide();
+            
+            _moveTouchController.OnBreakOn();
+            _moveTouchController.enabled = false;
         }
         else
         {
             _gamePanel.Show();
-            _pausePanel2.Hide();
+            _pausePanel.Hide();
+            
+            _moveTouchController.enabled = true;
         }
         
     }

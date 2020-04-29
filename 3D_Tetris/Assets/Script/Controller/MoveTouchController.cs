@@ -108,4 +108,9 @@ public class MoveTouchController : MonoBehaviour
         _state = newState;
         onStateChanged?.Invoke(_state);
     }
+
+    public void OnBreakOn()
+    {
+        OnBreak();
+    }
 }
