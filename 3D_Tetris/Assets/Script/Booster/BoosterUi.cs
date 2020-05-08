@@ -5,17 +5,23 @@ namespace Script.Booster
 {
     [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(Button))]
+    [RequireComponent(typeof(CanvasGroup))]
     public class BoosterUi : MonoBehaviour
     {
-        private Image _icon;
-
+        [SerializeField] private Image _icon;
+        [SerializeField] private Image _fill;
+        
         private Button _button;
 
         private BoosterBase _booster;
+
+        private CanvasGroup _canvasGroup;
+        
+        
         private void Awake()
         {
-            _icon = GetComponent<Image>();
             _button = GetComponent<Button>();
+            _canvasGroup = GetComponent<CanvasGroup>();
         }
 
         public void Initialize(BoosterBase booster)
@@ -34,12 +40,14 @@ namespace Script.Booster
                 case BoosterState.ReadyForUse:
                 {
                     _button.enabled = true;
+                    _canvasGroup.alpha = 1f;
                     break;
                 }
                 case BoosterState.Respawn:
                 {
-                    _booster.timer.onProgressChanged += (p) => { _icon.fillAmount = p; };
+                    _booster.timer.onProgressChanged += (p) => { _fill.fillAmount = p; };
                     _button.enabled = false;
+                    _canvasGroup.alpha = 0.5f;
                     break;
                 }
             }

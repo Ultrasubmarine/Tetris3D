@@ -45,8 +45,20 @@ namespace Script.Booster
         
         public virtual void Apply()
         {
-            if(currentState == BoosterState.ReadyForUse)
-                SetState(BoosterState.Respawn); 
+            if (currentState == BoosterState.ReadyForUse)
+            {
+                
+                _timer = TimersKeeper.Schedule(_timeRespawn);
+                _timer.onStateChanged += (s) =>
+                {
+                    if(s == TimerState.Completed)
+                    {
+                        SetState(BoosterState.ReadyForUse);
+                        _timer = null;
+                    }
+                };
+                SetState(BoosterState.Respawn);
+            }
         }
 
         public virtual void EndApply()

@@ -29,7 +29,8 @@ namespace Script.Booster
 
                 var ui = Instantiate(_boosterUi).GetComponent<BoosterUi>();
                 ui.Initialize(booster);
-                ui.transform.parent = this.transform;
+                ui.transform.parent = _boosterUiParent;
+         
                 _boosterUis.Add(ui);
             }
         }
