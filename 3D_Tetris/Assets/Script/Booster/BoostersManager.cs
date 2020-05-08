@@ -20,7 +20,7 @@ namespace Script.Booster
 
         private List<BoosterUi> _boosterUis;
 
-        private void Awake()
+        private void Start()
         {
             _boosterUis = new List<BoosterUi>();
             foreach (var booster in _boosters)

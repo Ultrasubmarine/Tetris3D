@@ -9,7 +9,7 @@ namespace Script.Booster
         Respawn,
     }
     
-    [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Booster", order = 1)]
+    [CreateAssetMenu(fileName = "BaseBooser", menuName = "ScriptableObjects/Booster/BaseBooster", order = 1)]
     public class BoosterBase : ScriptableObject
     {
         public event Action<BoosterState> onStateChange;
@@ -31,7 +31,7 @@ namespace Script.Booster
         
         private BoosterState _currentState;
         
-        public void Initialize()
+        public virtual void Initialize()
         {
             onStateChange += OnStateChange;
             SetState(BoosterState.ReadyForUse); 
