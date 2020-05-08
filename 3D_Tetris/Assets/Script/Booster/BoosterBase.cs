@@ -14,7 +14,7 @@ namespace Script.Booster
     {
         public event Action<BoosterState> onStateChange;
         
-        public BoosterState currentState;
+        public BoosterState currentState => _currentState;
         
         public Sprite icon => _icon;
         
@@ -29,36 +29,18 @@ namespace Script.Booster
         
         [SerializeField] private float _timeRespawn;
         
-        [SerializeField] private BoosterState _currentState;
+        private BoosterState _currentState;
         
-        
-        public BoosterBase()
-        {
-          
-        }
-
-
         public void Initialize()
         {
+            onStateChange += OnStateChange;
             SetState(BoosterState.ReadyForUse); 
         }
         
         public virtual void Apply()
         {
-            if (currentState == BoosterState.ReadyForUse)
-            {
-                
-                _timer = TimersKeeper.Schedule(_timeRespawn);
-                _timer.onStateChanged += (s) =>
-                {
-                    if(s == TimerState.Completed)
-                    {
-                        SetState(BoosterState.ReadyForUse);
-                        _timer = null;
-                    }
-                };
+            if (_currentState == BoosterState.ReadyForUse)
                 SetState(BoosterState.Respawn);
-            }
         }
 
         public virtual void EndApply()
@@ -68,13 +50,21 @@ namespace Script.Booster
 
         protected void SetState(BoosterState newState)
         {
-            currentState = newState;
-            onStateChange?.Invoke(currentState);
+            _currentState = newState;
+            onStateChange?.Invoke(_currentState);
         }
         
         protected virtual void OnRespawn()
         {
-                
+            _timer = TimersKeeper.Schedule(_timeRespawn);
+            _timer.onStateChanged += (s) =>
+            {
+                if(s == TimerState.Completed)
+                {
+                    SetState(BoosterState.ReadyForUse);
+                    _timer = null;
+                }
+            }; 
         }
 
         protected virtual void OnReadyForUse()
