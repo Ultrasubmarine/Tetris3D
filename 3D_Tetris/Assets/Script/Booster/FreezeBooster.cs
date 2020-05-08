@@ -7,6 +7,7 @@ namespace Script.Booster
     {
         private SlowManager _slowManager;
         
+      
         [SerializeField] private float _slowTime;
         
         [SerializeField] private float _slowValue;
@@ -15,11 +16,14 @@ namespace Script.Booster
         {
             base.Initialize();
             _slowManager = RealizationBox.Instance.slowManager;
+            _useTime = _slowTime;
         }
 
         public override void Apply()
         {
-            base.Apply();
+            if (_currentState == BoosterState.ReadyForUse)
+                SetState(BoosterState.UseWithCountdown);
+            
             _slowManager.AddedSlow(_slowTime, _slowValue);
         }
 

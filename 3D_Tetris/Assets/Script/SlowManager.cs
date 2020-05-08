@@ -100,6 +100,7 @@ public class SlowManager : MonoBehaviour
         if (MoveModeSlow != null)
             _slowlerValue += MoveModeSlow.Value.slow;
         
+        Debug.Log(" slow =" + _slowlerValue);
         onUpdateValue?.Invoke();
     }
 

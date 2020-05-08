@@ -6,6 +6,7 @@ namespace Script.Booster
     public enum BoosterState
     {
         ReadyForUse,
+        UseWithCountdown,
         Respawn,
     }
     
@@ -19,17 +20,21 @@ namespace Script.Booster
         public Sprite icon => _icon;
         
         public  Timer timer => _timer;
-        
-        public float timeRespawn => _timeRespawn;
-        
+        public  Timer useTimer => _useTimer;
+
         
         [SerializeField] Sprite _icon;
-        
-        [SerializeField] private Timer _timer;
-        
+
         [SerializeField] private float _timeRespawn;
+
+        protected float _useTime;
         
-        private BoosterState _currentState;
+        private Timer _timer;
+        
+        private Timer _useTimer;
+        
+        protected BoosterState _currentState;
+        
         
         public virtual void Initialize()
         {
@@ -72,6 +77,19 @@ namespace Script.Booster
             
         }
 
+        protected virtual void UseWithCountdown()
+        {
+            _useTimer = TimersKeeper.Schedule(_useTime);
+            _useTimer.onStateChanged += (s) =>
+            {
+                if(s == TimerState.Completed)
+                {
+                    SetState(BoosterState.Respawn);
+                    _timer = null;
+                }
+            }; 
+        }
+        
         protected void OnStateChange(BoosterState newState)
         {
             switch (newState)
@@ -84,6 +102,11 @@ namespace Script.Booster
                 case BoosterState.Respawn:
                 {
                     OnRespawn();
+                    break;
+                }
+                case BoosterState.UseWithCountdown:
+                {
+                    UseWithCountdown();
                     break;
                 }
             }

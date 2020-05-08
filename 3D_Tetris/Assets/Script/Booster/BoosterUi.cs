@@ -50,6 +50,13 @@ namespace Script.Booster
                     _canvasGroup.alpha = 0.5f;
                     break;
                 }
+                case BoosterState.UseWithCountdown: 
+                {
+                    _booster.useTimer.onProgressChanged += (p) => { _fill.fillAmount = 1 - p; };
+                    _button.enabled = false;
+                    _canvasGroup.alpha = 1f;
+                    break;
+                }
             }
         }
     }
