@@ -77,7 +77,7 @@ namespace Script.Influence
 
         public void CalculateSpeed()
         {
-            currentSpeed = speed - _slowler.slow;
+            currentSpeed = Mathf.Clamp(speed - _slowler.slow, 0 ,1);
         }
     }
 }
