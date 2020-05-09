@@ -24,6 +24,10 @@ public class Generator : MonoBehaviour
         _pool = RealizationBox.Instance.gameLogicPool;
 
         _castMatrix = new bool[3, 3, 3];
+        
+        _answerElement= _pool.CreateEmptyElement();
+        _answerElement.myTransform.parent = transform;
+        _answerElement.myTransform.position = new Vector3(0,0.42f, 0);
     }
 
     public Element GenerationNewElement(Transform elementParent)
@@ -32,7 +36,7 @@ public class Generator : MonoBehaviour
         _castMatrix = CreateCastMatrix(_minPoint.y);
 
         var newElement = GenerateElement();
-//       CreateDuplicate(newElement);
+        CreateDuplicate(newElement);
 
         var pos = elementParent.position;
         newElement.InitializationAfterGeneric(_matrix.height);
@@ -123,28 +127,30 @@ public class Generator : MonoBehaviour
         return _castMatrix[indices.x, indices.y, indices.z];
     }
 
-//    private void CreateDuplicate( Element element)
-//    {
-//        if( !ReferenceEquals( _answerElement, null) )
-//            DestroyOldDuplicate();
-//        _answerElement= _ElementPool.CreateObject(Vector3Int.zero);
-//
-//        Vector3Int stabiliation = new Vector3Int(1, 0, 1);
-//        foreach (var item in element.MyBlocks)
-//        {
-//            //CreateBlock( ( (Vector3Int)item.MyTransform.position + stabiliation), _answerElement, 666);
-//        }
-//       _answerElement.MyTransform.position += new Vector3(0,0.42f, 0); 
-//    }
-//
-//    private void DestroyOldDuplicate()
-//    {
-//        foreach (var block in _answerElement.MyBlocks)
-//        {
-//            DeleteBlock(block);
-//        }
-//        DeleteElement(_answerElement);
-//    }
+    private void CreateDuplicate( Element element)
+    {
+        DestroyOldDuplicate();
+        Vector3Int stabiliation = new Vector3Int(1, 0, 1);
+        foreach (var item in element.blocks)
+        {
+            var position = item.myTransform.position;
+            Vector3Int v = stabiliation + new Vector3Int((int) position.x, (int) position.y, (int) position.z);
+            _pool.CreateBlock(v, _answerElement, _BonusMaterial);
+        }
+
+        var answerPosition = _answerElement.myTransform.position;
+        answerPosition = new Vector3(answerPosition.x, 0.42f + _minPoint.y, answerPosition.z);
+        _answerElement.myTransform.position = answerPosition;
+    }
+
+    private void DestroyOldDuplicate()
+    {
+        foreach (var block in _answerElement.blocks)
+        {
+            _pool.DeleteBlock(block);
+        }
+        _answerElement.RemoveBlocksInList(_answerElement.blocks.ToArray());
+    }
 
 //    void ConfuseElement(Element element){//, GameObject target) {
 //        Random rn = new Random();
