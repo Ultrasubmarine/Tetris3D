@@ -148,9 +148,8 @@ public class Generator : MonoBehaviour
         
         var answerPosition = _answerElement.myTransform.position;
         answerPosition = new Vector3(answerPosition.x, 0.42f + _minPoint.y, answerPosition.z);
-        _answerElement.myTransform.position = answerPosition;
-        
-      _answerElement.gameObject.SetActive(false);
+        _answerElement.myTransform.position = answerPosition; 
+        _answerElement.gameObject.SetActive(false);
     }
 
     public void DestroyOldDuplicate()
