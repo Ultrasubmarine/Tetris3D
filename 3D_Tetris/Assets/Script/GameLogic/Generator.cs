@@ -29,6 +29,7 @@ public class Generator : MonoBehaviour
         _answerElement= _pool.CreateEmptyElement();
         _answerElement.myTransform.parent = _answerElementParent.transform;
         _answerElement.myTransform.position = new Vector3(0,0.42f, 0);
+        _answerElement.gameObject.SetActive(false);
     }
 
     public Element GenerationNewElement(Transform elementParent)
@@ -130,6 +131,7 @@ public class Generator : MonoBehaviour
 
     private void CreateDuplicate( Element element)
     {
+       // _answerElementParent.SetActive(true);
         Vector3Int stabiliation = new Vector3Int(1, 0, 1);
         
         foreach (var item in element.blocks)
@@ -148,9 +150,7 @@ public class Generator : MonoBehaviour
         answerPosition = new Vector3(answerPosition.x, 0.42f + _minPoint.y, answerPosition.z);
         _answerElement.myTransform.position = answerPosition;
         
-        Debug.Log($"before  {_answerElement.myTransform.position}");
-        _answerElementParent.SetActive(false);
-        Debug.Log($"after {_answerElement.myTransform.position}");
+      _answerElement.gameObject.SetActive(false);
     }
 
     public void DestroyOldDuplicate()
@@ -161,11 +161,12 @@ public class Generator : MonoBehaviour
             _pool.DeleteBlock(block);
         }
         _answerElement.RemoveBlocksInList(_answerElement.blocks.ToArray());
+        _answerElement.gameObject.SetActive(false);
     }
 
     public void ShowAnswerElement()
     {
-        _answerElementParent.SetActive(true);
+        _answerElement.gameObject.SetActive(true);
     }
 
 //    void ConfuseElement(Element element){//, GameObject target) {
