@@ -1,8 +1,13 @@
-﻿using UnityEngine;
+﻿using Script.UI;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _losePanel;
+    [SerializeField] private GameObject[] _losePanels;
+    
+    [SerializeField] private BottomPanelAnimation _settingsPanel;
+    [SerializeField] private BottomPanelAnimation _gameplayBottomPanel;
+    
     [SerializeField] private GameObject _winPanel;
     
     private TetrisFSM _fsm;
@@ -25,7 +30,12 @@ public class GameManager : MonoBehaviour
 
     private void OnLoseGame()
     {
-        _losePanel.SetActive(true);
+        foreach (var panel in _losePanels)
+        {
+            panel.SetActive(true);
+        }
+        _settingsPanel.Show();
+        _gameplayBottomPanel.Hide();
     }
     
     private void OnWinGame()

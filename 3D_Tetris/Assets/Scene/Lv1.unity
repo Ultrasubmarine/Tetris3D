@@ -1896,7 +1896,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 267bfb9d5367cd54f96250e307132494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _losePanel: {fileID: 866765056}
+  _losePanels:
+  - {fileID: 866765056}
+  _settingsPanel: {fileID: 547163896}
+  _gameplayBottomPanel: {fileID: 2082029544}
   _winPanel: {fileID: 0}
 --- !u!4 &311359820
 Transform:
@@ -2561,7 +2564,7 @@ GameObject:
   - component: {fileID: 547163897}
   - component: {fileID: 547163896}
   m_Layer: 5
-  m_Name: PausePanel
+  m_Name: BottomSettingsPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4198,6 +4201,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1553480523}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &866765059 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114172833873194388, guid: c4e7311714ff94a4382631a9616bf709,
+    type: 3}
+  m_PrefabInstance: {fileID: 1553480523}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866765056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &876679917
 GameObject:
   m_ObjectHideFlags: 0
@@ -11197,7 +11212,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TargetGraphic
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 866765059}
     - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
@@ -11277,6 +11292,66 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Arguments.m_BoolArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Target
+      value: 
+      objectReference: {fileID: 547163896}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_MethodName
+      value: Hide
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[6].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[6].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[6].m_Target
+      value: 
+      objectReference: {fileID: 2082029544}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[6].m_MethodName
+      value: Show
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[6].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114466867398604066, guid: c4e7311714ff94a4382631a9616bf709,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[6].m_Arguments.m_BoolArgument
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224144924612348802, guid: c4e7311714ff94a4382631a9616bf709,
         type: 3}
@@ -13556,6 +13631,39 @@ MonoBehaviour:
       - m_Target: {fileID: 311359819}
         m_MethodName: ClearPlace
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 547163889}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 547163889}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2082029541}
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
