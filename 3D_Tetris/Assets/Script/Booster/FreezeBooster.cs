@@ -6,12 +6,12 @@ namespace Script.Booster
     public class FreezeBooster : BoosterBase
     {
         private SlowManager _slowManager;
-        
-      
+
+
         [SerializeField] private float _slowTime;
-        
+
         [SerializeField] private float _slowValue;
-        
+
         public override void Initialize()
         {
             base.Initialize();
@@ -23,7 +23,7 @@ namespace Script.Booster
         {
             if (_currentState == BoosterState.ReadyForUse)
                 SetState(BoosterState.UseWithCountdown);
-            
+
             _slowManager.AddedSlow(_slowTime, _slowValue);
         }
 

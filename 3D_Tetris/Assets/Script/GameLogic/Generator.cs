@@ -8,6 +8,7 @@ public class Generator : MonoBehaviour
     private GameLogicPool _pool;
 
     [SerializeField] private Material[] _MyMaterial;
+    [SerializeField] private GameObject _answerElementParent;
 
     [Tooltip(" подсказка места расположения падающего элемента")] [SerializeField]
     private Material _BonusMaterial;
@@ -26,7 +27,7 @@ public class Generator : MonoBehaviour
         _castMatrix = new bool[3, 3, 3];
         
         _answerElement= _pool.CreateEmptyElement();
-        _answerElement.myTransform.parent = transform;
+        _answerElement.myTransform.parent = _answerElementParent.transform;
         _answerElement.myTransform.position = new Vector3(0,0.42f, 0);
     }
 
@@ -129,8 +130,8 @@ public class Generator : MonoBehaviour
 
     private void CreateDuplicate( Element element)
     {
-        DestroyOldDuplicate();
         Vector3Int stabiliation = new Vector3Int(1, 0, 1);
+        
         foreach (var item in element.blocks)
         {
             var position = item.myTransform.position;
@@ -138,18 +139,33 @@ public class Generator : MonoBehaviour
             _pool.CreateBlock(v, _answerElement, _BonusMaterial);
         }
 
+        foreach (var block in _answerElement.blocks)
+        {
+            block.transform.localScale = Vector3.one * 0.9f;
+        }
+        
         var answerPosition = _answerElement.myTransform.position;
         answerPosition = new Vector3(answerPosition.x, 0.42f + _minPoint.y, answerPosition.z);
         _answerElement.myTransform.position = answerPosition;
+        
+        Debug.Log($"before  {_answerElement.myTransform.position}");
+        _answerElementParent.SetActive(false);
+        Debug.Log($"after {_answerElement.myTransform.position}");
     }
 
-    private void DestroyOldDuplicate()
+    public void DestroyOldDuplicate()
     {
         foreach (var block in _answerElement.blocks)
         {
+            block.transform.localScale = Vector3.one * 0.97f;
             _pool.DeleteBlock(block);
         }
         _answerElement.RemoveBlocksInList(_answerElement.blocks.ToArray());
+    }
+
+    public void ShowAnswerElement()
+    {
+        _answerElementParent.SetActive(true);
     }
 
 //    void ConfuseElement(Element element){//, GameObject target) {
