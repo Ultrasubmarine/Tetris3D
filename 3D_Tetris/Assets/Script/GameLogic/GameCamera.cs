@@ -6,6 +6,8 @@ using UnityEngine;
 public class GameCamera : MonoBehaviour
 {
     public event Action onFirstAnimationEnd;
+
+    [SerializeField] private Vector3 _startPoint;
     
     [SerializeField] private Transform _maxDistance;
     [SerializeField] private Transform _minDistance;
@@ -30,15 +32,38 @@ public class GameCamera : MonoBehaviour
 
     [Space(15)] [Header("First Animation")] [SerializeField]
     private float _Time = 1;
-
-    [SerializeField] private float _FirstOrthographicSize = 15;
-
     
-    
+
     public void FirstAnimation()
     {
-        _camera.DOOrthoSize(_minSize, _Time).From(_FirstOrthographicSize)
-            .OnComplete(() => onFirstAnimationEnd?.Invoke());
+        
+        
+        Debug.Log($"this rot {_camera.transform.localRotation}");
+        _camera.transform.localRotation = Quaternion.identity;
+        Debug.Log($"this rot {_camera.transform.localRotation}");
+
+        _camera.transform.DOLocalMove(Vector3.zero, _Time)
+            .From(_startPoint).OnComplete(  () => onFirstAnimationEnd?.Invoke());
+    }
+
+    public void SetPositionWithoutAnimation()
+    {
+        int height = _heightHandler.currentHeight;
+        int limit= _heightHandler.limitHeight; 
+        
+        if (_currentHeight == height)
+            return;
+
+        _currentHeight = height;
+        
+        var finishP = Vector3.Lerp(_minDistance.position, _maxDistance.position, height / (float) limit);
+        var finishS = Mathf.Lerp(_minSize, _maxSize, height / (float) limit);
+        var finishLookAt = Vector3.Lerp(_minLookAt.position, _maxLookAt.position, height / (float) limit);
+
+        _myTransform.position = finishP;
+        _camera.orthographicSize = finishS;
+        _objectLook.position = finishLookAt;
+        _myTransform.LookAt(_objectLook.position);
     }
     
     public void SetStabilization()
@@ -55,9 +80,10 @@ public class GameCamera : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        _myTransform.LookAt(_objectLook.transform.position);
-        _myTransform.LookAt(_objectLook.position);
-
+        //_camera.orthographicSize = _FirstOrthographicSize;
+       // _myTransform.LookAt(_objectLook.position);
+        
+        
         _heightHandler = RealizationBox.Instance.haightHandler;
     }
 
@@ -67,7 +93,6 @@ public class GameCamera : MonoBehaviour
             return;
 
         _currentHeight = height;
-        
         
         var finishP = Vector3.Lerp(_minDistance.position, _maxDistance.position, height / (float) limit);
         var finishS = Mathf.Lerp(_minSize, _maxSize, height / (float) limit);

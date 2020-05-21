@@ -49,6 +49,6 @@ public class GameManager : MonoBehaviour
         RealizationBox.Instance.matrix.Clear();
         
         RealizationBox.Instance.haightHandler.CalculateHeight();
-        RealizationBox.Instance.gameCamera.SetStabilization();
+        RealizationBox.Instance.gameCamera.SetPositionWithoutAnimation();
     }
 }
