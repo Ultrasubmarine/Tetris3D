@@ -1,5 +1,6 @@
 ﻿using Script.GameLogic.TetrisElement;
 using Script.Influence;
+using Script.Speed;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -27,7 +28,10 @@ public class RealizationBox : Singleton<RealizationBox>
 
     [SerializeField] private SlowManager _slowManager;
     [SerializeField] private Transform _place;
-    
+    [SerializeField] private Speed _speed;
+    [SerializeField] private SpeedChanger _speedChanger;
+
+
     public TetrisFSM FSM => _FSM;
     public PlaneMatrix matrix => _matrix;
     public Generator generator => _generator;
@@ -44,6 +48,8 @@ public class RealizationBox : Singleton<RealizationBox>
     public GameController gameController => _gameController;
     public SlowManager slowManager => _slowManager;
     public Transform place => _place;
+    public Speed speed => _speed;
+    public SpeedChanger speedChanger => _speedChanger;
     
     private void Start()
     {

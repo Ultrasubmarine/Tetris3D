@@ -1,12 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
+    public int currentScore => _currentScore;
+    
     [FormerlySerializedAs("_ScoreForWin")] [SerializeField] private int _scoreForWin;
     
     [FormerlySerializedAs("_ScoreText")] [SerializeField] private Text _scoreText;
+
+    public Action<int> onScoreIncrement;
     
     private int _currentScore = 0;
     
@@ -27,6 +32,7 @@ public class Score : MonoBehaviour
     private void ScoreIncrement(int layer)
     {
         _currentScore += 9;
+        onScoreIncrement?.Invoke(9);
         _scoreText.text = _currentScore + "/" + _scoreForWin + " m";
     }
 

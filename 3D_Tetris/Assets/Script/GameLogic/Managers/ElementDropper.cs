@@ -25,7 +25,7 @@ namespace Script.GameLogic.TetrisElement
         public void StartDropElement()
         {
             ElementData.newElement.LogicDrop();
-            _influence.AddDrop(ElementData.newElement.myTransform, Vector3.down, Speed.TimeDrop, CallDrop);
+            _influence.AddDrop(ElementData.newElement.myTransform, Vector3.down, global::Speed.timeDrop, CallDrop);
         }
 
         private void CallDrop()
@@ -62,7 +62,7 @@ namespace Script.GameLogic.TetrisElement
                     _dropElementCount++;
                     item.LogicDrop();
 
-                    _influence.AddDrop(item.myTransform, Vector3.down, Speed.TimeDropAfterDestroy,
+                    _influence.AddDrop(item.myTransform, Vector3.down, global::Speed.timeDropAfterDestroy,
                         DecrementDropElementsCount);
                 }
                 else

@@ -311,6 +311,7 @@ GameObject:
   m_Component:
   - component: {fileID: 31514271}
   - component: {fileID: 31514270}
+  - component: {fileID: 31514272}
   m_Layer: 0
   m_Name: Speed
   m_TagString: Untagged
@@ -330,11 +331,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b07569f4208f34983a50edfed585a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _TimeDelay: 0.05
   _TimeDrop: 0.3
   _TimeDropAfterDestroy: 0.3
   _TimeMove: 0.2
-  _TimeRotate: 0.4
 --- !u!4 &31514271
 Transform:
   m_ObjectHideFlags: 0
@@ -350,6 +349,23 @@ Transform:
   m_Father: {fileID: 1623312048}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &31514272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31514269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d24aa2da9764537bc8ae4df50c140c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _points:
+  - time: 0.1
+    score: 8
+  - time: 0.05
+    score: 16
 --- !u!4 &33823533 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4061492859372462, guid: 608548a572be463418d25f306ecd7df8,
@@ -1537,8 +1553,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81555360fa8abf04381ed18c76d0bf0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScoreAndTime:
-  - {x: 2, y: 1}
 --- !u!4 &261399471
 Transform:
   m_ObjectHideFlags: 0
@@ -5288,6 +5302,8 @@ MonoBehaviour:
   _gameController: {fileID: 860787690}
   _slowManager: {fileID: 2014896470}
   _place: {fileID: 876679918}
+  _speed: {fileID: 0}
+  _speedChanger: {fileID: 0}
 --- !u!4 &1237479897
 Transform:
   m_ObjectHideFlags: 0
