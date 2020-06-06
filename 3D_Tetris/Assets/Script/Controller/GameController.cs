@@ -10,10 +10,10 @@ public class GameController : MonoBehaviour
     [SerializeField] private float _timeTurn = 0.3f;
     [SerializeField] private Button _turnButton;
     
-    private move[] left_up = {move._z, move.x, move.z, move._x};
-    private move[] left_down = {move.x, move.z, move._x, move._z};
-    private move[] right_down = {move.z, move._x, move._z, move.x};
-    private move[] right_up = {move._x, move._z, move.x, move.z};
+    private move[] left_up = {move.zm, move.x, move.z, move.xm};
+    private move[] left_down = {move.x, move.z, move.xm, move.zm};
+    private move[] right_down = {move.z, move.xm, move.zm, move.x};
+    private move[] right_up = {move.xm, move.zm, move.x, move.z};
     private int _indexTable = 0;
 
     private int _rotate = 0;
@@ -46,14 +46,14 @@ public class GameController : MonoBehaviour
     }
     
 
-    private void Move(move touch)
+    public void Move(move touch)
     {
         if (Equals(ElementData.newElement))
             return;
 
         switch (touch)
         {
-            case move._z:
+            case move.zm:
             {
                 InfluenceData.direction = left_up[_indexTable];
                 break;
@@ -68,7 +68,7 @@ public class GameController : MonoBehaviour
                 InfluenceData.direction = right_down[_indexTable];
                 break;
             }
-            case move._x:
+            case move.xm:
             {
                 InfluenceData.direction = right_up[_indexTable];
                 break;

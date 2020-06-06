@@ -56,7 +56,7 @@ namespace Script.StateMachine.States
             Vector3Int vectorDirection;
             if (direction == move.x)
                 vectorDirection = new Vector3Int(1, 0, 0);
-            else if (direction == move._x)
+            else if (direction == move.xm)
                 vectorDirection = new Vector3Int(-1, 0, 0);
             else if (direction == move.z)
                 vectorDirection = new Vector3Int(0, 0, 1);
@@ -71,13 +71,13 @@ namespace Script.StateMachine.States
             if (direction == move.x)
                 foreach (var item in element.blocks)
                     item.OffsetCoordinates(1, 0, 0);
-            else if (direction == move._x)
+            else if (direction == move.xm)
                 foreach (var item in element.blocks)
                     item.OffsetCoordinates(-1, 0, 0);
             else if (direction == move.z)
                 foreach (var item in element.blocks)
                     item.OffsetCoordinates(0, 0, 1);
-            else if (direction == move._z)
+            else if (direction == move.zm)
                 foreach (var item in element.blocks)
                     item.OffsetCoordinates(0, 0, -1);
         }

@@ -50,7 +50,7 @@ public class Generator : MonoBehaviour
         var size = max_y - min_y;
         newElement.myTransform.position = new Vector3(pos.x, pos.y + _matrix.height - size, pos.z);
 
-        //ConfuseElement(newElement);//, plane.gameObject);
+     //   ConfuseElement(newElement);//, plane.gameObject);
         return newElement;
     }
 
@@ -168,30 +168,46 @@ public class Generator : MonoBehaviour
         _answerElement.gameObject.SetActive(true);
     }
 
-//    void ConfuseElement(Element element){//, GameObject target) {
-//        Random rn = new Random();
-//
-//          int turnCount = Random.Range(1, 2);
-////        if (turnCount > 0) {
-////            turn direction = (turn) Random.Range(0, 1 + 1);
-////            Debug.Log(direction.ToString());
-////            while (turnCount > 0) {
-////                element.SetTurn(direction, target);
-////                turnCount--;
-////            }
-////        }
-//
-//        int moveCount = Random.Range(0, 2);
-//        if (moveCount > 0) {
-//            move directionMove = (move) Random.Range(0, 4 + 1);
-//            while (moveCount > 0) {
-//                if ( _Mover.MomentaryActionForGenerator(element, directionMove)) {
-//                    Debug.Log("mover in " + directionMove.ToString());
-//                    moveCount--;
-//                }
-//                else
-//                    break;
+    /*void ConfuseElement(Element element){//, GameObject target) {
+        Random rn = new Random();
+
+          int turnCount = Random.Range(1, 2);
+//        if (turnCount > 0) {
+//            turn direction = (turn) Random.Range(0, 1 + 1);
+//            Debug.Log(direction.ToString());
+//            while (turnCount > 0) {
+//                element.SetTurn(direction, target);
+//                turnCount--;
 //            }
 //        }
-//    }
+
+        int moveCount = Random.Range(0, 2);
+        if (moveCount > 0) {
+            move directionMove = (move) Random.Range(0, 4 + 1);
+            while (moveCount > 0) {
+                if ( _Mover.MomentaryActionForGenerator(element, directionMove)) {
+                    Debug.Log("mover in " + directionMove.ToString());
+                    moveCount--;
+                }
+                else
+                    break;
+            }
+        }
+    }
+
+    private void MomentaryMoveElement()
+    {
+        if (direction == move.x)
+            foreach (var item in element.blocks)
+                item.OffsetCoordinates(1, 0, 0);
+        else if (direction == move._x)
+            foreach (var item in element.blocks)
+                item.OffsetCoordinates(-1, 0, 0);
+        else if (direction == move.z)
+            foreach (var item in element.blocks)
+                item.OffsetCoordinates(0, 0, 1);
+        else if (direction == move._z)
+            foreach (var item in element.blocks)
+                item.OffsetCoordinates(0, 0, -1);
+    }*/
 }
