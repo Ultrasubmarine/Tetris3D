@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,62 +6,73 @@ using UnityEngine.EventSystems;
 namespace Script.Controller
 {
     
-    public struct EndAction
+    public struct LastAction
     {
         public int count;
+        public bool isReverseAction;
         public move direction;
+        public bool? isSuccess;
+
+        public void Reset()
+        {
+            isSuccess = null;
+            isReverseAction = false;
+            count = 0;
+        }
     }
     
     [RequireComponent(typeof(CanvasGroup))]
-    public class MovementJoystick: MonoBehaviour, IDragHandler, IDropHandler
+    public class MovementJoystick: MonoBehaviour, IDragHandler
     {
-        public event Action<move> onPointEnter;
+        public bool isCenterReverseLastAction { get; set; }
         
         [SerializeField] private RectTransform _skickSpace;
         [SerializeField] private RectTransform _stick;
-        [SerializeField] private float _spawnTime = 0.05f;
+        [SerializeField] private float _spawnAnimationTime = 0.05f;
         
-        [SerializeField] private List<MovePointUi> _points;
+        [SerializeField][Range(0,1)] private float _minPercentRadiusForMove = 0.25f;
+        [SerializeField][Range(0,3)] private float _maxPercentOutSpaceRadius = 2.5f;
         
         private CanvasGroup _canvasGroup;
-
+        
         private MoveTouchController _moveTouchController;
         
         private bool _isStickCanDrag;
 
-        private float _radius2;
-        
+        private float _squareSpaceRadius;
 
         // for delta zone
-        private float _deltaRadius2;
-        private float _delta;
+        private float _squareMaxRadius;
+        private float _maxR;
         
         //for move 
-        private float _minRadiusMove;
+        private float _squareMinRadiusMove;
         private float _minAngle = 20f;
 
+        private Vector2 _correctPivotStickPosition;
         private GameController _gameController;
 
-        private EndAction _endAction;
+        private LastAction _lastAction;
+        
         private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
 
-            _radius2 = (_skickSpace.rect.size.x - _stick.rect.size.x) / 2;
-            _minRadiusMove = _radius2 / 2;
-            _delta   = _radius2 * 3;
-            _radius2 *= _radius2;
-            _minRadiusMove *= _minRadiusMove;
 
-            _deltaRadius2 = _delta * _delta;
+            Debug.Log("stick " + _stick.pivot.y);
+            var spaceR =  (_skickSpace.rect.size.x - _stick.rect.size.x) / 2;
+            var minRForMove =  spaceR * _minPercentRadiusForMove;
+            var maxR = spaceR * _maxPercentOutSpaceRadius;
             
-            for (var i = 0; i < _points.Count; i++)
-            {
-                _points[i].SetIndex(i);
-                _points[i].onPointEnter += OnMovePointUiTouch;
-            }
+            _squareSpaceRadius = spaceR * spaceR;
+            _squareMinRadiusMove = minRForMove * minRForMove;
+            _squareMaxRadius = maxR * maxR;
 
-            _endAction.count = 0;
+            _correctPivotStickPosition = new Vector2( (0.5f - _stick.pivot.x) * _stick.rect.width,
+                (0.5f - _stick.pivot.y) * _stick.rect.height) ;
+            
+            _lastAction.isSuccess = null;
+            isCenterReverseLastAction = true;
         }
 
         private void Start()
@@ -75,17 +85,14 @@ namespace Script.Controller
             RealizationBox.Instance.FSM.AddListener(TetrisState.MergeElement, OnTetrisMergeElement);
             
             _gameController = RealizationBox.Instance.gameController;
+            _gameController.onMoveApply += CheckSuccessMove;
         }
 
         private void OnTetrisMergeElement()
         {
             Hide();
         }
-        private void OnTetrisNewelement()
-        {
-            _endAction.count = 0;
-            OnEndInfluenseState();
-        }
+        
         private void OnEndInfluenseState()
         {
             if (!_isStickCanDrag)
@@ -99,12 +106,11 @@ namespace Script.Controller
 
             var currentRadius = (x - _skickSpace.position.x) * (x - _skickSpace.position.x) + 
                                 (y - _skickSpace.position.y) * (y - _skickSpace.position.y);
-            if (currentRadius < _radius2)
+            if (currentRadius < _squareSpaceRadius)
             {
-                if(currentRadius > _minRadiusMove)
+                if(currentRadius > _squareMinRadiusMove)
                     CheckMove(Input.GetTouch(0).position);
             }
-            
         }
         
         private void OnMoveTouchControllerStateChange( MoveTouchController.StateTouch stateTouch)
@@ -126,19 +132,19 @@ namespace Script.Controller
         
         public void Spawn()
         {
-            _canvasGroup.DOFade(1, _spawnTime);
+            _canvasGroup.DOFade(1, _spawnAnimationTime);
             _isStickCanDrag = true;
             
-            _skickSpace.position = Input.GetTouch(0).position;  
+            _skickSpace.position = Input.GetTouch(0).position ;  
             _stick.position = _skickSpace.position;
-            EventSystem.current.SetSelectedGameObject(gameObject);
         }
 
         public void Hide()
         {
-            _canvasGroup.DOFade(0, _spawnTime);
+            _canvasGroup.DOFade(0, _spawnAnimationTime);
             _isStickCanDrag = false;
-            _endAction.count = 0;
+
+            _lastAction.Reset();
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -149,18 +155,21 @@ namespace Script.Controller
             var x = eventData.position.x;
             var y = eventData.position.y;
 
-            var currentRadius = (x - _skickSpace.position.x) * (x - _skickSpace.position.x) + 
-                                (y - _skickSpace.position.y) * (y - _skickSpace.position.y);
-            if (currentRadius < _radius2)
+            var correctStickPos = (Vector2)_skickSpace.position - _correctPivotStickPosition;
+            var currentRadius = (x - correctStickPos.x) * (x - correctStickPos.x) + 
+                                (y - correctStickPos.y) * (y - correctStickPos.y);
+            if (currentRadius < _squareSpaceRadius)
             {
                 _stick.position = eventData.position;
                 
-                if(currentRadius > _minRadiusMove)
+                if(currentRadius > _squareMinRadiusMove)
                     CheckMove(eventData.position);
+                else if (isCenterReverseLastAction)
+                    ReverseLastAction();
             }
             else
             {
-                if (currentRadius> _deltaRadius2)
+                if (currentRadius> _squareMaxRadius)
                     Hide();
             }
         }
@@ -171,7 +180,6 @@ namespace Script.Controller
                 return;
             
             var currdirection = (position - new Vector2(_skickSpace.position.x, _skickSpace.position.y)).normalized;
-          //  Debug.Log(currdirection);
             var angle = Vector2.Angle(currdirection, Vector2.right);
 
             
@@ -195,55 +203,73 @@ namespace Script.Controller
                 direct = move.z;
             else 
                 direct = move.x;
-            
-     
 
-            if (direct == _endAction.direction)
+            if (direct == _lastAction.direction)
             {
-                if (_endAction.count >= RealizationBox.Instance.matrix.wight)
+                if (_lastAction.isSuccess == false)
                     return;
-                _endAction.count++;
+                _lastAction.count++;
             }
             else
             {
-                _endAction.direction = direct;
-                _endAction.count = 1;
+                _lastAction.direction = direct;
+                _lastAction.count = 1;
             }
             
+            _lastAction.isReverseAction = false;
             _gameController.Move(direct);
             // находим четверть и говорим, куда перемещать объект
-            // Debug.Log(angle);
         }
-        private void OnMovePointUiTouch(MovePointUi point)
+
+        private void CheckSuccessMove(bool isSuccess, move direction)
         {
+            if (direction == _lastAction.direction)
+            {
+                _lastAction.isSuccess = isSuccess;
+            }
+        }
+
+        private void ReverseLastAction()
+        {
+            if (RealizationBox.Instance.FSM.GetCurrentState() != TetrisState.WaitInfluence)
+                return;
             
-            onPointEnter?.Invoke(point.direction);
-        }
+            if (_lastAction.isReverseAction)
+                return;
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            Debug.Log("Enter");
-        }
-
-        public void OnPointerUp(PointerEventData eventData)
-        {
+            if ( (_lastAction.count == 1 && _lastAction.isSuccess == false ) || _lastAction.count < 1 )
+                return;
             
-        }
+            move reversDirect = move.x;
 
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            Debug.Log("Down");
-        }
-
-        public void OnSelect(BaseEventData eventData)
-        {
-            Debug.Log("SELECT");
-        }
-
-        public void OnDrop(PointerEventData eventData)
-        {
+            switch (_lastAction.direction)
+            {
+                case move.x:
+                {
+                    reversDirect = move.xm;
+                    break;
+                }
+                case move.z:
+                {
+                    reversDirect = move.zm;
+                    break;
+                }
+                case move.xm:
+                {
+                    reversDirect = move.x;
+                    break;
+                }
+                case move.zm:
+                {
+                    reversDirect = move.z;
+                    break;
+                }
+            }
             
-            Debug.Log("DROP");
+            _lastAction.direction = reversDirect;
+            _lastAction.isReverseAction = true;
+            
+            _gameController.Move(reversDirect);
         }
     }
 }

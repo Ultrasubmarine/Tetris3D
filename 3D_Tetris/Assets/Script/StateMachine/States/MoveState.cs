@@ -4,24 +4,26 @@ using Script.GameLogic.TetrisElement;
 using Script.Influence;
 using Script.ObjectEngine;
 using UnityEngine;
-
 namespace Script.StateMachine.States
 {
     public class MoveState : AbstractState<TetrisState>
     {
         private InfluenceManager _influence;
         private PlaneMatrix _matrix;
+        private GameController _gameController;
         
         public MoveState()
         {
             _influence = RealizationBox.Instance.influenceManager;
             _matrix = RealizationBox.Instance.matrix;
+            _gameController = RealizationBox.Instance.gameController;
         }
         
         public override void Enter(TetrisState last)
         {
             if (CheckOpportunity(ElementData.newElement, InfluenceData.direction))
             {
+                _gameController.OnMoveActionApply(true, InfluenceData.direction);
                 Logic(InfluenceData.direction, ElementData.newElement);
 
                 Vector3Int vectorDirection = SetVectorMove(InfluenceData.direction);
@@ -35,6 +37,7 @@ namespace Script.StateMachine.States
             }
             else
             {
+                _gameController.OnMoveActionApply(false, InfluenceData.direction);
                 base.Enter(last);
                 _FSM.SetNewState(TetrisState.EndInfluence);
             }

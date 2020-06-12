@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using IntegerExtension;
+using Script.Controller;
 
 public class Generator : MonoBehaviour
 {
@@ -168,7 +169,7 @@ public class Generator : MonoBehaviour
         _answerElement.gameObject.SetActive(true);
     }
 
-    /*void ConfuseElement(Element element){//, GameObject target) {
+/*    void ConfuseElement(Element element){//, GameObject target) {
         Random rn = new Random();
 
           int turnCount = Random.Range(1, 2);

@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using Script.Controller;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
@@ -7,6 +8,8 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    public event Action<bool,move> onMoveApply;
+        
     [SerializeField] private float _timeTurn = 0.3f;
     [SerializeField] private Button _turnButton;
     
@@ -51,6 +54,7 @@ public class GameController : MonoBehaviour
         if (Equals(ElementData.newElement))
             return;
 
+        
         switch (touch)
         {
             case move.zm:
@@ -75,10 +79,15 @@ public class GameController : MonoBehaviour
             }
         }
         
-        if(_fsm.GetCurrentState() == TetrisState.WaitInfluence)
+        if(_fsm.GetCurrentState() == TetrisState.WaitInfluence){}
             _fsm.SetNewState(TetrisState.Move);
     }
  
+    public void OnMoveActionApply(bool isSuccess, move direction)
+    {
+        onMoveApply.Invoke(isSuccess, direction);
+    }
+    
     public void Turn()
     {
         if (_isTurn)
@@ -96,7 +105,7 @@ public class GameController : MonoBehaviour
             _isTurn = false;
         });
     }
-
+    
     private void OnFsmStateChange(TetrisState newState)
     {
         _fsm.AddListener(TetrisState.Drop, () => _turnButton.interactable = true);
