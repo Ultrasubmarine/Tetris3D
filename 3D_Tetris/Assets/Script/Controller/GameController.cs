@@ -12,6 +12,9 @@ public class GameController : MonoBehaviour
         
     [SerializeField] private float _timeTurn = 0.3f;
     [SerializeField] private Button _turnButton;
+
+    [SerializeField] private AudioClip _successMove;
+    [SerializeField] private AudioClip _defeatMove;
     
     private move[] left_up = {move.zm, move.x, move.z, move.xm};
     private move[] left_down = {move.x, move.z, move.xm, move.zm};
@@ -29,7 +32,8 @@ public class GameController : MonoBehaviour
     private PointJoystick _pointJoystick;
     private InfluenceManager _influence;
     private TetrisFSM _fsm;
-
+    
+    private AudioSource _audioSource;
     private void Start()
     {
         _pointJoystick = RealizationBox.Instance.pointJoystick;
@@ -39,13 +43,7 @@ public class GameController : MonoBehaviour
         _place = RealizationBox.Instance.place;
         _fsm = RealizationBox.Instance.FSM;
 
-    //    _fsm.onStateChange += OnFsmStateChange;
-        /*_fsm.AddListener(TetrisState.Drop, () => _turnButton.interactable = true);
-        _fsm.AddListener(TetrisState.MergeElement, () => _turnButton.interactable = false);
-        _fsm.AddListener(TetrisState.Move, () => _turnButton.interactable = false);
-        _fsm.AddListener(TetrisState.Collection, () => _turnButton.interactable = false);
-        _fsm.AddListener(TetrisState.AllElementsDrop, () => _turnButton.interactable = false);*/
-     
+        _audioSource = GetComponent<AudioSource>();
     }
     
 
@@ -86,6 +84,11 @@ public class GameController : MonoBehaviour
     public void OnMoveActionApply(bool isSuccess, move direction)
     {
         onMoveApply.Invoke(isSuccess, direction);
+        if (isSuccess)
+            _audioSource.clip = _successMove;
+        else
+            _audioSource.clip = _defeatMove;
+        _audioSource.Play();
     }
     
     public void Turn()
