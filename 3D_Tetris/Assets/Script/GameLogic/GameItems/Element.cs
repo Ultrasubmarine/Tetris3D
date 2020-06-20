@@ -1,19 +1,40 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEngine.Serialization;
 
 public class Element : MonoBehaviour
 {
     public List<Block> blocks => _blocks;
+
+    public List<Block> projectionBlocks
+    {
+        get
+        {
+            if (_dirty)
+            {
+                _projectionBlocks.Clear();
+                var xzList = _blocks.Select(b => b.xz).Distinct();
+                foreach (var xz in xzList)
+                {
+                    var minY = _blocks.Where(b => b.xz == xz).Min(b => b._coordinates.y);
+                    _projectionBlocks.Add(_blocks.FirstOrDefault(b => b._coordinates.y == minY && b.xz == xz));
+                }
+            }
+            
+            return _projectionBlocks;
+        }
+    }
     
     public bool _isBind = false;
     
     public Transform myTransform { get; private set; }
     
     [SerializeField] private List<Block> _blocks = new List<Block>();
-    
 
+    private bool _dirty = false;
+
+    private List<Block> _projectionBlocks = new List<Block>();
+    
     private void Awake()
     {
         myTransform = transform;
@@ -28,11 +49,13 @@ public class Element : MonoBehaviour
     public void AddBlock(Block newBlock)
     {
         _blocks.Add(newBlock);
+        _dirty = true;
     }
 
     public void SetBlocks(List<Block> blocks)
     {
         this._blocks = blocks;
+        _dirty = true;
     }
     
     public void InitializationAfterGeneric(int height)
@@ -59,8 +82,9 @@ public class Element : MonoBehaviour
     public void RemoveBlocksInList(Block[] massBlock)
     {
         _blocks = _blocks.Except(massBlock).ToList();
+        _dirty = true;
     }
-
+    
     #region РАЗБИЕНИЕ ЭЛ_ТА НА 2
 
     public List<Block> GetNotAttachedBlocks()
@@ -101,6 +125,7 @@ public class Element : MonoBehaviour
             {
                 var notContact = _blocks.Except(contactList).ToList();
                 _blocks = contactList;
+                _dirty = true;
                 return notContact;
             }
             else
