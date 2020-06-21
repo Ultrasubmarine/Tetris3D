@@ -2,7 +2,7 @@
 using Script.Controller;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
-using Script.ObjectEngine;
+using Script.Projections;
 using UnityEngine;
 namespace Script.StateMachine.States
 {
@@ -11,12 +11,16 @@ namespace Script.StateMachine.States
         private InfluenceManager _influence;
         private PlaneMatrix _matrix;
         private GameController _gameController;
+        private ProjectionLineManager _projectionLineManager;
+        private Projection _projection;
         
         public MoveState()
         {
             _influence = RealizationBox.Instance.influenceManager;
             _matrix = RealizationBox.Instance.matrix;
             _gameController = RealizationBox.Instance.gameController;
+            _projectionLineManager = RealizationBox.Instance.projectionLineManager;
+            _projection = RealizationBox.Instance.projection;
         }
         
         public override void Enter(TetrisState last)
@@ -33,6 +37,9 @@ namespace Script.StateMachine.States
                     {
                         _FSM.SetNewState(TetrisState.EndInfluence);
                     });
+                
+                _projection.CreateProjection();
+                _projectionLineManager.UpdateProjectionLines();
                 base.Enter(last);
             }
             else

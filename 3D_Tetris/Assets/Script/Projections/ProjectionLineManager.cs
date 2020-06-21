@@ -28,6 +28,7 @@ namespace Script.Projections
         private Pool<ProjectionLine> _pool;
         private PlaneMatrix _matrix;
         private float _lateYElementPosition;
+        
         private void Start()
         {
             _projections = new List<ProjectionLineStruct>();
@@ -37,7 +38,7 @@ namespace Script.Projections
             ElementData.onNewElementUpdate += UpdateProjectionLines;
         }
 
-        private void UpdateProjectionLines()
+        public void UpdateProjectionLines()
         {
             Clear();
 

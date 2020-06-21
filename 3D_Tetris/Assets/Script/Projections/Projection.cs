@@ -28,12 +28,11 @@ public class Projection : MonoBehaviour
     private void LastStart()
     {
         ElementData.onNewElementUpdate += CreateProjection;
-
-        _fsm.AddListener(TetrisState.Move, CreateProjection);
+        
         _fsm.AddListener(TetrisState.MergeElement, () => Destroy());
     }
 
-    private void CreateProjection()
+    public void CreateProjection()
     {
         var obj = ElementData.newElement;
 
