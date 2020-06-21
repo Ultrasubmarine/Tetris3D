@@ -1,4 +1,5 @@
-﻿using Script.GameLogic.TetrisElement;
+﻿using Script.Controller;
+using Script.GameLogic.TetrisElement;
 using Script.Influence;
 using Script.Projections;
 using Script.Speed;
@@ -31,11 +32,13 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private Transform _place;
     [SerializeField] private Speed _speed;
     [SerializeField] private SpeedChanger _speedChanger;
-
+    [SerializeField] private MovementJoystick _joystick;
+    
     [Header("Projections")] 
     [SerializeField] private ProjectionLineManager _projectionLineManager;
     [SerializeField] private Projection _projection;
-
+    
+    
     public TetrisFSM FSM => _FSM;
     public PlaneMatrix matrix => _matrix;
     public Generator generator => _generator;
@@ -56,6 +59,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public SpeedChanger speedChanger => _speedChanger;
     public ProjectionLineManager projectionLineManager => _projectionLineManager;
     public Projection projection => _projection;
+    public MovementJoystick joystick => _joystick;
     
     private void Start()
     {

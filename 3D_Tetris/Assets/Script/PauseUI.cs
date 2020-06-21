@@ -1,4 +1,5 @@
-﻿using Script.Influence;
+﻿using Script.Controller;
+using Script.Influence;
 using UnityEngine;
 
 public class PauseUI : MonoBehaviour
@@ -7,13 +8,13 @@ public class PauseUI : MonoBehaviour
     
     [SerializeField] private BottomPanelAnimation _gamePanel;
 
-    private MoveTouchController _moveTouchController;
     private InfluenceManager _influenceManager;
+    private MovementJoystick _joystick;
 
     private void Awake()
     {
         _influenceManager = RealizationBox.Instance.influenceManager;
-        _moveTouchController = RealizationBox.Instance.moveTouchController;
+        _joystick = RealizationBox.Instance.joystick;
     }
 
     public void SetPauseGame(bool isPause)
@@ -25,15 +26,15 @@ public class PauseUI : MonoBehaviour
             _pausePanel.Show();
             _gamePanel.Hide();
             
-            _moveTouchController.OnBreakOn();
-            _moveTouchController.enabled = false;
+            _joystick.Hide();
+            _joystick.enabled = false;
         }
         else
         {
             _gamePanel.Show();
             _pausePanel.Hide();
             
-            _moveTouchController.enabled = true;
+            _joystick.enabled = true;
         }
         
     }

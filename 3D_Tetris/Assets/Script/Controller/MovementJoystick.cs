@@ -35,12 +35,11 @@ namespace Script.Controller
         [SerializeField] private RectTransform _stick;
         [SerializeField] private float _spawnAnimationTime = 0.05f;
         
-        [SerializeField][Range(0,1)] private float _minPercentRadiusForMove = 0.25f;
+        [SerializeField][Range(0,1)] private float _minPercentRadiusForMove = 0.15f;
         [SerializeField][Range(0,3)] private float _maxPercentOutSpaceRadius = 2.5f;
         
         private CanvasGroup _canvasGroup;
         
-        private MoveTouchController _moveTouchController;
         private SlowManager _slowManager;
         
         private bool _isStickCanDrag;
@@ -63,9 +62,7 @@ namespace Script.Controller
         private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
-
-
-            Debug.Log("stick " + _stick.pivot.y);
+            
             var spaceR =  (_skickSpace.rect.size.x - _stick.rect.size.x) / 2;
             var minRForMove =  spaceR * _minPercentRadiusForMove;
             var maxR = spaceR * _maxPercentOutSpaceRadius;
@@ -83,10 +80,8 @@ namespace Script.Controller
 
         private void Start()
         {
-            _moveTouchController = RealizationBox.Instance.moveTouchController;
             _slowManager = RealizationBox.Instance.slowManager;
             
-           // _moveTouchController.onStateChanged += OnMoveTouchControllerStateChange;
             _canvasGroup.alpha = 0;
 
             RealizationBox.Instance.FSM.AddListener(TetrisState.EndInfluence, OnEndInfluenseState);
@@ -120,26 +115,10 @@ namespace Script.Controller
                     CheckMove(Input.GetTouch(0).position);
             }
         }
-        
-        private void OnMoveTouchControllerStateChange( MoveTouchController.StateTouch stateTouch)
-        {
-            switch (stateTouch)
-            {
-                case MoveTouchController.StateTouch.open:
-                {
-                    Spawn();
-                    break;
-                }
-                case MoveTouchController.StateTouch.none:
-                {
-                    Hide();
-                    break;
-                }
-            }
-        }
-        
+
         public void Spawn()
         {
+            _slowManager.OnJoystickTouchChange(JoystickState.Show);
             if (Input.touchCount != 1)
                 return;
             _canvasGroup.DOFade(1, _spawnAnimationTime);
@@ -151,6 +130,7 @@ namespace Script.Controller
 
         public void Hide()
         {
+            _slowManager.OnJoystickTouchChange(JoystickState.Hide);
             _canvasGroup.DOFade(0, _spawnAnimationTime);
             _isStickCanDrag = false;
 
@@ -168,20 +148,19 @@ namespace Script.Controller
             var correctStickPos = (Vector2)_skickSpace.position - _correctPivotStickPosition;
             var currentRadius = (x - correctStickPos.x) * (x - correctStickPos.x) + 
                                 (y - correctStickPos.y) * (y - correctStickPos.y);
+          
             if (currentRadius < _squareSpaceRadius)
-            {
                 _stick.position = eventData.position;
-                
-                if(currentRadius > _squareMinRadiusMove)
-                    CheckMove(eventData.position);
-                else if (isCenterReverseLastAction)
-                    ReverseLastAction();
-            }
             else
             {
-                if (currentRadius> _squareMaxRadius)
-                    Hide();
+                var spaceR =  (_skickSpace.rect.size.x - _stick.rect.size.x) / 2;
+                _stick.position = (eventData.position - (Vector2)_skickSpace.position ).normalized * spaceR + (Vector2)_skickSpace.position - _correctPivotStickPosition;
             }
+            if(currentRadius > _squareMinRadiusMove)
+                CheckMove(eventData.position);
+            else if (isCenterReverseLastAction)
+                ReverseLastAction();
+           
         }
 
         private void CheckMove(Vector2 position)
@@ -281,7 +260,6 @@ namespace Script.Controller
         
         public void OnPointerExit(PointerEventData eventData)
         {
-            _slowManager.OnJoystickTouchChange(JoystickState.Hide);
             Hide();
         }
 
@@ -290,7 +268,6 @@ namespace Script.Controller
             if (Input.touchCount < 1)
                 return;
             Spawn();
-            _slowManager.OnJoystickTouchChange(JoystickState.Show);
         }
     }
 }
