@@ -4,7 +4,6 @@ using System.Linq;
 using Helper.Patterns;
 using IntegerExtension;
 using Script.GameLogic.TetrisElement;
-using UnityEngine.Serialization;
 
 public class Projection : MonoBehaviour
 {

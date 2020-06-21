@@ -10,6 +10,20 @@ public struct CoordinatXZ
         this.x = x;
         this.z = z;
     }
+
+    public static bool operator ==  (CoordinatXZ one, CoordinatXZ two)
+    {
+        if (one.x != two.x || one.z != two.z)
+            return false;
+        return true;
+    }
+    
+    public static bool operator !=  (CoordinatXZ one, CoordinatXZ two)
+    {
+        if (one.x != two.x || one.z != two.z)
+            return true;
+        return false;
+    }
 }
 
 public class Block : MonoBehaviour
@@ -54,7 +68,7 @@ public class Block : MonoBehaviour
         _coordinates.y += y;
         _coordinates.z += z;
     }
-
+    
     private void OnDisable()
     {
         isDestroy = false;
