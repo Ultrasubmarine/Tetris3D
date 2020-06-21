@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Script.Controller;
 using UnityEngine;
 
 public class SlowManager : MonoBehaviour
@@ -74,7 +75,6 @@ public class SlowManager : MonoBehaviour
     private void Start()
     {
         _moveTouchController = RealizationBox.Instance.moveTouchController;
-        _moveTouchController.onStateChanged += OnMoveTouchControllerStateChange;
     }
 
     private void OnDestroyTimer(Slow slowler)
@@ -103,16 +103,16 @@ public class SlowManager : MonoBehaviour
         onUpdateValue?.Invoke();
     }
 
-    private void OnMoveTouchControllerStateChange(MoveTouchController.StateTouch state)
+    public void OnJoystickTouchChange(JoystickState state)
     {
         switch (state)
         {
-            case MoveTouchController.StateTouch.open:
+            case JoystickState.Show:
             {
                 AddedMoveModeSlow(3, 0.95f);
                 break;
             }
-            case MoveTouchController.StateTouch.none:
+            case JoystickState.Hide:
             {
                 RemoveMoveModeSlow();
                 break;

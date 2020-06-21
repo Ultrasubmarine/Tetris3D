@@ -5,6 +5,11 @@ using UnityEngine.EventSystems;
 
 namespace Script.Controller
 {
+    public enum JoystickState
+    {
+        Show,
+        Hide,
+    }
     
     public struct LastAction
     {
@@ -22,7 +27,7 @@ namespace Script.Controller
     }
     
     [RequireComponent(typeof(CanvasGroup))]
-    public class MovementJoystick: MonoBehaviour, IDragHandler
+    public class MovementJoystick: MonoBehaviour, IDragHandler, IPointerExitHandler,IPointerEnterHandler
     {
         public bool isCenterReverseLastAction { get; set; }
         
@@ -36,6 +41,7 @@ namespace Script.Controller
         private CanvasGroup _canvasGroup;
         
         private MoveTouchController _moveTouchController;
+        private SlowManager _slowManager;
         
         private bool _isStickCanDrag;
 
@@ -78,7 +84,9 @@ namespace Script.Controller
         private void Start()
         {
             _moveTouchController = RealizationBox.Instance.moveTouchController;
-            _moveTouchController.onStateChanged += OnMoveTouchControllerStateChange;
+            _slowManager = RealizationBox.Instance.slowManager;
+            
+           // _moveTouchController.onStateChanged += OnMoveTouchControllerStateChange;
             _canvasGroup.alpha = 0;
 
             RealizationBox.Instance.FSM.AddListener(TetrisState.EndInfluence, OnEndInfluenseState);
@@ -132,6 +140,8 @@ namespace Script.Controller
         
         public void Spawn()
         {
+            if (Input.touchCount != 1)
+                return;
             _canvasGroup.DOFade(1, _spawnAnimationTime);
             _isStickCanDrag = true;
             
@@ -267,6 +277,20 @@ namespace Script.Controller
             _lastAction.isReverseAction = true;
             
             _gameController.Move(reversDirect);
+        }
+        
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            _slowManager.OnJoystickTouchChange(JoystickState.Hide);
+            Hide();
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (Input.touchCount < 1)
+                return;
+            Spawn();
+            _slowManager.OnJoystickTouchChange(JoystickState.Show);
         }
     }
 }

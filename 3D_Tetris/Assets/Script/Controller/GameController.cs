@@ -29,16 +29,12 @@ public class GameController : MonoBehaviour
     public static bool MoveTutorial { get; set; }
     public static bool TurnTutorial { get; set; }
 
-    private PointJoystick _pointJoystick;
     private InfluenceManager _influence;
     private TetrisFSM _fsm;
     
     private AudioSource _audioSource;
     private void Start()
     {
-        _pointJoystick = RealizationBox.Instance.pointJoystick;
-        _pointJoystick.onPointEnter += Move;
-        
         _influence = RealizationBox.Instance.influenceManager;
         _place = RealizationBox.Instance.place;
         _fsm = RealizationBox.Instance.FSM;
