@@ -223,10 +223,7 @@ namespace Script.Controller
 
         private void CheckSuccessMove(bool isSuccess, move direction)
         {
-            if (direction == _lastAction.direction)
-            {
-                _lastAction.isSuccess = isSuccess;
-            }
+            _lastAction.isSuccess = isSuccess;
         }
 
         private void ReverseLastAction()
