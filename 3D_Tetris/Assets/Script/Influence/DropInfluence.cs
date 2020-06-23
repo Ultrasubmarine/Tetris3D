@@ -39,7 +39,7 @@ namespace Script.ObjectEngine
 
         private bool Drop(float speed = 1)
         {
-            _currentTime += Time.deltaTime * speed;
+            _currentTime += (Time.deltaTime < 0.05? Time.deltaTime : 0.02f) * speed;
             _transform.localPosition = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
 
             if (_currentTime >= _allTime)
