@@ -52,7 +52,7 @@ namespace Script.Controller
         
         //for move 
         private float _squareMinRadiusMove;
-        private float _minAngle = 20f;
+        [SerializeField] private float _minAngle = 10f;
 
         private Vector2 _correctPivotStickPosition;
         private GameController _gameController;
