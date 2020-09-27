@@ -27,7 +27,7 @@ namespace Script.Controller
     }
     
     [RequireComponent(typeof(CanvasGroup))]
-    public class MovementJoystick: MonoBehaviour, IDragHandler, IPointerExitHandler,IPointerEnterHandler
+    public class MovementJoystick: MonoBehaviour, IDragHandler, IPointerExitHandler
     {
         public bool isCenterReverseLastAction { get; set; }
         
@@ -81,6 +81,8 @@ namespace Script.Controller
         private void Start()
         {
             _slowManager = RealizationBox.Instance.slowManager;
+            
+            RealizationBox.Instance.tapsEvents.OnSingleTap += Spawn;
             
             _canvasGroup.alpha = 0;
 
@@ -257,17 +259,10 @@ namespace Script.Controller
             
             _gameController.Move(reversDirect);
         }
-        
+
         public void OnPointerExit(PointerEventData eventData)
         {
             Hide();
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (Input.touchCount < 1)
-                return;
-            Spawn();
         }
     }
 }

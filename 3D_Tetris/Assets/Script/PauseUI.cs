@@ -10,11 +10,13 @@ public class PauseUI : MonoBehaviour
 
     private InfluenceManager _influenceManager;
     private MovementJoystick _joystick;
-
+    private TapsEvents _tapsEvents;
+    
     private void Awake()
     {
         _influenceManager = RealizationBox.Instance.influenceManager;
         _joystick = RealizationBox.Instance.joystick;
+        _tapsEvents = RealizationBox.Instance.tapsEvents;
     }
 
     public void SetPauseGame(bool isPause)
@@ -28,6 +30,7 @@ public class PauseUI : MonoBehaviour
             
             _joystick.Hide();
             _joystick.enabled = false;
+            _tapsEvents.enabled = false;
         }
         else
         {
@@ -35,6 +38,7 @@ public class PauseUI : MonoBehaviour
             _pausePanel.Hide();
             
             _joystick.enabled = true;
+            _tapsEvents.enabled = true;
         }
         
     }

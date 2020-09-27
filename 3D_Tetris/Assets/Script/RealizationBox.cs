@@ -33,6 +33,7 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private Speed _speed;
     [SerializeField] private SpeedChanger _speedChanger;
     [SerializeField] private MovementJoystick _joystick;
+    [SerializeField] private TapsEvents _tapsEvents;
     
     [Header("Projections")] 
     [SerializeField] private ProjectionLineManager _projectionLineManager;
@@ -60,6 +61,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public ProjectionLineManager projectionLineManager => _projectionLineManager;
     public Projection projection => _projection;
     public MovementJoystick joystick => _joystick;
+    public TapsEvents tapsEvents => _tapsEvents;
     
     private void Start()
     {
