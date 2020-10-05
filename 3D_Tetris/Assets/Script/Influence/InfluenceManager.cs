@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Script.ObjectEngine;
+using Unity.Collections;
 using UnityEngine;
 
 namespace Script.Influence
@@ -20,6 +21,10 @@ namespace Script.Influence
 
         private SlowManager _slowler;
 
+        [SerializeField] private int _faster = 0;
+
+        private bool _fastMode = false;
+        
         private void Awake()
         {
             _influences = new List<IInfluence>();
@@ -77,7 +82,22 @@ namespace Script.Influence
 
         public void CalculateSpeed()
         {
-            currentSpeed = Mathf.Clamp(speed - _slowler.slow, 0 ,1);
+            if(!_fastMode)
+                currentSpeed = Mathf.Clamp(speed - _slowler.slow, 0 ,1);
+        }
+
+        public void SetSpeedMode(bool mode)
+        {
+            if (mode)
+            {
+                _fastMode = true;
+                currentSpeed = speed + _faster;
+            }
+            else
+            {
+                _fastMode = false;
+                CalculateSpeed();
+            }
         }
     }
 }

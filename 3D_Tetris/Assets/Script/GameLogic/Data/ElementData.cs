@@ -7,6 +7,7 @@ namespace Script.GameLogic.TetrisElement
     public static class ElementData
     {
         public static event Action onNewElementUpdate;
+        public static event Action onMergeElement;
         public static Element newElement { get; private set; }
 
         public static Func<Element> loader;
@@ -29,6 +30,7 @@ namespace Script.GameLogic.TetrisElement
         {
             _mergerElements.Add(newElement);
             newElement = null;
+            onMergeElement?.Invoke();
         }
 
         public static void RemoveMergedElement(Element element)
