@@ -120,9 +120,10 @@ namespace Script.Controller
 
         public void Spawn()
         {
-            _slowManager.OnJoystickTouchChange(JoystickState.Show);
             if (Input.touchCount != 1)
                 return;
+            
+            _slowManager.OnJoystickTouchChange(JoystickState.Show);
             _canvasGroup.DOFade(1, _spawnAnimationTime);
             _isStickCanDrag = true;
             
@@ -262,6 +263,7 @@ namespace Script.Controller
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            Debug.Log("Pointer exit - Hide");
             Hide();
         }
     }

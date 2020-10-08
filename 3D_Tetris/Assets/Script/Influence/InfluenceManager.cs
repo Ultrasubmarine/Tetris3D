@@ -84,6 +84,8 @@ namespace Script.Influence
         {
             if(!_fastMode)
                 currentSpeed = Mathf.Clamp(speed - _slowler.slow, 0 ,1);
+            else
+                currentSpeed = speed + _faster;
         }
 
         public void SetSpeedMode(bool mode)
