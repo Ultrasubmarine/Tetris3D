@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using IntegerExtension;
 using Script.Controller;
+using Script.Influence;
+using Random = UnityEngine.Random;
 
 public class Generator : MonoBehaviour
 {
@@ -51,7 +54,10 @@ public class Generator : MonoBehaviour
         var size = max_y - min_y;
         newElement.myTransform.position = new Vector3(pos.x, pos.y + _matrix.height - size, pos.z);
 
+        SetRandomPosition(newElement);
+        //ConfuseElement(newElement);
      //   ConfuseElement(newElement);//, plane.gameObject);
+        
         return newElement;
     }
 
@@ -169,7 +175,7 @@ public class Generator : MonoBehaviour
         _answerElement.gameObject.SetActive(true);
     }
 
-/*    void ConfuseElement(Element element){//, GameObject target) {
+    void ConfuseElement(Element element){//, GameObject target) {
         Random rn = new Random();
 
           int turnCount = Random.Range(1, 2);
@@ -181,22 +187,34 @@ public class Generator : MonoBehaviour
 //                turnCount--;
 //            }
 //        }
-
-        int moveCount = Random.Range(0, 2);
-        if (moveCount > 0) {
-            move directionMove = (move) Random.Range(0, 4 + 1);
-            while (moveCount > 0) {
-                if ( _Mover.MomentaryActionForGenerator(element, directionMove)) {
-                    Debug.Log("mover in " + directionMove.ToString());
-                    moveCount--;
+        
+        Vector3 lastDirection = Vector3.zero;
+ 
+        int moveCount = Random.Range(0, 4);
+        if (moveCount > 0)
+        {
+            while (moveCount > 0)
+            {
+                Vector3Int newDirection;
+                move directionMove;
+                do
+                {
+                    directionMove = (move) Random.Range(0, 4 + 1);
+                    newDirection = GetVectorMove(directionMove);
+                } 
+                while ((int) Vector3.Dot(newDirection, lastDirection) == -1);
+                
+                if (_matrix.CheckEmptyPlaсe(element, newDirection))
+                {
+                    MoveInfluence.MomentaryMove(element, newDirection);
+                    Logic(directionMove, element);
+                    lastDirection = newDirection;
                 }
-                else
-                    break;
+                moveCount--;
             }
         }
     }
-
-    private void MomentaryMoveElement()
+/*    private void MomentaryMoveElement(Element element)
     {
         if (direction == move.x)
             foreach (var item in element.blocks)
@@ -211,4 +229,77 @@ public class Generator : MonoBehaviour
             foreach (var item in element.blocks)
                 item.OffsetCoordinates(0, 0, -1);
     }*/
+    
+    private Vector3Int GetVectorMove(move direction)
+    {
+        Vector3Int vectorDirection;
+        if (direction == move.x)
+            vectorDirection = new Vector3Int(1, 0, 0);
+        else if (direction == move.xm)
+            vectorDirection = new Vector3Int(-1, 0, 0);
+        else if (direction == move.z)
+            vectorDirection = new Vector3Int(0, 0, 1);
+        else // (direction == move._z)
+            vectorDirection = new Vector3Int(0, 0, -1);
+
+        return vectorDirection;
+    }
+    
+    private void Logic(move direction, Element element)
+    {
+        if (direction == move.x)
+            foreach (var item in element.blocks)
+                item.OffsetCoordinates(1, 0, 0);
+        else if (direction == move.xm)
+            foreach (var item in element.blocks)
+                item.OffsetCoordinates(-1, 0, 0);
+        else if (direction == move.z)
+            foreach (var item in element.blocks)
+                item.OffsetCoordinates(0, 0, 1);
+        else if (direction == move.zm)
+            foreach (var item in element.blocks)
+                item.OffsetCoordinates(0, 0, -1);
+    }
+
+    #region RandomMove
+
+    private void SetRandomPosition(Element element)
+    {
+        // first step
+        int x_min, z_min, x_max, z_max;
+        x_min = z_min = _matrix.wight;
+        x_max = z_max = 0;
+
+        foreach (var block in element.blocks)
+        {
+            x_max = Mathf.Max(block._coordinates.x, x_max);
+            z_max = Mathf.Max(block._coordinates.z, z_max);
+            
+            x_min = Mathf.Min(block._coordinates.x, x_min);
+            z_min = Mathf.Min(block._coordinates.z, z_min);
+        }
+        Vector3Int size = new Vector3Int(x_max - x_min,0, z_max - z_min);
+        
+        //second step
+        int minCoordinate = 0.ToCoordinat();
+        foreach (var block in element.blocks)
+        {
+            block.OffsetCoordinates(minCoordinate - x_min, 0,  minCoordinate - z_min);
+        }
+        MoveInfluence.MomentaryMove(element, new Vector3(minCoordinate - x_min, 0, minCoordinate - z_min));
+
+        //third step
+        int x_move, z_move;
+        
+        x_move = Random.Range(0, _matrix.wight - size.x);
+        z_move = Random.Range(0,_matrix.wight - size.z);
+        
+        foreach (var block in element.blocks)
+        {
+            block.OffsetCoordinates(x_move, 0,  z_move);
+        }
+        MoveInfluence.MomentaryMove(element, new Vector3(x_move, 0, z_move));
+    }
+    
+    #endregion
 }

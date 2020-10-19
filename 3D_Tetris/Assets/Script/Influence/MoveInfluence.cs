@@ -68,5 +68,17 @@ namespace Script.Influence
                     new Vector3(_finalPosBlock[i].x, element.blocks[i].transform.localPosition.y, _finalPosBlock[i].z);
             return true;
         }
+
+        public static void MomentaryMove(Element element, Vector3 direction)
+        {
+            Vector3[] _finalPosBlock = new Vector3[element.blocks.Count];
+
+            for (var i = 0; i < element.blocks.Count; i++) 
+                _finalPosBlock[i] = element.blocks[i].myTransform.localPosition + direction;
+            
+            for (var i = 0; i < element.blocks.Count; i++)
+                element.blocks[i].myTransform.localPosition =
+                    new Vector3(_finalPosBlock[i].x, element.blocks[i].transform.localPosition.y, _finalPosBlock[i].z);
+        }
     }
 }

@@ -263,7 +263,6 @@ namespace Script.Controller
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            Debug.Log("Pointer exit - Hide");
             Hide();
         }
     }
