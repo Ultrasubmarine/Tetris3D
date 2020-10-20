@@ -14,10 +14,16 @@ public class Generator : MonoBehaviour
     [SerializeField] private Material[] _MyMaterial;
     [SerializeField] private GameObject _answerElementParent;
 
+    [Space(10)] [Header("GD Balance height generate element")]
+    [SerializeField] private int _minHeight;
+
     [Tooltip(" подсказка места расположения падающего элемента")] [SerializeField]
     private Material _BonusMaterial;
 
     private PlaneMatrix _matrix;
+    private HeightHandler _heightHandler;
+    private GameCamera _gameCamera;
+    
     private bool[,,] _castMatrix;
     private Vector3Int _minPoint;
 
@@ -27,6 +33,8 @@ public class Generator : MonoBehaviour
     {
         _matrix = RealizationBox.Instance.matrix;
         _pool = RealizationBox.Instance.gameLogicPool;
+        _heightHandler = RealizationBox.Instance.haightHandler;
+        _gameCamera = RealizationBox.Instance.gameCamera;
 
         _castMatrix = new bool[3, 3, 3];
         
@@ -45,14 +53,17 @@ public class Generator : MonoBehaviour
         CreateDuplicate(newElement);
 
         var pos = elementParent.position;
-        newElement.InitializationAfterGeneric(_matrix.height);
 
         // выравниваем элемент относительно координат y 
         var min_y = newElement.blocks.Min(s => s.coordinates.y);
         var max_y = newElement.blocks.Max(s => s.coordinates.y);
 
         var size = max_y - min_y;
-        newElement.myTransform.position = new Vector3(pos.x, pos.y + _matrix.height - size, pos.z);
+
+        int currentHeightPosition  = (_matrix.height - _minHeight) * _gameCamera.lastMaxCurrentHeight / _heightHandler.limitHeight + _minHeight; //(_matrix.height - _minHeight) * _heightHandler.currentHeight / _heightHandler.limitHeight + _minHeight;
+        
+        newElement.InitializationAfterGeneric(currentHeightPosition);
+        newElement.myTransform.position = new Vector3(pos.x, pos.y + currentHeightPosition - size, pos.z);
 
         SetRandomPosition(newElement);
         //ConfuseElement(newElement);
@@ -174,93 +185,7 @@ public class Generator : MonoBehaviour
     {
         _answerElement.gameObject.SetActive(true);
     }
-
-    void ConfuseElement(Element element){//, GameObject target) {
-        Random rn = new Random();
-
-          int turnCount = Random.Range(1, 2);
-//        if (turnCount > 0) {
-//            turn direction = (turn) Random.Range(0, 1 + 1);
-//            Debug.Log(direction.ToString());
-//            while (turnCount > 0) {
-//                element.SetTurn(direction, target);
-//                turnCount--;
-//            }
-//        }
-        
-        Vector3 lastDirection = Vector3.zero;
- 
-        int moveCount = Random.Range(0, 4);
-        if (moveCount > 0)
-        {
-            while (moveCount > 0)
-            {
-                Vector3Int newDirection;
-                move directionMove;
-                do
-                {
-                    directionMove = (move) Random.Range(0, 4 + 1);
-                    newDirection = GetVectorMove(directionMove);
-                } 
-                while ((int) Vector3.Dot(newDirection, lastDirection) == -1);
-                
-                if (_matrix.CheckEmptyPlaсe(element, newDirection))
-                {
-                    MoveInfluence.MomentaryMove(element, newDirection);
-                    Logic(directionMove, element);
-                    lastDirection = newDirection;
-                }
-                moveCount--;
-            }
-        }
-    }
-/*    private void MomentaryMoveElement(Element element)
-    {
-        if (direction == move.x)
-            foreach (var item in element.blocks)
-                item.OffsetCoordinates(1, 0, 0);
-        else if (direction == move._x)
-            foreach (var item in element.blocks)
-                item.OffsetCoordinates(-1, 0, 0);
-        else if (direction == move.z)
-            foreach (var item in element.blocks)
-                item.OffsetCoordinates(0, 0, 1);
-        else if (direction == move._z)
-            foreach (var item in element.blocks)
-                item.OffsetCoordinates(0, 0, -1);
-    }*/
     
-    private Vector3Int GetVectorMove(move direction)
-    {
-        Vector3Int vectorDirection;
-        if (direction == move.x)
-            vectorDirection = new Vector3Int(1, 0, 0);
-        else if (direction == move.xm)
-            vectorDirection = new Vector3Int(-1, 0, 0);
-        else if (direction == move.z)
-            vectorDirection = new Vector3Int(0, 0, 1);
-        else // (direction == move._z)
-            vectorDirection = new Vector3Int(0, 0, -1);
-
-        return vectorDirection;
-    }
-    
-    private void Logic(move direction, Element element)
-    {
-        if (direction == move.x)
-            foreach (var item in element.blocks)
-                item.OffsetCoordinates(1, 0, 0);
-        else if (direction == move.xm)
-            foreach (var item in element.blocks)
-                item.OffsetCoordinates(-1, 0, 0);
-        else if (direction == move.z)
-            foreach (var item in element.blocks)
-                item.OffsetCoordinates(0, 0, 1);
-        else if (direction == move.zm)
-            foreach (var item in element.blocks)
-                item.OffsetCoordinates(0, 0, -1);
-    }
-
     #region RandomMove
 
     private void SetRandomPosition(Element element)

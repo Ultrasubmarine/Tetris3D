@@ -29,6 +29,7 @@ public class GameCamera : MonoBehaviour
     private HeightHandler _heightHandler;
 
     private int _currentHeight = 0;
+    public int lastMaxCurrentHeight { get; private set; }
 
     [Space(15)] [Header("First Animation")] [SerializeField]
     private float _Time = 1;
@@ -53,7 +54,8 @@ public class GameCamera : MonoBehaviour
         
         if (_currentHeight == height)
             return;
-
+        
+        lastMaxCurrentHeight = _currentHeight < height ? height : _currentHeight;
         _currentHeight = height;
         
         var finishP = Vector3.Lerp(_minDistance.position, _maxDistance.position, height / (float) limit);
@@ -98,7 +100,7 @@ public class GameCamera : MonoBehaviour
         var finishS = Mathf.Lerp(_minSize, _maxSize, height / (float) limit);
         var finishLookAt = Vector3.Lerp(_minLookAt.position, _maxLookAt.position, height / (float) limit);
 
-        _myTransform.DOMove(finishP, _timeStabilization);
+        _myTransform.DOMove(finishP, _timeStabilization).OnComplete( () => lastMaxCurrentHeight = _currentHeight);
         _camera.DOOrthoSize(finishS, _timeStabilization);
         _objectLook.DOMove(finishLookAt, _timeStabilization).OnUpdate(() => _myTransform.LookAt(_objectLook.position));
     }
