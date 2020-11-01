@@ -1,4 +1,5 @@
 ﻿using System;
+using Script.Controller.TouchController;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler {
     public  event Action OnSingleTap;
     public event Action OnDoubleTap;
  
+    public event Action OnTapOnIceIsland;
  
     float firstTapTime = 0f;
     float timeBetweenTaps = 0.2f; // time between taps to be resolved in double tap
@@ -16,6 +18,7 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler {
  
     public void OnPointerDown(PointerEventData eventData)
     {
+        
         // invoke single tap after max time between taps
         Invoke("SingleTap", timeBetweenTaps);
  
@@ -37,6 +40,8 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler {
     {
         doubleTapInitialized = false; // deinit double tap
  
+        if (IsIsland())
+            return;
         // fire OnSingleTap event for all eventual subscribers
         if(OnSingleTap != null)
         {
@@ -52,5 +57,22 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler {
             OnDoubleTap.Invoke();
         }
     }
- 
+
+    bool IsIsland()
+    {
+        var mousePos = Input.mousePosition;
+        if (mousePos.x < 0 || mousePos.x >= Screen.width || mousePos.y < 0 || mousePos.y >= Screen.height)
+            return false;
+
+        if (!Physics.Raycast(Camera.main.ScreenPointToRay(mousePos), out var hit))
+            return false;
+
+        if (hit.collider.tag == "Island")
+        {
+            Debug.Log("IS ISLAND");
+            this.GetComponent<IslandTurn>().Turn(true);
+            return true;
+        }
+        return false;
+    }
 }
