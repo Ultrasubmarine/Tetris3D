@@ -1,7 +1,6 @@
 ﻿using System;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 namespace Script.Controller.TouchController
@@ -10,7 +9,9 @@ namespace Script.Controller.TouchController
     public class IslandTurn : MonoBehaviour, IPointerExitHandler
     {
         [SerializeField] private GameObject island;
-        
+
+        [SerializeField] private float _speedForCorrectRotate = 0.5f;
+
         private float firstPosition;
 
         private float lastPosition;
@@ -18,10 +19,24 @@ namespace Script.Controller.TouchController
         private float delta = 0;// 2;
 
         private bool isTurn = false;
+
+        private GameController _gameController;
+
+        public event Action OnStartTurn;
+
+        public event Action OnEndTurn;
         
+        private void Start()
+        {
+            _gameController = RealizationBox.Instance.gameController;
+        }
+
         public void Turn(bool state)
         {
+            island.transform.DOKill();
             isTurn = state;
+            lastPosition = Input.mousePosition.x;
+            OnStartTurn.Invoke();
         }
 
         private void Update()
@@ -41,6 +56,27 @@ namespace Script.Controller.TouchController
         public void OnPointerExit(PointerEventData eventData)
         {
             Turn(false);
+            TurnFinished();
+            OnEndTurn.Invoke();
+        }
+
+        private void TurnFinished()
+        {
+            var sinY = Mathf.Sin(island.transform.eulerAngles.y * Mathf.Deg2Rad);
+            
+            float needRotate;
+
+            if (sinY >= 0.5f)
+                needRotate = 90;
+            else if (sinY <= -0.5f)
+                needRotate = 270;
+            else if (island.transform.eulerAngles.y > 90 && island.transform.eulerAngles.y < 270)
+                needRotate = 180; 
+            else
+                needRotate = 0;
+            
+            island.transform.DORotate(new Vector3(0, needRotate, 0), 0.5f );
+            _gameController.CorrectTurn((int)needRotate);
         }
     }
 }

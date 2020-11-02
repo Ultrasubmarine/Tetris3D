@@ -1,4 +1,5 @@
 ﻿using Script.Controller;
+using Script.Controller.TouchController;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
 using Script.Projections;
@@ -32,8 +33,11 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private Transform _place;
     [SerializeField] private Speed _speed;
     [SerializeField] private SpeedChanger _speedChanger;
+    
+    [Header("UI GameControllers")]
     [SerializeField] private MovementJoystick _joystick;
     [SerializeField] private TapsEvents _tapsEvents;
+    [SerializeField] private IslandTurn _islandTurn;
     
     [Header("Projections")] 
     [SerializeField] private ProjectionLineManager _projectionLineManager;
@@ -62,6 +66,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public Projection projection => _projection;
     public MovementJoystick joystick => _joystick;
     public TapsEvents tapsEvents => _tapsEvents;
+    public IslandTurn islandTurn => _islandTurn;
     
     private void Start()
     {

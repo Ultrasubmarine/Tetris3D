@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Script.Controller;
+using Script.Controller.TouchController;
 using UnityEngine;
 
 public class SlowManager : MonoBehaviour
 {
+    [Header("Slow when turn")]
+    [SerializeField] private float _time = 4;
+    
+    [SerializeField] private float _value = 0.95f;
+
+    
     public struct Slow
     {
         public Timer timer;
@@ -18,6 +25,8 @@ public class SlowManager : MonoBehaviour
     }
 
     private MoveTouchController _moveTouchController;
+
+    private IslandTurn _islandTurn;
     
     public float slow => _slowlerValue;
 
@@ -30,7 +39,7 @@ public class SlowManager : MonoBehaviour
 
     private Slow? MoveModeSlow;
     
-
+    private Slow? TurnModeSlow;
     
     public void AddedSlow(float time, float value)
     {
@@ -61,6 +70,21 @@ public class SlowManager : MonoBehaviour
         
         CalculateSlow();
     }
+    
+    private void AddedTurnModeSlow(float time, float value)
+    {
+        var timer = TimersKeeper.Schedule(time);
+        var slow = new Slow(timer, value);
+
+        timer.onStateChanged += (s) =>
+        {
+            if (s == TimerState.Completed)
+                OnDestroyTurnModeTimer();
+        };
+        TurnModeSlow = slow;
+        
+        CalculateSlow();
+    }
 
     private void RemoveMoveModeSlow()
     {
@@ -71,10 +95,24 @@ public class SlowManager : MonoBehaviour
         MoveModeSlow = null;
         CalculateSlow();
     }
+    
+    private void RemoveTurnModeSlow()
+    {
+        if (TurnModeSlow == null)
+            return;
+        
+        TurnModeSlow.Value.timer.Cancel();
+        TurnModeSlow = null;
+        CalculateSlow();
+    }
 
     private void Start()
     {
         _moveTouchController = RealizationBox.Instance.moveTouchController;
+        _islandTurn = RealizationBox.Instance.islandTurn;
+
+        _islandTurn.OnStartTurn += OnTurnIsland;
+        _islandTurn.OnEndTurn += OnFinishTurnIsland;
     }
 
     private void OnDestroyTimer(Slow slowler)
@@ -88,6 +126,12 @@ public class SlowManager : MonoBehaviour
         MoveModeSlow = null;
         CalculateSlow();
     }
+    
+    private void OnDestroyTurnModeTimer()
+    {
+        TurnModeSlow = null;
+        CalculateSlow();
+    }
 
     private void CalculateSlow()
     {
@@ -99,6 +143,9 @@ public class SlowManager : MonoBehaviour
 
         if (MoveModeSlow != null)
             _slowlerValue += MoveModeSlow.Value.slow;
+        
+        if (TurnModeSlow != null)
+            _slowlerValue += TurnModeSlow.Value.slow;
         
         onUpdateValue?.Invoke();
     }
@@ -118,5 +165,15 @@ public class SlowManager : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void OnTurnIsland()
+    {
+        AddedTurnModeSlow(_time, _value);
+    }
+
+    public void OnFinishTurnIsland()
+    {
+        RemoveTurnModeSlow();
     }
 }

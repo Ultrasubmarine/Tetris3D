@@ -104,6 +104,11 @@ public class GameController : MonoBehaviour
             _isTurn = false;
         });
     }
+
+    public void CorrectTurn(int newAngle)
+    {
+        _indexTable = (newAngle) % 360  / 90 ;
+    }
     
     private void OnFsmStateChange(TetrisState newState)
     {
