@@ -29,6 +29,7 @@ namespace Script.Controller.TouchController
         private void Start()
         {
             _gameController = RealizationBox.Instance.gameController;
+            RealizationBox.Instance.tapsEvents.OnTurnIceIsland += () =>Turn(true);
         }
 
         public void Turn(bool state)
@@ -75,7 +76,7 @@ namespace Script.Controller.TouchController
             else
                 needRotate = 0;
             
-            island.transform.DORotate(new Vector3(0, needRotate, 0), 0.5f );
+            island.transform.DORotate(new Vector3(0, needRotate, 0), _speedForCorrectRotate );
             _gameController.CorrectTurn((int)needRotate);
         }
     }

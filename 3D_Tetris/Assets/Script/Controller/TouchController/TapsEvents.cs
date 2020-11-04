@@ -4,20 +4,30 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine;
 
+
 public class TapsEvents : MonoBehaviour, IPointerDownHandler {
  
     // You can add listeners in inspector
     public  event Action OnSingleTap;
     public event Action OnDoubleTap;
  
-    public event Action OnTapOnIceIsland;
+    public event Action OnTurnIceIsland;
  
     float firstTapTime = 0f;
     float timeBetweenTaps = 0.2f; // time between taps to be resolved in double tap
     bool doubleTapInitialized;
- 
+
+    private float _deltaPosition = (Screen.width * 5 / 100);
+    private float _lastPosition;
+
+    private bool isAnalyzingTap = false;
+    private bool isTurnIsland = false;
+    
     public void OnPointerDown(PointerEventData eventData)
     {
+        isAnalyzingTap = true;
+        isTurnIsland = false;
+        _lastPosition = Input.mousePosition.x;
         
         // invoke single tap after max time between taps
         Invoke("SingleTap", timeBetweenTaps);
@@ -35,18 +45,31 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler {
             DoubleTap();
         }
     }
- 
+
+    private void Update()
+    {
+        if (isAnalyzingTap)
+        {
+            if (Mathf.Abs(Input.mousePosition.x - _lastPosition) > _deltaPosition)
+                IslandSwipe();
+        }
+    }
+
     void SingleTap()
     {
         doubleTapInitialized = false; // deinit double tap
- 
-        if (IsIsland())
+
+        if (isTurnIsland)
             return;
+        
+        _lastPosition = Input.mousePosition.x;
         // fire OnSingleTap event for all eventual subscribers
         if(OnSingleTap != null)
         {
             OnSingleTap.Invoke();
         }
+
+        isAnalyzingTap = false;
     }
  
     void DoubleTap()
@@ -56,23 +79,16 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler {
         {
             OnDoubleTap.Invoke();
         }
+
+        isAnalyzingTap = false;
     }
 
-    bool IsIsland()
+    void IslandSwipe()
     {
-        var mousePos = Input.mousePosition;
-        if (mousePos.x < 0 || mousePos.x >= Screen.width || mousePos.y < 0 || mousePos.y >= Screen.height)
-            return false;
-
-        if (!Physics.Raycast(Camera.main.ScreenPointToRay(mousePos), out var hit))
-            return false;
-
-        if (hit.collider.tag == "Island")
-        {
-            Debug.Log("IS ISLAND");
-            this.GetComponent<IslandTurn>().Turn(true);
-            return true;
-        }
-        return false;
+        isTurnIsland = true;
+        isAnalyzingTap = false;
+        
+        OnTurnIceIsland.Invoke();
     }
+    
 }
