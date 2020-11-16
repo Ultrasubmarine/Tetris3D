@@ -111,5 +111,17 @@ namespace Script.Booster
                 }
             }
         }
+
+        public void Reset()
+        {
+            if (_timer != null)
+                _timer.Cancel();
+            if(_useTimer != null)
+                _useTimer.Cancel();
+            
+            _timer = null;
+            _useTimer = null;
+            SetState(BoosterState.ReadyForUse);
+        }
     }
 }

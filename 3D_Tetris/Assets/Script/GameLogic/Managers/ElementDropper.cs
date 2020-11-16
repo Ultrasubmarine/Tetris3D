@@ -30,6 +30,8 @@ namespace Script.GameLogic.TetrisElement
 
         private void CallDrop()
         {
+            if (!ElementData.newElement)
+                return;
             if(_fsm.GetCurrentState() != TetrisState.WaitInfluence)
                 InfluenceData.delayedDrop = true;
             else

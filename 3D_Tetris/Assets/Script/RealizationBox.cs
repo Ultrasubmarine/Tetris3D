@@ -10,6 +10,7 @@ using UnityEngine.Serialization;
 public class RealizationBox : Singleton<RealizationBox>
 {
     [SerializeField] private TetrisFSM _FSM;
+    [SerializeField] private GameManager _gameManager;
     [Space(5)] 
     [SerializeField] private PlaneMatrix _matrix;
     [SerializeField] private Generator _generator;
@@ -45,6 +46,7 @@ public class RealizationBox : Singleton<RealizationBox>
     
     
     public TetrisFSM FSM => _FSM;
+    public GameManager gameManager => _gameManager;
     public PlaneMatrix matrix => _matrix;
     public Generator generator => _generator;
     public GameLogicPool gameLogicPool => _gameLogicPool;

@@ -22,6 +22,8 @@ namespace Script.Booster
 
         private void Start()
         {
+            RealizationBox.Instance.gameManager.OnReplay += ResetBoosters;
+            
             _boosterUis = new List<BoosterUi>();
             foreach (var booster in _boosters)
             {
@@ -32,6 +34,14 @@ namespace Script.Booster
                 ui.transform.parent = _boosterUiParent;
          
                 _boosterUis.Add(ui);
+            }
+        }
+
+        public void ResetBoosters()
+        {
+            foreach (var booster in _boosters)
+            {
+                booster.Reset();
             }
         }
     }

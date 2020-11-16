@@ -11,6 +11,8 @@ public class Score : MonoBehaviour
     
     [FormerlySerializedAs("_ScoreText")] [SerializeField] private Text _scoreText;
 
+    [SerializeField] private ProgressBar _progressBar;
+    
     public Action<int> onScoreIncrement;
     
     private int _currentScore = 0;
@@ -34,11 +36,13 @@ public class Score : MonoBehaviour
         _currentScore += 9;
         onScoreIncrement?.Invoke(9);
         _scoreText.text = _currentScore + "/" + _scoreForWin + " m";
+        _progressBar.SetProgress((float)_currentScore /_scoreForWin);
     }
 
     private void ClearScore()
     {
         _currentScore = 0;
         _scoreText.text = _currentScore + "/" + _scoreForWin + " m";
+        _progressBar.SetProgress(0);
     }
 }

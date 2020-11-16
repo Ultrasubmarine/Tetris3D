@@ -70,8 +70,9 @@ namespace Script.Projections
             _lateYElementPosition = ElementData.newElement.transform.position.y;
         }
         
-        private void Clear()
+        public void Clear()
         {
+            Debug.Log("Clear projection");
             foreach (var projectionLine in _projections)
             {
                 _pool.Push(projectionLine.projection);

@@ -41,6 +41,7 @@ namespace Script.Booster
                 {
                     _button.enabled = true;
                     _canvasGroup.alpha = 1f;
+                    _fill.fillAmount = 1;
                     break;
                 }
                 case BoosterState.Respawn:

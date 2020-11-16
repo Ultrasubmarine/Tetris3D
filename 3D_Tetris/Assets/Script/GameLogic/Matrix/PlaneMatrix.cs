@@ -37,6 +37,8 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
 
     public bool CheckEmptyPlaсe(Element element, Vector3Int direction)
     {
+        if (!element)
+            return false;
         if (element.blocks.Count == 0)
             return false;
 

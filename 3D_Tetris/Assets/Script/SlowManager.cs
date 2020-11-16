@@ -167,12 +167,24 @@ public class SlowManager : MonoBehaviour
         }
     }
 
-    public void OnTurnIsland()
+    public void DeleteAllSlows()
+    {
+        foreach (var slow1 in _slowsList)
+        {
+            slow1.timer.Cancel();
+        }
+        _slowsList.Clear();
+        OnDestroyMoveModeTimer();
+        OnDestroyTurnModeTimer();
+        CalculateSlow();
+    }
+    
+    private void OnTurnIsland()
     {
         AddedTurnModeSlow(_time, _value);
     }
 
-    public void OnFinishTurnIsland()
+    private void OnFinishTurnIsland()
     {
         RemoveTurnModeSlow();
     }

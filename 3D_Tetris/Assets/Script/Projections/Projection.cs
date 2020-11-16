@@ -52,7 +52,7 @@ public class Projection : MonoBehaviour
         }
     }
 
-    private void Destroy()
+    public void Destroy()
     {
         foreach (var item in _projectionsList) _pool.Push(item);
         _projectionsList.Clear();

@@ -93,16 +93,14 @@ namespace Script.GameLogic.TetrisElement
                 item.RemoveBlocksInList(item.blocks.ToArray());
                 _pool.DeleteElement(item);
             }
-
-            ElementData.RemoveAll();
-
+            
             if (!Equals(ElementData.newElement, null))
             {
                 ClearDeletedBlocks(ElementData.newElement.blocks.ToArray());
                 ElementData.newElement.RemoveBlocksInList(ElementData.newElement.blocks.ToArray());
                 _pool.DeleteElement(ElementData.newElement);
-//                ElementData.NewElement = null;
             }
+            ElementData.RemoveAll();
             
             onDeleteAllElements?.Invoke();
         }

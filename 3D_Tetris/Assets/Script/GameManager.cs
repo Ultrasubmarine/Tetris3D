@@ -1,4 +1,5 @@
-﻿using Script.UI;
+﻿using System;
+using Script.UI;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
     
     private TetrisFSM _fsm;
 
+    public event Action OnReplay;
+    
     private void Start()
     {
         _fsm = RealizationBox.Instance.FSM;
@@ -45,11 +48,19 @@ public class GameManager : MonoBehaviour
 
     public void ClearPlace()
     {
+        RealizationBox.Instance.projectionLineManager.Clear();
+        RealizationBox.Instance.projection.Destroy();
+        
         RealizationBox.Instance.elementCleaner.DeleteAllElements();
         RealizationBox.Instance.matrix.Clear();
         
+        RealizationBox.Instance.slowManager.DeleteAllSlows();
+        OnReplay?.Invoke();
         RealizationBox.Instance.haightHandler.CalculateHeight();
         RealizationBox.Instance.gameCamera.SetPositionWithoutAnimation();
         RealizationBox.Instance.speedChanger.ResetSpeed();
+        
+       
+        //Add boosters
     }
 }
