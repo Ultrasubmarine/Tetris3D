@@ -1,6 +1,4 @@
 ﻿using System;
-using Script.Controller.TouchController;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine;
 
