@@ -86,7 +86,7 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler {
         isTurnIsland = true;
         isAnalyzingTap = false;
         
-        OnTurnIceIsland.Invoke();
+        OnTurnIceIsland?.Invoke();
     }
     
 }

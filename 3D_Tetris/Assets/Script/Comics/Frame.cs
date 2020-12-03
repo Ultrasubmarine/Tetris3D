@@ -11,21 +11,11 @@ namespace Script.Comics
         [SerializeField] private CanvasGroup _hidingMask;
 
         [SerializeField] private float _speedShow = 0.2f;
-        [SerializeField] private float _speedFastShow = 0.1f;
-        
-        public bool isHide { get; private set; } = true;
-        private Action OnShow;
 
         public void Show()
         {
             _hidingMask.DOFade(0, _speedShow);
-            _content.DOFade(1, _speedShow).OnComplete(OnFinish);
-        }
-
-        private void OnFinish()
-        {
-            isHide = false;
-            OnShow.Invoke();
+            _content.DOFade(1, _speedShow);
         }
 
         public void Hide()
