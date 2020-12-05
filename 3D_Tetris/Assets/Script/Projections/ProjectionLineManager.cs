@@ -72,7 +72,6 @@ namespace Script.Projections
         
         public void Clear()
         {
-            Debug.Log("Clear projection");
             foreach (var projectionLine in _projections)
             {
                 _pool.Push(projectionLine.projection);

@@ -1,6 +1,7 @@
 ﻿using System;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Assertions.Comparers;
 using UnityEngine.EventSystems;
 
 namespace Script.Controller.TouchController
@@ -11,10 +12,13 @@ namespace Script.Controller.TouchController
         [SerializeField] private GameObject island;
 
         [SerializeField] private float _speedForCorrectRotate = 0.5f;
-
+        [SerializeField] private float _speedForCorrectRotateForSwipe = 0.5f;
+        
         private float firstPosition;
 
         private float lastPosition;
+        
+        private int _firstAngle;
 
         private float delta = 0;// 2;
 
@@ -25,6 +29,10 @@ namespace Script.Controller.TouchController
         public event Action OnStartTurn;
 
         public event Action OnEndTurn;
+
+        private float _startTime;
+
+        private const float _swipeTime = 0.3f;
         
         private void Start()
         {
@@ -34,10 +42,18 @@ namespace Script.Controller.TouchController
 
         public void Turn(bool state)
         {
-            island.transform.DOKill();
+            island.transform.DOComplete();
             isTurn = state;
+            
+            if (state)
+            {
+                firstPosition = Input.mousePosition.x;
+
+                _firstAngle = (int)island.transform.eulerAngles.y;
+                _startTime = Time.time;
+                OnStartTurn.Invoke();
+            }
             lastPosition = Input.mousePosition.x;
-            OnStartTurn.Invoke();
         }
 
         private void Update()
@@ -48,7 +64,8 @@ namespace Script.Controller.TouchController
             if (Mathf.Abs(Input.mousePosition.x - lastPosition) > delta)
             {
                 float angle = 180 * (lastPosition - Input.mousePosition.x ) / (Screen.width * 0.8f);
-    
+
+                angle = Mathf.Clamp(angle, -90.0f / _swipeTime, 90.0f / _swipeTime);
                 island.transform.Rotate(Vector3.up, angle );
                 lastPosition = Input.mousePosition.x;
             }
@@ -63,20 +80,35 @@ namespace Script.Controller.TouchController
 
         private void TurnFinished()
         {
-            var sinY = Mathf.Sin(island.transform.eulerAngles.y * Mathf.Deg2Rad);
-            
-            float needRotate;
+            int needRotate;
+            float speed;
+            if (Time.time - _startTime < _swipeTime)  // if short swipe
+            {
+                if (firstPosition - lastPosition > 0) //left
+                    needRotate = _firstAngle + 90;
+                else
+                    needRotate = _firstAngle - 90;
 
-            if (sinY >= 0.5f)
-                needRotate = 90;
-            else if (sinY <= -0.5f)
-                needRotate = 270;
-            else if (island.transform.eulerAngles.y > 90 && island.transform.eulerAngles.y < 270)
-                needRotate = 180; 
-            else
-                needRotate = 0;
+                speed = _speedForCorrectRotateForSwipe;
+                Debug.Log($"SWIPE ROTATE {_firstAngle} {needRotate}");
+            }
+            else // if drag island
+            {
+                var sinY = Mathf.Sin(island.transform.eulerAngles.y * Mathf.Deg2Rad);
+
+                if (sinY >= 0.5f)
+                    needRotate = 90;
+                else if (sinY <= -0.5f)
+                    needRotate = 270;
+                else if (island.transform.eulerAngles.y > 90 && island.transform.eulerAngles.y < 270)
+                    needRotate = 180; 
+                else
+                    needRotate = 0;
+
+                speed = _speedForCorrectRotate;
+            }
             
-            island.transform.DORotate(new Vector3(0, needRotate, 0), _speedForCorrectRotate );
+            island.transform.DORotate(new Vector3(0, needRotate, 0), speed);
             _gameController.CorrectTurn((int)needRotate);
         }
 
