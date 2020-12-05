@@ -481,7 +481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _TimeDrop: 0.25
   _TimeDropAfterDestroy: 0.3
-  _TimeMove: 0.4
+  _TimeMove: 0.7
 --- !u!4 &31514271
 Transform:
   m_ObjectHideFlags: 0
@@ -2710,7 +2710,7 @@ MonoBehaviour:
   _skickSpace: {fileID: 632795699}
   _stick: {fileID: 1739614229}
   _spawnAnimationTime: 0.05
-  _minPercentRadiusForMove: 0.2
+  _minPercentRadiusForMove: 0.444
   _maxPercentOutSpaceRadius: 3
   _minAngle: 15
 --- !u!225 &483158833
@@ -9057,8 +9057,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 15
-      minScalar: 11
+      scalar: 35
+      minScalar: 25
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -13640,7 +13640,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1552059846}
   m_LocalRotation: {x: 0.54298586, y: -0.12354083, z: 0.08114978, w: 0.826631}
-  m_LocalPosition: {x: 0.69848436, y: 8.650001, z: -2.1706293}
+  m_LocalPosition: {x: 0.69848436, y: 6.53, z: -2.1706293}
   m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333337}
   m_Children: []
   m_Father: {fileID: 513714267}
@@ -15138,7 +15138,7 @@ PrefabInstance:
     - target: {fileID: 224903690074027326, guid: c4e7311714ff94a4382631a9616bf709,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -240
       objectReference: {fileID: 0}
     - target: {fileID: 224903690074027326, guid: c4e7311714ff94a4382631a9616bf709,
         type: 3}
@@ -18074,7 +18074,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7434318747780587979
 RectTransform:
   m_ObjectHideFlags: 0

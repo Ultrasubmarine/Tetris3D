@@ -29,7 +29,7 @@ namespace Script.Controller.TouchController
         private void Start()
         {
             _gameController = RealizationBox.Instance.gameController;
-            RealizationBox.Instance.tapsEvents.OnTurnIceIsland += () =>Turn(true);
+            RealizationBox.Instance.tapsEvents.OnDragIceIsland += () =>Turn(true);
         }
 
         public void Turn(bool state)
@@ -78,6 +78,11 @@ namespace Script.Controller.TouchController
             
             island.transform.DORotate(new Vector3(0, needRotate, 0), _speedForCorrectRotate );
             _gameController.CorrectTurn((int)needRotate);
+        }
+
+        private void SwipeTurn()
+        {
+            
         }
     }
 }

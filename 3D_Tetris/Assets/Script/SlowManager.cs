@@ -61,11 +61,11 @@ public class SlowManager : MonoBehaviour
         var timer = TimersKeeper.Schedule(time);
         var slow = new Slow(timer, value);
 
-        timer.onStateChanged += (s) =>
+        /*timer.onStateChanged += (s) =>
         {
             if (s == TimerState.Completed)
                 OnDestroyMoveModeTimer();
-        };
+        };*/
         MoveModeSlow = slow;
         
         CalculateSlow();
@@ -76,11 +76,11 @@ public class SlowManager : MonoBehaviour
         var timer = TimersKeeper.Schedule(time);
         var slow = new Slow(timer, value);
 
-        timer.onStateChanged += (s) =>
+        /*timer.onStateChanged += (s) =>
         {
             if (s == TimerState.Completed)
                 OnDestroyTurnModeTimer();
-        };
+        };*/
         TurnModeSlow = slow;
         
         CalculateSlow();

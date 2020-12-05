@@ -75,7 +75,7 @@ namespace Script.Controller
                 (0.5f - _stick.pivot.y) * _stick.rect.height) ;
             
             _lastAction.isSuccess = null;
-            isCenterReverseLastAction = true;
+            isCenterReverseLastAction = false;
         }
 
         private void Start()
