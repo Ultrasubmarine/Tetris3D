@@ -40,6 +40,8 @@ public class SlowManager : MonoBehaviour
     private Slow? MoveModeSlow;
     
     private Slow? TurnModeSlow;
+
+    private bool _isPauseSlow;
     
     public void AddedSlow(float time, float value)
     {
@@ -53,6 +55,12 @@ public class SlowManager : MonoBehaviour
         };
         
         _slowsList.Add(slow);
+        CalculateSlow();
+    }
+    
+    public void SetPauseSlow(bool isPause)
+    {
+        _isPauseSlow = isPause;
         CalculateSlow();
     }
     
@@ -136,16 +144,24 @@ public class SlowManager : MonoBehaviour
     private void CalculateSlow()
     {
         _slowlerValue = 0;
-        foreach (var slow in _slowsList)
-        {
-            _slowlerValue += slow.slow;
-        }
 
-        if (MoveModeSlow != null)
-            _slowlerValue += MoveModeSlow.Value.slow;
+        if (_isPauseSlow)
+        {
+            _slowlerValue = 1;
+        }
+        else
+        {
+            foreach (var slow in _slowsList)
+            {
+                _slowlerValue += slow.slow;
+            }
+
+            if (MoveModeSlow != null)
+                _slowlerValue += MoveModeSlow.Value.slow;
         
-        if (TurnModeSlow != null)
-            _slowlerValue += TurnModeSlow.Value.slow;
+            if (TurnModeSlow != null)
+                _slowlerValue += TurnModeSlow.Value.slow;
+        }
         
         onUpdateValue?.Invoke();
     }

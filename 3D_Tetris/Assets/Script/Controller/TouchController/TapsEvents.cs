@@ -20,6 +20,13 @@ public enum SwipeDirection
     Right,
 }
 
+public enum BlockingType
+{
+    None,
+    OnlySingleTap,
+    SingleAndDouble,
+}
+
 public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandler {
  
     // You can add listeners in inspector
@@ -39,6 +46,8 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
     private float _deltaPosition = (Screen.width * 5 / 100);
     private Vector2 _lastPosition;
 
+    public BlockingType _blockTapEvents = BlockingType.None;
+    
   private void Awake()
   {
       _touchType = TouchEventType.None;
@@ -90,6 +99,7 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
         if(OnSingleTap != null)
         {
             _touchType = TouchEventType.SingleTap;
+            
             OnSingleTap.Invoke();
         }
     }
@@ -100,7 +110,8 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
         _touchType = TouchEventType.DoubleTap;
         if(OnDoubleTap != null)
         {
-            OnDoubleTap.Invoke();
+            if(_blockTapEvents != BlockingType.OnlySingleTap)
+                OnDoubleTap.Invoke();
         }
     }
 
@@ -113,8 +124,11 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
         {
             if (hit.collider.CompareTag("Island"))
             {
-                _touchType = TouchEventType.IslandDrag;
-                OnDragIceIsland?.Invoke();
+                if (_blockTapEvents == BlockingType.None)
+                {
+                    _touchType = TouchEventType.IslandDrag;
+                    OnDragIceIsland?.Invoke();
+                }
             }
         }
     }

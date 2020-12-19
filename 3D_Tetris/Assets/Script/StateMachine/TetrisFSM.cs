@@ -1,4 +1,5 @@
-﻿using Helper.Patterns.FSM;
+﻿using System;
+using Helper.Patterns.FSM;
 using Script.StateMachine.States;
 
 public enum TetrisState
@@ -22,6 +23,8 @@ public enum TetrisState
 
 public class TetrisFSM : AbstractFSM<TetrisState>
 {
+    public event Action OnStart;
+    
     private void Start()
     {
         AbstractState<TetrisState>.SetMainFSM(this);
@@ -47,6 +50,7 @@ public class TetrisFSM : AbstractFSM<TetrisState>
 
     public override void StartFSM()
     {
+        OnStart?.Invoke();
         _current = TetrisState.GenerateElement;
         _statesDictionary[_current].Enter(TetrisState.GenerateElement);
     }

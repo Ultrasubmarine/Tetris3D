@@ -27,7 +27,7 @@ public class Generator : MonoBehaviour
     private bool[,,] _castMatrix;
     private Vector3Int _minPoint;
 
-    private Element _answerElement;
+    public Element _answerElement;
 
     private void Start()
     {
@@ -113,6 +113,11 @@ public class Generator : MonoBehaviour
         return createElement;
     }
 
+    /*private Element GenerateConcretElement()
+    {
+        
+    }*/
+    
     private List<Vector3Int> FoundFreePlacesAround(Vector3Int point)
     {
         var listPov = new List<Vector3Int>();
@@ -167,7 +172,7 @@ public class Generator : MonoBehaviour
         var answerPosition = _answerElement.myTransform.position;
         answerPosition = new Vector3(answerPosition.x, 0.42f + _minPoint.y, answerPosition.z);
         _answerElement.myTransform.position = answerPosition; 
-        _answerElement.gameObject.SetActive(false);
+        //_answerElement.gameObject.SetActive(true);
     }
 
     public void DestroyOldDuplicate()
@@ -178,7 +183,7 @@ public class Generator : MonoBehaviour
             _pool.DeleteBlock(block);
         }
         _answerElement.RemoveBlocksInList(_answerElement.blocks.ToArray());
-        _answerElement.gameObject.SetActive(false);
+        //_answerElement.gameObject.SetActive(false);
     }
 
     public void ShowAnswerElement()
