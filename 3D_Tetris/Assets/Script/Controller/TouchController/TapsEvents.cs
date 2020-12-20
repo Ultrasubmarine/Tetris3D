@@ -25,6 +25,7 @@ public enum BlockingType
     None,
     OnlySingleTap,
     SingleAndDouble,
+    SingleAndDrag,
 }
 
 public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandler {
@@ -99,7 +100,6 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
         if(OnSingleTap != null)
         {
             _touchType = TouchEventType.SingleTap;
-            
             OnSingleTap.Invoke();
         }
     }
@@ -110,7 +110,7 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
         _touchType = TouchEventType.DoubleTap;
         if(OnDoubleTap != null)
         {
-            if(_blockTapEvents != BlockingType.OnlySingleTap)
+            if(_blockTapEvents != BlockingType.OnlySingleTap && _blockTapEvents != BlockingType.SingleAndDrag)
                 OnDoubleTap.Invoke();
         }
     }
@@ -124,7 +124,7 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
         {
             if (hit.collider.CompareTag("Island"))
             {
-                if (_blockTapEvents == BlockingType.None)
+                if (_blockTapEvents == BlockingType.None || _blockTapEvents == BlockingType.SingleAndDrag)
                 {
                     _touchType = TouchEventType.IslandDrag;
                     OnDragIceIsland?.Invoke();

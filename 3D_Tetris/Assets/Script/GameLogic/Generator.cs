@@ -193,7 +193,7 @@ public class Generator : MonoBehaviour
     
     #region RandomMove
 
-    private void SetRandomPosition(Element element)
+    public void SetRandomPosition(Element element)
     {
         // first step
         int x_min, z_min, x_max, z_max;

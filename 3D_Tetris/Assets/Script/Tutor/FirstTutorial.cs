@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Script.Controller;
@@ -15,14 +16,21 @@ namespace Script.Tutor
         [SerializeField] private CanvasGroup _secondTutor;
         [SerializeField] private CanvasGroup _thirdTutor;
         [SerializeField] private CanvasGroup _fourthTutor;
-        [SerializeField] private CanvasGroup _sixthTutor;
 
+        [SerializeField] private CanvasGroup _topPanel;
+        [SerializeField] private CanvasGroup _bottomPanel;
+        [SerializeField] private RectTransform _hand;
         private int _amountSetElements = 0; 
         
         private Action OnMoveSuccess;
         private void Start()
         {
             RealizationBox.Instance.FSM.OnStart += StartGame;
+            _topPanel.alpha = 0;
+            _bottomPanel.alpha = 0;
+            
+            _topPanel.gameObject.SetActive(false);
+            _bottomPanel.gameObject.SetActive(false);
         }
 
         void StartGame()
@@ -34,9 +42,12 @@ namespace Script.Tutor
             _secondTutor.DOFade(0, 0.1f);
             _thirdTutor.DOFade(0, 0.1f);
             _fourthTutor.DOFade(0, 0.1f);
-            _sixthTutor.DOFade(0, 0.1f);
             
-            _amountSetElements = 0; 
+            _amountSetElements = 0;
+            _topPanel.alpha = 0;
+            _topPanel.interactable = false;
+            _bottomPanel.alpha = 0;
+            _bottomPanel.interactable = false;
         }
         
         void FirstStep() // open joystick
@@ -51,15 +62,23 @@ namespace Script.Tutor
             RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
             
             RealizationBox.Instance.tapsEvents.OnSingleTap += SecondStep;
-
         }
 
         void SecondStep() // move element
         {
             RealizationBox.Instance.tapsEvents.OnSingleTap -= SecondStep;
             
-            _firstTutor.DOFade(0, 0.1f);
-            _secondTutor.DOFade(1, 0.3f);
+            _firstTutor.DOFade(0, 0.1f).SetDelay(0.1f).OnComplete(() => _secondTutor.DOFade(1, 0.3f));
+            
+            IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ, razn;
+            do
+            {
+                blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);
+                blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
+                razn = blocksXZ.Except(blocksAnswerXZ);
+                
+                RealizationBox.Instance.generator.SetRandomPosition(RealizationBox.Instance.generator._answerElement);
+            } while (!razn.Any());
             
             RealizationBox.Instance.generator._answerElement.gameObject.SetActive(true);
             RealizationBox.Instance.gameController.onMoveApply += FinishMove;
@@ -71,9 +90,7 @@ namespace Script.Tutor
             OnMoveSuccess -= ThirdStep;
             
             RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDouble;
-            
-            _thirdTutor.DOFade(1, 0.1f);
-            _secondTutor.DOFade(0, 0.3f);
+            _secondTutor.DOFade(0, 0.3f).SetDelay(0.5f).OnComplete(() => _thirdTutor.DOFade(1, 0.1f));
             
             RealizationBox.Instance.tapsEvents.OnDoubleTap += FourthStep;
         }
@@ -81,43 +98,53 @@ namespace Script.Tutor
         void FourthStep() // continue placing elements 
         {
             RealizationBox.Instance.tapsEvents.OnDoubleTap -= FourthStep;
-            
-            _fourthTutor.DOFade(1, 0.1f);
             _thirdTutor.DOFade(0, 0.3f);
             
-            RealizationBox.Instance.slowManager.SetPauseSlow(false);
-            RealizationBox.Instance.tapsEvents.OnDoubleTap += FifthStep;
-            RealizationBox.Instance.tapsEvents.OnSingleTap += FifthStep;
-        }
-
-        void FifthStep()
-        {
-            RealizationBox.Instance.tapsEvents.OnDoubleTap -= FifthStep;
-            RealizationBox.Instance.tapsEvents.OnSingleTap -= FifthStep;
-
-            _fourthTutor.DOFade(0, 0.3f);
             ElementData.onNewElementUpdate +=  SixthStep;
+            RealizationBox.Instance.slowManager.SetPauseSlow(false);
         }
+
 
         private void SixthStep() // drag the island to turn
         {
-            if (++_amountSetElements > 2)
+            if (++_amountSetElements > 1)
             {
                 ElementData.onNewElementUpdate -=  SixthStep;
                 
+                RealizationBox.Instance.tapsEvents.enabled = false;
                 RealizationBox.Instance.generator._answerElement.gameObject.SetActive(false);
-                _sixthTutor.DOFade(1, 0.3f);
-                RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.None;
-                RealizationBox.Instance.slowManager.SetPauseSlow(true);
-                RealizationBox.Instance.tapsEvents.OnDragIceIsland += Finished;
+                Invoke(nameof(SeventhStep), _timeStop);
             }
         }
 
+        private void SeventhStep()
+        {
+            RealizationBox.Instance.tapsEvents.enabled = true;
+            RealizationBox.Instance.slowManager.SetPauseSlow(true);
+            
+            _fourthTutor.DOFade(1, 0.3f);
+            RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDrag;
+            RealizationBox.Instance.tapsEvents.OnDragIceIsland += Finished;
+
+            int w = Screen.width / 2;
+            _hand.DOMoveX(w - w/3, 1.0f).From(w + w/3).SetLoops(-1, LoopType.Yoyo);
+        }
+        
         private void Finished()
         {
             RealizationBox.Instance.slowManager.SetPauseSlow(false);
             RealizationBox.Instance.tapsEvents.OnDragIceIsland -= Finished;
-            _sixthTutor.DOFade(0, 0.3f);
+            _fourthTutor.DOFade(0, 0.3f).OnComplete(() =>
+            {
+                _topPanel.DOFade(1, 0.6f);
+                _bottomPanel.DOFade(1, 0.6f);
+            });
+            
+            _topPanel.interactable = true;
+            _bottomPanel.interactable = true;
+            RealizationBox.Instance.FSM.OnStart -= StartGame;
+            RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.None;
+            _hand.DOKill();
         }
 
         
