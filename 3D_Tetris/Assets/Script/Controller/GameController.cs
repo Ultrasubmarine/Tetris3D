@@ -48,7 +48,6 @@ public class GameController : MonoBehaviour
         if (Equals(ElementData.newElement))
             return;
 
-        
         switch (touch)
         {
             case move.zm:
@@ -107,6 +106,8 @@ public class GameController : MonoBehaviour
 
     public void CorrectTurn(int newAngle)
     {
+        if (newAngle < 0)
+            newAngle += 360;
         _indexTable = (newAngle) % 360  / 90 ;
     }
     

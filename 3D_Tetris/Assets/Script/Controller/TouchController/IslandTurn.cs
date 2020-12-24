@@ -9,13 +9,14 @@ namespace Script.Controller.TouchController
     
     public class IslandTurn : MonoBehaviour, IPointerExitHandler
     {
+        public bool isTurnIsland => isTurn;
+        
         [SerializeField] private GameObject island;
 
         [SerializeField] private float _speedForCorrectRotate = 0.5f;
         [SerializeField] private float _speedForCorrectRotateForSwipe = 0.5f;
         
         private float firstPosition;
-
         private float lastPosition;
         
         private int _firstAngle;
@@ -51,7 +52,7 @@ namespace Script.Controller.TouchController
 
                 _firstAngle = (int)island.transform.eulerAngles.y;
                 _startTime = Time.time;
-                OnStartTurn.Invoke();
+                OnStartTurn?.Invoke();
             }
             lastPosition = Input.mousePosition.x;
         }
@@ -75,7 +76,6 @@ namespace Script.Controller.TouchController
         {
             Turn(false);
             TurnFinished();
-            OnEndTurn.Invoke();
         }
 
         private void TurnFinished()
@@ -90,7 +90,6 @@ namespace Script.Controller.TouchController
                     needRotate = _firstAngle - 90;
 
                 speed = _speedForCorrectRotateForSwipe;
-                Debug.Log($"SWIPE ROTATE {_firstAngle} {needRotate}");
             }
             else // if drag island
             {
@@ -108,13 +107,8 @@ namespace Script.Controller.TouchController
                 speed = _speedForCorrectRotate;
             }
             
-            island.transform.DORotate(new Vector3(0, needRotate, 0), speed);
+            island.transform.DORotate(new Vector3(0, needRotate, 0), speed).OnComplete(() => OnEndTurn.Invoke());
             _gameController.CorrectTurn((int)needRotate);
-        }
-
-        private void SwipeTurn()
-        {
-            
         }
     }
 }

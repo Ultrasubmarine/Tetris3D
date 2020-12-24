@@ -479,7 +479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b07569f4208f34983a50edfed585a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _TimeDrop: 0.25
+  _TimeDrop: 0.44
   _TimeDropAfterDestroy: 0.3
   _TimeMove: 0.7
 --- !u!4 &31514271
@@ -510,9 +510,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _points:
-  - time: 0.21
+  - time: 0.3
     score: 36
-  - time: 0.18
+  - time: 0.28
     score: 72
 --- !u!4 &33823533 stripped
 Transform:
@@ -574,7 +574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _firstTutor: {fileID: 181074836}
-  _timeStop: 2.5
+  _timeStop: 2.3
   _secondTutor: {fileID: 53060305}
   _thirdTutor: {fileID: 704329845}
   _fourthTutor: {fileID: 2091371181}
@@ -746,9 +746,9 @@ RectTransform:
   m_Father: {fileID: 38568429}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2, y: 634}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 2, y: -535}
   m_SizeDelta: {x: 864.3, y: 509.09998}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &53060305
@@ -760,8 +760,8 @@ CanvasGroup:
   m_GameObject: {fileID: 53060303}
   m_Enabled: 1
   m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &53060306
 MonoBehaviour:
@@ -1671,8 +1671,8 @@ CanvasGroup:
   m_GameObject: {fileID: 181074834}
   m_Enabled: 1
   m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!222 &181074837
 CanvasRenderer:
@@ -5338,8 +5338,8 @@ CanvasGroup:
   m_GameObject: {fileID: 704329843}
   m_Enabled: 1
   m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!222 &704329846
 CanvasRenderer:
@@ -5709,7 +5709,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _testObj: {fileID: 0}
-  _faster: 3
+  _faster: 4
 --- !u!4 &770432239
 Transform:
   m_ObjectHideFlags: 0
@@ -5929,10 +5929,10 @@ RectTransform:
   m_Father: {fileID: 2091371180}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -2201}
-  m_SizeDelta: {x: 864.5, y: 186.2}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 138}
+  m_SizeDelta: {x: 864.5, y: 186.19995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &857085008
 MonoBehaviour:
@@ -8020,8 +8020,8 @@ MonoBehaviour:
   _gameController: {fileID: 860787690}
   _slowManager: {fileID: 2014896470}
   _place: {fileID: 876679918}
-  _speed: {fileID: 0}
-  _speedChanger: {fileID: 0}
+  _speed: {fileID: 31514270}
+  _speedChanger: {fileID: 31514272}
   _joystick: {fileID: 483158832}
   _tapsEvents: {fileID: 483158834}
   _islandTurn: {fileID: 483158835}
@@ -15956,10 +15956,10 @@ RectTransform:
   m_Father: {fileID: 704329844}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.000019789, y: -594}
-  m_SizeDelta: {x: 643.1, y: 346.1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.000019789, y: 575}
+  m_SizeDelta: {x: 643.1, y: 346.09998}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1774063363
 MonoBehaviour:
@@ -17608,8 +17608,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 3.8200073, y: -0.02999878}
-  m_SizeDelta: {x: 12.36, y: 3.26}
+  m_AnchoredPosition: {x: 0.36999512, y: 0.6100006}
+  m_SizeDelta: {x: -21.07, y: -18.09}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2006038316
 MonoBehaviour:
@@ -17631,7 +17631,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 323593c5f6f23304ba6b1fa8c018420c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 33ebad0602028734eafa971c7534277d, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -18315,8 +18315,8 @@ CanvasGroup:
   m_GameObject: {fileID: 2091371179}
   m_Enabled: 1
   m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!222 &2091371182
 CanvasRenderer:

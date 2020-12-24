@@ -35,6 +35,7 @@ namespace Script.Tutor
 
         void StartGame()
         {
+            global::Speed.SetTimeDrop(0.26f);
             RealizationBox.Instance.tapsEvents.enabled = false;
             Invoke(nameof(FirstStep), _timeStop);
             
@@ -66,9 +67,10 @@ namespace Script.Tutor
 
         void SecondStep() // move element
         {
+            RealizationBox.Instance.speedChanger.ResetSpeed();
             RealizationBox.Instance.tapsEvents.OnSingleTap -= SecondStep;
             
-            _firstTutor.DOFade(0, 0.1f).SetDelay(0.1f).OnComplete(() => _secondTutor.DOFade(1, 0.3f));
+            _firstTutor.DOFade(0, 0.1f).SetDelay(0.1f).OnComplete(() => _secondTutor.DOFade(1, 0.2f));
             
             IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ, razn;
             do
@@ -81,7 +83,7 @@ namespace Script.Tutor
             } while (!razn.Any());
             
             RealizationBox.Instance.generator._answerElement.gameObject.SetActive(true);
-            RealizationBox.Instance.gameController.onMoveApply += FinishMove;
+            RealizationBox.Instance.FSM.onStateChange += FinishMove;
             OnMoveSuccess += ThirdStep;
         }
 
@@ -89,15 +91,19 @@ namespace Script.Tutor
         {
             OnMoveSuccess -= ThirdStep;
             
-            RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDouble;
-            _secondTutor.DOFade(0, 0.3f).SetDelay(0.5f).OnComplete(() => _thirdTutor.DOFade(1, 0.1f));
-            
-            RealizationBox.Instance.tapsEvents.OnDoubleTap += FourthStep;
+            _secondTutor.DOKill();
+            _secondTutor.DOFade(0, 0.3f).SetDelay(0.2f).
+                OnComplete(() => _thirdTutor.DOFade(1, 0.1f).OnComplete(() =>
+                {
+                    RealizationBox.Instance.tapsEvents.OnDoubleTap += FourthStep;
+                    RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDouble;
+                }));
         }
 
         void FourthStep() // continue placing elements 
         {
             RealizationBox.Instance.tapsEvents.OnDoubleTap -= FourthStep;
+            _thirdTutor.DOKill();
             _thirdTutor.DOFade(0, 0.3f);
             
             ElementData.onNewElementUpdate +=  SixthStep;
@@ -113,7 +119,7 @@ namespace Script.Tutor
                 
                 RealizationBox.Instance.tapsEvents.enabled = false;
                 RealizationBox.Instance.generator._answerElement.gameObject.SetActive(false);
-                Invoke(nameof(SeventhStep), _timeStop);
+                Invoke(nameof(SeventhStep), 2.2f);
             }
         }
 
@@ -145,12 +151,17 @@ namespace Script.Tutor
             RealizationBox.Instance.FSM.OnStart -= StartGame;
             RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.None;
             _hand.DOKill();
+            
+            RealizationBox.Instance.FSM.onStateChange -= FinishMove;
         }
 
         
 
-        void FinishMove(bool isSuccess, move direction)
+        void FinishMove(TetrisState obj)
         {
+            if (obj != TetrisState.EndInfluence)
+                return;
+            
             var blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);
             
             var blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
