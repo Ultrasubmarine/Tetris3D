@@ -31,13 +31,16 @@ namespace Script.Tutor
             
             _topPanel.gameObject.SetActive(false);
             _bottomPanel.gameObject.SetActive(false);
+            
+            RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
+            RealizationBox.Instance.generator.fixedHightPosition = 10;
         }
 
         void StartGame()
         {
-            global::Speed.SetTimeDrop(0.26f);
+          //  global::Speed.SetTimeDrop(0.26f);
             RealizationBox.Instance.tapsEvents.enabled = false;
-            Invoke(nameof(FirstStep), _timeStop);
+           // Invoke(nameof(FirstStep), _timeStop);
             
             _firstTutor.DOFade(0, 0.1f);
             _secondTutor.DOFade(0, 0.1f);
@@ -49,20 +52,25 @@ namespace Script.Tutor
             _topPanel.interactable = false;
             _bottomPanel.alpha = 0;
             _bottomPanel.interactable = false;
+
+            FirstStep();
         }
         
         void FirstStep() // open joystick
+        {   
+            Invoke(nameof(FirstStepPause),_timeStop);
+            // text
+            _firstTutor.DOFade(1, 1f);
+
+            // tap event
+            RealizationBox.Instance.tapsEvents.enabled = true;
+            RealizationBox.Instance.tapsEvents.OnSingleTap += SecondStep;
+        }
+
+        void FirstStepPause()
         {
             //pause
             RealizationBox.Instance.slowManager.SetPauseSlow(true);
-            // text
-            _firstTutor.DOFade(1, 0.3f);
-            
-            // tap event
-            RealizationBox.Instance.tapsEvents.enabled = true;
-            RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
-            
-            RealizationBox.Instance.tapsEvents.OnSingleTap += SecondStep;
         }
 
         void SecondStep() // move element

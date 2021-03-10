@@ -34,15 +34,12 @@ public class GameCamera : MonoBehaviour
     [Space(15)] [Header("First Animation")] [SerializeField]
     private float _Time = 1;
     
-
     public void FirstAnimation()
     {
-        
-        
         Debug.Log($"this rot {_camera.transform.localRotation}");
         _camera.transform.localRotation = Quaternion.identity;
         Debug.Log($"this rot {_camera.transform.localRotation}");
-
+        
         _camera.transform.DOLocalMove(Vector3.zero, _Time)
             .From(_startPoint).OnComplete(  () => onFirstAnimationEnd?.Invoke());
     }
@@ -61,7 +58,7 @@ public class GameCamera : MonoBehaviour
         var finishP = Vector3.Lerp(_minDistance.position, _maxDistance.position, height / (float) limit);
         var finishS = Mathf.Lerp(_minSize, _maxSize, height / (float) limit);
         var finishLookAt = Vector3.Lerp(_minLookAt.position, _maxLookAt.position, height / (float) limit);
-
+        
         _myTransform.position = finishP;
         _camera.orthographicSize = finishS;
         _objectLook.position = finishLookAt;
@@ -84,24 +81,26 @@ public class GameCamera : MonoBehaviour
     {
         //_camera.orthographicSize = _FirstOrthographicSize;
        // _myTransform.LookAt(_objectLook.position);
-        
-        
-        _heightHandler = RealizationBox.Instance.haightHandler;
+       
+       _heightHandler = RealizationBox.Instance.haightHandler;
+       
+     //  _camera.transform.localRotation = Quaternion.identity;
+     //  _camera.transform.position = _startPoint;
     }
 
     private void CheckStabilization(int limit, int height)
     {
         if (_currentHeight == height)
             return;
-
+        
         _currentHeight = height;
         
         var finishP = Vector3.Lerp(_minDistance.position, _maxDistance.position, height / (float) limit);
         var finishS = Mathf.Lerp(_minSize, _maxSize, height / (float) limit);
         var finishLookAt = Vector3.Lerp(_minLookAt.position, _maxLookAt.position, height / (float) limit);
-
+        
         _myTransform.DOMove(finishP, _timeStabilization).OnComplete( () => lastMaxCurrentHeight = _currentHeight);
         _camera.DOOrthoSize(finishS, _timeStabilization);
         _objectLook.DOMove(finishLookAt, _timeStabilization).OnUpdate(() => _myTransform.LookAt(_objectLook.position));
-    }
+     }
 }

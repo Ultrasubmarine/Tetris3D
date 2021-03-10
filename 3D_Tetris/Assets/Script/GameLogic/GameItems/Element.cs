@@ -60,6 +60,7 @@ public class Element : MonoBehaviour
     
     public void InitializationAfterGeneric(int height)
     {
+        Debug.Log("h is " + height);
         var maxElement = _blocks.Max(s => s.coordinates.y);
 
         foreach (var item in _blocks)

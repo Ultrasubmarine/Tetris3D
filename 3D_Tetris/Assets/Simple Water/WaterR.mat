@@ -61,18 +61,30 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Depth: 0.07
-    - Foam_Amount: 0
-    - Foam_Cutoff: 4.15
-    - Vector1_29A8EAB: 0
-    - Vector1_3C2CF0EB: 0
+    - Depth: 1.21
+    - Foam_Amount: 7.9
+    - Foam_Cutoff: 3.6
+    - Vector1_29A8EAB: 1.01
+    - Vector1_3C2CF0EB: 0.0131
     - Vector1_53B9698E: 7.6
-    - Vector1_6D9DC178: 87.3
+    - Vector1_6D9DC178: 84.14
     - Vector1_93DCFAA9: 0.259
-    - Vector1_95BBCBE0: 246.07
+    - Vector1_95BBCBE0: 8.21
     - Vector1_C5543ECF: 4.6
-    - Vector1_E23798DE: 1.77
+    - Vector1_E23798DE: 1.356
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -95,10 +107,11 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_A271762B: {r: 0.06138547, g: 0.2627451, b: 0, a: 0.6862745}
-    - Color_AFFD055F: {r: 0.5494838, g: 0.75774294, b: 0.7924528, a: 0}
-    - Color_E0824245: {r: 1, g: 1, b: 1, a: 0}
+    - Color_A271762B: {r: 0.00978996, g: 0.17469403, b: 0.18867922, a: 0.84313726}
+    - Color_AFFD055F: {r: 1, g: 1, b: 1, a: 0}
+    - Color_E0824245: {r: 0.08664116, g: 0.5566038, b: 0.42914918, a: 0.3882353}
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  m_BuildTextureStacks: []

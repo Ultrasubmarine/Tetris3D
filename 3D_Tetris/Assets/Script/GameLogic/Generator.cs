@@ -29,6 +29,8 @@ public class Generator : MonoBehaviour
 
     public Element _answerElement;
 
+    public int fixedHightPosition = 0;
+    
     private void Start()
     {
         _matrix = RealizationBox.Instance.matrix;
@@ -61,14 +63,16 @@ public class Generator : MonoBehaviour
         var size = max_y - min_y;
 
         int currentHeightPosition  = (_matrix.height - _minHeight) * _gameCamera.lastMaxCurrentHeight / _heightHandler.limitHeight + _minHeight; //(_matrix.height - _minHeight) * _heightHandler.currentHeight / _heightHandler.limitHeight + _minHeight;
-        
-        newElement.InitializationAfterGeneric(currentHeightPosition);
-        newElement.myTransform.position = new Vector3(pos.x, pos.y + currentHeightPosition - size, pos.z);
+
+        int currentYpos = fixedHightPosition == 0 ? currentHeightPosition : fixedHightPosition;
+        newElement.InitializationAfterGeneric(currentYpos);
+        newElement.myTransform.position = new Vector3(pos.x, pos.y + currentYpos - size, pos.z);
 
         SetRandomPosition(newElement);
         //ConfuseElement(newElement);
      //   ConfuseElement(newElement);//, plane.gameObject);
-        
+
+        fixedHightPosition = 0;
         return newElement;
     }
 

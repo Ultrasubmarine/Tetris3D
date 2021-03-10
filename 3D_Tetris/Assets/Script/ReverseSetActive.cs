@@ -8,4 +8,4 @@ public class ReverseSetActive : MonoBehaviour
     {
         gameObject.SetActive(!value);
     }
-}
+    }
