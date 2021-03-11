@@ -34,6 +34,7 @@ namespace Script.Tutor
             
             RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
             RealizationBox.Instance.generator.fixedHightPosition = 10;
+            RealizationBox.Instance.tapsEvents.enabled = false;
         }
 
         void StartGame()
@@ -60,10 +61,13 @@ namespace Script.Tutor
         {   
             Invoke(nameof(FirstStepPause),_timeStop);
             // text
-            _firstTutor.DOFade(1, 1f);
+            _firstTutor.DOFade(1, 1f).OnComplete(() =>
+            {
+                RealizationBox.Instance.tapsEvents.enabled = true;
+            });
 
             // tap event
-            RealizationBox.Instance.tapsEvents.enabled = true;
+           // RealizationBox.Instance.tapsEvents.enabled = true;
             RealizationBox.Instance.tapsEvents.OnSingleTap += SecondStep;
         }
 
@@ -78,6 +82,7 @@ namespace Script.Tutor
             RealizationBox.Instance.speedChanger.ResetSpeed();
             RealizationBox.Instance.tapsEvents.OnSingleTap -= SecondStep;
             
+            _firstTutor.DOComplete();
             _firstTutor.DOFade(0, 0.1f).SetDelay(0.1f).OnComplete(() => _secondTutor.DOFade(1, 0.2f));
             
             IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ, razn;
@@ -91,7 +96,8 @@ namespace Script.Tutor
             } while (!razn.Any());
             
             RealizationBox.Instance.generator._answerElement.gameObject.SetActive(true);
-            RealizationBox.Instance.FSM.onStateChange += FinishMove;
+         //   RealizationBox.Instance.FSM.onStateChange += FinishMove;
+            RealizationBox.Instance.joystick.onStateChange += FinishMove;
             OnMoveSuccess += ThirdStep;
         }
 
@@ -163,14 +169,17 @@ namespace Script.Tutor
             RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.None;
             _hand.DOKill();
             
-            RealizationBox.Instance.FSM.onStateChange -= FinishMove;
+            RealizationBox.Instance.joystick.onStateChange -= FinishMove;
+           // RealizationBox.Instance.FSM.onStateChange -= FinishMove;
         }
 
         
 
-        void FinishMove(TetrisState obj)
+        void FinishMove(JoystickState state)//TetrisState obj)
         {
-            if (obj != TetrisState.EndInfluence)
+            /*if (obj != TetrisState.EndInfluence)
+                return;*/
+            if (state == JoystickState.Show || ElementData.newElement == null)
                 return;
             
             var blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);

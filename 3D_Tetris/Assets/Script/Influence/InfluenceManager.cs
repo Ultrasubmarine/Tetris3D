@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Script.ObjectEngine;
-using Unity.Collections;
 using UnityEngine;
 
 namespace Script.Influence

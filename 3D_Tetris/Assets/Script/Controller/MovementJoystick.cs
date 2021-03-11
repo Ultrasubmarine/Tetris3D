@@ -30,6 +30,7 @@ namespace Script.Controller
     public class MovementJoystick: MonoBehaviour, IDragHandler, IPointerExitHandler
     {
         public bool isCenterReverseLastAction { get; set; }
+        public JoystickState state { get; private set; }
         
         [SerializeField] private RectTransform _skickSpace;
         [SerializeField] private RectTransform _stick;
@@ -37,6 +38,8 @@ namespace Script.Controller
         
         [SerializeField][Range(0,1)] private float _minPercentRadiusForMove = 0.15f;
         [SerializeField][Range(0,3)] private float _maxPercentOutSpaceRadius = 2.5f;
+
+        public Action<JoystickState> onStateChange;
         
         private CanvasGroup _canvasGroup;
         
@@ -118,10 +121,18 @@ namespace Script.Controller
             }
         }
 
+        protected void OnJoystickStateChange(JoystickState newState)
+        {
+            state = newState;
+            onStateChange?.Invoke(state);
+        }
+        
         public void Spawn()
         {
             if (Input.touchCount != 1)
                 return;
+
+            OnJoystickStateChange(JoystickState.Show);
             
             _slowManager.OnJoystickTouchChange(JoystickState.Show);
             _canvasGroup.DOFade(1, _spawnAnimationTime);
@@ -133,6 +144,8 @@ namespace Script.Controller
 
         public void Hide()
         {
+            OnJoystickStateChange(JoystickState.Hide);
+            
             _slowManager.OnJoystickTouchChange(JoystickState.Hide);
             _canvasGroup.DOFade(0, _spawnAnimationTime);
             _isStickCanDrag = false;
@@ -163,7 +176,6 @@ namespace Script.Controller
                 CheckMove(eventData.position);
             else if (isCenterReverseLastAction)
                 ReverseLastAction();
-           
         }
 
         private void CheckMove(Vector2 position)
