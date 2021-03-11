@@ -37,8 +37,8 @@ namespace Script.Tutor
         }
 
         void StartGame()
-        {
-          //  global::Speed.SetTimeDrop(0.26f);
+        { 
+            //  global::Speed.SetTimeDrop(0.26f);
             RealizationBox.Instance.tapsEvents.enabled = false;
            // Invoke(nameof(FirstStep), _timeStop);
             
@@ -117,23 +117,26 @@ namespace Script.Tutor
             ElementData.onNewElementUpdate +=  SixthStep;
             RealizationBox.Instance.slowManager.SetPauseSlow(false);
         }
-
-
+        
         private void SixthStep() // drag the island to turn
         {
-            if (++_amountSetElements > 1)
+            if (++_amountSetElements == 1)
+            {
+                RealizationBox.Instance.generator.fixedHightPosition = 10;
+            }
+            if (_amountSetElements > 1)
             {
                 ElementData.onNewElementUpdate -=  SixthStep;
                 
-                RealizationBox.Instance.tapsEvents.enabled = false;
+              //  RealizationBox.Instance.tapsEvents.enabled = false;
                 RealizationBox.Instance.generator._answerElement.gameObject.SetActive(false);
-                Invoke(nameof(SeventhStep), 2.2f);
+                Invoke(nameof(SeventhStep), _timeStop);
             }
         }
 
         private void SeventhStep()
         {
-            RealizationBox.Instance.tapsEvents.enabled = true;
+           // RealizationBox.Instance.tapsEvents.enabled = true;
             RealizationBox.Instance.slowManager.SetPauseSlow(true);
             
             _fourthTutor.DOFade(1, 0.3f);
