@@ -54,6 +54,14 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
       _touchType = TouchEventType.None;
   }
 
+  private void OnEnable()
+  {
+      if (Input.touches.Length == 1)
+      {
+          OnPointerDown(null);
+      }
+  }
+
   public void OnPointerDown(PointerEventData eventData)
     {
         _touchType = TouchEventType.AnalyzingTap;
