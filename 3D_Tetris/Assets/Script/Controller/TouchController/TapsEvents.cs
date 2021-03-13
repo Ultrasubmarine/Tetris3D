@@ -91,7 +91,7 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
             doubleTapInitialized = true;
             firstTapTime = Time.time;
         }
-        else if (Time.time - firstTapTime < timeBetweenTaps)
+        else if (Time.time - firstTapTime < waitTime)
         {
             // here we have tapped second time before "single tap" has been invoked
             CancelInvoke("SingleTap"); // cancel "single tap" invoking
@@ -157,6 +157,6 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
 
     public void OnPointerExit(PointerEventData eventData)
     {
-      //  throw new NotImplementedException();
+        //  throw new NotImplementedException();
     }
 }

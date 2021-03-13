@@ -115,7 +115,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -225,18 +225,18 @@ ParticleSystem:
       maxColor: {r: 0.015686274, g: 1, b: 0.60589355, a: 0.972549}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.19607843, g: 0.9254902, b: 0.88867134, a: 1}
-        key1: {r: 1, g: 0.9581807, b: 0.24056602, a: 0.9843137}
-        key2: {r: 0.19824673, g: 0.48560336, b: 0.9339623, a: 0.8627451}
-        key3: {r: 0.90588236, g: 0.66693866, b: 0.2941177, a: 0}
-        key4: {r: 0.8490566, g: 0.31639373, b: 0.6287579, a: 0}
+        key0: {r: 0.14070843, g: 0.9622642, b: 0.6929764, a: 1}
+        key1: {r: 0.9622642, g: 0.9230084, b: 0.12255252, a: 0.9843137}
+        key2: {r: 0.6279369, g: 0.5179334, b: 0.9716981, a: 0.8627451}
+        key3: {r: 0.16958882, g: 0.62974626, b: 0.9716981, a: 0}
+        key4: {r: 0.9433962, g: 0.4032716, b: 0.38714847, a: 0}
         key5: {r: 1, g: 0.86942345, b: 0.36470592, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 15806
-        ctime1: 32768
-        ctime2: 50115
-        ctime3: 65535
+        ctime0: 12914
+        ctime1: 27178
+        ctime2: 40670
+        ctime3: 53970
         ctime4: 65535
         ctime5: 63800
         ctime6: 0
@@ -250,7 +250,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 1
-        m_NumColorKeys: 4
+        m_NumColorKeys: 5
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
@@ -865,7 +865,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 300
+      scalar: 350
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -990,23 +990,32 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.14792712
-          value: 0.97297287
-          inSlope: -4.2101264
-          outSlope: -4.2101264
+          time: 0.4188435
+          value: 1
+          inSlope: -1.1126986
+          outSlope: -1.1126986
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.3589336
+        - serializedVersion: 3
+          time: 0.6852589
+          value: 0.29729557
+          inSlope: -2.7323463
+          outSlope: -2.7323463
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.44877785
+          outWeight: 0.4390242
         - serializedVersion: 3
           time: 1
-          value: 0
-          inSlope: -2.4556727
-          outSlope: -2.4556727
+          value: 0.06756756
+          inSlope: -0.056531515
+          outSlope: -0.056531515
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
+          inWeight: 0.7317075
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
