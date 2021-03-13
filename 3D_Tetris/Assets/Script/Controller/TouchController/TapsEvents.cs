@@ -67,9 +67,23 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
         _touchType = TouchEventType.AnalyzingTap;
 
         _lastPosition = Input.mousePosition;
+
+        float waitTime = timeBetweenTaps;
+        RaycastHit hit;
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.CompareTag("Island"))
+            {
+                if (_blockTapEvents == BlockingType.None || _blockTapEvents == BlockingType.SingleAndDrag)
+                {
+                    waitTime *= 1.5f;
+                }
+            }
+        }
         
         // invoke single tap after max time between taps
-        Invoke("SingleTap", timeBetweenTaps);
+        Invoke("SingleTap", waitTime);
  
         if (!doubleTapInitialized)
         {
