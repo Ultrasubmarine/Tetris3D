@@ -1,31 +1,34 @@
 ﻿using Helper.Patterns.FSM;
 using UnityEngine;
 
-public class WinCheckState : AbstractState<TetrisState>
+namespace Script.StateMachine.States
 {
-    private Score _score;
-    private GameCamera _gameCamera;
-    
-    public WinCheckState()
+    public class WinCheckState : AbstractState<TetrisState>
     {
-        _score = RealizationBox.Instance.score;
-        _gameCamera = RealizationBox.Instance.gameCamera;
-    }
+        private Score _score;
+        private GameCamera _gameCamera;
 
-    public override void Enter(TetrisState last)
-    {
-        base.Enter(last);
-        
-        if (_score.CheckWin())
-            Debug.Log("Win");
-        else
+        public WinCheckState()
         {
-            _gameCamera.SetStabilization();
-            _FSM.SetNewState(TetrisState.GenerateElement);
+            _score = RealizationBox.Instance.score;
+            _gameCamera = RealizationBox.Instance.gameCamera;
         }
-    }
 
-    public override void Exit(TetrisState last)
-    {
+        public override void Enter(TetrisState last)
+        {
+            base.Enter(last);
+
+            if (_score.CheckWin())
+                _FSM.SetNewState(TetrisState.WinGame);
+            else
+            {
+                _gameCamera.SetStabilization();
+                _FSM.SetNewState(TetrisState.GenerateElement);
+            }
+        }
+
+        public override void Exit(TetrisState last)
+        {
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using Script.UI;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BottomPanelAnimation _settingsPanel;
     [SerializeField] private BottomPanelAnimation _gameplayBottomPanel;
     
-    [SerializeField] private GameObject _winPanel;
+    [SerializeField] private CanvasGroup _winPanel;
     
     private TetrisFSM _fsm;
 
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
     
     private void OnWinGame()
     {
-        _winPanel.SetActive(true);
+        _winPanel.gameObject.SetActive(true);
     }
 
     public void ClearPlace()
@@ -62,5 +63,12 @@ public class GameManager : MonoBehaviour
         
        
         //Add boosters
+    }
+
+    public void ShowWinPanel()
+    {
+        _winPanel.gameObject.SetActive(true);
+        _winPanel.DOFade(1, 0.4f);
+        _winPanel.transform.DOMoveY(_winPanel.transform.position.y, 0.4f).From(_winPanel.transform.position.y - 250);
     }
 }
