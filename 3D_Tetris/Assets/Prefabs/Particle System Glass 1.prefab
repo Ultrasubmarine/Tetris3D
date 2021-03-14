@@ -46,7 +46,7 @@ ParticleSystem:
   cullingMode: 1
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 0
+  looping: 1
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -225,16 +225,16 @@ ParticleSystem:
       maxColor: {r: 0.015686274, g: 1, b: 0.60589355, a: 0.972549}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.94204724, g: 1, b: 0.39215684, a: 1}
-        key1: {r: 0.36320752, g: 0.7346696, b: 1, a: 1}
+        key0: {r: 0.14070843, g: 0.9622642, b: 0.6929764, a: 1}
+        key1: {r: 0.9622642, g: 0.9230084, b: 0.12255252, a: 0.9843137}
         key2: {r: 0.6279369, g: 0.5179334, b: 0.9716981, a: 0.8627451}
         key3: {r: 0.16958882, g: 0.62974626, b: 0.9716981, a: 0}
         key4: {r: 0.9433962, g: 0.4032716, b: 0.38714847, a: 0}
         key5: {r: 1, g: 0.86942345, b: 0.36470592, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 0
-        ctime1: 65535
+        ctime0: 12914
+        ctime1: 27178
         ctime2: 40670
         ctime3: 53970
         ctime4: 65535
@@ -250,7 +250,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_NumColorKeys: 2
+        m_NumColorKeys: 5
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
@@ -667,7 +667,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 2.8, y: 0.24, z: 2.8}
+    m_Scale: {x: 2.83, y: 0.24, z: 2.88}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
