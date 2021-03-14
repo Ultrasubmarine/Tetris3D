@@ -134,6 +134,7 @@ namespace Script.Tutor
             {
                 ElementData.onNewElementUpdate -=  SixthStep;
                 
+                RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDrag;
               //  RealizationBox.Instance.tapsEvents.enabled = false;
                 RealizationBox.Instance.generator._answerElement.gameObject.SetActive(false);
                 Invoke(nameof(SeventhStep), _timeStop);
