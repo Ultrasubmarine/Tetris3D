@@ -14919,18 +14919,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1661956721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16038,8 +16026,8 @@ Camera:
     y: 0
     width: 3.42
     height: 5.9
-  near clip plane: 5
-  far clip plane: 200
+  near clip plane: 1.4
+  far clip plane: 150
   field of view: 60
   orthographic: 1
   orthographic size: 8
