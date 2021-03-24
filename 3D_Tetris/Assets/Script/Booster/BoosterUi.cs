@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Script.Booster
@@ -28,9 +29,14 @@ namespace Script.Booster
         {
             _booster = booster;
             
-            _booster.onStateChange += OnBoosterStateChange;
+         //   _booster.onStateChange += OnBoosterStateChange;
             _icon.sprite = _booster.icon;
             _button.onClick.AddListener(_booster.Apply);
+        }
+
+        private void OnDestroy()
+        {
+          //  _booster.onStateChange -= OnBoosterStateChange;
         }
 
         private void OnBoosterStateChange(BoosterState newState)

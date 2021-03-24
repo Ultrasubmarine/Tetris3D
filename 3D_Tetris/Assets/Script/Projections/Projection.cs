@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Helper.Patterns;
@@ -56,5 +57,10 @@ public class Projection : MonoBehaviour
     {
         foreach (var item in _projectionsList) _pool.Push(item);
         _projectionsList.Clear();
+    }
+
+    private void OnDestroy()
+    {
+        ElementData.onNewElementUpdate -= CreateProjection;
     }
 }

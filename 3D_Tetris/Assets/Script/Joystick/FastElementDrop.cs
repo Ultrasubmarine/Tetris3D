@@ -1,4 +1,5 @@
-﻿using Script.Controller;
+﻿using System;
+using Script.Controller;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
 using UnityEngine;
@@ -29,5 +30,10 @@ public class FastElementDrop : MonoBehaviour
     {
         _joystick.enabled = true;
         _influenceManager.SetSpeedMode(false);
+    }
+
+    private void OnDestroy()
+    {
+        ElementData.onMergeElement -= ResetFastSpeed;
     }
 }

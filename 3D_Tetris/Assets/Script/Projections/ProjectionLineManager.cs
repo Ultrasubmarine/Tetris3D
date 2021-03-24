@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Helper.Patterns;
 using IntegerExtension;
 using Script.GameLogic.TetrisElement;
@@ -77,6 +78,11 @@ namespace Script.Projections
                 _pool.Push(projectionLine.projection);
             }
             _projections.Clear();
+        }
+
+        public void OnDestroy()
+        {
+            ElementData.onNewElementUpdate -= UpdateProjectionLines;
         }
     }
 }

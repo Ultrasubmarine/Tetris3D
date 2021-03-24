@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
@@ -23,5 +24,11 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
     /// </summary>
     protected virtual void Init()
     {
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("deleted realize box");
+        Instance = null;
     }
 }
