@@ -29,8 +29,8 @@ namespace Script.GameLogic.TetrisElement
         public static void MergeNewElement()
         {
             _mergerElements.Add(newElement);
-            newElement = null;
             onMergeElement?.Invoke();
+            newElement = null;
         }
 
         public static void RemoveMergedElement(Element element)

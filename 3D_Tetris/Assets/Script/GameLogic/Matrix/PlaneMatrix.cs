@@ -73,6 +73,11 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         return ReferenceEquals(_matrix[x_index, y_index, z_index], null);
     }
 
+    public Block GetBlockInPlace(int x_index, int y_index, int z_index)
+    {
+        return _matrix[x_index, y_index, z_index];
+    }
+    
     #region привязка/отвязка эл-та к матрице
 
     public void BindToMatrix(Element element)
