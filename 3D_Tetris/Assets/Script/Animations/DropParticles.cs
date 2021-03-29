@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Helper.Patterns;
@@ -55,6 +56,11 @@ namespace Script.Animations
         {
             yield return new WaitForSeconds(5);
             _pool.Push(particle);
+        }
+
+        private void OnDestroy()
+        {
+            ElementData.onMergeElement -= StartAnimationParticle;
         }
     }
 }
