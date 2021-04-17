@@ -11,7 +11,10 @@ public class SlowManager : MonoBehaviour
     
     [SerializeField] private float _value = 0.95f;
 
+    [SerializeField] private float _slowTimeInJoystickMode = 3f;
     
+    [SerializeField] private float _slowProcInJoystickMode = 0.85f;
+
     public struct Slow
     {
         public Timer timer;
@@ -69,11 +72,11 @@ public class SlowManager : MonoBehaviour
         var timer = TimersKeeper.Schedule(time);
         var slow = new Slow(timer, value);
 
-        /*timer.onStateChanged += (s) =>
+        timer.onStateChanged += (s) =>
         {
             if (s == TimerState.Completed)
                 OnDestroyMoveModeTimer();
-        };*/
+        };
         MoveModeSlow = slow;
         
         CalculateSlow();
@@ -172,7 +175,7 @@ public class SlowManager : MonoBehaviour
         {
             case JoystickState.Show:
             {
-                AddedMoveModeSlow(3, 0.95f);
+                AddedMoveModeSlow(_slowTimeInJoystickMode, _slowProcInJoystickMode);
                 break;
             }
             case JoystickState.Hide:

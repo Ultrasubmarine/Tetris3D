@@ -51,9 +51,9 @@ namespace Script.Influence
         
         private bool Move(float speed = 1)
         {
-            if (_currentTime + Time.deltaTime < _allTime)
+            if (_currentTime + Time.fixedDeltaTime < _allTime)
             {
-                _currentTime += Time.deltaTime * speed;
+                _currentTime += Time.fixedDeltaTime * speed;
                 
                 var deltaVector = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
 

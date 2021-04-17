@@ -18,7 +18,7 @@ namespace Script.ObjectEngine
         public DropInfluence(Transform transform, Vector3 direction, float allTime, Action action)
         {
             _transform = transform;
-            
+        
             _start = transform.localPosition;
             _finish = transform.localPosition + direction;
             
@@ -39,9 +39,11 @@ namespace Script.ObjectEngine
 
         private bool Drop(float speed = 1)
         {
-            _currentTime += (Time.deltaTime < 0.05? Time.deltaTime : 0.02f) * speed;
+            _currentTime += Time.fixedDeltaTime /*(Time.deltaTime < 0.05? Time.deltaTime : 0.05f)*/ * speed;
             _transform.localPosition = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
-
+            
+           // if()
+            
             if (_currentTime >= _allTime)
             {
                 _transform.localPosition = _finish;

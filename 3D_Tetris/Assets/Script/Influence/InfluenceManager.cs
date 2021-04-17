@@ -50,8 +50,8 @@ namespace Script.Influence
             var info = new MoveInfluence(element,offset, speed, callBack);
             _moveInfluences.Add(info);
         }
-
-        private void Update()
+        
+        private void FixedUpdate()
         {
             var i = 0;
             if(_fsm.GetCurrentState() == TetrisState.Move)
