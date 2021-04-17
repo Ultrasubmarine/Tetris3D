@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b07569f4208f34983a50edfed585a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _TimeDrop: 0.44
+  _TimeDrop: 0.4
   _TimeDropAfterDestroy: 0.3
   _TimeMove: 0.7
 --- !u!4 &31514271
@@ -383,16 +383,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _points:
-  - time: 0.3
+  - time: 0.35
     score: 9
-  - time: 0.2
-    score: 18
   - time: 0.25
-    score: 27
-  - time: 0.18
     score: 45
-  - time: 0.25
-    score: 63
   - time: 0.2
     score: 72
 --- !u!4 &33823533 stripped
@@ -16297,6 +16291,7 @@ MonoBehaviour:
   _answerElementParent: {fileID: 1459696636}
   _minHeight: 17
   _BonusMaterial: {fileID: 2100000, guid: 4a7e242d1fbda3847bd19c6c0e9ba228, type: 2}
+  _pGenerateNeedElement: 0.67
   _answerElement: {fileID: 0}
   fixedHightPosition: 0
 --- !u!4 &1634487028
@@ -19062,6 +19057,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _time: 4
   _value: 0.95
+  _slowTimeInJoystickMode: 3
+  _slowProcInJoystickMode: 0.85
 --- !u!4 &2014896471
 Transform:
   m_ObjectHideFlags: 0

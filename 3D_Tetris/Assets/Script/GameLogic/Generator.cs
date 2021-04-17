@@ -20,6 +20,8 @@ public class Generator : MonoBehaviour
     [Tooltip(" подсказка места расположения падающего элемента")] [SerializeField]
     private Material _BonusMaterial;
 
+    public float _pGenerateNeedElement = 0.5f;
+    
     private PlaneMatrix _matrix;
     private HeightHandler _heightHandler;
     private GameCamera _gameCamera;
@@ -51,7 +53,11 @@ public class Generator : MonoBehaviour
         _minPoint = _matrix.FindLowerAccessiblePlace();
         _castMatrix = CreateCastMatrix(_minPoint.y);
 
-        var newElement = GenerateElement();
+        bool isRandomElement = Random.Range(0.0f, 1.0f) >= _pGenerateNeedElement;
+        var newElement = isRandomElement? GenerateRandomElement(): GenerateElement();
+        if(isRandomElement)
+            Debug.Log("random");
+        
         CreateDuplicate(newElement);
 
         var pos = elementParent.position;
@@ -97,6 +103,7 @@ public class Generator : MonoBehaviour
 
         var createElement = _pool.CreateEmptyElement();
 
+        
         var lastPoint = new Vector3Int(_minPoint.x, 0, _minPoint.z);
         _castMatrix[_minPoint.x, 0, _minPoint.z] = false;
 
@@ -117,6 +124,43 @@ public class Generator : MonoBehaviour
         return createElement;
     }
 
+    private Element GenerateRandomElement()
+    {
+        var indexMat = Random.Range(0, _MyMaterial.Length - 1);
+        _castMatrix = new bool[3, 3, 3];
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    _castMatrix[i, j, k] = true;
+                }
+            }
+        }
+        var createElement = _pool.CreateEmptyElement();
+
+        var lastPoint = new Vector3Int(_minPoint.x, 0, _minPoint.z);
+        _castMatrix[_minPoint.x, 0, _minPoint.z] = false;
+
+        _pool.CreateBlock(lastPoint, createElement, _MyMaterial[indexMat]);
+
+        List<Vector3Int> freePlaces;
+        for (var i = 0; i < 3; i++)
+        {
+            freePlaces = FoundFreePlacesAround(lastPoint);
+            if (freePlaces.Count == 0)
+                break;
+            lastPoint = freePlaces[Random.Range(0, freePlaces.Count)];
+
+            _pool.CreateBlock(lastPoint, createElement, _MyMaterial[indexMat]);
+            _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;
+        }
+
+        return createElement;
+    }
+    
     /*private Element GenerateConcretElement()
     {
         

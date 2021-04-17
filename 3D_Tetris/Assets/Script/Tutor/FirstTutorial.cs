@@ -23,9 +23,15 @@ namespace Script.Tutor
         private int _amountSetElements = 0; 
         
         private Action OnMoveSuccess;
+        private float _pNeedElement;
+        
         private void Start()
         {
             RealizationBox.Instance.FSM.OnStart += StartGame;
+            
+            _pNeedElement = RealizationBox.Instance.generator._pGenerateNeedElement;
+            RealizationBox.Instance.generator._pGenerateNeedElement = 1;
+            
             _topPanel.alpha = 0;
             _bottomPanel.alpha = 0;
             
@@ -171,6 +177,7 @@ namespace Script.Tutor
             _hand.DOKill();
             
             RealizationBox.Instance.joystick.onStateChange -= FinishMove;
+            RealizationBox.Instance.generator._pGenerateNeedElement = _pNeedElement;
            // RealizationBox.Instance.FSM.onStateChange -= FinishMove;
         }
 
