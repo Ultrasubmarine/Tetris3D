@@ -75,4 +75,14 @@ public class Block : MonoBehaviour
         myTransform.position = Vector3.zero;
         myTransform.rotation = Quaternion.identity;
     }
+
+    // FOR override & pickable blocks
+    public virtual bool IsPickable()
+    {
+        return false;
+    }
+
+    public virtual void Pick(Element element)
+    {
+    }
 }

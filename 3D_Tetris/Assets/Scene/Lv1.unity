@@ -412,7 +412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &38568429
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9058,6 +9058,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1283215337}
   m_CullTransparentMesh: 0
+--- !u!1 &1286559695
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1286559696}
+  m_Layer: 0
+  m_Name: pickableBlocksPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1286559696
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286559695}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.94, y: -4.16, z: -0.89}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1634487028}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1290464213
 GameObject:
   m_ObjectHideFlags: 0
@@ -10077,8 +10107,11 @@ MonoBehaviour:
     type: 3}
   _blockPrefab: {fileID: 708639632095135415, guid: 960fba17cf0993c4896b41f07400b093,
     type: 3}
+  _pickableBlockPrefab: {fileID: 708639632095135415, guid: a507e54f93d83427da6696605d2c56b2,
+    type: 3}
   _elementPoolParent: {fileID: 1155972832}
   _blockPoolParent: {fileID: 1413799074}
+  _pickableBlockPoolParent: {fileID: 1286559696}
 --- !u!4 &1476940815
 Transform:
   m_ObjectHideFlags: 0
@@ -16308,6 +16341,7 @@ Transform:
   - {fileID: 1413799074}
   - {fileID: 1476940815}
   - {fileID: 1155972832}
+  - {fileID: 1286559696}
   m_Father: {fileID: 876679918}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

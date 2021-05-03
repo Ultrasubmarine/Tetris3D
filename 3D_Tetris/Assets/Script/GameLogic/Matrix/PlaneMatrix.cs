@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using IntegerExtension;
+using Script.GameLogic.GameItems;
 
 public class PlaneMatrix : Singleton<PlaneMatrix>
 {
@@ -35,6 +37,26 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         _limitHeight = limit;
     }
 
+    #region FOR_PICKABLE_BLOCKS
+    public bool BindBlock(Block block) //for pickable blocks
+    {
+        if (ReferenceEquals(_matrix[block.coordinates.x.ToIndex(), block.coordinates.y, block.coordinates.z.ToIndex()], null))
+        {
+            _matrix[block.coordinates.x.ToIndex(), block.coordinates.y, block.coordinates.z.ToIndex()] = block;
+            return true;
+        }
+        return false;
+    }
+
+    public void UnbindBlock(Block block)
+    {
+        if (ReferenceEquals(_matrix[block.coordinates.x.ToIndex(), block.coordinates.y, block.coordinates.z.ToIndex()], block))
+        {
+            _matrix[block.coordinates.x.ToIndex(), block.coordinates.y, block.coordinates.z.ToIndex()] = null;
+        }
+    }
+    #endregion
+    
     public bool CheckEmptyPlaсe(Element element, Vector3Int direction, bool forPlayerMove = false)
     {
         if (!element)
@@ -53,6 +75,8 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
 
                 if (!ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()], null))
                 {
+                    if (_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()].IsPickable())
+                        continue;
                     if (!element._isBind)
                         return false;
                     if (!element.blocks.Contains(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y,
@@ -68,6 +92,32 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         return true;
     }
 
+
+    public List<Block> GetPickableBlocksForElement(Element element)
+    {
+        if (!element)
+            return null;
+        if (element.blocks.Count == 0)
+            return null;
+
+        List<Block> PickableBlocks = new List<Block>();
+        Vector3Int newCoordinat;
+        foreach (var item in element.blocks)
+            if (!item.isDestroy)
+            {
+                newCoordinat = new Vector3Int(item.coordinates.x, item.coordinates.y, item.coordinates.z);
+
+                if (newCoordinat.OutOfCoordinatLimit())
+                    return null;
+
+                if (!ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()], null))
+                {
+                    if (_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()].IsPickable())
+                        PickableBlocks.Add(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()]);
+                }
+            }
+        return PickableBlocks;
+    }
     public bool CheckEmptyPlace(int x_index, int y_index, int z_index)
     {
         return ReferenceEquals(_matrix[x_index, y_index, z_index], null);

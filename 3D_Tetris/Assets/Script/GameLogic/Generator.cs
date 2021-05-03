@@ -48,10 +48,17 @@ public class Generator : MonoBehaviour
         _answerElement.gameObject.SetActive(false);
     }
 
+    public void GeneratePickableBlock()
+    {
+        var pBlock = _pool.CreatePickableBlock(new Vector3Int(0, _matrix.limitHeight -2, 0));
+        _matrix.BindBlock(pBlock);
+    }
     public Element GenerationNewElement(Transform elementParent)
     {
         _minPoint = _matrix.FindLowerAccessiblePlace();
         _castMatrix = CreateCastMatrix(_minPoint.y);
+
+        GeneratePickableBlock();
 
         bool isRandomElement = Random.Range(0.0f, 1.0f) >= _pGenerateNeedElement;
         var newElement = isRandomElement? GenerateRandomElement(): GenerateElement();

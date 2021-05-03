@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Script.GameLogic.GameItems;
 using UnityEngine;
 
 namespace Script.GameLogic.TetrisElement
@@ -10,7 +11,7 @@ namespace Script.GameLogic.TetrisElement
         
         private PlaneMatrix _matrix;
         private GameLogicPool _pool;
-
+        
         private Transform _myTransform;
 
         private void Start()
@@ -103,6 +104,11 @@ namespace Script.GameLogic.TetrisElement
             ElementData.RemoveAll();
             
             onDeleteAllElements?.Invoke();
+        }
+
+        public void DeletePickableBlock(PickableBlock pBlock)
+        {
+            _pool.DeletePickableBlock(pBlock);
         }
     }
 }

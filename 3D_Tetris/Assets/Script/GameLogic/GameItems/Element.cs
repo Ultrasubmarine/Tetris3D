@@ -28,6 +28,8 @@ public class Element : MonoBehaviour
     public bool _isBind = false;
     
     public Transform myTransform { get; private set; }
+
+    public bool isFreeze { get; private set; } = false;
     
     [SerializeField] private List<Block> _blocks = new List<Block>();
 
@@ -44,6 +46,7 @@ public class Element : MonoBehaviour
     {
         myTransform.localRotation = Quaternion.identity;
         myTransform.localPosition = Vector3.zero;
+        isFreeze = false;
     }
 
     public void AddBlock(Block newBlock)

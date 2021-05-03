@@ -1,4 +1,5 @@
-﻿using Script.Influence;
+﻿using Script.GameLogic.GameItems;
+using Script.Influence;
 using UnityEngine;
 
 namespace Script.GameLogic.TetrisElement
@@ -13,11 +14,14 @@ namespace Script.GameLogic.TetrisElement
 
         private int _dropElementCount;
 
+        private ElementCleaner _cleaner;
+
         private void Start()
         {
             _matrix = RealizationBox.Instance.matrix;
             _fsm = RealizationBox.Instance.FSM;
             _influence = RealizationBox.Instance.influenceManager;
+            _cleaner = RealizationBox.Instance.elementCleaner;
         }
 
         #region  функции падения нового эл-та ( и его слияние)
@@ -26,6 +30,14 @@ namespace Script.GameLogic.TetrisElement
         {
             ElementData.newElement.LogicDrop();
             _influence.AddDrop(ElementData.newElement.myTransform, Vector3.down, global::Speed.timeDrop, CallDrop);
+            
+            var pickableBlocks = _matrix.GetPickableBlocksForElement(ElementData.newElement);
+            foreach (var pBlock in pickableBlocks)
+            {
+                pBlock.Pick(ElementData.newElement);
+                _matrix.UnbindBlock(pBlock);
+                _cleaner.DeletePickableBlock((PickableBlock)pBlock);
+            }
         }
 
         private void CallDrop()
@@ -66,6 +78,14 @@ namespace Script.GameLogic.TetrisElement
 
                     _influence.AddDrop(item.myTransform, Vector3.down, global::Speed.timeDropAfterDestroy,
                         DecrementDropElementsCount);
+                    
+                    var pickableBlocks = _matrix.GetPickableBlocksForElement(item);
+                    foreach (var pBlock in pickableBlocks)
+                    {
+                        pBlock.Pick(item);
+                        _matrix.UnbindBlock(pBlock);
+                        _cleaner.DeletePickableBlock((PickableBlock)pBlock);
+                    }
                 }
                 else
                 {

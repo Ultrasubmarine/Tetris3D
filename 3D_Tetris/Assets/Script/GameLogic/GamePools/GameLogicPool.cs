@@ -1,17 +1,21 @@
 ﻿using Helper.Patterns;
 using IntegerExtension;
+using Script.GameLogic.GameItems;
 using UnityEngine;
 
 public class GameLogicPool : MonoBehaviour
 {
     [SerializeField] private GameObject _elementPrefab;
     [SerializeField] private GameObject _blockPrefab;
+    [SerializeField] private GameObject _pickableBlockPrefab;
 
     [SerializeField] private Transform _elementPoolParent;
     [SerializeField] private Transform _blockPoolParent;
+    [SerializeField] private Transform _pickableBlockPoolParent;
     
     private Pool<Element> _elementPool;
     private Pool<Block>   _blockPool;
+    private Pool<PickableBlock> _pickableBlockPool;
 
     public Element CreateEmptyElement()
     {
@@ -29,6 +33,15 @@ public class GameLogicPool : MonoBehaviour
         element.AddBlock(currBlock);
     }
 
+    public PickableBlock CreatePickableBlock(Vector3Int position)
+    {
+        var currBlock = _pickableBlockPool.Pop(true);
+        currBlock.SetCoordinates(position.x.ToCoordinat(), position.y, position.z.ToCoordinat());
+
+        SetBlockPosition(currBlock);
+        return currBlock;
+    }
+    
     private void SetBlockPosition(Block block)
     {
         var position = new Vector3(block.coordinates.x, block.coordinates.y, block.coordinates.z);
@@ -53,10 +66,17 @@ public class GameLogicPool : MonoBehaviour
         _blockPool.Push(block);
     }
     
+    public void DeletePickableBlock(PickableBlock pBlock)
+    {
+        pBlock.gameObject.SetActive(false);
+        _pickableBlockPool.Push(pBlock);
+    }
+    
     
     private void Start()
     {
         _elementPool = new Pool<Element>(_elementPrefab.GetComponent<Element>(), _elementPoolParent);
         _blockPool = new Pool<Block>(_blockPrefab.GetComponent<Block>(), _blockPoolParent);
+        _pickableBlockPool = new Pool<PickableBlock>(_pickableBlockPrefab.GetComponent<PickableBlock>(), _pickableBlockPoolParent);
     }
 }
