@@ -12,81 +12,89 @@ AssetImportWorker0
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-52945
+51832
 Successfully changed project path to: /Users/sbm/Projects/T3D/3D_Tetris
 /Users/sbm/Projects/T3D/3D_Tetris
 Using Asset Import Pipeline V2.
-Refreshing native plugins compatible for Editor in 48.54 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 54.12 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2020.2.6f1 (8a2143876886)
 [Subsystems] Discovering subsystems at path /Applications/Unity/Hub/Editor/2020.2.6f1/Unity.app/Contents/Resources/UnitySubsystems
 [Subsystems] Discovering subsystems at path /Users/sbm/Projects/T3D/3D_Tetris/Assets
 GfxDevice: creating device client; threaded=0
-2021-03-28 12:45:20.157 Unity[3445:257781] (null) preferred device: Apple M1 (high power)
-2021-03-28 12:45:20.157 Unity[3445:257781] Metal devices available: 1
-2021-03-28 12:45:20.157 Unity[3445:257781] 0: Apple M1 (high power)
-2021-03-28 12:45:20.157 Unity[3445:257781] Using device Apple M1 (high power)
+2021-05-02 16:10:51.383 Unity[37897:3508426] (null) preferred device: Apple M1 (high power)
+2021-05-02 16:10:51.383 Unity[37897:3508426] Metal devices available: 1
+2021-05-02 16:10:51.383 Unity[37897:3508426] 0: Apple M1 (high power)
+2021-05-02 16:10:51.383 Unity[37897:3508426] Using device Apple M1 (high power)
 Initializing Metal device caps: Apple M1
 Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
 Initialize mono
 Mono path[0] = '/Applications/Unity/Hub/Editor/2020.2.6f1/Unity.app/Contents/Managed'
 Mono path[1] = '/Applications/Unity/Hub/Editor/2020.2.6f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/unityjit'
 Mono config path = '/Applications/Unity/Hub/Editor/2020.2.6f1/Unity.app/Contents/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56445
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56897
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: /Applications/Unity/Hub/Editor/2020.2.6f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
 Register platform support module: /Applications/Unity/Hub/Editor/2020.2.6f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.000465 seconds.
+Registered in 0.002670 seconds.
 Native extension for WindowsStandalone target not found
 Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 49.88 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 50.66 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Invoked RoslynAnalysisRunner static constructor.
 RoslynAnalysisRunner will not be running.
 RoslynAnalysisRunner has terminated.
 Mono: successfully reloaded assembly
-- Completed reload, in  2.679 seconds
+- Completed reload, in  2.877 seconds
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.001600 seconds.
+Registered in 0.005296 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
 Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 50.57 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 51.44 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Invoked RoslynAnalysisRunner static constructor.
 RoslynAnalysisRunner will not be running.
 RoslynAnalysisRunner has terminated.
 Mono: successfully reloaded assembly
-- Completed reload, in  2.014 seconds
+- Completed reload, in  1.818 seconds
 Platform modules already initialized, skipping
 ========================================================================
 Worker process is ready to serve import requests
 Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
 Launching external process: /Applications/Unity/Hub/Editor/2020.2.6f1/Unity.app/Contents/Tools/UnityShaderCompiler
-Launched and connected shader compiler UnityShaderCompiler after 0.02 seconds
-Refreshing native plugins compatible for Editor in 0.56 ms, found 1 plugins.
+Launched and connected shader compiler UnityShaderCompiler after 0.03 seconds
+Refreshing native plugins compatible for Editor in 0.61 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3079 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 240.7 MB.
-System memory in use after: 241.0 MB.
+Unloading 3084 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 238.8 MB.
+System memory in use after: 238.7 MB.
 
-Unloading 42 unused Assets to reduce memory usage. Loaded Objects now: 3529.
-Total: 2.577625 ms (FindLiveObjects: 0.224167 ms CreateObjectMapping: 0.072083 ms MarkObjects: 2.250125 ms  DeleteObjects: 0.030125 ms)
-
-========================================================================
-Received Import Request.
-  path: Assets/Prefabs/Logic
-  artifactKey: Guid(f8ec76b2ebd319d459f6edad6f342f90) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/Logic using Guid(f8ec76b2ebd319d459f6edad6f342f90) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '326a0ae5bda87c21c7f7b3c17478316b') in 0.008569 seconds
-  Import took 0.013094 seconds .
+Unloading 43 unused Assets to reduce memory usage. Loaded Objects now: 3535.
+Total: 2.206583 ms (FindLiveObjects: 0.258708 ms CreateObjectMapping: 0.073792 ms MarkObjects: 1.475541 ms  DeleteObjects: 0.397625 ms)
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000245 seconds.
-  path: Assets/Prefabs/Logic/Block.prefab
-  artifactKey: Guid(960fba17cf0993c4896b41f07400b093) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/Logic/Block.prefab using Guid(960fba17cf0993c4896b41f07400b093) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5e77f6af5cd2164c7e5e6af48c5c0c27') in 1.141573 seconds
-  Import took 1.145764 seconds .
+  path: Assets/HandPainted Lava Textures/Demo
+  artifactKey: Guid(d86a3df6a6cac5243bae62ef5387b1c1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/HandPainted Lava Textures/Demo using Guid(d86a3df6a6cac5243bae62ef5387b1c1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b2e5306158d9f1e30c15cf472e3fca80') in 0.008008 seconds
+  Import took 0.011976 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 15.947016 seconds.
+  path: Assets/HandPainted Lava Textures
+  artifactKey: Guid(36d0a6ead542add40bb6d774a0fe14da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/HandPainted Lava Textures using Guid(36d0a6ead542add40bb6d774a0fe14da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '08057224de4778df356ced7956c7908b') in 0.001508 seconds
+  Import took 0.008790 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.437487 seconds.
+  path: Assets/HandPainted Lava Textures/Materials
+  artifactKey: Guid(e96c669152a3f7c44bae1633ca09a197) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/HandPainted Lava Textures/Materials using Guid(e96c669152a3f7c44bae1633ca09a197) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4f19079f364bc3532919066d27738500') in 0.001484 seconds
+  Import took 0.008841 seconds .
 
