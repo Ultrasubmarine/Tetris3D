@@ -58,7 +58,7 @@ namespace Script.Projections
             }
         }
         
-        private void Destroy()
+        public void Destroy()
         {
             foreach (var item in _ceilingList) _pool.Push(item);
             _ceilingList.Clear();

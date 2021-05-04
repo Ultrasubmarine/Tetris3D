@@ -42,7 +42,7 @@ public class RealizationBox : Singleton<RealizationBox>
     [Header("Projections")] 
     [SerializeField] private ProjectionLineManager _projectionLineManager;
     [SerializeField] private Projection _projection;
-    
+    [SerializeField] private Ceiling _ceiling;
     
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
@@ -67,6 +67,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public MovementJoystick joystick => _joystick;
     public TapsEvents tapsEvents => _tapsEvents;
     public IslandTurn islandTurn => _islandTurn;
+    public Ceiling ceiling => _ceiling;
     
     private void Start()
     {
