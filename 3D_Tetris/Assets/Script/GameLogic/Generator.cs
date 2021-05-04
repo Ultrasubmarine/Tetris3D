@@ -52,6 +52,7 @@ public class Generator : MonoBehaviour
     {
         var pBlock = _pool.CreatePickableBlock(new Vector3Int(0, _matrix.limitHeight -2, 0));
         _matrix.BindBlock(pBlock);
+        RealizationBox.Instance.projectionLineManager.AddPickableProjection(pBlock);
     }
     public Element GenerationNewElement(Transform elementParent)
     {

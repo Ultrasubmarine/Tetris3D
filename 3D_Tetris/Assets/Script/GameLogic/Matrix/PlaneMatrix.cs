@@ -38,6 +38,33 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     }
 
     #region FOR_PICKABLE_BLOCKS
+    
+    public List<Block> GetPickableBlocksForElement(Element element)
+    {
+        if (!element)
+            return null;
+        if (element.blocks.Count == 0)
+            return null;
+
+        List<Block> PickableBlocks = new List<Block>();
+        Vector3Int newCoordinat;
+        foreach (var item in element.blocks)
+            if (!item.isDestroy)
+            {
+                newCoordinat = new Vector3Int(item.coordinates.x, item.coordinates.y, item.coordinates.z);
+
+                if (newCoordinat.OutOfCoordinatLimit())
+                    return null;
+
+                if (!ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()], null))
+                {
+                    if (_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()].IsPickable())
+                        PickableBlocks.Add(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()]);
+                }
+            }
+        return PickableBlocks;
+    }
+
     public bool BindBlock(Block block) //for pickable blocks
     {
         if (ReferenceEquals(_matrix[block.coordinates.x.ToIndex(), block.coordinates.y, block.coordinates.z.ToIndex()], null))
@@ -91,33 +118,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
             }
         return true;
     }
-
-
-    public List<Block> GetPickableBlocksForElement(Element element)
-    {
-        if (!element)
-            return null;
-        if (element.blocks.Count == 0)
-            return null;
-
-        List<Block> PickableBlocks = new List<Block>();
-        Vector3Int newCoordinat;
-        foreach (var item in element.blocks)
-            if (!item.isDestroy)
-            {
-                newCoordinat = new Vector3Int(item.coordinates.x, item.coordinates.y, item.coordinates.z);
-
-                if (newCoordinat.OutOfCoordinatLimit())
-                    return null;
-
-                if (!ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()], null))
-                {
-                    if (_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()].IsPickable())
-                        PickableBlocks.Add(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()]);
-                }
-            }
-        return PickableBlocks;
-    }
+    
     public bool CheckEmptyPlace(int x_index, int y_index, int z_index)
     {
         return ReferenceEquals(_matrix[x_index, y_index, z_index], null);
@@ -186,7 +187,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     {
         for (var x = 0; x < wight; x++)
         for (var z = 0; z < wight; z++)
-            if (ReferenceEquals(_matrix[x, layer, z], null))
+            if (ReferenceEquals(_matrix[x, layer, z], null) || _matrix[x, layer, z].IsPickable())
                 return false;
         return true;
     }
@@ -199,6 +200,10 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         for (var z = 0; z < wight; z++)
         {
             _matrix[x, layer, z].isDestroy = true;
+            
+            if(_matrix[x, layer, z].IsPickable())
+                _matrix[x, layer, z].Pick(null);
+            
             _matrix[x, layer, z] = null;
         }
     }
@@ -229,7 +234,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     public int MinHeightInCoordinates(int x_index, int z_index)
     {
         for (var y = _matrix.GetUpperBound(1) - 1; y >= 0; --y)
-            if (!ReferenceEquals(_matrix[x_index, y, z_index], null))
+            if (!ReferenceEquals(_matrix[x_index, y, z_index], null) && !_matrix[x_index, y, z_index].IsPickable())
                 return y + 1;
         return 0;
     }
