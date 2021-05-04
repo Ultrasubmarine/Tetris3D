@@ -105,6 +105,16 @@ namespace Script.Projections
             pBlock.onPick += DeletePickableProjection;
         }
 
+        public void UpdatePickableProjections()
+        {
+            foreach (var proj in _pickableProjections.Values)
+            {
+                var blockXZ = proj.block.xz;
+                float minHeightInCoordinates = _matrix.MinHeightInCoordinates(blockXZ.x.ToIndex(), blockXZ.z.ToIndex());
+                proj.projection.SetMinBottomHeight(minHeightInCoordinates);
+            }
+        }
+        
         public void DeletePickableProjection(PickableBlock pBlock)
         {
             pBlock.onPick -= DeletePickableProjection;
