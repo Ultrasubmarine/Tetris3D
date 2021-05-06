@@ -27,10 +27,9 @@ public class DropState : AbstractState<TetrisState>
         }
         
         var empty = _matrix.CheckEmptyPlaсe(ElementData.newElement, new Vector3Int(0, -1, 0));
-        if (empty)
+        if (empty && !ElementData.newElement.isFreeze)
         {
             _elementDropper.StartDropElement();
-            
             
             _FSM.SetNewState(TetrisState.WaitInfluence);
             return;

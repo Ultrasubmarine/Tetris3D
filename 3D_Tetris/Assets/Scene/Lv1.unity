@@ -3417,6 +3417,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96f9de264c1ae204f82c370428079975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeBetweenTaps: 0.2
+  timeSwipe: 0.2
   _blockTapEvents: 0
 --- !u!114 &483158835
 MonoBehaviour:
@@ -6186,7 +6188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _testObj: {fileID: 0}
-  _faster: 4
+  _faster: 5
 --- !u!4 &770432239
 Transform:
   m_ObjectHideFlags: 0
@@ -10108,7 +10110,7 @@ MonoBehaviour:
     type: 3}
   _blockPrefab: {fileID: 708639632095135415, guid: 960fba17cf0993c4896b41f07400b093,
     type: 3}
-  _pickableBlockPrefab: {fileID: 708639632095135415, guid: a507e54f93d83427da6696605d2c56b2,
+  _pickableBlockPrefab: {fileID: 708639632095135415, guid: f642e670e57384c7ba9726cc6c46a1b0,
     type: 3}
   _elementPoolParent: {fileID: 1155972832}
   _blockPoolParent: {fileID: 1413799074}
@@ -16323,6 +16325,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
   - {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
   _answerElementParent: {fileID: 1459696636}
+  freezeMaterial: {fileID: 2100000, guid: 3f5edf893e933b146877d393842279b9, type: 2}
   _minHeight: 17
   _BonusMaterial: {fileID: 2100000, guid: 4a7e242d1fbda3847bd19c6c0e9ba228, type: 2}
   _pGenerateNeedElement: 0.67
@@ -19092,8 +19095,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _time: 4
   _value: 0.95
-  _slowTimeInJoystickMode: 3
+  _slowTimeInJoystickMode: 5
   _slowProcInJoystickMode: 0.85
+  _slowFreezeElement: 0.85
 --- !u!4 &2014896471
 Transform:
   m_ObjectHideFlags: 0
@@ -22855,6 +22859,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96f9de264c1ae204f82c370428079975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeBetweenTaps: 0.2
+  timeSwipe: 0.2
   _blockTapEvents: 0
 --- !u!114 &7434318747780587982
 MonoBehaviour:

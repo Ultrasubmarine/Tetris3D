@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using Script.Controller;
 using Script.Controller.TouchController;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class SlowManager : MonoBehaviour
     
     [SerializeField] private float _slowProcInJoystickMode = 0.85f;
 
+    [SerializeField] private float _slowFreezeElement = 0.85f;
+    
     public struct Slow
     {
         public Timer timer;
@@ -45,6 +48,10 @@ public class SlowManager : MonoBehaviour
     private Slow? TurnModeSlow;
 
     private bool _isPauseSlow;
+
+    private bool _isFeezeSlow = false;
+    
+    private Slow? FreezeElementModeSlow;
     
     public void AddedSlow(float time, float value)
     {
@@ -147,10 +154,14 @@ public class SlowManager : MonoBehaviour
     private void CalculateSlow()
     {
         _slowlerValue = 0;
-
+        
         if (_isPauseSlow)
         {
             _slowlerValue = 1;
+        }
+        else if (_isFeezeSlow)
+        {
+            _slowlerValue = _slowFreezeElement;
         }
         else
         {
@@ -207,4 +218,23 @@ public class SlowManager : MonoBehaviour
     {
         RemoveTurnModeSlow();
     }
+
+    public void FreezeElementSlowOn()
+    {
+        _isFeezeSlow = true;
+        RealizationBox.Instance.FSM.onStateChange += FreezeElementSlowOff;
+   //     DOTween.To(() => _slowlerValue, x => _slowlerValue = x, _slowFreezeElement, 0.1f).OnUpdate(()=>onUpdateValue?.Invoke());
+        CalculateSlow(); 
+    }
+
+    public void FreezeElementSlowOff( TetrisState state)
+    {
+        if (state == TetrisState.MergeElement || state == TetrisState.GenerateElement)
+        {
+            _isFeezeSlow = false;
+            RealizationBox.Instance.FSM.onStateChange += FreezeElementSlowOff;
+            CalculateSlow();  
+        }
+    }
+    
 }

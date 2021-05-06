@@ -13,6 +13,7 @@ public class Generator : MonoBehaviour
 
     [SerializeField] private Material[] _MyMaterial;
     [SerializeField] private GameObject _answerElementParent;
+    public Material freezeMaterial;
 
     [Space(10)] [Header("GD Balance height generate element")]
     [SerializeField] private int _minHeight;
@@ -50,9 +51,9 @@ public class Generator : MonoBehaviour
 
     public void GeneratePickableBlock()
     {
-        var pBlock = _pool.CreatePickableBlock(new Vector3Int(0, _matrix.limitHeight -2, 0));
-        _matrix.BindBlock(pBlock);
-        RealizationBox.Instance.projectionLineManager.AddPickableProjection(pBlock);
+       // var pBlock = _pool.CreatePickableBlock(new Vector3Int(0, _matrix.limitHeight -5, 0));
+       // _matrix.BindBlock(pBlock);
+       // RealizationBox.Instance.projectionLineManager.AddPickableProjection(pBlock);
     }
     public Element GenerationNewElement(Transform elementParent)
     {

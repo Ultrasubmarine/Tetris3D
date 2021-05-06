@@ -68,7 +68,7 @@ namespace Script.GameLogic.TetrisElement
             foreach (var item in ElementData.mergerElements)
             {
                 var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
-                if (empty) //если коллизии нет, элемент может падать вниз
+                if (empty && !item.isFreeze) //если коллизии нет, элемент может падать вниз
                 {
                     if (item._isBind)
                         _matrix.UnbindToMatrix(item);

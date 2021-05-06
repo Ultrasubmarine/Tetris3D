@@ -26,10 +26,9 @@ public class Element : MonoBehaviour
     }
     
     public bool _isBind = false;
-    
     public Transform myTransform { get; private set; }
 
-    public bool isFreeze { get; private set; } = false;
+    public bool isFreeze { get; set; } = false;
     
     [SerializeField] private List<Block> _blocks = new List<Block>();
 
