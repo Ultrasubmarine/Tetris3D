@@ -6,6 +6,8 @@ namespace Script.GameLogic.TetrisElement
 {
     public static class ElementData
     {
+        public readonly static string NewElementTag = "newElementTag";
+        
         public static event Action onNewElementUpdate;
         public static event Action onMergeElement;
         public static Element newElement { get; private set; }
@@ -24,12 +26,24 @@ namespace Script.GameLogic.TetrisElement
         {
             newElement = loader.Invoke();
             onNewElementUpdate?.Invoke();
+            
+            // add TAG
+            foreach (var block in newElement.blocks)
+            {
+                block.tag = NewElementTag;
+            }
         }
 
         public static void MergeNewElement()
         {
             _mergerElements.Add(newElement);
             onMergeElement?.Invoke();
+            
+            // remove TAG
+            foreach (var block in newElement.blocks)
+            {
+                block.tag = "none";
+            }
             newElement = null;
         }
 
