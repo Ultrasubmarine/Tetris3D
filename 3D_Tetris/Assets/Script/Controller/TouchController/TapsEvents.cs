@@ -1,6 +1,5 @@
 ﻿using System;
 using Script.Controller.TouchController;
-using Script.GameLogic.TetrisElement;
 using UnityEngine.EventSystems;
 using UnityEngine;
 
@@ -50,7 +49,9 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
 
     public BlockingType _blockTapEvents = BlockingType.None;
 
-    private void Awake()
+    private int amountTap = 0;
+    
+  private void Awake()
   {
       _touchType = TouchEventType.None;
   }
@@ -65,52 +66,62 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
 
   public void OnPointerDown(PointerEventData eventData)
   {
+        amountTap++;
         _touchType = TouchEventType.AnalyzingTap;
-         
-        if (!doubleTapInitialized)
-        {
-            // init double tapping
-            doubleTapInitialized = true;
-            firstTapTime = Time.time;
-        }
-        else if (Time.time - firstTapTime < timeBetweenTaps)
-        {
-            // here we have tapped second time before "single tap" has been invoked
-            CancelInvoke("SingleTap"); // cancel "single tap" invoking
-            CancelInvoke("DragIsland"); // cancel "single tap" invoking
-            DoubleTap();
-        }
-        
+
+        _lastPosition = Input.mousePosition;
+
+        float waitTime = timeBetweenTaps;
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
         if (Physics.Raycast(ray, out hit))
         {
             if (hit.collider.CompareTag("Island"))
             {
                 if (_blockTapEvents == BlockingType.None || _blockTapEvents == BlockingType.SingleAndDrag)
                 {
-                    Invoke("DragIsland", timeBetweenTaps);
+                    waitTime *= 1.15f;
                 }
             }
-            else if (hit.collider.CompareTag(ElementData.NewElementTag))
-            {
-                DoubleTap();
-            }
-            else
-            {
-                Invoke("SingleTap", timeBetweenTaps);
-            
-            }
         }
-        else
+        
+        // invoke single tap after max time between taps
+        Invoke("SingleTap", waitTime);
+ 
+        if (!doubleTapInitialized)
         {
-            Invoke("SingleTap", timeBetweenTaps);
+            // init double tapping
+            doubleTapInitialized = true;
+            firstTapTime = Time.time;
+        }
+        else if (Time.time - firstTapTime < waitTime || amountTap > 1)
+        {
+            // here we have tapped second time before "single tap" has been invoked
+            CancelInvoke("SingleTap"); // cancel "single tap" invoking
+            DoubleTap();
         }
     }
 
-  void SingleTap()
+    private void Update()
     {
+        if (_touchType == TouchEventType.AnalyzingTap)
+        {
+            if (Mathf.Abs(Input.mousePosition.x - _lastPosition.x) > _deltaPosition) // something with Island
+            {
+                IslandDrag();
+            }
+        }
+    }
+
+    void SingleTap()
+    {
+        if (amountTap > 1)
+        {
+            DoubleTap();
+            return;
+        }
+        
+        amountTap = 0;
         if (Input.touchCount == 0) // not work
         {
             _touchType = TouchEventType.None;
@@ -133,6 +144,7 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
  
     void DoubleTap()
     {
+        amountTap = 0;
         doubleTapInitialized = false;
         _touchType = TouchEventType.DoubleTap;
         if(OnDoubleTap != null)
@@ -142,15 +154,9 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
         }
     }
 
-    void DragIsland()
-    {
-        doubleTapInitialized = false;
-        _touchType = TouchEventType.IslandDrag;
-        OnDragIceIsland?.Invoke();
-    }
     void IslandDrag()
     {
-        doubleTapInitialized = false;
+        amountTap = 0;
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
