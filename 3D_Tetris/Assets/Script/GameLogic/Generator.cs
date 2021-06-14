@@ -38,6 +38,8 @@ public class Generator : MonoBehaviour
     public Element _answerElement;
 
     public int fixedHightPosition = 0;
+
+    [SerializeField] private int stepOfHardElement = 2; // 1-min 3-max
     
     private void Start()
     {
@@ -201,37 +203,55 @@ public class Generator : MonoBehaviour
         _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
 
         List<Vector3Int> freePlaces;
+        
+        Vector3Int elementComplexity = Vector3Int.zero;
         for (var i = 0; i < 3; i++)
         {
-            freePlaces = FoundFreePlacesAround(firstPoint, lastPoint);
+            freePlaces = FoundFreePlacesAround(firstPoint, lastPoint, elementComplexity);
             if (freePlaces.Count == 0)
                 break;
-            lastPoint = freePlaces[Random.Range(0, freePlaces.Count)];
-
+            
+            var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
+            var different = lastPoint - generatePoint;
+            lastPoint = generatePoint;
+            
             _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
             _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;
+
+            if (different.x != 0)
+                elementComplexity.x = 1;
+            else if (different.y != 0)
+                elementComplexity.y = 1;
+            else if (different.z != 0)
+                elementComplexity.z = 1;
         }
         return createElement;
     }
 
-    private List<Vector3Int> FoundFreePlacesAround(Vector3Int firstPoint, Vector3Int point)
+    private List<Vector3Int> FoundFreePlacesAround(Vector3Int firstPoint, Vector3Int point, Vector3Int elementComplexity)
     {
         var listPov = new List<Vector3Int>();
-
-        if (CheckEmptyPlace(point + new Vector3Int(1, 0, 0)))
+        var complexity = elementComplexity.x + elementComplexity.y + elementComplexity.z;
+        
+        if (CheckEmptyPlace(point + new Vector3Int(1, 0, 0)) 
+            && (1 + elementComplexity.y + elementComplexity.z <= stepOfHardElement))
             listPov.Add(point + new Vector3Int(1, 0, 0));
 
-        if (CheckEmptyPlace(point + new Vector3Int(-1, 0, 0)))
+        if (CheckEmptyPlace(point + new Vector3Int(-1, 0, 0))
+            && (1 + elementComplexity.y + elementComplexity.z <= stepOfHardElement))
             listPov.Add(point + new Vector3Int(-1, 0, 0));
-
-        if (CheckEmptyPlace(point + new Vector3Int(0, 0, 1)))
+        
+        if (CheckEmptyPlace(point + new Vector3Int(0, 0, 1))
+            && (elementComplexity.x + elementComplexity.y + 1 <= stepOfHardElement))
             listPov.Add(point + new Vector3Int(0, 0, 1));
-
-        if (CheckEmptyPlace(point + new Vector3Int(0, 0, -1)))
+        
+        if (CheckEmptyPlace(point + new Vector3Int(0, 0, -1))
+            && (elementComplexity.x + elementComplexity.y + 1 <= stepOfHardElement))
             listPov.Add(point + new Vector3Int(0, 0, -1));
 
         if (point.y - firstPoint.y < 2)//(point.y < 7 - 1)//2)
-            if (CheckEmptyPlace(point + new Vector3Int(0, 1, 0)))
+            if (CheckEmptyPlace(point + new Vector3Int(0, 1, 0))
+                && (elementComplexity.x + 1 + elementComplexity.z <= stepOfHardElement))
                 listPov.Add(point + new Vector3Int(0, 1, 0));
 
         return listPov;
