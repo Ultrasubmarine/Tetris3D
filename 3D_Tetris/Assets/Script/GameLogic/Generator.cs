@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using IntegerExtension;
-using Script.Controller;
 using Script.Influence;
 using Random = UnityEngine.Random;
+
+public struct PlacePoint
+{
+    public Vector3Int position;
+    public float p;
+}
 
 public class Generator : MonoBehaviour
 {
@@ -51,9 +56,9 @@ public class Generator : MonoBehaviour
 
     public void GeneratePickableBlock()
     {
-       // var pBlock = _pool.CreatePickableBlock(new Vector3Int(0, _matrix.limitHeight -5, 0));
-       // _matrix.BindBlock(pBlock);
-       // RealizationBox.Instance.projectionLineManager.AddPickableProjection(pBlock);
+       var pBlock = _pool.CreatePickableBlock(new Vector3Int(0, _matrix.limitHeight -5, 0));
+       _matrix.BindBlock(pBlock);
+       RealizationBox.Instance.projectionLineManager.AddPickableProjection(pBlock);
     }
     public Element GenerationNewElement(Transform elementParent)
     {
@@ -62,11 +67,7 @@ public class Generator : MonoBehaviour
 
       //  GeneratePickableBlock();
       
-      //  bool isRandomElement = Random.Range(0.0f, 1.0f) >= _pGenerateNeedElement;
-       // var newElement = isRandomElement? GenerateRandomElement(): GenerateElement();
         var newElement = GenerateElement();
-        // if(isRandomElement)
-        //     Debug.Log("random");
         
         CreateDuplicate(newElement);
 
@@ -110,18 +111,76 @@ public class Generator : MonoBehaviour
     private List<Vector3Int> CalculateEmptyPlaceInCastMatrix()
     {
         List<Vector3Int> place = new List<Vector3Int>();
-
-        for (var x = 0; x < 3; x++)
-        for (var z = 0; z < 3; z++)
-        for (var y = 0; y < 7-3; y++)
+        
+        for (var x = 0; x < _castMatrix.GetLength(0); x++)
+        for (var z = 0; z < _castMatrix.GetLength(2); z++)
+        for (var y = 0; y < _castMatrix.GetLength(1)-3; y++)
         {
             if (_castMatrix[x, y, z]) // empty
             {
-                place.Add(new Vector3Int(x, y, z));
+                if(HasNeibhords(new Vector3Int(x,y,z), 1))
+                    place.Add(new Vector3Int(x, y, z));
                 break;
             }
         }
         return place;
+    }
+
+    private bool HasNeibhords(Vector3Int point, int delay)
+    {
+        int amountOfNeighbords = 0;
+        int weight = 0;
+
+        int posNeibhord;
+        
+        posNeibhord = IsMinimalYBetween(point + new Vector3Int(1, 0, 0), point.y, point.y + delay);
+        if (posNeibhord  != 404)
+        {
+            weight += posNeibhord;
+            amountOfNeighbords++;
+        }
+        posNeibhord = IsMinimalYBetween(point + new Vector3Int(-1, 0, 0), point.y, point.y + delay);
+        if (posNeibhord  != 404)
+        {
+            weight += posNeibhord;
+            amountOfNeighbords++;
+        }
+        posNeibhord = IsMinimalYBetween(point + new Vector3Int(0, 0, 1), point.y, point.y + delay);
+        if (posNeibhord  != 404)
+        {
+            weight += posNeibhord;
+            amountOfNeighbords++;
+        }
+        posNeibhord = IsMinimalYBetween(point + new Vector3Int(0, 0, -1), point.y, point.y + delay);
+        if (posNeibhord  != 404)
+        {
+            weight += posNeibhord;
+            amountOfNeighbords++;
+        }
+        
+        if(amountOfNeighbords + weight == 0) // the tallest
+            return false;
+        return true;
+    }
+
+    // 0 - if include [min, max)
+    // 1 - if > max
+    // -1 - if < min
+    private int IsMinimalYBetween(Vector3Int point, int minY, int maxY)
+    {
+        if (point.OutOfIndexLimit())
+            return 404; // not found 
+
+        for (var y = 0; y < _castMatrix.GetLength(1) && y < maxY; y++)
+        {
+            if (_castMatrix[point.x, y, point.z]) // empty
+            {
+                if( y >= minY)
+                    return 0;
+                return -1;
+            }
+        }
+        return 1;
     }
     
     private Element GenerateElement()
@@ -131,11 +190,11 @@ public class Generator : MonoBehaviour
         var createElement = _pool.CreateEmptyElement();
 
         var emptyPlaces = CalculateEmptyPlaceInCastMatrix();
+        Debug.Log($"cont place: {emptyPlaces.Count}");
         int randomIndexPlace = Random.Range(0, emptyPlaces.Count());
 
         var firstPoint = emptyPlaces[randomIndexPlace];
-        var lastPoint = emptyPlaces[randomIndexPlace];//new Vector3Int(_minPoint.x, 0, _minPoint.z);
-       // _castMatrix[_minPoint.x, 0, _minPoint.z] = false;
+        var lastPoint = emptyPlaces[randomIndexPlace];
         _castMatrix[emptyPlaces[randomIndexPlace].x, emptyPlaces[randomIndexPlace].y, emptyPlaces[randomIndexPlace].z] = false;
 
         Vector3Int deltaY = new Vector3Int(0, firstPoint.y, 0);
@@ -152,58 +211,9 @@ public class Generator : MonoBehaviour
             _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
             _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;
         }
-
-        
-        // foreach (var block in createElement.blocks)
-        // {
-        //     block._coordinates -= deltaY;
-        // }
         return createElement;
     }
 
-    private Element GenerateRandomElement()
-    {
-        var indexMat = Random.Range(0, _MyMaterial.Length - 1);
-        _castMatrix = new bool[3, 3, 3];
-
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    _castMatrix[i, j, k] = true;
-                }
-            }
-        }
-        var createElement = _pool.CreateEmptyElement();
-
-        var lastPoint = new Vector3Int(_minPoint.x, 0, _minPoint.z);
-        var firstPoint = lastPoint;
-        _castMatrix[_minPoint.x, 0, _minPoint.z] = false;
-
-        _pool.CreateBlock(lastPoint, createElement, _MyMaterial[indexMat]);
-
-        List<Vector3Int> freePlaces;
-        for (var i = 0; i < 3; i++)
-        {
-            freePlaces = FoundFreePlacesAround(firstPoint,lastPoint);
-            if (freePlaces.Count == 0)
-                break;
-            lastPoint = freePlaces[Random.Range(0, freePlaces.Count)];
-
-            _pool.CreateBlock(lastPoint, createElement, _MyMaterial[indexMat]);
-            _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;
-        }
-
-        return createElement;
-    }
-    
-    /*private Element GenerateConcretElement()
-    {
-        
-    }*/
-    
     private List<Vector3Int> FoundFreePlacesAround(Vector3Int firstPoint, Vector3Int point)
     {
         var listPov = new List<Vector3Int>();
