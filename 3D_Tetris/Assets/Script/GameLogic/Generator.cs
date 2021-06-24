@@ -6,12 +6,6 @@ using IntegerExtension;
 using Script.Influence;
 using Random = UnityEngine.Random;
 
-public struct PlacePoint
-{
-    public Vector3Int position;
-    public float p;
-}
-
 public struct IndexVector
 {
     public Vector3Int newPoint;
@@ -53,11 +47,6 @@ public class Generator : MonoBehaviour
 
     [SerializeField] private int stepOfHardElement = 2; // 1-min 3-max
     [SerializeField] private bool growBlocksAnywhere = false; // grow more hard element
-    
-    [Tooltip(" вероятность генерации эл-та под мин. точку при предельной высоте")] 
-    [SerializeField] private float _pForMinimalElement = 0.6f;
-    [SerializeField] private int startUseHeight = 5;
-    
     
     private void Start()
     {
@@ -210,7 +199,7 @@ public class Generator : MonoBehaviour
         var createElement = _pool.CreateEmptyElement();
 
         var emptyPlaces = CalculateEmptyPlaceInCastMatrix();
-        Debug.Log($"cont place: {emptyPlaces.Count}");
+
         int randomIndexPlace = Random.Range(0, emptyPlaces.Count());
 
         var firstPoint = emptyPlaces[randomIndexPlace];
