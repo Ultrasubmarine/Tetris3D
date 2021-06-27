@@ -1,5 +1,6 @@
 ﻿using Script.Controller;
 using Script.Controller.TouchController;
+using Script.GameLogic;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
 using Script.Projections;
@@ -32,7 +33,9 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private SlowManager _slowManager;
     [SerializeField] private Transform _place;
     [SerializeField] private Speed _speed;
+    
     [SerializeField] private SpeedChanger _speedChanger;
+    [SerializeField] private GeneratorChanger _generatorChanger;
     
     [Header("UI GameControllers")]
     [SerializeField] private MovementJoystick _joystick;
@@ -62,6 +65,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public Transform place => _place;
     public Speed speed => _speed;
     public SpeedChanger speedChanger => _speedChanger;
+    public GeneratorChanger generatorChanger => _generatorChanger;
     public ProjectionLineManager projectionLineManager => _projectionLineManager;
     public Projection projection => _projection;
     public MovementJoystick joystick => _joystick;

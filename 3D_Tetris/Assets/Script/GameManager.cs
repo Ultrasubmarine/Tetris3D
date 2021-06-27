@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
         RealizationBox.Instance.haightHandler.CalculateHeight();
         RealizationBox.Instance.gameCamera.SetPositionWithoutAnimation();
         RealizationBox.Instance.speedChanger.ResetSpeed();
+        RealizationBox.Instance.generatorChanger.ResetGenerator();
         
        
         //Add boosters

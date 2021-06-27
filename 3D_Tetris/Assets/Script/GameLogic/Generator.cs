@@ -45,8 +45,8 @@ public class Generator : MonoBehaviour
 
     public int fixedHightPosition = 0;
 
-    [SerializeField] private int stepOfHardElement = 2; // 1-min 3-max
-    [SerializeField] private bool growBlocksAnywhere = false; // grow more hard element
+    [SerializeField] public int stepOfHardElement = 2; // 1-min 3-max
+    [SerializeField] public bool growBlocksAnywhere = false; // grow more hard element
     
     private void Start()
     {
