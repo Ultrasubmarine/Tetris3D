@@ -20,6 +20,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     public int limitHeight => _limitHeight;
 
     public event Action<int> OnDestroyLayer;
+    public event Action<bool> OnDestroyLayerEnd; // true - if destroy lvl
     
     protected override void Init()
     {
@@ -169,18 +170,23 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
 
     #region сбор коллекций в слоях матрицы
 
-    public bool CollectLayers()
+    public void CollectLayers()
     {
-        var flag = false;
-        ;
         for (var y = 0; y < _limitHeight; y++)
             if (CheckCollectedInLayer(y))
             {
                 DestroyLayer(y);
-                flag = true;
+                RealizationBox.Instance.gameCamera.SetStabilization();
+                RealizationBox.Instance.gameCamera.onStabilizationEnd += OnCameraStabilizationEnd;
+                return;
             }
+       OnDestroyLayerEnd?.Invoke(false);
+    }
 
-        return flag;
+    public void OnCameraStabilizationEnd()
+    {
+        RealizationBox.Instance.gameCamera.onStabilizationEnd -= OnCameraStabilizationEnd;
+        OnDestroyLayerEnd?.Invoke(true);
     }
 
     private bool CheckCollectedInLayer(int layer)

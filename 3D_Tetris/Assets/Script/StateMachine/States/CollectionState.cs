@@ -14,15 +14,25 @@ public class CollectionState : AbstractState<TetrisState>
 
     public override void Enter(TetrisState last)
     {
-        if (_matrix.CollectLayers())
-            _FSM.SetNewState(TetrisState.AllElementsDrop);
-        else
-            _FSM.SetNewState(TetrisState.WinCheck);
+        _matrix.OnDestroyLayerEnd += OnCollectEnd;
+        _matrix.CollectLayers();
         
-        _heightHandler.CalculateHeight();
+        //  _heightHandler.CalculateHeight();
         base.Enter(last);
     }
 
+    public void OnCollectEnd(bool isDestroy)
+    {
+        _matrix.OnDestroyLayerEnd -= OnCollectEnd;
+        
+        if(isDestroy)
+            _FSM.SetNewState(TetrisState.AllElementsDrop);
+        else
+        {
+            _heightHandler.CalculateHeight();
+            _FSM.SetNewState(TetrisState.WinCheck);
+        }
+    }
     public override void Exit(TetrisState last)
     {
     }

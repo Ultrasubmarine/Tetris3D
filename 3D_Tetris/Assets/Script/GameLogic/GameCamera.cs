@@ -92,7 +92,10 @@ public class GameCamera : MonoBehaviour
     private bool CheckStabilization(int limit, int height)
     {
         if (_currentHeight == height)
+        {
+            onStabilizationEnd?.Invoke();
             return false;
+        }
         
         _currentHeight = height;
         

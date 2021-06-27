@@ -333,7 +333,6 @@ GameObject:
   m_Component:
   - component: {fileID: 31514271}
   - component: {fileID: 31514270}
-  - component: {fileID: 31514272}
   m_Layer: 0
   m_Name: Speed
   m_TagString: Untagged
@@ -370,25 +369,6 @@ Transform:
   m_Father: {fileID: 1623312048}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &31514272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 31514269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d24aa2da9764537bc8ae4df50c140c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _points:
-  - time: 0.35
-    score: 9
-  - time: 0.25
-    score: 45
-  - time: 0.2
-    score: 72
 --- !u!4 &33823533 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4061492859372462, guid: 608548a572be463418d25f306ecd7df8,
@@ -3295,6 +3275,73 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 430484943}
   m_CullTransparentMesh: 0
+--- !u!1 &444827361
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 444827363}
+  - component: {fileID: 444827364}
+  - component: {fileID: 444827362}
+  m_Layer: 0
+  m_Name: ChangeGameByScore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &444827362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444827361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02a9bfcd5604940880b63f9652ff881, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _points:
+  - score: 27
+    stepOfHardElement: 2
+    growBlocksAnywhere: 1
+--- !u!4 &444827363
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444827361}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.5138736, y: -4.9909034, z: -2.4947217}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1623312048}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &444827364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444827361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d24aa2da9764537bc8ae4df50c140c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _points:
+  - time: 0.35
+    score: 9
+  - time: 0.25
+    score: 45
+  - time: 0.2
+    score: 72
 --- !u!1 &483158828
 GameObject:
   m_ObjectHideFlags: 0
@@ -8604,8 +8651,8 @@ MonoBehaviour:
   _slowManager: {fileID: 2014896470}
   _place: {fileID: 876679918}
   _speed: {fileID: 31514270}
-  _speedChanger: {fileID: 31514272}
-  _generatorChanger: {fileID: 1634487029}
+  _speedChanger: {fileID: 444827364}
+  _generatorChanger: {fileID: 444827362}
   _joystick: {fileID: 483158832}
   _tapsEvents: {fileID: 483158834}
   _islandTurn: {fileID: 483158835}
@@ -16252,6 +16299,7 @@ Transform:
   m_Children:
   - {fileID: 188220914}
   - {fileID: 31514271}
+  - {fileID: 444827363}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -16299,7 +16347,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1634487028}
   - component: {fileID: 1634487027}
-  - component: {fileID: 1634487029}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -16334,7 +16381,7 @@ MonoBehaviour:
   _answerElement: {fileID: 0}
   fixedHightPosition: 0
   stepOfHardElement: 2
-  growBlocksAnywhere: 1
+  growBlocksAnywhere: 0
 --- !u!4 &1634487028
 Transform:
   m_ObjectHideFlags: 0
@@ -16353,31 +16400,6 @@ Transform:
   m_Father: {fileID: 876679918}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1634487029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1634487026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a02a9bfcd5604940880b63f9652ff881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _points:
-  - score: 9
-    stepOfHardElement: 2
-    growBlocksAnywhere: 1
-  - score: 18
-    stepOfHardElement: 2
-    growBlocksAnywhere: 0
-  - score: 27
-    stepOfHardElement: 3
-    growBlocksAnywhere: 0
-  - score: 36
-    stepOfHardElement: 3
-    growBlocksAnywhere: 1
 --- !u!4 &1661586899 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4061492859372462, guid: 608548a572be463418d25f306ecd7df8,

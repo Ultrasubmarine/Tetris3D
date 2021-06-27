@@ -18,6 +18,7 @@ public class HeightHandler : MonoBehaviour
     {
         _matrix = PlaneMatrix.Instance;
         _matrix.SetLimitHeight(_limitHeight);
+        _matrix.OnDestroyLayer += DecrementHeight;
     }
     
     public bool CheckOutOfLimit()
@@ -39,6 +40,11 @@ public class HeightHandler : MonoBehaviour
         }
    }
 
+    public void DecrementHeight(int layer)
+    {
+        _currentHeight--;
+    }
+    
     private bool OutOfLimitHeight()
     {
         if (_currentHeight <= limitHeight)
