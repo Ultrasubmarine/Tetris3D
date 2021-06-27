@@ -1,4 +1,5 @@
-﻿using Helper.Patterns.FSM;
+﻿using System.Diagnostics.Eventing.Reader;
+using Helper.Patterns.FSM;
 using UnityEngine;
 
 namespace Script.StateMachine.States
@@ -22,11 +23,19 @@ namespace Script.StateMachine.States
                 _FSM.SetNewState(TetrisState.WinGame);
             else
             {
-                _gameCamera.SetStabilization();
-                _FSM.SetNewState(TetrisState.GenerateElement);
+                if( _gameCamera.SetStabilization())
+                    _gameCamera.onStabilizationEnd += OnStabilizationCameraEnd;
+                else
+                    _FSM.SetNewState(TetrisState.GenerateElement);
             }
         }
 
+        public void OnStabilizationCameraEnd()
+        {
+            _gameCamera.onStabilizationEnd -= OnStabilizationCameraEnd;
+            _FSM.SetNewState(TetrisState.GenerateElement);
+        }
+        
         public override void Exit(TetrisState last)
         {
         }

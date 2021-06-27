@@ -6,7 +6,8 @@ using UnityEngine;
 public class GameCamera : MonoBehaviour
 {
     public event Action onFirstAnimationEnd;
-
+    public event Action onStabilizationEnd;
+    
     [SerializeField] private Vector3 _startPoint;
     
     [SerializeField] private Transform _maxDistance;
@@ -65,9 +66,9 @@ public class GameCamera : MonoBehaviour
         _myTransform.LookAt(_objectLook.position);
     }
     
-    public void SetStabilization()
+    public bool SetStabilization()
     {
-        CheckStabilization(_heightHandler.limitHeight, _heightHandler.currentHeight);
+        return CheckStabilization(_heightHandler.limitHeight, _heightHandler.currentHeight);
     }
     
     private void Awake()
@@ -88,10 +89,10 @@ public class GameCamera : MonoBehaviour
      //  _camera.transform.position = _startPoint;
     }
 
-    private void CheckStabilization(int limit, int height)
+    private bool CheckStabilization(int limit, int height)
     {
         if (_currentHeight == height)
-            return;
+            return false;
         
         _currentHeight = height;
         
@@ -101,6 +102,8 @@ public class GameCamera : MonoBehaviour
         
         _myTransform.DOMove(finishP, _timeStabilization).OnComplete( () => lastMaxCurrentHeight = _currentHeight);
         _camera.DOOrthoSize(finishS, _timeStabilization);
-        _objectLook.DOMove(finishLookAt, _timeStabilization).OnUpdate(() => _myTransform.LookAt(_objectLook.position));
-     }
+        _objectLook.DOMove(finishLookAt, _timeStabilization).OnUpdate(() => _myTransform.LookAt(_objectLook.position))
+            .OnComplete(() => onStabilizationEnd?.Invoke());
+        return true;
+    }
 }
