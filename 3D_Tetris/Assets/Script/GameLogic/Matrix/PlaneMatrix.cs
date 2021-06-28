@@ -176,8 +176,8 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
             if (CheckCollectedInLayer(y))
             {
                 DestroyLayer(y);
-                RealizationBox.Instance.gameCamera.SetStabilization();
                 RealizationBox.Instance.gameCamera.onStabilizationEnd += OnCameraStabilizationEnd;
+                RealizationBox.Instance.gameCamera.SetStabilization();
                 return;
             }
        OnDestroyLayerEnd?.Invoke(false);
