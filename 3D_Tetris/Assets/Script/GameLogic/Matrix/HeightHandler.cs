@@ -1,73 +1,53 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-using IntegerExtension;
-using UnityEngine.Serialization;
+public class HeightHandler : MonoBehaviour
+{
+    private PlaneMatrix _matrix;
 
-public class HeightHandler : MonoBehaviour {
+    [SerializeField] [Space(20)] private int _limitHeight;
+    
+    [SerializeField] private int _currentHeight;
 
-    // DELETE
-    [FormerlySerializedAs("machine")] [SerializeField] StateMachine _Machine;
-    //
-    PlaneMatrix _matrix;
+    public event Action<int, int> onHeightChange;
+    
+    public int limitHeight => _limitHeight;
+    public int currentHeight => _currentHeight;
 
-    [SerializeField, Space(20)] int _LimitHeight;
-    [SerializeField] int _CurrentHeight;
-
-    public int LimitHeight{ get { return _LimitHeight; } }
-    public int CurrentHeight { get { return _CurrentHeight; } }
-
-    private void Start() {
-        _matrix = PlaneMatrix.Instance;
-        _matrix.SetLimitHeight(_LimitHeight);
-
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Merge, ChangeStateOutOfHeights);
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, CheckHeight);
-    }
-
-    void OnDestroy()
+    private void Start()
     {
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Merge, ChangeStateOutOfHeights);
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.DropAllElements, CheckHeight);
+        _matrix = PlaneMatrix.Instance;
+        _matrix.SetLimitHeight(_limitHeight);
+        _matrix.OnDestroyLayer += DecrementHeight;
     }
-
-    public void ChangeStateOutOfHeights() {
-        if(CheckOutOfLimit()) {
-            _Machine.ChangeState(EMachineState.End);
-            Debug.Log("END GAME");
-        }
-        else {            
-            _Machine.ChangeState(EMachineState.Collection);
-        }
-    }
-
-    private bool CheckOutOfLimit() {
-
-        CheckHeight();
+    
+    public bool CheckOutOfLimit()
+    {
+        CalculateHeight();
         return OutOfLimitHeight();
     }
 
-    public void CheckHeight() {
-
-        _CurrentHeight = 0;
+    public void CalculateHeight()
+    {
+        _currentHeight = 0;
         int check;
 
-        for (int x = 0; x < _matrix.Wight && !OutOfLimitHeight(); x++) {
-            for (int z = 0; z < _matrix.Wight && !OutOfLimitHeight(); z++) {
-
-               check = _matrix.MinHeightInCoordinates(x, z);
-                if(check > _CurrentHeight) {
-                    _CurrentHeight = check;           
-                }
-            }
+        for (var x = 0; x < _matrix.wight && !OutOfLimitHeight(); x++)
+        for (var z = 0; z < _matrix.wight && !OutOfLimitHeight(); z++)
+        {
+            check = _matrix.MinHeightInCoordinates(x, z);
+            if (check > _currentHeight) _currentHeight = check;
         }
-        Messenger<int, int>.Broadcast(GameEvent.CURRENT_HEIGHT.ToString(), _LimitHeight, _CurrentHeight +1);
+   }
+
+    public void DecrementHeight(int layer)
+    {
+        _currentHeight--;
     }
-
-    private bool OutOfLimitHeight( ) {
-
-        if (_CurrentHeight <= LimitHeight)
+    
+    private bool OutOfLimitHeight()
+    {
+        if (_currentHeight <= limitHeight)
             return false;
         return true;
     }

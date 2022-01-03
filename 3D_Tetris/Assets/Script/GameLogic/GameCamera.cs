@@ -1,126 +1,112 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class GameCamera : MonoBehaviour {
+[RequireComponent(typeof(Camera))]
+public class GameCamera : MonoBehaviour
+{
+    public event Action onFirstAnimationEnd;
+    public event Action onStabilizationEnd;
     
-    [SerializeField] private Transform _MaxDistance;
-    [SerializeField] private Transform _MinDistance;
+    [SerializeField] private Vector3 _startPoint;
+    
+    [SerializeField] private Transform _maxDistance;
+    [SerializeField] private Transform _minDistance;
 
-    [SerializeField] private float _MaxSize;
-    [SerializeField] private float _MinSize;
+    [SerializeField] private float _maxSize;
+    [SerializeField] private float _minSize;
 
-    [SerializeField] private Transform _MaxLookAt;
-    [SerializeField] private Transform _MinLookAt;
+    [SerializeField] private Transform _maxLookAt;
+    [SerializeField] private Transform _minLookAt;
 
-    [SerializeField] private float _TimeStabilization;
+    [SerializeField] private float _timeStabilization;
 
-    [SerializeField] private Transform _ObjectLook;
-
+    [SerializeField] private Transform _objectLook;
+    
+    private Camera _camera;
+   
     private Transform _myTransform;
+    
+    private HeightHandler _heightHandler;
 
     private int _currentHeight = 0;
-    private Camera _camera;
+    public int lastMaxCurrentHeight { get; private set; }
 
-    private Vector3 _offset; // положение между камерой и площадкой
-    private float _rotY;
-    public float Rotation{ set { _rotY = value; } }
+    [Space(15)] [Header("First Animation")] [SerializeField]
+    private float _Time = 1;
     
-    [Space(15)]
-    [Header("First Animation")]
-    [SerializeField] private float _Time = 1;
-    [SerializeField] private float _FirstOrthographicSize = 15;
+    public void FirstAnimation()
+    {
+        Debug.Log($"this rot {_camera.transform.localRotation}");
+        _camera.transform.localRotation = Quaternion.identity;
+        Debug.Log($"this rot {_camera.transform.localRotation}");
+        
+        _camera.transform.DOLocalMove(Vector3.zero, _Time)
+            .From(_startPoint).OnComplete(  () => onFirstAnimationEnd?.Invoke());
+    }
 
-    private void Awake() {
-        Messenger<int, int>.AddListener(GameEvent.CURRENT_HEIGHT.ToString(), CheckStabilization);
+    public void SetPositionWithoutAnimation()
+    {
+        int height = _heightHandler.currentHeight;
+        int limit= _heightHandler.limitHeight; 
+        
+        if (_currentHeight == height)
+            return;
+        
+        lastMaxCurrentHeight = _currentHeight < height ? height : _currentHeight;
+        _currentHeight = height;
+        
+        var finishP = Vector3.Lerp(_minDistance.position, _maxDistance.position, height / (float) limit);
+        var finishS = Mathf.Lerp(_minSize, _maxSize, height / (float) limit);
+        var finishLookAt = Vector3.Lerp(_minLookAt.position, _maxLookAt.position, height / (float) limit);
+        
+        _myTransform.position = finishP;
+        _camera.orthographicSize = finishS;
+        _objectLook.position = finishLookAt;
+        _myTransform.LookAt(_objectLook.position);
+    }
+    
+    public bool SetStabilization()
+    {
+        return CheckStabilization(_heightHandler.limitHeight, _heightHandler.currentHeight);
+    }
+    
+    private void Awake()
+    {
         _myTransform = transform;
+        _camera = GetComponent<Camera>();
     }
 
     // Use this for initialization
-    private void Start() {
-        _offset = Vector3.zero - transform.position;
-        _myTransform.LookAt(_ObjectLook.transform.position);
-
-        _camera = GetComponent<Camera>();
-        _myTransform.LookAt(_ObjectLook.position);
+    private void Start()
+    {
+        //_camera.orthographicSize = _FirstOrthographicSize;
+       // _myTransform.LookAt(_objectLook.position);
+       
+       _heightHandler = RealizationBox.Instance.haightHandler;
+       
+     //  _camera.transform.localRotation = Quaternion.identity;
+     //  _camera.transform.position = _startPoint;
     }
 
-    public void CheckStabilization(int limit, int height) {
+    private bool CheckStabilization(int limit, int height)
+    {
         if (_currentHeight == height)
-            return;
-
+        {
+            onStabilizationEnd?.Invoke();
+            return false;
+        }
+        
         _currentHeight = height;
-        StartCoroutine(ChangeDistance(limit, height));
-    }
-
-    public IEnumerator ChangeDistance(int limit, int current) {
         
-        Vector3 needPosition = Vector3.Lerp(_MinDistance.position, _MaxDistance.position, current / (float) limit);
-
-        float t = 0;
-      
-        _offset = Vector3.zero - needPosition;
-        Quaternion rotation = Quaternion.Euler(0, _rotY, 0);
-
-        Vector3 startP = _myTransform.position;
-        Vector3 finishP = Vector3.zero - (rotation * _offset);
-
-        float startS = _camera.orthographicSize;
-        float finishS = Mathf.Lerp(_MinSize, _MaxSize, current / (float) limit);
-
-        Vector3 startLookAt = _ObjectLook.position;
-        Vector3 finishLookAt = Vector3.Lerp(_MinLookAt.position, _MaxLookAt.position,current / (float) limit);
-
-        while (t < _TimeStabilization) {
-            _myTransform.position = Vector3.Lerp(startP, finishP, t / _TimeStabilization);
-            _camera.orthographicSize = Mathf.Lerp(startS, finishS, t / _TimeStabilization);
-
-            _ObjectLook.position = Vector3.Lerp(startLookAt, finishLookAt, t / _TimeStabilization);
-            _myTransform.LookAt(_ObjectLook.position);
-
-            yield return new WaitForEndOfFrame();
-            t += Time.deltaTime;
-        }
-
-        _myTransform.position = finishP;
-        _camera.orthographicSize = finishS;
-        _ObjectLook.transform.position = finishLookAt;
-        _myTransform.LookAt(_ObjectLook.position);
-    }
-
-  
-
-    public void FirstAnimation() {
-        StartCoroutine(ChangeCameraSize());
-    }
-
-    public IEnumerator ChangeCameraSize() {
-        float timer = 0;
-
-        float startS = _FirstOrthographicSize;
-        float finishS = _MinSize;
-        while (timer < _Time) {
-            _camera.orthographicSize = Mathf.Lerp(startS, finishS, timer / _Time);
-            timer += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
+        var finishP = Vector3.Lerp(_minDistance.position, _maxDistance.position, height / (float) limit);
+        var finishS = Mathf.Lerp(_minSize, _maxSize, height / (float) limit);
+        var finishLookAt = Vector3.Lerp(_minLookAt.position, _maxLookAt.position, height / (float) limit);
         
-        Messenger.Broadcast(GameEvent.END_CAMERA_ANIMATION.ToString());
+        _myTransform.DOMove(finishP, _timeStabilization).OnComplete( () => lastMaxCurrentHeight = _currentHeight);
+        _camera.DOOrthoSize(finishS, _timeStabilization);
+        _objectLook.DOMove(finishLookAt, _timeStabilization).OnUpdate(() => _myTransform.LookAt(_objectLook.position))
+            .OnComplete(() => onStabilizationEnd?.Invoke());
+        return true;
     }
-    
-    public void ResetSettings() {
-        _rotY = 0;
-        
-        _offset = Vector3.zero - _MinDistance.position;;
-        Quaternion rotation = Quaternion.Euler(0, _rotY, 0);
-        
-        Vector3 finishP = Vector3.zero - (rotation * _offset);
-
-        _myTransform.position = finishP;
-        _camera.orthographicSize = _MinSize;
-        _ObjectLook.transform.position = _MinLookAt.position;
-        _myTransform.LookAt(_ObjectLook.position);
-    }
-    
 }

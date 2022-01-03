@@ -1,183 +1,253 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-
 using IntegerExtension;
+using Script.GameLogic.GameItems;
 
-public class PlaneMatrix : Singleton<PlaneMatrix> {
+public class PlaneMatrix : Singleton<PlaneMatrix>
+{
+    private Block[,,] _matrix;
 
-    // DELETE
-    [SerializeField] StateMachine machine;
-    [SerializeField] HeightHandler _HeightHandler;
-    //
-    public Block[,,] _matrix;
+    [Header("Size plane")] private int _limitHeight = 18;
+    [SerializeField] private int _wight;
+    [SerializeField] private int _height;
 
-    [Header("Size plane")]
-    int _limitHeight = 18; 
-    [SerializeField] int _Wight;
-    [SerializeField] int _Height;
+    public int wight => _wight;
 
-    public int Wight { get { return _Wight;  } }
-    public int Height { get { return _Height - 1; } } // высота отсчитывается от 0
+    public int height // высота отсчитывается от 0
+        => _height - 1;
 
-    public int LimitHeight { get { return _limitHeight; } }
-    public int CurrentHeight { get { return _HeightHandler.CurrentHeight; } } 
-   
-    protected override void Init() {
-        ExtensionMetodsForMatrix.SetSizePlane(_Wight);
-        _matrix = new Block[_Wight, _Height, _Wight];
+    public int limitHeight => _limitHeight;
 
-        for (int i = 0; i < _Wight; i++) {
-            for (int j = 0; j < _Height; j++) {
-                for (int k = 0; k < _Wight; k++) {
-                    _matrix[i, j, k] = null;
-                }
-            }
-        }
-    }
+    public event Action<int> OnDestroyLayer;
+    public event Action<bool> OnDestroyLayerEnd; // true - if destroy lvl
     
-    private void Start() {
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.Collection, CheckCollections);
+    protected override void Init()
+    {
+        ExtensionMetodsForMatrix.SetSizePlane(_wight);
+        _matrix = new Block[_wight, _height, _wight];
+
+        for (var i = 0; i < _wight; i++)
+        for (var j = 0; j < _height; j++)
+        for (var k = 0; k < _wight; k++)
+            _matrix[i, j, k] = null;
     }
 
-    private void OnDestroy() {
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.Collection, CheckCollections);
-    }
-
-    public void SetLimitHeight( int limit) {
+    public void SetLimitHeight(int limit)
+    {
         _limitHeight = limit;
     }
 
-    public bool CheckEmptyPlaсe( Element element, Vector3Int direction) {
+    #region FOR_PICKABLE_BLOCKS
+    
+    public List<Block> GetPickableBlocksForElement(Element element)
+    {
+        if (!element)
+            return null;
+        if (element.blocks.Count == 0)
+            return null;
 
-        if (element.MyBlocks.Count == 0) 
-            return false;
-        
+        List<Block> PickableBlocks = new List<Block>();
         Vector3Int newCoordinat;
-        foreach (Block item in element.MyBlocks) {
-            if (!item.IsDestroy) {
+        foreach (var item in element.blocks)
+            if (!item.isDestroy)
+            {
+                newCoordinat = new Vector3Int(item.coordinates.x, item.coordinates.y, item.coordinates.z);
 
-                newCoordinat = new Vector3Int(item.Coordinates.x, item.Coordinates.y, item.Coordinates.z) + direction;
+                if (newCoordinat.OutOfCoordinatLimit())
+                    return null;
 
-                if (newCoordinat.OutOfCoordinatLimit()) 
-                    return false;               
-
-                if ( !ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()],null)) {
-                    if (!element.IsBind)
-                        return false;
-                    if (!element.MyBlocks.Contains(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()])) 
-                        return false;                
+                if (!ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()], null))
+                {
+                    if (_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()].IsPickable())
+                        PickableBlocks.Add(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()]);
                 }
             }
+        return PickableBlocks;
+    }
+
+    public bool BindBlock(Block block) //for pickable blocks
+    {
+        if (ReferenceEquals(_matrix[block.coordinates.x.ToIndex(), block.coordinates.y, block.coordinates.z.ToIndex()], null))
+        {
+            _matrix[block.coordinates.x.ToIndex(), block.coordinates.y, block.coordinates.z.ToIndex()] = block;
+            return true;
         }
+        return false;
+    }
+
+    public void UnbindBlock(Block block)
+    {
+        if (ReferenceEquals(_matrix[block.coordinates.x.ToIndex(), block.coordinates.y, block.coordinates.z.ToIndex()], block))
+        {
+            _matrix[block.coordinates.x.ToIndex(), block.coordinates.y, block.coordinates.z.ToIndex()] = null;
+        }
+    }
+    #endregion
+    
+    public bool CheckEmptyPlaсe(Element element, Vector3Int direction, bool forPlayerMove = false)
+    {
+        if (!element)
+            return false;
+        if (element.blocks.Count == 0)
+            return false;
+
+        Vector3Int newCoordinat;
+        foreach (var item in element.blocks)
+            if (!item.isDestroy)
+            {
+                newCoordinat = new Vector3Int(item.coordinates.x, item.coordinates.y, item.coordinates.z) + direction;
+
+                if (newCoordinat.OutOfCoordinatLimit())
+                    return false;
+
+                if (!ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()], null))
+                {
+                    if (_matrix[newCoordinat.x.ToIndex(), newCoordinat.y, newCoordinat.z.ToIndex()].IsPickable())
+                        continue;
+                    if (!element._isBind)
+                        return false;
+                    if (!element.blocks.Contains(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y,
+                        newCoordinat.z.ToIndex()]))
+                        return false;
+                }
+                if (forPlayerMove && newCoordinat.y + 1 < _height)
+                {
+                    if (!ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y + 1, newCoordinat.z.ToIndex()], null))
+                        return false;
+                }
+            }
         return true;
     }
-
-    public bool CheckEmptyPlace( int x_index, int y_index, int z_index) {
-        return ReferenceEquals( _matrix[x_index, y_index, z_index] ,null);   
+    
+    public bool CheckEmptyPlace(int x_index, int y_index, int z_index)
+    {
+        return ReferenceEquals(_matrix[x_index, y_index, z_index], null);
     }
 
+    public Block GetBlockInPlace(int x_index, int y_index, int z_index)
+    {
+        return _matrix[x_index, y_index, z_index];
+    }
+    
     #region привязка/отвязка эл-та к матрице
-    public void BindToMatrix(Element element) {
 
+    public void BindToMatrix(Element element)
+    {
         int x, y, z;
-        foreach (Block item in element.MyBlocks) {
-            if (ReferenceEquals(item,null) || item.IsDestroy)
+        foreach (var item in element.blocks)
+        {
+            if (ReferenceEquals(item, null) || item.isDestroy)
                 continue;
-            x = item.Coordinates.x;
-            y = item.Coordinates.y;
-            z = item.Coordinates.z;
+            x = item.coordinates.x;
+            y = item.coordinates.y;
+            z = item.coordinates.z;
 
             _matrix[x.ToIndex(), y, z.ToIndex()] = item;
         }
-        element.IsBind = true;
+
+        element._isBind = true;
     }
 
-    public void UnbindToMatrix(Element element) {
-
+    public void UnbindToMatrix(Element element)
+    {
         int x, y, z;
-        foreach (Block item in element.MyBlocks) {
-            if ( ReferenceEquals(item,null) || item.IsDestroy)
+        foreach (var item in element.blocks)
+        {
+            if (ReferenceEquals(item, null) || item.isDestroy)
                 continue;
-            x = item.Coordinates.x;
-            y = item.Coordinates.y;
-            z = item.Coordinates.z;
+            x = item.coordinates.x;
+            y = item.coordinates.y;
+            z = item.coordinates.z;
 
             _matrix[x.ToIndex(), y, z.ToIndex()] = null;
         }
-        element.IsBind = false;
+
+        element._isBind = false;
     }
+
     #endregion
 
     #region сбор коллекций в слоях матрицы
-    private void CheckCollections() {
-        if (CollectLayers())
-            machine.ChangeState(EMachineState.DropAllElements);
-        else 
-            machine.ChangeState(EMachineState.Empty);
-        
-    }
-    private bool CollectLayers() {
 
-        bool flag = false; ;
-        for (int y = 0; y < _limitHeight; y++) {
-            if (CheckCollectedInLayer(y)) {
+    public void CollectLayers()
+    {
+        for (var y = 0; y < _limitHeight; y++)
+            if (CheckCollectedInLayer(y))
+            {
                 DestroyLayer(y);
-                flag = true;
+                RealizationBox.Instance.gameCamera.onStabilizationEnd += OnCameraStabilizationEnd;
+                RealizationBox.Instance.gameCamera.SetStabilization();
+                return;
             }
-        }
-        return flag;
+       OnDestroyLayerEnd?.Invoke(false);
     }
-    private bool CheckCollectedInLayer(int layer) {
 
-        for (int x = 0; x < Wight; x++) {
-            for (int z = 0; z < Wight; z++) {
-                if ( ReferenceEquals(  _matrix[x, layer, z], null ) )
-                {
-                    return false;    
-                }
-            }
-        }
-        return true;       
+    public void OnCameraStabilizationEnd()
+    {
+        RealizationBox.Instance.gameCamera.onStabilizationEnd -= OnCameraStabilizationEnd;
+        OnDestroyLayerEnd?.Invoke(true);
     }
-    
+
+    private bool CheckCollectedInLayer(int layer)
+    {
+        for (var x = 0; x < wight; x++)
+        for (var z = 0; z < wight; z++)
+            if (ReferenceEquals(_matrix[x, layer, z], null) || _matrix[x, layer, z].IsPickable())
+                return false;
+        return true;
+    }
+
     private void DestroyLayer(int layer)
     {
-        Messenger<int>.Broadcast(GameEvent.DESTROY_LAYER.ToString(), layer);
-        for (int x = 0; x < Wight; x++) {
-            for (int z = 0; z < Wight; z++) {
-                _matrix[x, layer, z].IsDestroy = true;
-                _matrix[x, layer, z] = null;           
-            }
+        OnDestroyLayer?.Invoke(layer);
+        
+        for (var x = 0; x < wight; x++)
+        for (var z = 0; z < wight; z++)
+        {
+            _matrix[x, layer, z].isDestroy = true;
+            
+            if(_matrix[x, layer, z].IsPickable())
+                _matrix[x, layer, z].Pick(null);
+            
+            _matrix[x, layer, z].Collect();
+            _matrix[x, layer, z] = null;
         }
     }
+
     #endregion
 
-    public Vector3Int FindLowerAccessiblePlace() {
-
-        int min = Height - 1;
+    public Vector3Int FindLowerAccessiblePlace()
+    {
+        var min = height - 1;
         int curr_min;
 
-        Vector3Int min_point = new Vector3Int(0, min, 0);
+        var min_point = new Vector3Int(0, min, 0);
 
-        for (int x = 0; x < Wight && min != 0; ++x) {
-            for (int z = 0; z < Wight && min !=0; ++z) {
-                curr_min = MinHeightInCoordinates(x, z);
-                if(curr_min < min ) {
-                    min = curr_min;
-                    min_point = new Vector3Int(x, min, z);
-                }
+        for (var x = 0; x < wight && min != 0; ++x)
+        for (var z = 0; z < wight && min != 0; ++z)
+        {
+            curr_min = MinHeightInCoordinates(x, z);
+            if (curr_min < min)
+            {
+                min = curr_min;
+                min_point = new Vector3Int(x, min, z);
             }
         }
+
         return min_point;
     }
+
     public int MinHeightInCoordinates(int x_index, int z_index)
     {
-        for (int y = _matrix.GetUpperBound(1) - 1; y >= 0; --y)
-        {
-            if ( !ReferenceEquals(  _matrix[x_index, y, z_index], null ) )
-                return y+1;
-        }
-        return 0;        
+        for (var y = _matrix.GetUpperBound(1) - 1; y >= 0; --y)
+            if (!ReferenceEquals(_matrix[x_index, y, z_index], null) && !_matrix[x_index, y, z_index].IsPickable())
+                return y + 1;
+        return 0;
+    }
+
+    public void Clear()
+    {
+        _matrix = new Block[_wight, _height, _wight];
     }
 }

@@ -1,98 +1,125 @@
-﻿using UnityEngine;
+﻿using System;
+using DG.Tweening;
+using Script.Controller;
+using Script.GameLogic.TetrisElement;
+using Script.Influence;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] StateMachine _StateMachine;
+    public event Action<bool,move> onMoveApply;
+        
+    [SerializeField] private float _timeTurn = 0.3f;
+    [SerializeField] private Button _turnButton;
 
-    [SerializeField] Moving _Moving;
-    [SerializeField] Turning _Turning;
+    [SerializeField] private AudioClip _successMove;
+    [SerializeField] private AudioClip _defeatMove;
+    
+    private move[] left_up = {move.zm, move.x, move.z, move.xm};
+    private move[] left_down = {move.x, move.z, move.xm, move.zm};
+    private move[] right_down = {move.z, move.xm, move.zm, move.x};
+    private move[] right_up = {move.xm, move.zm, move.x, move.z};
+    private int _indexTable = 0;
 
-    // таблица для перемещения блоков в зависимости от угла обзора.
-    private move[] A = { move._z, move._x, move.z, move.x };
-    private move[] S = { move.x, move._z, move._x, move.z };
-    private move[] D = { move.z, move.x, move._z, move._x };
-    private move[] W = { move._x, move.z, move.x, move._z };
-    private int _indexTable;
+    private int _rotate = 0;
+    private Transform _place;
+    private bool _isTurn = false;
+    
+    public static bool MoveTutorial { get; set; }
+    public static bool TurnTutorial { get; set; }
 
-    private Vector3 _offset; // начальное положение между камерой и площадкой
-    private float _rotY;  // поворот камеры
-
-    static public bool MoveTutorial { get; set; } 
-    static public bool TurnTutorial { get; set; } 
-
+    private InfluenceManager _influence;
+    private TetrisFSM _fsm;
+    
+    private AudioSource _audioSource;
     private void Start()
     {
-        Messenger<ETouсhSign>.AddListener( TouchControl.SWIPE, Move);
-        Messenger<ETouсhSign>.AddListener( TouchControl.ONE_TOUCH, Turn);
-            
-        Messenger.AddListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
-    }
+        _influence = RealizationBox.Instance.influenceManager;
+        _place = RealizationBox.Instance.place;
+        _fsm = RealizationBox.Instance.FSM;
 
-    void OnDestroy()
+        _audioSource = GetComponent<AudioSource>();
+    }
+    
+
+    public void Move(move touch)
     {
-        Messenger<ETouсhSign>.RemoveListener( TouchControl.SWIPE, Move);
-        Messenger<ETouсhSign>.RemoveListener( TouchControl.ONE_TOUCH, Turn);
-        
-        Messenger.RemoveListener(StateMachine.StateMachineKey + EMachineState.NotActive, ResetRotation);
-    }
-
-    void Turn(ETouсhSign touch)
-    {
-        if (Equals( ElementManager.NewElement) )
-            return;
-
-        if(touch == ETouсhSign.OneTouch_Left) {
-            if( _Turning.Action(ElementManager.NewElement, turn.left, Speed.TimeRotate))
-                CorrectIndex(90);             
-        }
-        else { //ETouсhSign.OneTouch_Right
-            if( _Turning.Action(ElementManager.NewElement, turn.right, Speed.TimeRotate))
-                CorrectIndex(90);    
-        }
-    }
-
-    void Move( ETouсhSign touch) {
-        
-        if (Equals( ElementManager.NewElement) )
+        if (Equals(ElementData.newElement))
             return;
 
         switch (touch)
         {
-            case ETouсhSign.Swipe_LeftUp:
+            case move.zm:
             {
-                _Moving.Action(ElementManager.NewElement, A[_indexTable], Speed.TimeMove);
+                InfluenceData.direction = left_up[_indexTable];
                 break;
             }
-            case ETouсhSign.Swipe_LeftDown:
+            case move.x:
             {
-                _Moving.Action(ElementManager.NewElement, S[_indexTable], Speed.TimeMove);
+                InfluenceData.direction = left_down[_indexTable];
                 break;
             }
-            case ETouсhSign.Swipe_RightDown:
+            case move.z:
             {
-                _Moving.Action(ElementManager.NewElement, D[_indexTable], Speed.TimeMove);
+                InfluenceData.direction = right_down[_indexTable];
                 break;
             }
-            case ETouсhSign.Swipe_RightUp:
+            case move.xm:
             {
-                _Moving.Action(ElementManager.NewElement, W[_indexTable], Speed.TimeMove);
+                InfluenceData.direction = right_up[_indexTable];
                 break;
             }
         }
+        
+        if(_fsm.GetCurrentState() == TetrisState.WaitInfluence){}
+            _fsm.SetNewState(TetrisState.Move);
+    }
+ 
+    public void OnMoveActionApply(bool isSuccess, move direction)
+    {
+        onMoveApply.Invoke(isSuccess, direction);
+        if (isSuccess)
+            _audioSource.clip = _successMove;
+        else
+            _audioSource.clip = _defeatMove;
+        _audioSource.Play();
     }
     
-    private void CorrectIndex( int degree) {
-        _rotY += degree;
-        if (_rotY > 360 || _rotY < -360)
-            _rotY = 0;
+    public void Turn()
+    {
+        if (_isTurn)
+            return;
+        
+        _isTurn = true;
+        _influence.enabled = false;
 
-        if (_rotY > -1)
-            _indexTable = (int)_rotY / 90;
-        else
-            _indexTable = ((int)_rotY + 360) / 90;
+        _rotate = (_rotate + 90) % 360;
+        _indexTable = (_indexTable + 1) % 4;
+        
+        _place.DORotate(new Vector3(0, _rotate, 0), _timeTurn).OnComplete( () =>
+        {
+            _influence.enabled = true;
+            _isTurn = false;
+        });
     }
 
-    void ResetRotation() {
-        _rotY = 0;
+    public void CorrectTurn(int newAngle)
+    {
+        if (newAngle < 0)
+            newAngle += 360;
+        _indexTable = (newAngle) % 360  / 90 ;
+    }
+    
+    private void OnFsmStateChange(TetrisState newState)
+    {
+        _fsm.AddListener(TetrisState.Drop, () => _turnButton.interactable = true);
+        _fsm.AddListener(TetrisState.MergeElement, () => _turnButton.interactable = false);
+        _fsm.AddListener(TetrisState.Move, () => _turnButton.interactable = false);
+        
+        /*if (newState == TetrisState.MergeElement;
+            _turnButton.interactable = false;
+        else if (newState == TetrisState.GenerateElement)
+            _turnButton.interactable = true;*/
     }
 }
