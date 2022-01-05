@@ -51,6 +51,9 @@ public class Block : MonoBehaviour
 
     public Transform oreol;
     
+    [SerializeField] private GameObject _star;
+    public Transform Star => _star.transform;
+    
     private void Awake()
     {
         myTransform = transform;
@@ -91,17 +94,21 @@ public class Block : MonoBehaviour
         myTransform.position = Vector3.zero;
         myTransform.rotation = Quaternion.identity;
         isStar = false;
-        _meshFilter.mesh = _meshCube;
-        myTransform.DOKill();
+      //  _meshFilter.mesh = _meshCube;
+        
+        _star.SetActive(false);
+        _star.transform.DOKill();
         oreol.gameObject.SetActive(false);
     }
 
     public void TransformToStar(Mesh _starMesh, Material _starMaterial)
     {
         isStar = true;
-        _meshFilter.mesh = _starMesh;
+        // _meshFilter.mesh = _starMesh;
         mesh.material = _starMaterial;
-        myTransform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
+        
+        _star.SetActive(true);
+        _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
         oreol.gameObject.SetActive(true);
     }
 

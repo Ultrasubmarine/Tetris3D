@@ -56,9 +56,11 @@ namespace Script.GameLogic.Stars
 
       [SerializeField] private Material _starmaterial;
       [FormerlySerializedAs("_starSpeed")] [SerializeField] private float _starRotationSpeed = 5.0f;
+      [SerializeField] private float _fallStarRotationSpeed = 5.0f;
 
       [SerializeField] private ParticleSystem _particles;
       private float z = 0;
+      private Transform CameraTransform;
 
       private List<StarInfo> _RotationStars;
         private void Start()
@@ -80,7 +82,7 @@ namespace Script.GameLogic.Stars
         {
             foreach (var s in _RotationStars)
             {
-                s.block.myTransform.LookAt(Camera.main.transform);
+                s.block.Star.LookAt(Camera.main.transform);
                 s.r += Time.deltaTime *_starRotationSpeed;
                 if (s.r > 360.0f)
                 {
@@ -93,6 +95,7 @@ namespace Script.GameLogic.Stars
 
         public bool CanCreateStar()
         {
+            CameraTransform = RealizationBox.Instance.gameCamera.transform;
             if (Stars.Count >= _maxStarsAmount)
                 return false;
             
@@ -139,22 +142,20 @@ namespace Script.GameLogic.Stars
             _animationPath[0] = new Vector3(endPoint.transform.position.x * _firstPointR, _animationPath[0].y, endPoint.transform.position.z * _firstPointR);
             _animationPath[1] = new Vector3(endPoint.transform.position.x * _secondPointR, endPoint.transform.position.y + _secondPointYP, endPoint.transform.position.z * _secondPointR);
 
+            
             _animationStar.position = _animationPath[0];
+            _animationStar.LookAt(Camera.main.transform);
             _animationStar.DOPath(_animationPath.ToArray(), 2, PathType.CatmullRom, PathMode.TopDown2D).
-                    /*OnUpdate(() =>
+                    OnUpdate(() =>
                     {
-                        z += Time.deltaTime *_starRotationSpeed;
+                        z += Time.deltaTime *_fallStarRotationSpeed;
                         if (z > 360.0f)
                             {
                                 z = 0.0f;
                             }
                         _rotationStar.localRotation = Quaternion.Euler(0, 0, z);
-                        _rotationStar.LookAt(Camera.current.transform);
-                        
-                        
-                        
-                        
-                    }).*/
+                        _animationStar.LookAt(CameraTransform);
+                    }).
               OnComplete(()=> 
               {
                   _particles.transform.position = endPoint.myTransform.position;
