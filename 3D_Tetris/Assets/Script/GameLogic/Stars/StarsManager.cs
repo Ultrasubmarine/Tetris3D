@@ -63,6 +63,8 @@ namespace Script.GameLogic.Stars
       private Transform CameraTransform;
 
       private List<StarInfo> _RotationStars;
+      private bool isParticle = false;
+      
         private void Start()
         {
             _RotationStars = new List<StarInfo>();
@@ -137,10 +139,11 @@ namespace Script.GameLogic.Stars
 
         public void CreateAnimation(Block endPoint)
         {
+            isParticle = false;
             _animationStar.gameObject.SetActive(true);
             _animationPath.Add(endPoint.transform.position);
             _animationPath[0] = new Vector3(endPoint.transform.position.x * _firstPointR, _animationPath[0].y, endPoint.transform.position.z * _firstPointR);
-            _animationPath[1] = new Vector3(endPoint.transform.position.x * _secondPointR, endPoint.transform.position.y + _secondPointYP, endPoint.transform.position.z * _secondPointR);
+            _animationPath[1] = new Vector3(endPoint.transform.position.x * _secondPointR + 0.5f * _secondPointR  , endPoint.transform.position.y + _secondPointYP, endPoint.transform.position.z * _secondPointR + 0.5f * _secondPointR );
 
             
             _animationStar.position = _animationPath[0];
@@ -155,16 +158,21 @@ namespace Script.GameLogic.Stars
                             }
                         _rotationStar.localRotation = Quaternion.Euler(0, 0, z);
                         _animationStar.LookAt(CameraTransform);
+
+                        if (!isParticle && Vector3.Distance(_animationStar.transform.position, _animationPath[2]) < 1)
+                        {
+                            _particles.transform.position = endPoint.myTransform.position;
+                            _particles.gameObject.SetActive(false);
+                            _particles.gameObject.SetActive(true);
+
+                            isParticle = true;
+                        }
                     }).
               OnComplete(()=> 
               {
-                  _particles.transform.position = endPoint.myTransform.position;
-                  _particles.gameObject.SetActive(false);
-                  _particles.gameObject.SetActive(true);
-     
                   endPoint.TransformToStar(_starMesh, _starmaterial);
                   
-                  _animationPath.Remove(endPoint.transform.position);
+                  _animationPath.RemoveAt(2);
                   _animationStar.DOKill();
                   _animationStar.gameObject.SetActive(false);
                   OnCreatedStar?.Invoke();
