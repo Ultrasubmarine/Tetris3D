@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
-using DG.Tweening.Plugins.Core.PathCore;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -11,100 +10,92 @@ namespace Script.GameLogic.Stars
     class StarInfo
     {
         public Block block;
-        public float r;
+        public float angle;
 
-        public StarInfo(Block block, float r)
+        public StarInfo(Block block, float angle)
         {
             this.block = block;
-            this.r = r;
+            this.angle = angle;
         }
     }
 
     public class StarsManager : MonoBehaviour
     {
-        public bool collectStarLvl { get { return _collectStars; } }
-        [SerializeField] private bool _collectStars;
-        
-        private List<Block> Stars;
-        
+        public bool collectStarLvlLvl { get { return _collectStarsLvl; } }
+        [SerializeField] private bool _collectStarsLvl;
         [SerializeField] private int _maxStarsAmount = 1;
-        private List<Block> _applicants;
-
-        private PlaneMatrix _matrix;
-
-        public Action OnCreatedStar;
-
-        [SerializeField] private Mesh _starMesh;
-
+        
         public int collectedStars { get; private set; }
-        [SerializeField] private int _neededStars = 5;
         public int neededStars => _neededStars;
-
+        [SerializeField] private int _neededStars = 5;
+        
+        public Action OnCreatedStar;
         public Action OnUpdatedCollectingStars;
 
+        [SerializeField] private Mesh _starMesh;
+        [SerializeField] private Material _starmaterial;
+
+        // Animation
         [Header("Animation")]
         [SerializeField] private Transform _rotationStar;
         [SerializeField] private Transform _animationStar;
-        [SerializeField] private List<Transform> _animationPathObjects;
-        private List<Vector3> _animationPath;
+        [SerializeField] private float _highestPathPos = 32;
 
-        [SerializeField] private float _firstPointR = 3.5f;
+        [SerializeField] private float _firstPointR = 2.5f;
         [SerializeField] private float _secondPointR = 2.5f;
         [SerializeField] private float _secondPointYP = 2.5f;
-      //  private Path p;
-      
-
-      [SerializeField] private Material _starmaterial;
-      [FormerlySerializedAs("_starSpeed")] [SerializeField] private float _starRotationSpeed = 5.0f;
-      [SerializeField] private float _fallStarRotationSpeed = 5.0f;
-
-      [SerializeField] private ParticleSystem _particles;
-      private float z = 0;
-      private Transform CameraTransform;
-
-      private List<StarInfo> _RotationStars;
-      private bool isParticle = false;
+        private List<Vector3> _animationPath;
+        
+        [SerializeField] private float _starRotationSpeed = 20.0f;
+        [SerializeField] private float _fallStarRotationSpeed = 300.0f;
+        private List<StarInfo> _rotationStars;
+        private float _fallStarAngle = 0;
+        
+        [SerializeField] private ParticleSystem _particles;
+        private bool isParticle = false;
+        // End of animation
+        
+        private List<Block> _stars;
+        private List<Block> _applicants;
+        
+        private PlaneMatrix _matrix;
+        private Transform _cameraTransform;
+       
       
         private void Start()
         {
-            _RotationStars = new List<StarInfo>();
-            Stars = new List<Block>();
+            _rotationStars = new List<StarInfo>();
+            _stars = new List<Block>();
             _applicants = new List<Block>();
-            _animationPath = new List<Vector3>();
+            _animationPath = new List<Vector3>() {new Vector3(0, _highestPathPos, 0), Vector3.zero};
             
             _matrix = RealizationBox.Instance.matrix;
-
-            foreach (var go in _animationPathObjects)
-            {
-                _animationPath.Add(go.position);
-            }
+            _cameraTransform = RealizationBox.Instance.gameCamera.transform;
         }
 
         private void Update()
         {
-            foreach (var s in _RotationStars)
+            foreach (var s in _rotationStars)
             {
                 s.block.Star.LookAt(Camera.main.transform);
-                s.r += Time.deltaTime *_starRotationSpeed;
-                if (s.r > 360.0f)
+                s.angle += Time.deltaTime *_starRotationSpeed;
+                if (s.angle > 360.0f)
                 {
-                    s.r = 0.0f;
+                    s.angle = 0.0f;
                 }
-                s.block.oreol.localRotation = Quaternion.Euler(0, 0, s.r);
-               // s.block.myTransform.localRotation = Quaternion.Euler(0, s.r, 0);
+                s.block.oreol.localRotation = Quaternion.Euler(0, 0, s.angle);
             }
         }
 
         public bool CanCreateStar()
         {
-            CameraTransform = RealizationBox.Instance.gameCamera.transform;
-            if (Stars.Count >= _maxStarsAmount)
+            if (_stars.Count >= _maxStarsAmount)
                 return false;
             
             _applicants.Clear();
             for (int i = 0; i <= _matrix.height; i++)
             {
-                if (Stars.Exists((Block b) => { return b._coordinates.y == i; }))
+                if (_stars.Exists((Block b) => { return b._coordinates.y == i; }))
                     continue;
 
                 AddApplicants(0, i, 0);
@@ -117,8 +108,7 @@ namespace Script.GameLogic.Stars
                 return true;
             return false;
         }
-
-
+        
         void AddApplicants(int x, int y, int z)
         {
             var b = _matrix.GetBlockInPlace(x, y, z);
@@ -132,36 +122,37 @@ namespace Script.GameLogic.Stars
         {
             var rndBlock = _applicants[Random.Range(0, _applicants.Count)];
             
-            Stars.Add(rndBlock);
+            _stars.Add(rndBlock);
             rndBlock.OnCollected += CollectStar;
             CreateAnimation(rndBlock);
         }
 
-        public void CreateAnimation(Block endPoint)
+        public void CreateAnimation(Block block)
         {
             isParticle = false;
-            _animationStar.gameObject.SetActive(true);
-            _animationPath.Add(endPoint.transform.position);
-            _animationPath[0] = new Vector3(endPoint.transform.position.x * _firstPointR, _animationPath[0].y, endPoint.transform.position.z * _firstPointR);
-            _animationPath[1] = new Vector3(endPoint.transform.position.x * _secondPointR + 0.5f * _secondPointR  , endPoint.transform.position.y + _secondPointYP, endPoint.transform.position.z * _secondPointR + 0.5f * _secondPointR );
-
+            Vector3 endPosition = block.myTransform.position;
             
+            _animationPath.Add(endPosition);
+            _animationPath[0] = new Vector3(endPosition.x * _firstPointR, _animationPath[0].y, endPosition.z * _firstPointR);
+            _animationPath[1] = new Vector3(endPosition.x * _secondPointR + 0.5f * _secondPointR  , endPosition.y + _secondPointYP, endPosition.z * _secondPointR + 0.5f * _secondPointR );
+
+            _animationStar.gameObject.SetActive(true);
             _animationStar.position = _animationPath[0];
-            _animationStar.LookAt(Camera.main.transform);
+            _animationStar.LookAt(_cameraTransform);//Camera.main.transform);
             _animationStar.DOPath(_animationPath.ToArray(), 2, PathType.CatmullRom, PathMode.TopDown2D).
                     OnUpdate(() =>
                     {
-                        z += Time.deltaTime *_fallStarRotationSpeed;
-                        if (z > 360.0f)
+                        _fallStarAngle += Time.deltaTime *_fallStarRotationSpeed;
+                        if (_fallStarAngle > 360.0f)
                             {
-                                z = 0.0f;
+                                _fallStarAngle = 0.0f;
                             }
-                        _rotationStar.localRotation = Quaternion.Euler(0, 0, z);
-                        _animationStar.LookAt(CameraTransform);
+                        _rotationStar.localRotation = Quaternion.Euler(0, 0, _fallStarAngle);
+                        _animationStar.LookAt(_cameraTransform);
 
                         if (!isParticle && Vector3.Distance(_animationStar.transform.position, _animationPath[2]) < 1)
                         {
-                            _particles.transform.position = endPoint.myTransform.position;
+                            _particles.transform.position = block.myTransform.position;
                             _particles.gameObject.SetActive(false);
                             _particles.gameObject.SetActive(true);
 
@@ -170,41 +161,42 @@ namespace Script.GameLogic.Stars
                     }).
               OnComplete(()=> 
               {
-                  endPoint.TransformToStar(_starMesh, _starmaterial);
+                  block.TransformToStar(_starMesh, _starmaterial);
                   
                   _animationPath.RemoveAt(2);
                   _animationStar.DOKill();
                   _animationStar.gameObject.SetActive(false);
+                  
                   OnCreatedStar?.Invoke();
-                  _RotationStars.Add(new StarInfo(endPoint, 0));
+                  _rotationStars.Add(new StarInfo(block, 0));
               });
 
             _animationStar.DOLocalRotate(Vector3.forward, 4).SetLoops(-1,LoopType.Incremental);
         }
-
         
         public void CollectStar(Block star)
         {
             star.OnCollected -= CollectStar;
             collectedStars++;
-            Stars.Remove(star);
+            _stars.Remove(star);
 
             StarInfo rStr;
-            foreach (var s in _RotationStars)
+            foreach (var s in _rotationStars)
             {
                 if (s.block == star)
                 {
                     rStr = s;
-                    _RotationStars.Remove(rStr);
+                    _rotationStars.Remove(rStr);
                     break;
                 }
             }
             OnUpdatedCollectingStars?.Invoke();
+            RealizationBox.Instance.starUIAnimation.StartAnimation();
         }
-
+        
         public void Clear()
         {
-            Stars.Clear();
+            _stars.Clear();
             _applicants.Clear();
             collectedStars = 0;
             OnUpdatedCollectingStars?.Invoke();
@@ -212,7 +204,7 @@ namespace Script.GameLogic.Stars
 
         public bool CheckWin()
         {
-            if (!collectStarLvl)
+            if (!collectStarLvlLvl)
                 return true;
             return collectedStars >= neededStars;
         }

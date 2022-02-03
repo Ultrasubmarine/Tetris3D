@@ -49,6 +49,7 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private Ceiling _ceiling;
     
     [SerializeField] private StarsManager _starsManager;
+    [SerializeField] private StarUIAnimation _starUIAnimation;
     
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
@@ -76,6 +77,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public IslandTurn islandTurn => _islandTurn;
     public Ceiling ceiling => _ceiling;
     public StarsManager starsManager => _starsManager;
+    public StarUIAnimation starUIAnimation => _starUIAnimation;
     
     private void Start()
     {

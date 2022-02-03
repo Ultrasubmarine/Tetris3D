@@ -43,6 +43,8 @@ namespace Script.Controller.TouchController
 
         public void Turn(bool state)
         {
+            if (state && RealizationBox.Instance.FSM.GetCurrentState() == TetrisState.CreateStar)
+                return;
             island.transform.DOComplete();
             isTurn = state;
             
