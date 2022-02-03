@@ -31,6 +31,8 @@ namespace Script.GameLogic.Stars
         
         public Action OnCreatedStar;
         public Action OnUpdatedCollectingStars;
+        public Action OnCollectedStars;
+        public bool onCollectedAnimationWaiting { get; private set; }
 
         [SerializeField] private Mesh _starMesh;
         [SerializeField] private Material _starmaterial;
@@ -191,9 +193,20 @@ namespace Script.GameLogic.Stars
                 }
             }
             OnUpdatedCollectingStars?.Invoke();
+
+            onCollectedAnimationWaiting = true;
+            RealizationBox.Instance.starUIAnimation.OnAnimationEnd += FinishCollectAnimation;
             RealizationBox.Instance.starUIAnimation.StartAnimation();
         }
-        
+
+        public void FinishCollectAnimation() // doesnt work when few stars are collected
+        {
+            onCollectedAnimationWaiting = false;
+            RealizationBox.Instance.starUIAnimation.OnAnimationEnd -= FinishCollectAnimation;
+            
+            OnCollectedStars?.Invoke();
+        }
+
         public void Clear()
         {
             _stars.Clear();

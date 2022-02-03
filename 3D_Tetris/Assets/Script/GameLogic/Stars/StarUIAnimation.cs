@@ -55,22 +55,34 @@ namespace Script.GameLogic.Stars
                     _star.SetActive(true);
                     OnAnimationEnd?.Invoke();
                 });
+            
+            animation.OnUpdate(() =>
+            {
+                _rotation += Time.deltaTime *_starRotationSpeed;
+                if (_rotation > 360.0f)
+                {
+                    _rotation = 0.0f;
+                }
+                _oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
+            });
+            animation.OnComplete(() => OnAnimationEnd?.Invoke());
         }
 
         private void Update()
         {
-            _rotation += Time.deltaTime *_starRotationSpeed;
-            if (_rotation > 360.0f)
-            {
-                _rotation = 0.0f;
-            }
-            _oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
+            // _rotation += Time.deltaTime *_starRotationSpeed;
+            // if (_rotation > 360.0f)
+            // {
+            //     _rotation = 0.0f;
+            // }
+            // _oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
         }
 
         public void StartAnimation()
         {
             _star.SetActive(true);
 
+           
             animation.Rewind();
             animation.Play();
         }

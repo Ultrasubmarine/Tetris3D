@@ -25,16 +25,15 @@ namespace Script.StateMachine.States
             if(!_starsManager.collectStarLvlLvl)
                 _FSM.SetNewState(TetrisState.GenerateElement);
 
-            if (_starsManager.CanCreateStar())
+            if (_starsManager.onCollectedAnimationWaiting) // if u collect u dont create star in this step
             {
-                _starsManager.OnCreatedStar += OnCreatedStar;
-                _starsManager.CreateStar();
+                _starsManager.OnCollectedStars += OnCollectedStar;
             }
-
-            // if (_starsManager.IsWaitingCollectAnimation)
-            // {
-            //     _starsManager.Coll
-            // }
+            else if (_starsManager.CanCreateStar()) 
+            {
+                 _starsManager.OnCreatedStar += OnCreatedStar;
+                 _starsManager.CreateStar();
+            }
             else
                 _FSM.SetNewState(TetrisState.GenerateElement);
         }
@@ -51,8 +50,8 @@ namespace Script.StateMachine.States
 
         public void OnCollectedStar()
         {
-            
+            _starsManager.OnCollectedStars -= OnCollectedStar;
+            _FSM.SetNewState(TetrisState.GenerateElement);
         }
-        
     }
 }
