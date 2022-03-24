@@ -15,6 +15,7 @@ namespace Script.GameLogic.Stars
         {
             _starsManager = RealizationBox.Instance.starsManager;
             _starsManager.OnUpdatedCollectingStars += OnUpdateScore;
+            RealizationBox.Instance.starUIAnimation.OnUpdateStartScoreText += OnUpdateScore;
             _text.text = _starsManager.collectedStars + " / " + _starsManager.neededStars;
         }
 

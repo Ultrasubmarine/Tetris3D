@@ -192,7 +192,7 @@ namespace Script.GameLogic.Stars
                     break;
                 }
             }
-            OnUpdatedCollectingStars?.Invoke();
+          //  OnUpdatedCollectingStars?.Invoke();
 
             onCollectedAnimationWaiting = true;
             RealizationBox.Instance.starUIAnimation.OnAnimationEnd += FinishCollectAnimation;

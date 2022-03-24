@@ -29,8 +29,12 @@ namespace Script.GameLogic.Stars
         private Sequence animation;
 
         public Action OnAnimationEnd;
+        public Action OnUpdateStartScoreText;
         public bool WaitingCollectAnimation { get; private set; }
-        
+
+        private bool isStarUIShow = false;
+        private float timerDissapear = 0;
+            
         // Start is called before the first frame update
         void Start()
         {
@@ -47,15 +51,20 @@ namespace Script.GameLogic.Stars
                 .Join(myTransform.DOAnchorPosY(FinishPoint, _time / 2).From(Vector2.down * Screen.height / 2))
                 .Append(_oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 1f), _timeAlphaOreol)
                     .From(new Color(m2.r, m2.g, m2.b, 0f)))
-                .Join(myTransform.DOAnchorPosY(_deltaMove + FinishPoint, _timeMoving).From(Vector2.up * FinishPoint).SetLoops(3, LoopType.Yoyo))
-                .Append(_oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear/2))
-                .Append(myTransform.DOAnchorPosY(-StarPanelTransform.sizeDelta.y/2, _timeDisappear))
-                .Join(_starMesh.material.DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear)).OnComplete(()=>
+                .Join(myTransform.DOAnchorPosY(_deltaMove + FinishPoint, _timeMoving).From(Vector2.up * FinishPoint)
+                    .SetLoops(3, LoopType.Yoyo))
+                .Append(_oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2))
+                .Append(myTransform.DOAnchorPosY(-StarPanelTransform.sizeDelta.y / 4, _timeDisappear).OnUpdate(() =>
                 {
-                    _star.SetActive(true);
-                    OnAnimationEnd?.Invoke();
-                });
-            
+                    timerDissapear += Time.deltaTime;
+                    if (!isStarUIShow && timerDissapear > _timeDisappear * 0.75f)
+                    {
+                        OnUpdateStartScoreText?.Invoke();
+                        isStarUIShow = true;
+                    }
+                }))
+                .Join(_starMesh.material.DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear));
+
             animation.OnUpdate(() =>
             {
                 _rotation += Time.deltaTime *_starRotationSpeed;
@@ -65,7 +74,13 @@ namespace Script.GameLogic.Stars
                 }
                 _oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
             });
-            animation.OnComplete(() => OnAnimationEnd?.Invoke());
+            animation.OnComplete(() =>
+            {
+                isStarUIShow = false;
+                timerDissapear = 0;
+                OnAnimationEnd?.Invoke();
+            });
+            
         }
 
         private void Update()
