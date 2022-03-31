@@ -6,6 +6,12 @@ namespace Script.GameLogic.Stars
 {
     public class StarUIAnimation : MonoBehaviour
     {
+        public Action OnAnimationEnd;
+        public Action OnUpdateStartScoreText;
+        
+        public bool WaitingCollectAnimation { get; private set; }
+
+        private int _collectStarsInAnimation;
         [SerializeField] private Transform _oreol;
         [SerializeField] private float _starRotationSpeed;
         private float _rotation;
@@ -26,18 +32,18 @@ namespace Script.GameLogic.Stars
         [SerializeField] private float _timeMoving;
         [SerializeField] private float _timeDisappear = 1;
         [SerializeField] private RectTransform StarPanelTransform;
+        
         private Sequence animation;
-
-        public Action OnAnimationEnd;
-        public Action OnUpdateStartScoreText;
-        public bool WaitingCollectAnimation { get; private set; }
-
+        private Sequence animationDissapear;
+        
         private bool isStarUIShow = false;
         private float timerDissapear = 0;
-            
+
+        [SerializeField] private MiniStarUIAnimation _miniStarUIAnimation;
         // Start is called before the first frame update
         void Start()
         {
+            _collectStarsInAnimation = 0;
             myTransform = GetComponent<RectTransform>();
             
             var m =  _starMesh.material;
@@ -52,7 +58,30 @@ namespace Script.GameLogic.Stars
                 .Append(_oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 1f), _timeAlphaOreol)
                     .From(new Color(m2.r, m2.g, m2.b, 0f)))
                 .Join(myTransform.DOAnchorPosY(_deltaMove + FinishPoint, _timeMoving).From(Vector2.up * FinishPoint)
-                    .SetLoops(3, LoopType.Yoyo))
+                    .SetLoops(3, LoopType.Yoyo));
+                
+            animation.OnUpdate(() =>
+            {
+                _rotation += Time.deltaTime *_starRotationSpeed;
+                if (_rotation > 360.0f)
+                {
+                    _rotation = 0.0f;
+                }
+                _oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
+            });
+            
+            animation.OnComplete(() =>
+            {
+                if (_collectStarsInAnimation == 1)
+                {
+                    DissapearAnimation();
+                }
+            });
+            animationDissapear = DOTween.Sequence().SetAutoKill(false).Pause();
+            animationDissapear /*.Append(_oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 1f), _timeAlphaOreol)
+                    .From(new Color(m2.r, m2.g, m2.b, 0f)))
+                .Join(myTransform.DOAnchorPosY(_deltaMove + FinishPoint, _timeMoving).From(Vector2.up * FinishPoint)
+                    .SetLoops(3, LoopType.Yoyo))*/
                 .Append(_oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2))
                 .Append(myTransform.DOAnchorPosY(-StarPanelTransform.sizeDelta.y / 4, _timeDisappear).OnUpdate(() =>
                 {
@@ -64,8 +93,8 @@ namespace Script.GameLogic.Stars
                     }
                 }))
                 .Join(_starMesh.material.DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear));
-
-            animation.OnUpdate(() =>
+            
+            animationDissapear.OnUpdate(() => // the same in animation.OnUpdate(()=>)
             {
                 _rotation += Time.deltaTime *_starRotationSpeed;
                 if (_rotation > 360.0f)
@@ -74,13 +103,20 @@ namespace Script.GameLogic.Stars
                 }
                 _oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
             });
-            animation.OnComplete(() =>
+            
+            animationDissapear.OnComplete(() =>
             {
                 isStarUIShow = false;
                 timerDissapear = 0;
+                _collectStarsInAnimation = 0;
                 OnAnimationEnd?.Invoke();
             });
-            
+
+            animationDissapear.OnStart(() =>
+            {
+                _miniStarUIAnimation.DissapearStars(_collectStarsInAnimation-1);
+            });
+
         }
 
         private void Update()
@@ -95,11 +131,37 @@ namespace Script.GameLogic.Stars
 
         public void StartAnimation()
         {
-            _star.SetActive(true);
+            _collectStarsInAnimation++;
+            
+            if(_collectStarsInAnimation < 2)
+            { 
+                _star.SetActive(true);
+                animation.Rewind();
+                animation.Play();
+            }
+            else
+            {
+                if (_collectStarsInAnimation < 3)
+                {
+                    _miniStarUIAnimation.onAnimationFinished += OnMiniStarsFinished;
+                }
+                _miniStarUIAnimation.ShowMiniStar(_collectStarsInAnimation-2);
+            }
+        }
 
-           
-            animation.Rewind();
-            animation.Play();
+        public void OnMiniStarsFinished(int index)
+        {
+            if (index == _collectStarsInAnimation - 1)
+            {
+                _miniStarUIAnimation.onAnimationFinished -= OnMiniStarsFinished;
+                DissapearAnimation();
+            }
+                
+        }
+        public void DissapearAnimation()
+        {
+            animationDissapear.Rewind();
+            animationDissapear.Play();
         }
     }
 }

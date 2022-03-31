@@ -175,7 +175,7 @@ namespace Script.GameLogic.Stars
 
             _animationStar.DOLocalRotate(Vector3.forward, 4).SetLoops(-1,LoopType.Incremental);
         }
-        
+
         public void CollectStar(Block star)
         {
             star.OnCollected -= CollectStar;
@@ -192,10 +192,13 @@ namespace Script.GameLogic.Stars
                     break;
                 }
             }
-          //  OnUpdatedCollectingStars?.Invoke();
 
-            onCollectedAnimationWaiting = true;
-            RealizationBox.Instance.starUIAnimation.OnAnimationEnd += FinishCollectAnimation;
+            //  OnUpdatedCollectingStars?.Invoke();
+            if (!onCollectedAnimationWaiting)
+            {
+                onCollectedAnimationWaiting = true;
+                RealizationBox.Instance.starUIAnimation.OnAnimationEnd += FinishCollectAnimation;
+             }
             RealizationBox.Instance.starUIAnimation.StartAnimation();
         }
 
