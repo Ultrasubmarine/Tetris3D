@@ -112,7 +112,7 @@ namespace Script.GameLogic.Stars
                 OnAnimationEnd?.Invoke();
             });
 
-            animationDissapear.OnStart(() =>
+            animationDissapear.OnPlay(() =>
             {
                 _miniStarUIAnimation.DissapearStars(_collectStarsInAnimation-1);
             });
@@ -151,7 +151,7 @@ namespace Script.GameLogic.Stars
 
         public void OnMiniStarsFinished(int index)
         {
-            if (index == _collectStarsInAnimation - 1)
+            if (index == _collectStarsInAnimation - 2)
             {
                 _miniStarUIAnimation.onAnimationFinished -= OnMiniStarsFinished;
                 DissapearAnimation();
