@@ -845,9 +845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _time: 1.5
   _scale: {x: 100, y: 100, z: 100}
-  _timeAlphaStar: 1.5
-  _timeDelayBetweenAlphaStar: 1.5
-  _timeAlphaOreol: 1.5
+  _fromScale: {x: 1, y: 1, z: 1}
   _timeDisappear: 1
   Stars:
   - {fileID: 1482226171}
@@ -7920,7 +7918,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &879045427
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9250,7 +9248,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1085512320
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11786,7 +11784,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1482226167
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17553,7 +17551,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1569067196
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19590,7 +19588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collectStarsLvl: 1
   _maxStarsAmount: 3
-  _neededStars: 5
+  _neededStars: 15
   _starMesh: {fileID: 8195499056177016675, guid: 2c8e4014c3c8a439fa117f39999ef875,
     type: 3}
   _starmaterial: {fileID: 2100000, guid: 4a7e242d1fbda3847bd19c6c0e9ba228, type: 2}
@@ -21064,7 +21062,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1923822213
 RectTransform:
   m_ObjectHideFlags: 0

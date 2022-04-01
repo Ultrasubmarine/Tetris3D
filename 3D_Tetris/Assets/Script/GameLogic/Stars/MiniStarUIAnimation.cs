@@ -14,14 +14,8 @@ public class MiniStarUIAnimation : MonoBehaviour
 
     [SerializeField] private Vector3 _scale = new Vector3(100f,100f,100f);
     [SerializeField] private Vector3 _fromScale = new Vector3(1f,1f,1f);
-    [SerializeField] private float _timeAlphaStar = 1.5f;
-    [SerializeField] private float _timeDelayBetweenAlphaStar = 1.5f;
-    [SerializeField] private float _timeAlphaOreol = 1.5f;
     [SerializeField] private float _timeDisappear = 1;
-    
- //   private List<Sequence> animations;
-//    private List<Sequence> animationsDissapear;
-    
+
     [SerializeField] private MiniStar[] Stars;
     
     [SerializeField] private float _starRotationSpeed = 20;
@@ -30,18 +24,12 @@ public class MiniStarUIAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      //  animations = new List<Sequence>();
-       // animationsDissapear = new List<Sequence>(); 
-        
         var m =  Stars[0].starMesh.material;
         var m2 =  Stars[0].oreolRender.color;
         
         for (int i = 0; i < Stars.Length; i++)
         {
-           // animations.Add(DOTween.Sequence().SetAutoKill(false).Pause());
-          //  animationsDissapear.Add( DOTween.Sequence().SetAutoKill(false).Pause());
-
-          Stars[i].animation.Append(Stars[i].starMesh.material
+            Stars[i].animation.Append(Stars[i].starMesh.material
                   .DOColor(new Color(m.color.r, m.color.g, m.color.b, 1f), _time / 3)
                   .From(new Color(m.color.r, m.color.g, m.color.b, 0f))) //.SetLoops(3, LoopType.Yoyo))
               .Join(Stars[i].transform.DOScale(_scale * 1.2f, _time / 3).From(_fromScale))
@@ -85,8 +73,7 @@ public class MiniStarUIAnimation : MonoBehaviour
     {
         for (int i = 0; i < amount; i++)
         {
-           // Stars[i].animation.Complete();
-       //   Stars[i].animationsDissapear.
+            Stars[i].animation.Complete();
             Stars[i].animationsDissapear.Rewind();
             Stars[i].animationsDissapear.Play();
         }

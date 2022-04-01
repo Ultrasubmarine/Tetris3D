@@ -6,6 +6,7 @@ namespace Script.GameLogic.Stars
 {
     public class StarUIAnimation : MonoBehaviour
     {
+        private bool _dissapearAfterComplete = false;
         public Action OnAnimationEnd;
         public Action OnUpdateStartScoreText;
         
@@ -72,7 +73,7 @@ namespace Script.GameLogic.Stars
             
             animation.OnComplete(() =>
             {
-                if (_collectStarsInAnimation == 1)
+                if (_collectStarsInAnimation == 1 && _dissapearAfterComplete)
                 {
                     DissapearAnimation();
                 }
@@ -109,6 +110,7 @@ namespace Script.GameLogic.Stars
                 isStarUIShow = false;
                 timerDissapear = 0;
                 _collectStarsInAnimation = 0;
+                _dissapearAfterComplete = false;
                 OnAnimationEnd?.Invoke();
             });
 
@@ -117,16 +119,19 @@ namespace Script.GameLogic.Stars
                 _miniStarUIAnimation.DissapearStars(_collectStarsInAnimation-1);
             });
 
+            RealizationBox.Instance.FSM.onStateChange += onFSMStateChange;
         }
 
         private void Update()
         {
-            // _rotation += Time.deltaTime *_starRotationSpeed;
-            // if (_rotation > 360.0f)
-            // {
-            //     _rotation = 0.0f;
-            // }
-            // _oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
+            if (!isStarUIShow) return;
+            
+            _rotation += Time.deltaTime *_starRotationSpeed;
+            if (_rotation > 360.0f)
+            {
+                _rotation = 0.0f;
+            }
+            _oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
         }
 
         public void StartAnimation()
@@ -154,14 +159,28 @@ namespace Script.GameLogic.Stars
             if (index == _collectStarsInAnimation - 2)
             {
                 _miniStarUIAnimation.onAnimationFinished -= OnMiniStarsFinished;
-                DissapearAnimation();
+             //   DissapearAnimation();
             }
                 
         }
         public void DissapearAnimation()
         {
+            animation.Complete();
             animationDissapear.Rewind();
             animationDissapear.Play();
+        }
+
+        public void onFSMStateChange( TetrisState state)
+        {
+            if (state == TetrisState.CreateStar && _collectStarsInAnimation > 0)
+            {
+                if (_collectStarsInAnimation == 1 && !animation.IsComplete()) //wait animation
+                {
+                    _dissapearAfterComplete = true;
+                }
+                else
+                    DissapearAnimation();
+            }
         }
     }
 }
