@@ -853,6 +853,7 @@ MonoBehaviour:
   - {fileID: 1085512324}
   - {fileID: 1923822217}
   - {fileID: 879045431}
+  _deltaMove: 20
   _starRotationSpeed: 20
 --- !u!225 &64990530
 CanvasGroup:
@@ -10509,7 +10510,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1294755799
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10553,7 +10554,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -10562,7 +10563,7 @@ MeshRenderer:
   m_RenderingLayerMask: 33554433
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cd6b88d9652a945e9a32b0b9bb50d661, type: 2}
+  - {fileID: 2100000, guid: 1ff93f7c6969f4f8b83093d35874034e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

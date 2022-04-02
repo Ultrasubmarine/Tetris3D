@@ -7046,3 +7046,99 @@ Received Import Request.
 Start importing Assets/Prefabs/str.prefab using Guid(a995501dfb74246e7bc5b7ed7d0e9626) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd515a121a528fd9da0d188ae8f6e0fcb') in 1.872438 seconds 
   Import took 1.882912 seconds .
 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.005730 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Refreshing native plugins compatible for Editor in 0.91 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  3.325 seconds
+Domain Reload Profiling:
+	ReloadAssembly (3326ms)
+		BeginReloadAssembly (425ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (117ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (168ms)
+		EndReloadAssembly (2798ms)
+			LoadAssemblies (249ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (428ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (60ms)
+			SetupLoadedEditorAssemblies (1287ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (14ms)
+				SetLoadedEditorAssemblies (2ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (202ms)
+				ProcessInitializeOnLoadAttributes (962ms)
+				ProcessInitializeOnLoadMethodAttributes (104ms)
+				AfterProcessingInitializeOnLoad (1ms)
+				EditorAssembliesLoaded (1ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (113ms)
+Platform modules already initialized, skipping
+Switching build target platform(2) subTarget(0) extendedPlatform(0) -> platform(13) subTarget(524288) extendedPlatform(0)
+Refreshing native plugins compatible for Editor in 0.91 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3665 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 328.7 MB.
+System memory in use after: 329.2 MB.
+
+Unloading 59 unused Assets to reduce memory usage. Loaded Objects now: 5805.
+Total: 6.148166 ms (FindLiveObjects: 0.306875 ms CreateObjectMapping: 0.115000 ms MarkObjects: 5.682917 ms  DeleteObjects: 0.042625 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:framework-osx-AVFoundation: e770b220cccbd017edd2c1fefb359320 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:graphics/normal-map-encoding: 01000000000000000000000000000000 -> 02000000000000000000000000000000
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.005033 seconds.
+Callback registration failed. Increase kMaxCallback.
+Fatal Error! Callback registration failed. Increase kMaxCallback.
+Obtained 30 stack frames.
+#0  0x007fff20364462 in __pthread_kill
+#1  0x007fff202e5720 in abort
+#2  0x00000104a016ae in CrashDontLaunchBugReporter()
+#3  0x0000010358baf7 in EditorMonoConsole::LogToConsoleImplementation(CppLogEntry const&)
+#4  0x0000010358b127 in EditorMonoConsole::LogToConsoleImplementation(DebugStringToFileData const&)
+#5  0x0000010358c89e in LogToConsoleImplementation(DebugStringToFileData const&)
+#6  0x000001045b2dcd in DebugStringToFilePostprocessedStacktrace(DebugStringToFileData const&)
+#7  0x000001045b36b3 in DebugStringToFile(DebugStringToFileData const&)
+#8  0x000001021b4cc4 in CallbackArrayBase<void (*)(AssemblyLoadFailure), void (*)(void const*, AssemblyLoadFailure)>::Register(void (*)(AssemblyLoadFailure), void (*)(void const*, AssemblyLoadFailure), void const*)
+#9  0x00000103a08cf8 in LoadDomainAndUserAssemblies(bool)
+#10 0x00000103a0b5af in LoadUserAssemblies()
+#11 0x00000103c57cb9 in AssetImportWorkerClient::ReloadMonoDomain(AssetResolver&)
+#12 0x00000103c7a01c in invocation function for block in AssetImportWorkerClient::HandleMessage(PrepareMessage const&)::$_5::operator()() const
+#13 0x007fff201e67c7 in _dispatch_client_callout
+#14 0x007fff201f36c4 in _dispatch_async_and_wait_invoke
+#15 0x007fff201e67c7 in _dispatch_client_callout
+#16 0x007fff201f2b86 in _dispatch_main_queue_callback_4CF
+#17 0x007fff204c7356 in __CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__
+#18 0x007fff20489188 in __CFRunLoopRun
+#19 0x007fff20487fe2 in CFRunLoopRunSpecific
+#20 0x007fff28956630 in RunCurrentEventLoopInMode
+#21 0x007fff2895642c in ReceiveNextEventCommon
+#22 0x007fff2895614f in _BlockUntilNextEventMatchingListInModeWithFilter
+#23 0x007fff22bdd9b1 in _DPSNextEvent
+#24 0x007fff22bdc177 in -[NSApplication(NSEvent) _nextEventMatchingEventMask:untilDate:inMode:dequeue:]
+#25 0x007fff22bce68a in -[NSApplication run]
+#26 0x007fff22ba296f in NSApplicationMain
+#27 0x00000104a2b541 in EditorMain(int, char const**)
+#28 0x00000104a2b769 in main
+#29 0x007fff203ad621 in start
