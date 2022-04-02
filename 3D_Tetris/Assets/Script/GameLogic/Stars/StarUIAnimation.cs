@@ -79,11 +79,7 @@ namespace Script.GameLogic.Stars
                 }
             });
             animationDissapear = DOTween.Sequence().SetAutoKill(false).Pause();
-            animationDissapear /*.Append(_oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 1f), _timeAlphaOreol)
-                    .From(new Color(m2.r, m2.g, m2.b, 0f)))
-                .Join(myTransform.DOAnchorPosY(_deltaMove + FinishPoint, _timeMoving).From(Vector2.up * FinishPoint)
-                    .SetLoops(3, LoopType.Yoyo))*/
-                .Append(_oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2))
+            animationDissapear.Append(_oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2))
                 .Append(myTransform.DOAnchorPosY(-StarPanelTransform.sizeDelta.y / 4, _timeDisappear).OnUpdate(() =>
                 {
                     timerDissapear += Time.deltaTime;
@@ -159,7 +155,6 @@ namespace Script.GameLogic.Stars
             if (index == _collectStarsInAnimation - 2)
             {
                 _miniStarUIAnimation.onAnimationFinished -= OnMiniStarsFinished;
-             //   DissapearAnimation();
             }
                 
         }

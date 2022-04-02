@@ -14,10 +14,11 @@ public class MiniStarUIAnimation : MonoBehaviour
 
     [SerializeField] private Vector3 _scale = new Vector3(100f,100f,100f);
     [SerializeField] private Vector3 _fromScale = new Vector3(1f,1f,1f);
-    [SerializeField] private float _timeDisappear = 1;
+    [SerializeField] private float _timeDisappear = 0.9f;
 
     [SerializeField] private MiniStar[] Stars;
     
+    [SerializeField] private float _deltaMove = 20f;
     [SerializeField] private float _starRotationSpeed = 20;
     private float _rotation;  //common oreol rotation
     
@@ -29,12 +30,13 @@ public class MiniStarUIAnimation : MonoBehaviour
         
         for (int i = 0; i < Stars.Length; i++)
         {
+            float FinishPoint = -Stars[i].myTransform.sizeDelta.y + Stars[i].myTransform.anchoredPosition.y;
+
+
             Stars[i].animation.Append(Stars[i].starMesh.material
-                  .DOColor(new Color(m.color.r, m.color.g, m.color.b, 1f), _time / 3)
-                  .From(new Color(m.color.r, m.color.g, m.color.b, 0f))) //.SetLoops(3, LoopType.Yoyo))
-              .Join(Stars[i].transform.DOScale(_scale * 1.2f, _time / 3).From(_fromScale))
-              .Append(Stars[i].transform.DOScale(_scale, _time / 3))
-              .Join(Stars[i].oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 1f), _timeDisappear / 2).From(new Color(m2.r, m2.g, m2.b, 0f)));
+                    .DOColor(new Color(m.color.r, m.color.g, m.color.b, 1f), _time / 3)
+                    .From(new Color(m.color.r, m.color.g, m.color.b, 0f))) 
+                .Join(Stars[i].myTransform.DOAnchorPosY(Stars[i].myTransform.anchoredPosition.y, _time / 2).From(Vector2.down * Screen.height / 2));
 
           int ind = i;
           Stars[i].animation.OnComplete(() =>
@@ -44,11 +46,7 @@ public class MiniStarUIAnimation : MonoBehaviour
           
           Stars[i].animationsDissapear
               .Append(Stars[i].oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear/3))
-                //.Join(Stars[i].myTransform.DOAnchorPosY(_deltaMove + FinishPoint, _timeMoving).From(Vector2.up * FinishPoint)
-                   // .SetLoops(3, LoopType.Yoyo))
-              //  .Append(Stars[i].oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2))
                 .Append(Stars[i].starMesh.material.DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear));
-               // .AppendInterval(_timeDelayBetweenAlphaStar);
           
           Stars[i].animationsDissapear.OnComplete(() =>
             {

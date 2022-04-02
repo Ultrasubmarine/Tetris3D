@@ -27,13 +27,14 @@ public class MiniStar : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
+        _myTransform = GetComponent<RectTransform>();
         _animation = DOTween.Sequence().SetAutoKill(false).Pause();
         _animationsDissapear = DOTween.Sequence().SetAutoKill(false).Pause(); //throw new NotImplementedException();
     }
 
     void Start()
     {
-        _myTransform = GetComponent<RectTransform>();
+        
     }
     
 }
