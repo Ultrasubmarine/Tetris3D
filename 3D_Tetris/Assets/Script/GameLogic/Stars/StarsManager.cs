@@ -62,7 +62,8 @@ namespace Script.GameLogic.Stars
         
         private PlaneMatrix _matrix;
         private Transform _cameraTransform;
-       
+
+        [SerializeField] private Transform _lookAtStar;
       
         private void Start()
         {
@@ -87,6 +88,8 @@ namespace Script.GameLogic.Stars
                 }
                 s.block.oreol.localRotation = Quaternion.Euler(0, 0, s.angle);
             }
+            
+            
         }
 
         public bool CanCreateStar()
@@ -132,16 +135,19 @@ namespace Script.GameLogic.Stars
         public void CreateAnimation(Block block)
         {
             isParticle = false;
-            Vector3 endPosition = block.myTransform.position;
+            _animationStar.transform.localPosition = Vector3.zero;
+            _animationStar.transform.localRotation = Quaternion.identity;
+            
+            Vector3 endPosition =  _animationStar.InverseTransformPoint(block.myTransform.position);;
             
             _animationPath.Add(endPosition);
             _animationPath[0] = new Vector3(endPosition.x * _firstPointR, _animationPath[0].y, endPosition.z * _firstPointR);
             _animationPath[1] = new Vector3(endPosition.x * _secondPointR + 0.5f * _secondPointR  , endPosition.y + _secondPointYP, endPosition.z * _secondPointR + 0.5f * _secondPointR );
 
             _animationStar.gameObject.SetActive(true);
-            _animationStar.position = _animationPath[0];
+            _animationStar.localPosition = _animationPath[0];
             _animationStar.LookAt(_cameraTransform);//Camera.main.transform);
-            _animationStar.DOPath(_animationPath.ToArray(), 2, PathType.CatmullRom, PathMode.TopDown2D).
+            _animationStar.DOLocalPath(_animationPath.ToArray(), 2, PathType.CatmullRom, PathMode.Ignore).
                     OnUpdate(() =>
                     {
                         _fallStarAngle += Time.deltaTime *_fallStarRotationSpeed;
@@ -150,9 +156,9 @@ namespace Script.GameLogic.Stars
                                 _fallStarAngle = 0.0f;
                             }
                         _rotationStar.localRotation = Quaternion.Euler(0, 0, _fallStarAngle);
-                        _animationStar.LookAt(_cameraTransform);
+                        _lookAtStar.LookAt(_cameraTransform.position);
 
-                        if (!isParticle && Vector3.Distance(_animationStar.transform.position, _animationPath[2]) < 1)
+                        if (!isParticle && Vector3.Distance(_animationStar.transform.localPosition, _animationPath[2]) < 1)
                         {
                             _particles.transform.position = block.myTransform.position;
                             _particles.gameObject.SetActive(false);
