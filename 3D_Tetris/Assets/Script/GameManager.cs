@@ -1,5 +1,6 @@
 ﻿using System;
 using DG.Tweening;
+using Script;
 using Script.UI;
 using UnityEngine;
 
@@ -19,7 +20,24 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _fsm = RealizationBox.Instance.FSM;
+        LoadLvlSettings();
         Invoke( nameof(LastStart), 1f);
+    }
+
+    private void LoadLvlSettings()
+    {
+        var lvl = LvlLoader.Instance.lvlSettings;
+
+        GameObject tutor = RealizationBox.Instance.GetTutor(lvl.tutorType);
+        tutor?.SetActive(true);
+        
+        RealizationBox.Instance.speedChanger.SetSpeedPoints(lvl.speedSettings);
+        
+        RealizationBox.Instance.score.SetWinScore(lvl.winScore);
+
+        RealizationBox.Instance.starsManager.neededStars = lvl.starSettings.winAmount;
+        RealizationBox.Instance.starsManager.collectStarLvlLvl = lvl.starSettings.collectStar;
+        RealizationBox.Instance.starsManager.maxStarsAmount = lvl.starSettings.maxStarsInPlace;
     }
 
     private void LastStart()

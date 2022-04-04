@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Script.Speed
 {
     [Serializable]
-    struct ChangeSpeedInfo
+    public struct ChangeSpeedInfo
     {
         public float time;
         public float score;
@@ -26,6 +26,11 @@ namespace Script.Speed
         {
             currentIndex = 0;
             global::Speed.SetTimeDrop( _startTimeDrop);
+        }
+
+        public void SetSpeedPoints(List<ChangeSpeedInfo> points)
+        {
+            _points = points;
         }
         
         private void Start()

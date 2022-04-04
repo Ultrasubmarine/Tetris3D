@@ -45,4 +45,14 @@ public class Score : MonoBehaviour
         _scoreText.text = _currentScore + "/" + _scoreForWin + " m";
         _progressBar.SetProgress(0);
     }
+
+    public void SetWinScore(int winScore)
+    {
+        _scoreForWin = winScore;
+
+        if (_scoreForWin == 0)
+        {
+            _progressBar.gameObject.SetActive(false);
+        }
+    }
 }

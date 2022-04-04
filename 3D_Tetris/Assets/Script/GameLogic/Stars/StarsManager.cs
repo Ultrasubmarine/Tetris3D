@@ -21,12 +21,17 @@ namespace Script.GameLogic.Stars
 
     public class StarsManager : MonoBehaviour
     {
-        public bool collectStarLvlLvl { get { return _collectStarsLvl; } }
+        public bool collectStarLvlLvl { get { return _collectStarsLvl; } set 
+        { _collectStarsLvl = value; 
+            if (!_collectStarsLvl) {RealizationBox.Instance.starUI.gameObject.SetActive(false);}
+        } }
+    
+        public int collectedStars { get; private set; }
+        public int neededStars { get { return _neededStars;} set { _neededStars = value; } }
+        public int maxStarsAmount { get { return _maxStarsAmount;} set { _maxStarsAmount = value; } }
+        
         [SerializeField] private bool _collectStarsLvl;
         [SerializeField] private int _maxStarsAmount = 1;
-        
-        public int collectedStars { get; private set; }
-        public int neededStars => _neededStars;
         [SerializeField] private int _neededStars = 5;
         
         public Action OnCreatedStar;

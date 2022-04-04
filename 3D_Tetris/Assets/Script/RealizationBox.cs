@@ -1,4 +1,7 @@
-﻿using Script.Controller;
+﻿using System;
+using System.Collections.Generic;
+using Script;
+using Script.Controller;
 using Script.Controller.TouchController;
 using Script.GameLogic;
 using Script.GameLogic.Stars;
@@ -13,15 +16,12 @@ public class RealizationBox : Singleton<RealizationBox>
 {
     [SerializeField] private TetrisFSM _FSM;
     [SerializeField] private GameManager _gameManager;
-    [Space(5)] 
-    [SerializeField] private PlaneMatrix _matrix;
+    [Space(5)] [SerializeField] private PlaneMatrix _matrix;
     [SerializeField] private Generator _generator;
     [SerializeField] private GameLogicPool _gameLogicPool;
-    [Space(5)] 
-    [SerializeField] private ElementDropper _elementDropper;
+    [Space(5)] [SerializeField] private ElementDropper _elementDropper;
     [SerializeField] private ElementCleaner _elementCleaner;
-    [Space(5)] 
-    [SerializeField] private Score _score;
+    [Space(5)] [SerializeField] private Score _score;
     [SerializeField] private InfluenceManager _influenceManager;
 
     [SerializeField] private GameObject _controller;
@@ -34,22 +34,28 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private SlowManager _slowManager;
     [SerializeField] private Transform _place;
     [SerializeField] private Speed _speed;
-    
+
     [SerializeField] private SpeedChanger _speedChanger;
     [SerializeField] private GeneratorChanger _generatorChanger;
-    
-    [Header("UI GameControllers")]
-    [SerializeField] private MovementJoystick _joystick;
+
+    [Header("UI GameControllers")] [SerializeField]
+    private MovementJoystick _joystick;
+
     [SerializeField] private TapsEvents _tapsEvents;
     [SerializeField] private IslandTurn _islandTurn;
-    
-    [Header("Projections")] 
-    [SerializeField] private ProjectionLineManager _projectionLineManager;
+
+    [Header("Projections")] [SerializeField]
+    private ProjectionLineManager _projectionLineManager;
+
     [SerializeField] private Projection _projection;
     [SerializeField] private Ceiling _ceiling;
-    
+
     [SerializeField] private StarsManager _starsManager;
     [SerializeField] private StarUIAnimation _starUIAnimation;
+
+    [Header("Tutorials")]
+    [SerializeField] private GameObject _joystickTutor;
+    [SerializeField] private StarUI _starUI;
     
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
@@ -78,7 +84,21 @@ public class RealizationBox : Singleton<RealizationBox>
     public Ceiling ceiling => _ceiling;
     public StarsManager starsManager => _starsManager;
     public StarUIAnimation starUIAnimation => _starUIAnimation;
+    public StarUI starUI => _starUI;
+
+    private Dictionary<TutorType, GameObject> _tutors;
     
+    public GameObject GetTutor(TutorType t)
+    {
+        return _tutors[t];
+    }
+
+    protected override void Init()
+    {
+        _tutors = new Dictionary<TutorType, GameObject>();
+        _tutors[TutorType.Joystick] = _joystickTutor;
+    }
+
     private void Start()
     {
         ElementData.loader = () => { return _generator.GenerationNewElement(_elementDropper.transform); };

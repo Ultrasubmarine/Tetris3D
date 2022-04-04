@@ -1,3 +1,4 @@
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using Helper.Patterns.FSM;
 using Script.GameLogic.Stars;
@@ -21,9 +22,13 @@ namespace Script.StateMachine.States
         public override void Enter(TetrisState last)
         {
             base.Enter(last);
-            
-            if(!_starsManager.collectStarLvlLvl)
+
+            if (!_starsManager.collectStarLvlLvl)
+            {
                 _FSM.SetNewState(TetrisState.GenerateElement);
+                return;
+            }
+                
 
             if (_starsManager.onCollectedAnimationWaiting) // if u collect u dont create star in this step
             {
