@@ -200,7 +200,28 @@ public class Generator : MonoBehaviour
 
         var emptyPlaces = CalculateEmptyPlaceInCastMatrix();
 
-        int randomIndexPlace = Random.Range(0, emptyPlaces.Count());
+        //pGenerator
+        int randomIndexPlace;
+        int _minIndex = 0;
+        int _minY = emptyPlaces[0].y;
+        for (int i = 1; i < emptyPlaces.Count; i++)
+        {
+            if (emptyPlaces[i].y < _minY)
+            {
+                int index = i;
+                int minY = emptyPlaces[i].y;
+            }
+        }
+        if (Random.Range(0, 1) < _pGenerateNeedElement)
+        {
+            randomIndexPlace = _minIndex;
+        }
+        else
+        {
+            emptyPlaces.RemoveRange(_minIndex,1);
+            randomIndexPlace = Random.Range(0, emptyPlaces.Count());
+        }
+        
 
         var firstPoint = emptyPlaces[randomIndexPlace];
         var lastPoint = emptyPlaces[randomIndexPlace];

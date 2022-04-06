@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 
 namespace Script.GameLogic
 {
     [Serializable]
-    struct ChangeGeneratorInfo
+    public struct ChangeGeneratorInfo
     {
         public float score;
         
@@ -24,7 +25,10 @@ namespace Script.GameLogic
     
     public class GeneratorChanger : MonoBehaviour
     {
-    
+        public List<ChangeGeneratorInfo> points {
+            get => _points;
+            set => _points = value;
+        } 
         [SerializeField] private List<ChangeGeneratorInfo> _points;
     
         private Score _score;
@@ -40,14 +44,26 @@ namespace Script.GameLogic
             _currentIndex = 0;
             SetGeneratorSettings(_startSettings);
         }
-    
+
+        public void SetGeneratorSettings(List<ChangeGeneratorInfo> settings)
+        {
+            _points = new List<ChangeGeneratorInfo>();
+            _points = settings;
+            if (_points.Count > 0 && _points[0].score == 0)
+            { 
+                _generator = RealizationBox.Instance.generator;
+                SetGeneratorSettings(_points[0]);  
+                _startSettings = new ChangeGeneratorInfo(0, _generator.stepOfHardElement, _generator.growBlocksAnywhere);
+            }
+        }
+        
         private void Start()
         {
             _score = RealizationBox.Instance.score;
             _score.onScoreIncrement += onIncrementScore;
 
             _generator = RealizationBox.Instance.generator;
-            _startSettings = new ChangeGeneratorInfo(0, _generator.stepOfHardElement, _generator.growBlocksAnywhere);
+           // _startSettings = new ChangeGeneratorInfo(0, _generator.stepOfHardElement, _generator.growBlocksAnywhere);
         }
 
         private void onIncrementScore(int increment)

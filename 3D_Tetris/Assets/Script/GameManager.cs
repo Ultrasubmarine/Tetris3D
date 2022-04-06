@@ -15,29 +15,45 @@ public class GameManager : MonoBehaviour
     
     private TetrisFSM _fsm;
 
+    private TetrisState _startState;
+    
     public event Action OnReplay;
     
     private void Start()
     {
         _fsm = RealizationBox.Instance.FSM;
         LoadLvlSettings();
+        RealizationBox.Instance.lvlElementsSetter.Init();
+        RealizationBox.Instance.lvlElementsSetter.CreateElements();
         Invoke( nameof(LastStart), 1f);
     }
 
     private void LoadLvlSettings()
     {
         var lvl = LvlLoader.Instance.lvlSettings;
+        var box = RealizationBox.Instance;
 
-        GameObject tutor = RealizationBox.Instance.GetTutor(lvl.tutorType);
-        tutor?.SetActive(true);
-        
-        RealizationBox.Instance.speedChanger.SetSpeedPoints(lvl.speedSettings);
-        
-        RealizationBox.Instance.score.SetWinScore(lvl.winScore);
+        if (lvl.tutorType != TutorType.None)
+        {
+            GameObject tutor = RealizationBox.Instance.GetTutor(lvl.tutorType);
+            tutor.SetActive(true);
+        }
 
-        RealizationBox.Instance.starsManager.neededStars = lvl.starSettings.winAmount;
-        RealizationBox.Instance.starsManager.collectStarLvlLvl = lvl.starSettings.collectStar;
-        RealizationBox.Instance.starsManager.maxStarsAmount = lvl.starSettings.maxStarsInPlace;
+
+        box.speedChanger.SetSpeedPoints(lvl.speedSettings);
+        
+        box.score.SetWinScore(lvl.winScore);
+
+        box.starsManager.neededStars = lvl.starSettings.winAmount;
+        box.starsManager.collectStarLvlLvl = lvl.starSettings.collectStar;
+        box.starsManager.maxStarsAmount = lvl.starSettings.maxStarsInPlace;
+        box.starsManager.stepsBetweenStar = lvl.starSettings.stepsBetweenStar;
+        
+        box.generatorChanger.SetGeneratorSettings(lvl.generatorSettings.points);
+        box.generator._pGenerateNeedElement = lvl.generatorSettings.pGenerateNeededElement;
+
+        box.lvlElementsSetter.createdElements = lvl.lvlElements;
+        box.FSM.startState= lvl.startState;
     }
 
     private void LastStart()
@@ -47,7 +63,8 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        _fsm.StartFSM();
+        _fsm.StartFSMFromCustomState(_startState);
+    //    _fsm.StartFSM();
     }
 
     private void OnLoseGame()
@@ -80,7 +97,7 @@ public class GameManager : MonoBehaviour
         RealizationBox.Instance.speedChanger.ResetSpeed();
         RealizationBox.Instance.generatorChanger.ResetGenerator();
         RealizationBox.Instance.starsManager.Clear();
-       
+        RealizationBox.Instance.lvlElementsSetter.CreateElements();
         //Add boosters
     }
 

@@ -12,16 +12,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e305acaa644cd79e690bc068505a79, type: 3}
   m_Name: Lvl2
   m_EditorClassIdentifier: 
-  _tutorType: 0
+  _tutorType: 2
   _speedSettings:
+  - time: 0.4
+    score: 0
   - time: 0.35
     score: 9
   - time: 0.25
     score: 45
-  - time: 0.2
+  - time: 0.25
     score: 72
-  _winScore: 90
+  _winScore: 0
   _starSettings:
     collectStar: 1
-    maxStarsInPlace: 4
-    winAmount: 10
+    maxStarsInPlace: 3
+    winAmount: 9
+    stepsBetweenStar: 4
+  _generatorSettings:
+    points:
+    - score: 0
+      stepOfHardElement: 2
+      growBlocksAnywhere: 0
+    - score: 18
+      stepOfHardElement: 2
+      growBlocksAnywhere: 1
+    - score: 36
+      stepOfHardElement: 2
+      growBlocksAnywhere: 1
+    - score: 72
+      stepOfHardElement: 3
+      growBlocksAnywhere: 0
+    pGenerateNeededElement: 0.75
+  _lvlElements:
+  - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
+    blocks:
+    - {x: 1, y: 0, z: 0}
+    - {x: 2, y: 0, z: 0}
+    - {x: 2, y: 0, z: 1}
+  - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
+    blocks:
+    - {x: 0, y: 0, z: 1}
+    - {x: 1, y: 0, z: 1}
+    - {x: 1, y: 0, z: 2}
+    - {x: 0, y: 0, z: 2}
+    - {x: 2, y: 0, z: 2}
+  _startState: 8

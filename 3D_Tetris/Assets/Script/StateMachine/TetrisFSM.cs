@@ -55,8 +55,16 @@ public class TetrisFSM : AbstractFSM<TetrisState>
 
     public override void StartFSM()
     {
+        StartFSMFromCustomState(startState);
+        // OnStart?.Invoke();
+        // _current = TetrisState.GenerateElement;
+        // _statesDictionary[_current].Enter(TetrisState.GenerateElement);
+    }
+
+    public override void StartFSMFromCustomState(TetrisState state)
+    {
         OnStart?.Invoke();
-        _current = TetrisState.GenerateElement;
-        _statesDictionary[_current].Enter(TetrisState.GenerateElement);
+        _current = state;
+        _statesDictionary[_current].Enter(_current);
     }
 }

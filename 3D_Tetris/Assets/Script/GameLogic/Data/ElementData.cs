@@ -33,6 +33,10 @@ namespace Script.GameLogic.TetrisElement
             newElement = null;
         }
 
+        public static void MergeElement(Element element)
+        {
+            _mergerElements.Add(element);
+        }
         public static void RemoveMergedElement(Element element)
         {
             _mergerElements.Remove(element);

@@ -55,7 +55,9 @@ public class RealizationBox : Singleton<RealizationBox>
 
     [Header("Tutorials")]
     [SerializeField] private GameObject _joystickTutor;
+    [SerializeField] private GameObject _starsTutor;
     [SerializeField] private StarUI _starUI;
+    [SerializeField] private LvlElementsSetter _lvlElementsSetter;
     
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
@@ -85,7 +87,8 @@ public class RealizationBox : Singleton<RealizationBox>
     public StarsManager starsManager => _starsManager;
     public StarUIAnimation starUIAnimation => _starUIAnimation;
     public StarUI starUI => _starUI;
-
+    public LvlElementsSetter lvlElementsSetter => _lvlElementsSetter;
+        
     private Dictionary<TutorType, GameObject> _tutors;
     
     public GameObject GetTutor(TutorType t)
@@ -97,6 +100,7 @@ public class RealizationBox : Singleton<RealizationBox>
     {
         _tutors = new Dictionary<TutorType, GameObject>();
         _tutors[TutorType.Joystick] = _joystickTutor;
+        _tutors[TutorType.Stars] = _starsTutor;
     }
 
     private void Start()

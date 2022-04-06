@@ -39,6 +39,9 @@ namespace Script.GameLogic.Stars
         public Action OnCollectedStars;
         public bool onCollectedAnimationWaiting { get; private set; }
 
+        public int stepsBetweenStar { get; set; }
+        private int _currentStep;
+        
         [SerializeField] private Mesh _starMesh;
         [SerializeField] private Material _starmaterial;
 
@@ -72,6 +75,7 @@ namespace Script.GameLogic.Stars
       
         private void Start()
         {
+            _currentStep = 1000;
             _rotationStars = new List<StarInfo>();
             _stars = new List<Block>();
             _applicants = new List<Block>();
@@ -113,10 +117,23 @@ namespace Script.GameLogic.Stars
                 AddApplicants(_matrix.wight-1, i, 0);
                 AddApplicants(_matrix.wight-1, i, _matrix.wight-1);
             }
+
+            if (_applicants.Count == 0)
+            {
+                _currentStep++;
+                return false;
+            }
             
-            if (_applicants.Count > 0)
+            if (_currentStep < stepsBetweenStar)
+            {
+                _currentStep++;
+                return false;
+            }
+            else
+            {
+                _currentStep = 0;
                 return true;
-            return false;
+            }
         }
         
         void AddApplicants(int x, int y, int z)
@@ -226,6 +243,7 @@ namespace Script.GameLogic.Stars
             _stars.Clear();
             _applicants.Clear();
             collectedStars = 0;
+            _currentStep = 1000;
             OnUpdatedCollectingStars?.Invoke();
         }
 

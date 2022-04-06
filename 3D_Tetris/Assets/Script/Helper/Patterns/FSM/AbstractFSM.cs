@@ -13,6 +13,8 @@ namespace Helper.Patterns.FSM
         protected T _last;
         protected T _current;
 
+        public T startState;
+        
         public T GetCurrentState()
         {
             return _current;
@@ -25,6 +27,8 @@ namespace Helper.Patterns.FSM
 
         public abstract void StartFSM();
 
+        public abstract void StartFSMFromCustomState(T state);
+        
         public virtual void SetNewState(T newState)
         {
 			_statesDictionary[_current].Exit(newState);

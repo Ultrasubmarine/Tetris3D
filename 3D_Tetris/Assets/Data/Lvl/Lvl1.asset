@@ -14,10 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tutorType: 1
   _speedSettings:
+  - time: 0.45
+    score: 0
   - time: 0.35
-    score: 9
-  _winScore: 81
+    score: 36
+  - time: 0.3
+    score: 63
+  _winScore: 99
   _starSettings:
     collectStar: 0
     maxStarsInPlace: 0
     winAmount: 0
+  _generatorSettings:
+    points:
+    - score: 0
+      stepOfHardElement: 1
+      growBlocksAnywhere: 0
+    - score: 27
+      stepOfHardElement: 2
+      growBlocksAnywhere: 0
+    - score: 63
+      stepOfHardElement: 2
+      growBlocksAnywhere: 1
+    pGenerateNeededElement: 0.8

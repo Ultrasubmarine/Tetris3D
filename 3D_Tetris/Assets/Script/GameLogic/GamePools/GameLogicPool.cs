@@ -73,7 +73,7 @@ public class GameLogicPool : MonoBehaviour
     }
     
     
-    private void Start()
+    private void Awake()
     {
         _elementPool = new Pool<Element>(_elementPrefab.GetComponent<Element>(), _elementPoolParent);
         _blockPool = new Pool<Block>(_blockPrefab.GetComponent<Block>(), _blockPoolParent);

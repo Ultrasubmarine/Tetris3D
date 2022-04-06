@@ -30,7 +30,12 @@ namespace Script.Speed
 
         public void SetSpeedPoints(List<ChangeSpeedInfo> points)
         {
+            _points = new List<ChangeSpeedInfo>();
             _points = points;
+            if (_points.Count > 0 && _points[0].score == 0)
+            {
+                global::Speed.SetTimeDrop(_points[0].time);
+            }
         }
         
         private void Start()

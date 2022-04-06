@@ -10,7 +10,7 @@ namespace Script.StateMachine.States
     {
         private PlaneMatrix _matrix;
         private StarsManager _starsManager;
-        
+
         public CreateStarState ()
         {
             _myState = TetrisState.CreateStar;
