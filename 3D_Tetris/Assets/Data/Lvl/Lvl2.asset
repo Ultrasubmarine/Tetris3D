@@ -14,14 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tutorType: 2
   _speedSettings:
-  - time: 0.4
+  - time: 0.45
     score: 0
   - time: 0.35
-    score: 9
+    score: 27
   - time: 0.25
     score: 45
-  - time: 0.25
+  - time: 0.2
     score: 72
+  - time: 0.25
+    score: 81
   _winScore: 0
   _starSettings:
     collectStar: 1
@@ -57,3 +59,6 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 2}
     - {x: 2, y: 0, z: 2}
   _startState: 8
+  _starPlaces:
+  - amountStars: 1
+    position: {x: 2, y: 0, z: 0}

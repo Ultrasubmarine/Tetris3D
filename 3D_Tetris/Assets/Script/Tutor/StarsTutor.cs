@@ -33,12 +33,37 @@ namespace Script.Tutor
             RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
             
             RealizationBox.Instance.FSM.onStateChange+= FirstStep;
-
+            RealizationBox.Instance.FSM.onStateChange += OnGenerateFirstElement;
+            
             RealizationBox.Instance.generator.fixedHightPosition = 10;
             _pGenerator = RealizationBox.Instance.generator._pGenerateNeedElement;
             RealizationBox.Instance.generator._pGenerateNeedElement = 2;
         }
 
+        void OnGenerateFirstElement(TetrisState state )
+        {
+            if (state != TetrisState.GenerateElement)
+                return;
+            RealizationBox.Instance.FSM.onStateChange -= OnGenerateFirstElement;
+            
+            IEnumerable<CoordinatXZ> razn;
+            do
+            {
+                IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ;
+                blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);
+                blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
+                razn = blocksXZ.Except(blocksAnswerXZ);
+
+                if (!razn.Any())
+                {
+                    RealizationBox.Instance.generator.SetRandomPosition(ElementData.newElement);
+                    RealizationBox.Instance.projectionLineManager.UpdateProjectionLines();
+                    RealizationBox.Instance.projection.CreateProjection();
+                }
+                   
+            } while (!razn.Any());
+        }
+      
         void FirstStep(TetrisState state)
         {
             // if (state == TetrisState.CreateStar)

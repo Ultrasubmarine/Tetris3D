@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using IntegerExtension;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -19,6 +20,18 @@ namespace Script.GameLogic.Stars
         }
     }
 
+    [Serializable]
+    public struct StarPlace
+    {
+        public int amountStars;
+        public Vector3Int position;
+
+        public void increment(int amnt)
+        {
+            amountStars = amnt;
+        }
+    }
+    
     public class StarsManager : MonoBehaviour
     {
         public bool collectStarLvlLvl { get { return _collectStarsLvl; } set 
@@ -71,6 +84,8 @@ namespace Script.GameLogic.Stars
         private PlaneMatrix _matrix;
         private Transform _cameraTransform;
 
+        public List<StarPlace> starPlaces { get; set; }
+        
         [SerializeField] private Transform _lookAtStar;
       
         private void Start()
@@ -105,6 +120,15 @@ namespace Script.GameLogic.Stars
         {
             if (_stars.Count >= _maxStarsAmount)
                 return false;
+
+            foreach (var p in starPlaces)
+            {
+                if (!_matrix.CheckEmptyPlace(p.position.x, p.position.y, p.position.z))
+                {
+                    _currentStep = 0;
+                    return true;
+                }
+            }
             
             _applicants.Clear();
             for (int i = 0; i <= _matrix.height; i++)
@@ -146,11 +170,34 @@ namespace Script.GameLogic.Stars
         }
 
         public void CreateStar()
-        {
-            var rndBlock = _applicants[Random.Range(0, _applicants.Count)];
+        {  
+            Block rndBlock; 
             
-            _stars.Add(rndBlock);
-            rndBlock.OnCollected += CollectStar;
+            int ind = -1;
+            for (int i=0; i < starPlaces.Count; i++)
+            {
+                if (!_matrix.CheckEmptyPlace(starPlaces[i].position.x, starPlaces[i].position.y, starPlaces[i].position.z))
+                {
+                    ind = i;
+                    break;
+                }
+            }
+
+            if (ind != -1)
+            {
+                rndBlock = _matrix.GetBlockInPlace(starPlaces[ind].position.x, starPlaces[ind].position.y, starPlaces[ind].position.z);
+                if (starPlaces[ind].amountStars - 1 == 0) 
+                    starPlaces.RemoveRange(ind,1);
+                else 
+                    starPlaces[ind].increment(starPlaces[ind].amountStars-1); 
+            }
+            else
+            {
+                rndBlock = _applicants[Random.Range(0, _applicants.Count)];
+            }
+            
+            _stars.Add(rndBlock); 
+            rndBlock.OnCollected += CollectStar; 
             CreateAnimation(rndBlock);
         }
 

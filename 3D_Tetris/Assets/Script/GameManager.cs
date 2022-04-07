@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using Script;
+using Script.GameLogic;
+using Script.GameLogic.Stars;
 using Script.UI;
 using UnityEngine;
 
@@ -30,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     private void LoadLvlSettings()
     {
-        var lvl = LvlLoader.Instance.lvlSettings;
+        var lvl = LvlLoader.instance.lvlSettings;
         var box = RealizationBox.Instance;
 
         if (lvl.tutorType != TutorType.None)
@@ -48,11 +51,12 @@ public class GameManager : MonoBehaviour
         box.starsManager.collectStarLvlLvl = lvl.starSettings.collectStar;
         box.starsManager.maxStarsAmount = lvl.starSettings.maxStarsInPlace;
         box.starsManager.stepsBetweenStar = lvl.starSettings.stepsBetweenStar;
+        box.starsManager.starPlaces = new List<StarPlace>(lvl.starPlaces);
         
         box.generatorChanger.SetGeneratorSettings(lvl.generatorSettings.points);
         box.generator._pGenerateNeedElement = lvl.generatorSettings.pGenerateNeededElement;
 
-        box.lvlElementsSetter.createdElements = lvl.lvlElements;
+        box.lvlElementsSetter.createdElements = new List<CreatedElement>(lvl.lvlElements);
         box.FSM.startState= lvl.startState;
     }
 

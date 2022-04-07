@@ -4,16 +4,11 @@ namespace Script
 {
     
     //[Destr]
-    public class LvlLoader : Singleton<LvlLoader>
+    public class LvlLoader : MonoBehaviourSingleton<LvlLoader>
     {
         public LvlSettings lvlSettings => _lvlSettings;
         
         private LvlSettings _lvlSettings;
-        
-        protected override void Init()
-        {
-            DontDestroyOnLoad(this.gameObject);
-        }
 
         public void Select(LvlSettings lvl)
         {

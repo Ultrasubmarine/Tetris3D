@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Script;
 using Script.GameLogic;
+using Script.GameLogic.Stars;
 using Script.Speed; // for ChangeSpeedInfo
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -34,6 +35,7 @@ namespace Script
         public GeneratorSettings generatorSettings => _generatorSettings;
         public List<CreatedElement> lvlElements => _lvlElements;
         public TetrisState startState => _startState;
+        public List<StarPlace> starPlaces => _starPlaces;
         
         [SerializeField] private TutorType _tutorType;
         [SerializeField] private List<ChangeSpeedInfo> _speedSettings;
@@ -42,6 +44,6 @@ namespace Script
         [SerializeField] private GeneratorSettings _generatorSettings;
         [SerializeField] private List<CreatedElement> _lvlElements;
         [SerializeField] private TetrisState _startState = TetrisState.GenerateElement;
-        
+        [SerializeField] private List<StarPlace> _starPlaces;
     }
 }
