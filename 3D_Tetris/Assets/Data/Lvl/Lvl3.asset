@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55e305acaa644cd79e690bc068505a79, type: 3}
-  m_Name: Lvl2 1
+  m_Name: Lvl3
   m_EditorClassIdentifier: 
   _tutorType: 0
   _speedSettings:
@@ -27,8 +27,8 @@ MonoBehaviour:
   _winScore: 0
   _starSettings:
     collectStar: 1
-    maxStarsInPlace: 7
-    winAmount: 7
+    maxStarsInPlace: 1
+    winAmount: 1
     stepsBetweenStar: 0
   _generatorSettings:
     points:
@@ -46,19 +46,35 @@ MonoBehaviour:
       growBlocksAnywhere: 0
     pGenerateNeededElement: 0.75
   _lvlElements:
+  - material: {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
+    blocks:
+    - {x: 1, y: 0, z: 1}
   - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
     blocks:
-    - {x: 1, y: 0, z: 0}
     - {x: 2, y: 0, z: 0}
-    - {x: 2, y: 0, z: 1}
+    - {x: 2, y: 1, z: 0}
+  - material: {fileID: 2100000, guid: 3963cdb215dc4f54ab8f2d3dabaff056, type: 2}
+    blocks:
+    - {x: 0, y: 0, z: 2}
+    - {x: 0, y: 1, z: 2}
   - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
     blocks:
-    - {x: 0, y: 0, z: 1}
-    - {x: 1, y: 0, z: 1}
-    - {x: 1, y: 0, z: 2}
-    - {x: 0, y: 0, z: 2}
-    - {x: 2, y: 0, z: 2}
+    - {x: 2, y: 2, z: 0}
+    - {x: 1, y: 2, z: 0}
+    - {x: 1, y: 2, z: 1}
+    - {x: 0, y: 2, z: 1}
+    - {x: 0, y: 2, z: 2}
+  - material: {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
+    blocks:
+    - {x: 2, y: 3, z: 0}
+    - {x: 2, y: 4, z: 0}
+    - {x: 1, y: 4, z: 0}
+    - {x: 0, y: 4, z: 0}
+    - {x: 0, y: 4, z: 1}
+    - {x: 0, y: 4, z: 2}
+    - {x: 0, y: 3, z: 2}
+    - {x: 1, y: 4, z: 1}
   _startState: 8
   _starPlaces:
   - amountStars: 1
-    position: {x: 2, y: 0, z: 0}
+    position: {x: 1, y: 0, z: 1}
