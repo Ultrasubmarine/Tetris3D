@@ -73,7 +73,7 @@ namespace Script.GameLogic.Stars
             
             animation.OnComplete(() =>
             {
-                if (_collectStarsInAnimation == 1 && _dissapearAfterComplete)
+                if ((_collectStarsInAnimation == 1 && _dissapearAfterComplete ) || RealizationBox.Instance.FSM.GetCurrentState() == TetrisState.WinGame)
                 {
                     DissapearAnimation();
                 }

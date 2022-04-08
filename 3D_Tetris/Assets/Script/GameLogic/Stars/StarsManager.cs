@@ -207,16 +207,19 @@ namespace Script.GameLogic.Stars
             _animationStar.transform.localPosition = Vector3.zero;
             _animationStar.transform.localRotation = Quaternion.identity;
             
-            Vector3 endPosition =  _animationStar.InverseTransformPoint(block.myTransform.position);;
+            Vector3 endPosition =  _animationStar.InverseTransformPoint(block.myTransform.position);
             
             _animationPath.Add(endPosition);
-            _animationPath[0] = new Vector3(endPosition.x * _firstPointR, _animationPath[0].y, endPosition.z * _firstPointR);
+           _animationPath[0] = new Vector3(endPosition.x * _firstPointR, _animationPath[0].y, endPosition.z * _firstPointR);
+           if(endPosition.x < 0 && endPosition.z < 0) // animation bug with star path
+               _animationPath[1] = new Vector3((endPosition.x -1) * _secondPointR + 0.5f * _secondPointR  , endPosition.y + _secondPointYP, (endPosition.z - 1) * _secondPointR + 0.5f * _secondPointR );
+           else
             _animationPath[1] = new Vector3(endPosition.x * _secondPointR + 0.5f * _secondPointR  , endPosition.y + _secondPointYP, endPosition.z * _secondPointR + 0.5f * _secondPointR );
 
             _animationStar.gameObject.SetActive(true);
-            _animationStar.localPosition = _animationPath[0];
+            _animationStar.localPosition = _animationPath[0];//new Vector3(0, _highestPathPos, 0);//
             _animationStar.LookAt(_cameraTransform);//Camera.main.transform);
-            _animationStar.DOLocalPath(_animationPath.ToArray(), 2, PathType.CatmullRom, PathMode.Ignore).
+            _animationStar.DOLocalPath(_animationPath.ToArray(), 2, PathType.CatmullRom, PathMode.Ignore, gizmoColor : Color.green).
                     OnUpdate(() =>
                     {
                         _fallStarAngle += Time.deltaTime *_fallStarRotationSpeed;
@@ -248,7 +251,7 @@ namespace Script.GameLogic.Stars
                   _rotationStars.Add(new StarInfo(block, 0));
               });
 
-            _animationStar.DOLocalRotate(Vector3.forward, 4).SetLoops(-1,LoopType.Incremental);
+            //_animationStar.DOLocalRotate(Vector3.forward, 4).SetLoops(-1,LoopType.Incremental);
         }
 
         public void CollectStar(Block star)
