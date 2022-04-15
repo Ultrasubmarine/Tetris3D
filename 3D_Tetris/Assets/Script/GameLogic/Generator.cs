@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using IntegerExtension;
 using Script.Influence;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public struct IndexVector
@@ -18,6 +19,66 @@ public struct IndexVector
     }
 }
 
+[Serializable]
+public struct BanLineElement
+{
+    public bool isBan;
+    
+    public int amountForBan; // if line generated so many times 
+    public int currentAmountForBan;
+
+    //step after ban
+    public int freezeSteps;
+    public int currentFreeze;
+    
+    public BanLineElement(bool isBan, int amountForBan, int freezeSteps)
+    {
+        this.isBan = isBan;
+        
+        this.amountForBan = amountForBan;
+        this.freezeSteps = freezeSteps;
+        
+        this.currentFreeze = 0;
+        currentAmountForBan = 0;
+    }
+    
+    public void IncrementFreezeStep()
+    {
+        if (currentFreeze + 1 == freezeSteps)
+        {
+            isBan = false;
+            currentFreeze = 0;
+        }
+        else
+        {
+            currentFreeze++; 
+        }
+    }
+    public void IncrementLine()
+    {
+        if (currentAmountForBan + 1 == amountForBan)
+        {
+            isBan = true;
+            currentAmountForBan = 0;
+        }
+        else
+        {
+            currentAmountForBan++;
+        }
+    }
+    public void ClearLine()
+    {
+        this.currentAmountForBan = 0;
+    }
+
+    public void NotLine()
+    {
+        if (isBan)
+            IncrementFreezeStep();
+        else
+            ClearLine();
+    }
+}
 public class Generator : MonoBehaviour
 {
     private GameLogicPool _pool;
@@ -47,7 +108,8 @@ public class Generator : MonoBehaviour
 
     [SerializeField] public int stepOfHardElement = 2; // 1-min 3-max
     [SerializeField] public bool growBlocksAnywhere = false; // grow more hard element
-    
+
+    [FormerlySerializedAs("_blockLineElement")] [SerializeField] private BanLineElement banLineElement; // for chiters 
     private void Start()
     {
         _matrix = RealizationBox.Instance.matrix;
@@ -143,25 +205,25 @@ public class Generator : MonoBehaviour
         int posNeibhord;
         
         posNeibhord = IsMinimalYBetween(point + new Vector3Int(1, 0, 0), point.y, point.y + delay);
-        if (posNeibhord  != 404)
+        if (posNeibhord  != 404 && posNeibhord != -1)
         {
             weight += posNeibhord;
             amountOfNeighbords++;
         }
         posNeibhord = IsMinimalYBetween(point + new Vector3Int(-1, 0, 0), point.y, point.y + delay);
-        if (posNeibhord  != 404)
+        if (posNeibhord  != 404 && posNeibhord != -1)
         {
             weight += posNeibhord;
             amountOfNeighbords++;
         }
         posNeibhord = IsMinimalYBetween(point + new Vector3Int(0, 0, 1), point.y, point.y + delay);
-        if (posNeibhord  != 404)
+        if (posNeibhord  != 404 && posNeibhord != -1)
         {
             weight += posNeibhord;
             amountOfNeighbords++;
         }
         posNeibhord = IsMinimalYBetween(point + new Vector3Int(0, 0, -1), point.y, point.y + delay);
-        if (posNeibhord  != 404)
+        if (posNeibhord  != 404 && posNeibhord != -1)
         {
             weight += posNeibhord;
             amountOfNeighbords++;
@@ -266,42 +328,84 @@ public class Generator : MonoBehaviour
             else if (different.z != 0)
                 elementComplexity.z = 1;
         }
+
+        if (isLineElement(createElement))
+        {
+            if (banLineElement.isBan)
+                //change element.Add random block
+            {
+                elementComplexity = Vector3Int.zero;
+             
+                freePlaces.Clear();
+                freePlaces = FoundFreePlacesAround(lastPoint, lastPoint,elementComplexity, true);
+                
+                var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
+                lastPoint = generatePoint.newPoint;
+                _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
+                Debug.Log("cheat BLOCK CrEATED");
+            }
+            else
+            {
+                banLineElement.IncrementLine();
+            }
+        }
+        else
+        {
+            banLineElement.NotLine();
+        }
+            
         return createElement;
     }
 
-    private List<IndexVector> FoundFreePlacesAround(Vector3Int firstPoint, Vector3Int point, Vector3Int elementComplexity)
+    private bool isLineElement(Element element)
+    {
+        if (element.blocks.Count != 3)
+            return false;
+      
+        for (int i = 0; i < element.blocks.Count-1; i++)
+        {
+            if (element.blocks[i].xz != element.blocks[i + 1].xz)
+                return false;
+        }
+        return true;
+    }
+    
+    private List<IndexVector> FoundFreePlacesAround(Vector3Int firstPoint, Vector3Int point, Vector3Int elementComplexity, bool ignoreCastBlocks = false)
     {
         var listPov = new List<IndexVector>();
         
-        if (CheckEmptyPlace(point + new Vector3Int(1, 0, 0)) 
+        if (CheckEmptyPlace(point + new Vector3Int(1, 0, 0),ignoreCastBlocks) 
             && (1 + elementComplexity.y + elementComplexity.z <= stepOfHardElement))
             listPov.Add(new IndexVector (point + new Vector3Int(1, 0, 0),point));
 
-        if (CheckEmptyPlace(point + new Vector3Int(-1, 0, 0))
+        if (CheckEmptyPlace(point + new Vector3Int(-1, 0, 0),ignoreCastBlocks)
             && (1 + elementComplexity.y + elementComplexity.z <= stepOfHardElement))
             listPov.Add(new IndexVector (point + new Vector3Int(-1, 0, 0),point));
         
-        if (CheckEmptyPlace(point + new Vector3Int(0, 0, 1))
+        if (CheckEmptyPlace(point + new Vector3Int(0, 0, 1),ignoreCastBlocks)
             && (elementComplexity.x + elementComplexity.y + 1 <= stepOfHardElement))
             listPov.Add(new IndexVector (point + new Vector3Int(0, 0, 1),point));
         
-        if (CheckEmptyPlace(point + new Vector3Int(0, 0, -1))
+        if (CheckEmptyPlace(point + new Vector3Int(0, 0, -1),ignoreCastBlocks)
             && (elementComplexity.x + elementComplexity.y + 1 <= stepOfHardElement))
             listPov.Add(new IndexVector (point + new Vector3Int(0, 0, -1),point));
 
         if (point.y - firstPoint.y < 2)//(point.y < 7 - 1)//2)
-            if (CheckEmptyPlace(point + new Vector3Int(0, 1, 0))
+            if (CheckEmptyPlace(point + new Vector3Int(0, 1, 0),ignoreCastBlocks)
                 && (elementComplexity.x + 1 + elementComplexity.z <= stepOfHardElement))
                 listPov.Add(new IndexVector (point + new Vector3Int(0, 1, 0),point));
 
         return listPov;
     }
 
-    private bool CheckEmptyPlace(Vector3Int indices)
+    private bool CheckEmptyPlace(Vector3Int indices, bool ignoreCastBlocks = false)
     {
         if (indices.OutOfIndexLimit())
             return false;
 
+        if (ignoreCastBlocks)
+            return true;
+        
         if (indices.y != 0 && _castMatrix[indices.x, indices.y - 1, indices.z])
             return false;
 
