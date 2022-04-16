@@ -20,6 +20,20 @@ public struct IndexVector
 }
 
 [Serializable]
+public struct ProbabilitySettings
+{
+    public int layerDown;
+    public int neighbours;
+    public int startPoints;
+    public ProbabilitySettings(int layerDown, int neighbours, int startPoints)
+    {
+        this.layerDown = layerDown;
+        this.neighbours = neighbours;
+        this.startPoints = startPoints;
+    }
+}
+
+[Serializable]
 public struct BanLineElement
 {
     public bool isBan;
@@ -93,7 +107,7 @@ public class Generator : MonoBehaviour
     [Tooltip(" подсказка места расположения падающего элемента")] [SerializeField]
     private Material _BonusMaterial;
 
-    public float _pGenerateNeedElement = 0.5f;
+    public bool _generateNeedElement = false;
     
     private PlaneMatrix _matrix;
     private HeightHandler _heightHandler;
@@ -109,7 +123,10 @@ public class Generator : MonoBehaviour
     [SerializeField] public int stepOfHardElement = 2; // 1-min 3-max
     [SerializeField] public bool growBlocksAnywhere = false; // grow more hard element
 
-    [FormerlySerializedAs("_blockLineElement")] [SerializeField] private BanLineElement banLineElement; // for chiters 
+    [FormerlySerializedAs("_blockLineElement")] [SerializeField] private BanLineElement banLineElement; // for chiters
+
+    [SerializeField] private ProbabilitySettings _probabilitySettings = new ProbabilitySettings(20,5,10);
+    
     private void Start()
     {
         _matrix = RealizationBox.Instance.matrix;
@@ -164,16 +181,18 @@ public class Generator : MonoBehaviour
         return newElement;
     }
 
+   
     private bool[,,] CreateCastMatrix(int min)
     {
-        var castMatrix = new bool[3, 7, 3];
+        int y_size = _heightHandler.limitHeight;
+        var castMatrix = new bool[3, y_size, 3];
         int barrier;
 
         for (var x = 0; x < 3; x++)
         for (var z = 0; z < 3; z++)
         {
             barrier = _matrix.MinHeightInCoordinates(x, z);
-            for (var y = min + 7 - 1; y >= min; y--) castMatrix[x, y - min, z] = y >= barrier;
+            for (var y = min + y_size - 1; y >= min; y--) castMatrix[x, y - min, z] = y >= barrier;
         }
 
         return castMatrix;
@@ -189,7 +208,8 @@ public class Generator : MonoBehaviour
         {
             if (_castMatrix[x, y, z]) // empty
             {
-                if(HasNeibhords(new Vector3Int(x,y,z), 1))
+                int amount;
+                if(HasNeibhords(new Vector3Int(x,y,z), 1, out amount))
                     place.Add(new Vector3Int(x, y, z));
                 break;
             }
@@ -197,7 +217,7 @@ public class Generator : MonoBehaviour
         return place;
     }
 
-    private bool HasNeibhords(Vector3Int point, int delay)
+    private bool HasNeibhords(Vector3Int point, int delay, out int amountNeighbours)
     {
         int amountOfNeighbords = 0;
         int weight = 0;
@@ -228,7 +248,8 @@ public class Generator : MonoBehaviour
             weight += posNeibhord;
             amountOfNeighbords++;
         }
-        
+
+        amountNeighbours = amountOfNeighbords;
         if(amountOfNeighbords + weight == 0) // the tallest
             return false;
         return true;
@@ -260,99 +281,93 @@ public class Generator : MonoBehaviour
 
         var createElement = _pool.CreateEmptyElement();
 
-        var emptyPlaces = CalculateEmptyPlaceInCastMatrix();
-
-        //pGenerator
-        int randomIndexPlace;
-        int _minIndex = 0;
-        int _minY = emptyPlaces[0].y;
-        for (int i = 1; i < emptyPlaces.Count; i++)
+        _castMatrix = CreateCastMatrix(_minPoint.y);
+        do
         {
-            if (emptyPlaces[i].y < _minY)
+            Debug.ClearDeveloperConsole();
+            Debug.Log("not change");
+            if (isLineElement(createElement) && banLineElement.isBan)
             {
-                int index = i;
-                int minY = emptyPlaces[i].y;
-            }
-        }
-        if (Random.Range(0, 1) < _pGenerateNeedElement)
-        {
-            randomIndexPlace = _minIndex;
-        }
-        else
-        {
-            emptyPlaces.RemoveRange(_minIndex,1);
-            randomIndexPlace = Random.Range(0, emptyPlaces.Count());
-        }
-        
-
-        var firstPoint = emptyPlaces[randomIndexPlace];
-        var lastPoint = emptyPlaces[randomIndexPlace];
-        _castMatrix[emptyPlaces[randomIndexPlace].x, emptyPlaces[randomIndexPlace].y, emptyPlaces[randomIndexPlace].z] = false;
-
-        Vector3Int deltaY = new Vector3Int(0, firstPoint.y, 0);
-        _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
-
-        
-        List<IndexVector> freePlaces = new List<IndexVector>();
-        List<Vector3Int> generatePoints = new List<Vector3Int>();
-        
-        generatePoints.Add(lastPoint);
-        Vector3Int elementComplexity = Vector3Int.zero;
-        for (var i = 0; i < 3; i++)
-        {
-            if (growBlocksAnywhere)
-            {
-                freePlaces.Clear();
-                foreach (var block in generatePoints)
+                Debug.ClearDeveloperConsole();
+                Debug.Log("change pos");
+                foreach (var b in createElement.blocks)
                 {
-                    freePlaces.AddRange(FoundFreePlacesAround(firstPoint, block, elementComplexity));
+                    _castMatrix[b._coordinates.x.ToIndex(), b._coordinates.y, b._coordinates.z.ToIndex()] = true; // clear
+                    _pool.DeleteBlock(b);
+                }
+                createElement.blocks.Clear();
+            }
+
+            var firstPoint = GetStartEmptyPosition();
+            var lastPoint = firstPoint;
+            _castMatrix[firstPoint.x, firstPoint.y, firstPoint.z] = false;
+
+            Vector3Int deltaY = new Vector3Int(0, firstPoint.y, 0);
+            _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
+
+            
+            List<IndexVector> freePlaces = new List<IndexVector>();
+            List<Vector3Int> generatePoints = new List<Vector3Int>();
+            
+            generatePoints.Add(lastPoint);
+            Vector3Int elementComplexity = Vector3Int.zero;
+            for (var i = 0; i < 3; i++)
+            {
+                if (growBlocksAnywhere)
+                {
+                    freePlaces.Clear();
+                    foreach (var block in generatePoints)
+                    {
+                        freePlaces.AddRange(FoundFreePlacesAround(firstPoint, block, elementComplexity));
+                    }
+                }
+                else
+                    freePlaces = FoundFreePlacesAround(firstPoint, lastPoint, elementComplexity);
+                if (freePlaces.Count == 0)
+                    break;
+                
+                var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
+                var different = generatePoint.parentPoint - generatePoint.newPoint;
+                lastPoint = generatePoint.newPoint;
+                
+                _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
+                _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;
+                generatePoints.Add(lastPoint);
+                
+                if (different.x != 0)
+                    elementComplexity.x = 1;
+                else if (different.y != 0)
+                    elementComplexity.y = 1;
+                else if (different.z != 0)
+                    elementComplexity.z = 1;
+            }
+
+            if (isLineElement(createElement))
+            {
+                if (banLineElement.isBan)
+                    //change element.Add random block
+                {
+                    // elementComplexity = Vector3Int.zero;
+                    //
+                    // freePlaces.Clear();
+                    // freePlaces = FoundFreePlacesAround(lastPoint, lastPoint,elementComplexity, true);
+                    //
+                    // var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
+                    // lastPoint = generatePoint.newPoint;
+                    // _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
+                    // Debug.Log("cheat BLOCK CrEATED");
+                }
+                else
+                {
+                    banLineElement.IncrementLine();
                 }
             }
             else
-                freePlaces = FoundFreePlacesAround(firstPoint, lastPoint, elementComplexity);
-            if (freePlaces.Count == 0)
-                break;
-            
-            var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
-            var different = generatePoint.parentPoint - generatePoint.newPoint;
-            lastPoint = generatePoint.newPoint;
-            
-            _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
-            _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;
-            generatePoints.Add(lastPoint);
-            
-            if (different.x != 0)
-                elementComplexity.x = 1;
-            else if (different.y != 0)
-                elementComplexity.y = 1;
-            else if (different.z != 0)
-                elementComplexity.z = 1;
-        }
+            {
+                banLineElement.NotLine();
+            }
 
-        if (isLineElement(createElement))
-        {
-            if (banLineElement.isBan)
-                //change element.Add random block
-            {
-                elementComplexity = Vector3Int.zero;
-             
-                freePlaces.Clear();
-                freePlaces = FoundFreePlacesAround(lastPoint, lastPoint,elementComplexity, true);
-                
-                var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
-                lastPoint = generatePoint.newPoint;
-                _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
-                Debug.Log("cheat BLOCK CrEATED");
-            }
-            else
-            {
-                banLineElement.IncrementLine();
-            }
-        }
-        else
-        {
-            banLineElement.NotLine();
-        }
+        } while (isLineElement(createElement) && banLineElement.isBan); // "generateCount < 15" - if creating another element is impossible
             
         return createElement;
     }
@@ -368,6 +383,66 @@ public class Generator : MonoBehaviour
                 return false;
         }
         return true;
+    }
+    
+    private Vector3Int GetStartEmptyPosition() // for grow element 
+    {
+        var emptyPlaces = CalculateEmptyPlaceInCastMatrix();
+
+        emptyPlaces.Sort((a, b) => { return a.y - b.y;});
+
+        if (_generateNeedElement)
+            return emptyPlaces[0]; // min 
+
+        int max_y = emptyPlaces.Max((i => i.y));
+
+        List<float> percents = new List<float>();
+
+        int sum = 0;
+        float onePr;
+
+       
+        foreach (var place in emptyPlaces) // set points for all places 
+        {
+            int amount;
+            HasNeibhords(place, 1, out amount);
+            
+            int points = (max_y - place.y) * _probabilitySettings.layerDown + amount * _probabilitySettings.neighbours 
+                                                                            + _probabilitySettings.startPoints; // rule for points 
+            percents.Add(points);
+            sum += points;
+        }
+        onePr = sum * 0.01f;
+        
+        float p = Random.Range(0, 100);
+        float currentLine = 0;
+        
+        string debugstr = "";
+        // convert points to percent
+        for (int i=0; i< percents.Count; i++)
+        {
+            percents[i] /= onePr;
+            
+            debugstr += percents[i].ToString();
+            if (i % 3 == 0)
+                debugstr += "\n";
+            else 
+                debugstr += "   ";
+        }
+        
+        Debug.Log(debugstr);
+        for (int i=0; i< percents.Count; i++)
+        {
+            if (percents[i] + currentLine > p)
+            {
+                Debug.Log("choose" + i);
+                return emptyPlaces[i];
+            }
+
+            currentLine += percents[i];
+        }
+        
+        return emptyPlaces[emptyPlaces.Count - 1];
     }
     
     private List<IndexVector> FoundFreePlacesAround(Vector3Int firstPoint, Vector3Int point, Vector3Int elementComplexity, bool ignoreCastBlocks = false)

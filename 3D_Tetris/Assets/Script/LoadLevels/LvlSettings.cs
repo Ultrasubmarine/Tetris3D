@@ -22,7 +22,7 @@ namespace Script
     public struct GeneratorSettings
     {
         public List<ChangeGeneratorInfo> points;
-        public float pGenerateNeededElement;
+        public bool pGenerateNeededElement;
     }
 
     [CreateAssetMenu(fileName = "LvlSettings", menuName = "Lvl", order = 0)]

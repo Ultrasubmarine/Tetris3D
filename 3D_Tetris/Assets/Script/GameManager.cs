@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         box.starsManager.starPlaces = new List<StarPlace>(lvl.starPlaces);
         
         box.generatorChanger.SetGeneratorSettings(lvl.generatorSettings.points);
-        box.generator._pGenerateNeedElement = lvl.generatorSettings.pGenerateNeededElement;
+        box.generator._generateNeedElement = lvl.generatorSettings.pGenerateNeededElement;
 
         box.lvlElementsSetter.createdElements = new List<CreatedElement>(lvl.lvlElements);
         box.FSM.startState= lvl.startState;

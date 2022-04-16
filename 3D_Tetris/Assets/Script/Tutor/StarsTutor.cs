@@ -17,7 +17,7 @@ namespace Script.Tutor
         [SerializeField] private CanvasGroup _topPanel;
         [SerializeField] private CanvasGroup _bottomPanel;
 
-        private float _pGenerator;
+        private bool _generateNeedElement;
 
         private bool _canPlace = false;
         
@@ -36,8 +36,8 @@ namespace Script.Tutor
             RealizationBox.Instance.FSM.onStateChange += OnGenerateFirstElement;
             
             RealizationBox.Instance.generator.fixedHightPosition = 10;
-            _pGenerator = RealizationBox.Instance.generator._pGenerateNeedElement;
-            RealizationBox.Instance.generator._pGenerateNeedElement = 2;
+            _generateNeedElement = RealizationBox.Instance.generator._generateNeedElement;
+            RealizationBox.Instance.generator._generateNeedElement = true;
         }
 
         void OnGenerateFirstElement(TetrisState state )
@@ -133,7 +133,7 @@ namespace Script.Tutor
             {
                 RealizationBox.Instance.slowManager.SetPauseSlow(false);
                 RealizationBox.Instance.tapsEvents.enabled = true;
-                RealizationBox.Instance.generator._pGenerateNeedElement = _pGenerator;
+                RealizationBox.Instance.generator._generateNeedElement = _generateNeedElement;
                 gameObject.SetActive(false);
             });
             
