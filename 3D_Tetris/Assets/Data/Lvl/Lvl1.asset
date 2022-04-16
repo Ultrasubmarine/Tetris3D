@@ -25,6 +25,7 @@ MonoBehaviour:
     collectStar: 0
     maxStarsInPlace: 0
     winAmount: 0
+    stepsBetweenStar: 0
   _generatorSettings:
     points:
     - score: 0
@@ -36,4 +37,10 @@ MonoBehaviour:
     - score: 63
       stepOfHardElement: 2
       growBlocksAnywhere: 1
-    pGenerateNeededElement: 0.8
+    probabilitySettings:
+      layerDown: 20
+      neighbours: 5
+      startPoints: 10
+  _lvlElements: []
+  _startState: 0
+  _starPlaces: []

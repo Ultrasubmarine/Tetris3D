@@ -16,6 +16,9 @@ namespace Script.GameLogic.TetrisElement
 
         private ElementCleaner _cleaner;
 
+        private bool _isWaitingMerge = false;
+        [SerializeField] private float _waitMergeTime = 0.4f;
+        
         private void Start()
         {
             _matrix = RealizationBox.Instance.matrix;
@@ -26,8 +29,20 @@ namespace Script.GameLogic.TetrisElement
 
         #region  функции падения нового эл-та ( и его слияние)
 
+        public bool WaitMerge()
+        {
+            if (_isWaitingMerge)
+                return false;
+            
+            _isWaitingMerge = true;
+            Invoke(nameof(CallDrop), _waitMergeTime);
+            
+            return true;
+        }
+        
         public void StartDropElement()
         {
+            _isWaitingMerge = false;
             ElementData.newElement.LogicDrop();
             _influence.AddDrop(ElementData.newElement.myTransform, Vector3.down, global::Speed.timeDrop, CallDrop);
             

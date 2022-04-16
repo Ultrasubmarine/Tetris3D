@@ -44,7 +44,10 @@ MonoBehaviour:
     - score: 72
       stepOfHardElement: 3
       growBlocksAnywhere: 0
-    pGenerateNeededElement: 0.75
+    probabilitySettings:
+      layerDown: 20
+      neighbours: 5
+      startPoints: 10
   _lvlElements:
   - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
     blocks:

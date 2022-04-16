@@ -125,7 +125,7 @@ public class Generator : MonoBehaviour
 
     [FormerlySerializedAs("_blockLineElement")] [SerializeField] private BanLineElement banLineElement; // for chiters
 
-    [SerializeField] private ProbabilitySettings _probabilitySettings = new ProbabilitySettings(20,5,10);
+    [SerializeField] public ProbabilitySettings _probabilitySettings = new ProbabilitySettings(20,5,10);
     
     private void Start()
     {

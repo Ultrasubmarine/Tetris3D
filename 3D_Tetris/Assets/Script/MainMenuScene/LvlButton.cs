@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Script;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LvlButton : MonoBehaviour
@@ -19,5 +20,10 @@ public class LvlButton : MonoBehaviour
     public void OpenLvl()
     {
         SceneManager.LoadScene(_lvlName);
+    }
+    
+    public void SelectLvlSettings(LvlSettings lvl)
+    {
+       LvlLoader.instance.Select(lvl);
     }
 }

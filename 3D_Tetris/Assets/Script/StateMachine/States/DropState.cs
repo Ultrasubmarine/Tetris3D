@@ -34,6 +34,12 @@ public class DropState : AbstractState<TetrisState>
             _FSM.SetNewState(TetrisState.WaitInfluence);
             return;
         }
+        
+        if (_elementDropper.WaitMerge())
+        {
+            _FSM.SetNewState(TetrisState.WaitInfluence);
+            return;
+        }
 
         _FSM.SetNewState(TetrisState.MergeElement);
     }

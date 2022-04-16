@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     private TetrisState _startState;
     
     public event Action OnReplay;
-    
+
     private void Start()
     {
         _fsm = RealizationBox.Instance.FSM;
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         box.starsManager.starPlaces = new List<StarPlace>(lvl.starPlaces);
         
         box.generatorChanger.SetGeneratorSettings(lvl.generatorSettings.points);
-        box.generator._generateNeedElement = lvl.generatorSettings.pGenerateNeededElement;
+        box.generator._probabilitySettings = lvl.generatorSettings.probabilitySettings;
 
         box.lvlElementsSetter.createdElements = new List<CreatedElement>(lvl.lvlElements);
         box.FSM.startState= lvl.startState;
