@@ -111,7 +111,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
                         newCoordinat.z.ToIndex()]))
                         return false;
                 }
-                if (forPlayerMove && newCoordinat.y + 1 < _height)
+                if (forPlayerMove && newCoordinat.y + 1 < _height && !RealizationBox.Instance.elementDropper.isWaitingMerge)
                 {
                     if (!ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y + 1, newCoordinat.z.ToIndex()], null))
                         return false;

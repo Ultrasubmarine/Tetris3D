@@ -6,6 +6,8 @@ namespace Script.GameLogic.TetrisElement
 {
     public class ElementDropper : MonoBehaviour
     {
+        public bool isWaitingMerge => _isWaitingMerge;
+        
         private TetrisFSM _fsm;
         
         private PlaneMatrix _matrix;
