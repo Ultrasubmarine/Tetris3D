@@ -20,13 +20,19 @@ namespace Script.GameLogic.TetrisElement
 
         private bool _isWaitingMerge = false;
         [SerializeField] private float _waitMergeTime = 0.4f;
-        
+        private Vector3Int[] vectorDirection;
         private void Start()
         {
             _matrix = RealizationBox.Instance.matrix;
             _fsm = RealizationBox.Instance.FSM;
             _influence = RealizationBox.Instance.influenceManager;
             _cleaner = RealizationBox.Instance.elementCleaner;
+            
+            vectorDirection = new Vector3Int[4];
+            vectorDirection[0] = new Vector3Int(1, 0, 0);
+            vectorDirection[1] = new Vector3Int(-1, 0, 0);
+            vectorDirection[2] = new Vector3Int(0, 0, 1);
+            vectorDirection[3] = new Vector3Int(0, 0, -1);
         }
 
         #region  функции падения нового эл-та ( и его слияние)
@@ -35,7 +41,22 @@ namespace Script.GameLogic.TetrisElement
         {
             if (_isWaitingMerge)
                 return false;
+
+            if (RealizationBox.Instance.influenceManager.fastSpeed)
+                return false;
             
+            bool can = false;
+            foreach (var p in vectorDirection)
+            {
+                if (_matrix.CheckEmptyPlaсe(ElementData.newElement, p, false))
+                {
+                    can = true;
+                    break;
+                };
+            }
+            if (!can)
+                return false;
+
             _isWaitingMerge = true;
             Invoke(nameof(CallDrop), _waitMergeTime);
             

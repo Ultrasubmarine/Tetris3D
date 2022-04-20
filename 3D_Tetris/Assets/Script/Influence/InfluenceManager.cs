@@ -9,6 +9,7 @@ namespace Script.Influence
     {
         private float currentSpeed = 1;
         public float speed { get; set; } = 1;
+        public bool fastSpeed => _fastMode;
         
         [SerializeField] private Transform _testObj;
         
