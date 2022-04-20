@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using DG.Tweening;
 using Script.Controller;
 using Script.GameLogic.TetrisElement;
@@ -14,6 +15,7 @@ namespace Script.Tutor
         [SerializeField] private float _timeStop;
 
         [SerializeField] private CanvasGroup _secondTutor;
+        [SerializeField] private CanvasGroup _secondDotFiveTutor;
         [SerializeField] private CanvasGroup _thirdTutor;
         [SerializeField] private CanvasGroup _fourthTutor;
 
@@ -22,7 +24,7 @@ namespace Script.Tutor
         [SerializeField] private RectTransform _hand;
         private int _amountSetElements = 0; 
         
-        private Action OnMoveSuccess;
+        private Action OnMoveSuccess, OnMoveFail;
         private bool _generateNeedElement;
         
         private void Start()
@@ -104,14 +106,62 @@ namespace Script.Tutor
             RealizationBox.Instance.generator._answerElement.gameObject.SetActive(true);
          //   RealizationBox.Instance.FSM.onStateChange += FinishMove;
             RealizationBox.Instance.joystick.onStateChange += FinishMove;
+            RealizationBox.Instance.FSM.onStateChange += SecondDotFiveStep;
             OnMoveSuccess += ThirdStep;
         }
 
+        void ReturnToSecondStep()
+        {
+            // in second
+            OnMoveSuccess += ThirdStep;
+            RealizationBox.Instance.FSM.onStateChange += SecondDotFiveStep;
+            _secondTutor.DOFade(1, 0.2f);
+
+            
+            RealizationBox.Instance.generator._answerElement.gameObject.SetActive(true);
+            //   RealizationBox.Instance.FSM.onStateChange += FinishMove;
+            
+            // in third
+            _thirdTutor.DOKill();
+            _thirdTutor.DOFade(0, 0.1f);
+            
+            OnMoveFail -= ReturnToSecondStep;
+            RealizationBox.Instance.tapsEvents.OnDoubleTap -= FourthStep;
+            RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
+        }
+
+        void SecondDotFiveStep(TetrisState state)
+        {
+            if (state == TetrisState.EndInfluence)
+            {
+                var blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);
+            
+                var blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
+
+                var razn = blocksXZ.Except(blocksAnswerXZ);
+                if (razn == null || razn.Count() == 0)
+                {
+                    _secondTutor.DOFade(0, 0.1f);
+                    _secondDotFiveTutor.DOFade(1, 0.2f);
+                }
+                else
+                {
+                    _secondTutor.DOFade(1, 0.2f);
+                    _secondDotFiveTutor.DOFade(0, 0.1f);
+                }
+            }
+        }
+        
+        
         void ThirdStep() // double tap
         {
             OnMoveSuccess -= ThirdStep;
+            OnMoveFail += ReturnToSecondStep;
+            RealizationBox.Instance.FSM.onStateChange -= SecondDotFiveStep;
             
             _secondTutor.DOKill();
+            _secondDotFiveTutor.DOKill();
+            _secondDotFiveTutor.DOFade(0, 0.3f);
             _secondTutor.DOFade(0, 0.3f).SetDelay(0.2f).
                 OnComplete(() => _thirdTutor.DOFade(1, 0.1f).OnComplete(() =>
                 {
@@ -122,6 +172,8 @@ namespace Script.Tutor
 
         void FourthStep() // continue placing elements 
         {
+            OnMoveFail -= ReturnToSecondStep;
+            
             RealizationBox.Instance.tapsEvents.OnDoubleTap -= FourthStep;
             _thirdTutor.DOKill();
             _thirdTutor.DOFade(0, 0.3f);
@@ -182,7 +234,6 @@ namespace Script.Tutor
         }
 
         
-
         void FinishMove(JoystickState state)//TetrisState obj)
         {
             /*if (obj != TetrisState.EndInfluence)
@@ -198,6 +249,10 @@ namespace Script.Tutor
             if (razn == null || razn.Count() == 0)
             {
                 OnMoveSuccess?.Invoke();
+            }
+            else
+            {
+                OnMoveFail?.Invoke();
             }
         }
  
