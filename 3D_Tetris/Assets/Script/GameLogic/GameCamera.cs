@@ -37,9 +37,9 @@ public class GameCamera : MonoBehaviour
     
     public void FirstAnimation()
     {
-        Debug.Log($"this rot {_camera.transform.localRotation}");
+        //Debug.Log($"this rot {_camera.transform.localRotation}");
         _camera.transform.localRotation = Quaternion.identity;
-        Debug.Log($"this rot {_camera.transform.localRotation}");
+        //Debug.Log($"this rot {_camera.transform.localRotation}");
         
         _camera.transform.DOLocalMove(Vector3.zero, _Time)
             .From(_startPoint).OnComplete(  () => onFirstAnimationEnd?.Invoke());

@@ -66,6 +66,7 @@ public class Block : MonoBehaviour
 
     public Block()
     {
+       
     }
 
     public Block(int x, int y, int z)

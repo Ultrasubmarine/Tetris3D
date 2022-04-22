@@ -54,7 +54,7 @@ namespace Script.Speed
             {
                 
                 global::Speed.SetTimeDrop(_points[currentIndex].time);
-                Debug.Log("speed = " +  global::Speed.timeDrop);
+                //Debug.Log("speed = " +  global::Speed.timeDrop);
                 currentIndex++;
             }
         }

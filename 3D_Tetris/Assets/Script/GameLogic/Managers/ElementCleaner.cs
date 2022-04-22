@@ -65,7 +65,7 @@ namespace Script.GameLogic.TetrisElement
 
         private void ClearDeletedBlocks(Block[] deletedList)
         {
-            foreach (var item in deletedList) _pool.DeleteBlock(item);
+            foreach (var item in deletedList) if(!Equals(item, null))_pool.DeleteBlock(item);
         }
 
         private void DeleteEmptyElement()

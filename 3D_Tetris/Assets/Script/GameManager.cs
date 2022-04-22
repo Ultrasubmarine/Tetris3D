@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
         RealizationBox.Instance.lvlElementsSetter.Init();
         RealizationBox.Instance.lvlElementsSetter.CreateElements();
         Invoke( nameof(LastStart), 1f);
+
+        DOTween.defaultAutoKill = true;
     }
 
     private void LoadLvlSettings()

@@ -62,6 +62,8 @@ public class GameLogicPool : MonoBehaviour
 
     public void DeleteBlock(Block block)
     {
+        if (Equals(block, null))
+            return;
         block.gameObject.SetActive(false);
         _blockPool.Push(block);
     }

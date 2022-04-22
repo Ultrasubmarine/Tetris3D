@@ -284,12 +284,12 @@ public class Generator : MonoBehaviour
         _castMatrix = CreateCastMatrix(_minPoint.y);
         do
         {
-            Debug.ClearDeveloperConsole();
-            Debug.Log("not change");
+           // Debug.ClearDeveloperConsole();
+            //Debug.Log("not change");
             if (isLineElement(createElement) && banLineElement.isBan)
             {
-                Debug.ClearDeveloperConsole();
-                Debug.Log("change pos");
+              //  Debug.ClearDeveloperConsole();
+              //  Debug.Log("change pos");
                 foreach (var b in createElement.blocks)
                 {
                     _castMatrix[b._coordinates.x.ToIndex(), b._coordinates.y, b._coordinates.z.ToIndex()] = true; // clear
@@ -430,12 +430,12 @@ public class Generator : MonoBehaviour
                 debugstr += "   ";
         }
         
-        Debug.Log(debugstr);
+        //Debug.Log(debugstr);
         for (int i=0; i< percents.Count; i++)
         {
             if (percents[i] + currentLine > p)
             {
-                Debug.Log("choose" + i);
+             //   Debug.Log("choose" + i);
                 return emptyPlaces[i];
             }
 

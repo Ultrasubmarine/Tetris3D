@@ -74,7 +74,7 @@ namespace Script.GameLogic
             if (_score.currentScore >= _points[_currentIndex].score)
             {
                 SetGeneratorSettings(_points[_currentIndex++]);
-                Debug.Log("update generator settings");
+                //Debug.Log("update generator settings");
             }
         }
 

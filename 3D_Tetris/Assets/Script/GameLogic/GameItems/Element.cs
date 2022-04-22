@@ -4,6 +4,7 @@ using System.Linq;
 
 public class Element : MonoBehaviour
 {
+    public bool isPreconstruct;
     public List<Block> blocks => _blocks;
 
     public List<Block> projectionBlocks
