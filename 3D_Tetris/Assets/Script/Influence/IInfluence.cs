@@ -2,6 +2,8 @@
 {
     public interface IInfluence
     {
-        bool Update(float speed = 1); 
+        bool Update(float speed = 1);
+
+        void UnlinkCallback();
     }
 }

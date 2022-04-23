@@ -49,6 +49,11 @@ namespace Script.Influence
             return false;
         }
         
+        public void UnlinkCallback()
+        {
+            _callBack = null;
+        }
+        
         private bool Move(float speed = 1)
         {
             if (_currentTime + Time.fixedDeltaTime < _allTime)

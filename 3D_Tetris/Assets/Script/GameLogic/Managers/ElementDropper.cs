@@ -80,6 +80,9 @@ namespace Script.GameLogic.TetrisElement
 
         private void CallDrop()
         {
+            if (_fsm.GetCurrentState() == TetrisState.Restart)
+                return;
+            
             if (!ElementData.newElement)
                 return;
             if(_fsm.GetCurrentState() != TetrisState.WaitInfluence)

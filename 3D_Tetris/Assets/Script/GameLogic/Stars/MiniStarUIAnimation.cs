@@ -41,7 +41,7 @@ public class MiniStarUIAnimation : MonoBehaviour
           int ind = i;
           Stars[i].animation.OnComplete(() =>
           {
-              onAnimationFinished.Invoke(ind);
+              onAnimationFinished?.Invoke(ind);
           });
           
           Stars[i].animationsDissapear
@@ -90,6 +90,22 @@ public class MiniStarUIAnimation : MonoBehaviour
                 _rotation = 0.0f;
             }
             s.oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
+        }
+    }
+
+    public void Clear(int amount)
+    {
+        _isShowStars = false;
+        var m =  Stars[0].starMesh.material;
+        
+        for (int i = 0; i < amount; i++)
+        {
+            Stars[i].animation.Rewind();
+            Stars[i].animation.Complete();
+            Stars[i].animationsDissapear.Rewind();
+            Stars[i].animationsDissapear.Complete();
+            
+         //   Stars[i].starMesh.material.SetColor(0,new Color(m.color.r, m.color.g, m.color.b,0f));
         }
     }
 }

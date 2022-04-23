@@ -290,10 +290,15 @@ namespace Script.GameLogic.Stars
 
         public void Clear()
         {
+            foreach (var s in _stars)
+            {
+                s.OnCollected -= CollectStar;
+            }
             _stars.Clear();
             _applicants.Clear();
             collectedStars = 0;
             _currentStep = 1000;
+            _animationStar.DORewind();
             OnUpdatedCollectingStars?.Invoke();
         }
 

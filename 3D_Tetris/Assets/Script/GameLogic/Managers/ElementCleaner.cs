@@ -101,8 +101,10 @@ namespace Script.GameLogic.TetrisElement
                 ElementData.newElement.RemoveBlocksInList(ElementData.newElement.blocks.ToArray());
                 _pool.DeleteElement(ElementData.newElement);
             }
+
+
             ElementData.RemoveAll();
-            
+
             onDeleteAllElements?.Invoke();
         }
 
@@ -110,5 +112,6 @@ namespace Script.GameLogic.TetrisElement
         {
             _pool.DeletePickableBlock(pBlock);
         }
+        
     }
 }

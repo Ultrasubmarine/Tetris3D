@@ -177,5 +177,27 @@ namespace Script.GameLogic.Stars
                     DissapearAnimation();
             }
         }
+
+        public void Clear()
+        {
+            animation.Rewind();
+            animation.Complete();
+            
+            if (_collectStarsInAnimation > 1)
+            {
+                _miniStarUIAnimation.onAnimationFinished -= OnMiniStarsFinished;
+                _miniStarUIAnimation.Clear(_collectStarsInAnimation - 1);
+                
+            }
+            _collectStarsInAnimation = 1;
+            animationDissapear.Rewind();
+            animationDissapear.Complete();
+
+           
+            isStarUIShow = false;
+            timerDissapear = 0;
+            _collectStarsInAnimation = 0;
+            _dissapearAfterComplete = false;
+        }
     }
 }

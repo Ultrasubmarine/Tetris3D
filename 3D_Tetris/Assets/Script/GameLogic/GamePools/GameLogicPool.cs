@@ -17,6 +17,8 @@ public class GameLogicPool : MonoBehaviour
     private Pool<Block>   _blockPool;
     private Pool<PickableBlock> _pickableBlockPool;
 
+    private Pool<Element> _activeElements;
+    
     public Element CreateEmptyElement()
     {
         return _elementPool.Pop(true);
@@ -56,6 +58,7 @@ public class GameLogicPool : MonoBehaviour
                 DeleteBlock(block);
             }
 
+        element.blocks.Clear();
         element.gameObject.SetActive(false);
         _elementPool.Push(element);
     }

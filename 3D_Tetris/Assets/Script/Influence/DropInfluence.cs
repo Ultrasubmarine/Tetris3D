@@ -31,17 +31,23 @@ namespace Script.ObjectEngine
         {
             if (Drop(speed))
             {
+              
                 _callBack?.Invoke();
                 return true;
             }
             return false;
         }
 
+        public void UnlinkCallback()
+        {
+            _callBack = null;
+        }
+
         private bool Drop(float speed = 1)
         {
             _currentTime += Time.fixedDeltaTime /*(Time.deltaTime < 0.05? Time.deltaTime : 0.05f)*/ * speed;
             _transform.localPosition = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
-            
+           
            // if()
             
             if (_currentTime >= _allTime)

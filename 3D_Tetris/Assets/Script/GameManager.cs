@@ -4,6 +4,7 @@ using DG.Tweening;
 using Script;
 using Script.GameLogic;
 using Script.GameLogic.Stars;
+using Script.GameLogic.TetrisElement;
 using Script.UI;
 using UnityEngine;
 
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
 
         box.lvlElementsSetter.createdElements = new List<CreatedElement>(lvl.lvlElements);
         box.FSM.startState= lvl.startState;
+        _startState = lvl.startState;  
     }
 
     private void LastStart()
@@ -88,25 +90,49 @@ public class GameManager : MonoBehaviour
         _winPanel.gameObject.SetActive(true);
     }
 
+    public void Restart()
+    {
+        _fsm.SetNewState(TetrisState.Restart);
+    }
+    
     public void ClearPlace()
     {
+        RealizationBox.Instance.starsManager.Clear();  
+        
         RealizationBox.Instance.projectionLineManager.Clear();
         RealizationBox.Instance.projection.Destroy();
         
         RealizationBox.Instance.elementCleaner.DeleteAllElements();
+      //  RealizationBox.Instance.generator.Clear();
+        RealizationBox.Instance.influenceManager.ClearAllInfluences();
         RealizationBox.Instance.matrix.Clear();
         
         RealizationBox.Instance.slowManager.DeleteAllSlows();
+        RealizationBox.Instance.lvlElementsSetter.CreateElements();  
         OnReplay?.Invoke();
         RealizationBox.Instance.haightHandler.CalculateHeight();
         RealizationBox.Instance.gameCamera.SetPositionWithoutAnimation();
         RealizationBox.Instance.speedChanger.ResetSpeed();
         RealizationBox.Instance.generatorChanger.ResetGenerator();
-        RealizationBox.Instance.starsManager.Clear();
-        RealizationBox.Instance.lvlElementsSetter.CreateElements();
+       
+        
         //Add boosters
     }
 
+    public void SetReplayState()
+    {
+        _fsm.SetNewState(TetrisState.Restart);
+    }
+    
+    public void Preconstruct()
+    {
+        var lvl = LvlLoader.instance.lvlSettings;
+        var box = RealizationBox.Instance;
+        
+       
+        box.FSM.startState= lvl.startState;
+        box.starsManager.starPlaces = new List<StarPlace>(lvl.starPlaces);
+    }
     public void ShowWinPanel()
     {
         _winPanel.gameObject.SetActive(true);

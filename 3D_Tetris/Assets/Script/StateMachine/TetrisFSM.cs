@@ -1,6 +1,7 @@
 ﻿using System;
 using Helper.Patterns.FSM;
 using Script.StateMachine.States;
+using UnityEditor;
 
 public enum TetrisState
 {
@@ -21,6 +22,7 @@ public enum TetrisState
     WinGame,
     
     CreateStar,
+    Restart,
 }
 
 public class TetrisFSM : AbstractFSM<TetrisState>
@@ -48,6 +50,7 @@ public class TetrisFSM : AbstractFSM<TetrisState>
         _statesDictionary.Add(TetrisState.WinGame, new WinState());
 
         _statesDictionary.Add(TetrisState.CreateStar, new CreateStarState());
+        _statesDictionary.Add(TetrisState.Restart, new RestartState());
         
         RealizationBox.Instance.gameCamera.onFirstAnimationEnd += StartFSM;
 //		Invoke( "StartFSM", 1.0f);

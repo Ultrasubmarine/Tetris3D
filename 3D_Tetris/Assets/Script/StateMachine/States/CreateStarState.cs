@@ -45,17 +45,23 @@ namespace Script.StateMachine.States
 
         public override void Exit(TetrisState last)
         {
+            _starsManager.OnCollectedStars -= OnCollectedStar;
+            _starsManager.OnCreatedStar -= OnCreatedStar;
         }
 
         public void OnCreatedStar()
         {
             _starsManager.OnCreatedStar -= OnCreatedStar;
+            if (_FSM.GetCurrentState() == TetrisState.Restart)
+                return;
             _FSM.SetNewState(TetrisState.GenerateElement);
         }
 
         public void OnCollectedStar()
         {
             _starsManager.OnCollectedStars -= OnCollectedStar;
+            if (_FSM.GetCurrentState() == TetrisState.Restart)
+                return;
             _FSM.SetNewState(TetrisState.GenerateElement);
         }
     }

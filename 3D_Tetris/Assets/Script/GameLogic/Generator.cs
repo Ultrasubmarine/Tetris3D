@@ -126,6 +126,8 @@ public class Generator : MonoBehaviour
     [FormerlySerializedAs("_blockLineElement")] [SerializeField] private BanLineElement banLineElement; // for chiters
 
     [SerializeField] public ProbabilitySettings _probabilitySettings = new ProbabilitySettings(20,5,10);
+
+    private Element _lastGenerateElement;
     
     private void Start()
     {
@@ -178,6 +180,7 @@ public class Generator : MonoBehaviour
      //   ConfuseElement(newElement);//, plane.gameObject);
 
         fixedHightPosition = 0;
+        _lastGenerateElement = newElement;
         return newElement;
     }
 
@@ -567,4 +570,14 @@ public class Generator : MonoBehaviour
     }
     
     #endregion
+
+    public void Clear()
+    {
+        if (!Equals(_lastGenerateElement, null) && _lastGenerateElement.gameObject.activeInHierarchy)
+        {
+            foreach (var item in _lastGenerateElement.blocks.ToArray()) if(!Equals(item, null))_pool.DeleteBlock(item);
+            _lastGenerateElement.RemoveBlocksInList(_lastGenerateElement.blocks.ToArray());
+            _pool.DeleteElement(_lastGenerateElement);
+        }
+    }
 }

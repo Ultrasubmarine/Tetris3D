@@ -29,7 +29,6 @@ namespace Script.Influence
         {
             _influences = new List<IInfluence>();
             _moveInfluences = new List<IInfluence>();
-            
         }
 
         private void Start()
@@ -100,6 +99,21 @@ namespace Script.Influence
                 _fastMode = false;
                 CalculateSpeed();
             }
+        }
+
+        public void ClearAllInfluences()
+        {
+            foreach (var i in _moveInfluences)
+            {
+                i.UnlinkCallback();
+            }
+            _moveInfluences.Clear();
+            foreach (var i in _influences)
+            {
+                i.UnlinkCallback();
+            }
+            _influences.Clear();
+            _fastMode = false;
         }
     }
 }
