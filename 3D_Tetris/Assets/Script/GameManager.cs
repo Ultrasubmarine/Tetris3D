@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
         {
             panel.SetActive(true);
         }
-        _settingsPanel.Show();
+       // _settingsPanel.Show();
         _gameplayBottomPanel.Hide();
     }
     

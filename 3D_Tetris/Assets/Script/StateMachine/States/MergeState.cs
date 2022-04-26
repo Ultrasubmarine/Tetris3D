@@ -24,6 +24,7 @@ public class MergeState : AbstractState<TetrisState>
         ElementData.MergeNewElement();
         _generator.DestroyOldDuplicate();
         _projLineManager.UpdatePickableProjections();
+        _projLineManager.Clear();
         base.Enter(last);
         if(!_heightHandler.CheckOutOfLimit())
             _FSM.SetNewState(TetrisState.Collection);

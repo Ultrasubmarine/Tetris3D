@@ -14,7 +14,7 @@ namespace Script.GameLogic.Stars
 
         private int _collectStarsInAnimation;
         [SerializeField] private Transform _oreol;
-        [SerializeField] private float _starRotationSpeed;
+        [SerializeField] private float _starRotationSpeed = 10;
         private float _rotation;
 
         [SerializeField] private GameObject _star;
@@ -40,6 +40,8 @@ namespace Script.GameLogic.Stars
         private bool isStarUIShow = false;
         private float timerDissapear = 0;
 
+        private bool _startDissapear = false;
+        
         [SerializeField] private MiniStarUIAnimation _miniStarUIAnimation;
         // Start is called before the first frame update
         void Start()
@@ -60,17 +62,7 @@ namespace Script.GameLogic.Stars
                     .From(new Color(m2.r, m2.g, m2.b, 0f)))
                 .Join(myTransform.DOAnchorPosY(_deltaMove + FinishPoint, _timeMoving).From(Vector2.up * FinishPoint)
                     .SetLoops(3, LoopType.Yoyo));
-                
-            animation.OnUpdate(() =>
-            {
-                _rotation += Time.deltaTime *_starRotationSpeed;
-                if (_rotation > 360.0f)
-                {
-                    _rotation = 0.0f;
-                }
-                _oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
-            });
-            
+
             animation.OnComplete(() =>
             {
                 if ((_collectStarsInAnimation == 1 && _dissapearAfterComplete ) || RealizationBox.Instance.FSM.GetCurrentState() == TetrisState.WinGame)
@@ -78,35 +70,27 @@ namespace Script.GameLogic.Stars
                     DissapearAnimation();
                 }
             });
+            
             animationDissapear = DOTween.Sequence().SetAutoKill(false).Pause();
             animationDissapear.Append(_oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2))
                 .Append(myTransform.DOAnchorPosY(-StarPanelTransform.sizeDelta.y / 4, _timeDisappear).OnUpdate(() =>
                 {
                     timerDissapear += Time.deltaTime;
-                    if (!isStarUIShow && timerDissapear > _timeDisappear * 0.75f)
+                    if (isStarUIShow && timerDissapear > _timeDisappear * 0.75f)
                     {
                         OnUpdateStartScoreText?.Invoke();
-                        isStarUIShow = true;
+                        isStarUIShow = false;
                     }
                 }))
                 .Join(_starMesh.material.DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear));
-            
-            animationDissapear.OnUpdate(() => // the same in animation.OnUpdate(()=>)
-            {
-                _rotation += Time.deltaTime *_starRotationSpeed;
-                if (_rotation > 360.0f)
-                {
-                    _rotation = 0.0f;
-                }
-                _oreol.localRotation = Quaternion.Euler(0, 0, _rotation);
-            });
-            
+
             animationDissapear.OnComplete(() =>
             {
                 isStarUIShow = false;
                 timerDissapear = 0;
                 _collectStarsInAnimation = 0;
                 _dissapearAfterComplete = false;
+                _startDissapear = false;
                 OnAnimationEnd?.Invoke();
             });
 
@@ -133,6 +117,7 @@ namespace Script.GameLogic.Stars
         public void StartAnimation()
         {
             _collectStarsInAnimation++;
+            isStarUIShow = true;
             
             if(_collectStarsInAnimation < 2)
             { 
@@ -160,8 +145,12 @@ namespace Script.GameLogic.Stars
         }
         public void DissapearAnimation()
         {
+            if (_startDissapear)
+                return;
+            
             animation.Complete();
             animationDissapear.Rewind();
+            _startDissapear = true;
             animationDissapear.Play();
         }
 
