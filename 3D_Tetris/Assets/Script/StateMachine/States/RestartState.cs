@@ -10,8 +10,10 @@ namespace Script.StateMachine.States
             base.Enter(last);
             
             RealizationBox.Instance.starUIAnimation.Clear();  
-            RealizationBox.Instance.starsManager.Clear();                       
-            
+            RealizationBox.Instance.starsManager.Clear();
+
+            RealizationBox.Instance.destroyedLayerParticles.ClearAll();
+            RealizationBox.Instance.islandTurn.ResetTurn();
             RealizationBox.Instance.projectionLineManager.Clear();              
             RealizationBox.Instance.projection.Destroy();                       
                     

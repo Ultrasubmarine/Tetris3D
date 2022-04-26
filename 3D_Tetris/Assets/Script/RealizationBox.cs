@@ -58,6 +58,7 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private GameObject _starsTutor;
     [SerializeField] private StarUI _starUI;
     [SerializeField] private LvlElementsSetter _lvlElementsSetter;
+    [SerializeField] private DestroyedLayerParticles _destroyedLayerParticles;
     
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
@@ -88,7 +89,8 @@ public class RealizationBox : Singleton<RealizationBox>
     public StarUIAnimation starUIAnimation => _starUIAnimation;
     public StarUI starUI => _starUI;
     public LvlElementsSetter lvlElementsSetter => _lvlElementsSetter;
-        
+    public DestroyedLayerParticles destroyedLayerParticles => _destroyedLayerParticles;
+    
     private Dictionary<TutorType, GameObject> _tutors;
     
     public GameObject GetTutor(TutorType t)

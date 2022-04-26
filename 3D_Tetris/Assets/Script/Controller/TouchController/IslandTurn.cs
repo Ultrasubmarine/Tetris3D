@@ -112,5 +112,11 @@ namespace Script.Controller.TouchController
             island.transform.DORotate(new Vector3(0, needRotate, 0), speed).OnComplete(() => OnEndTurn.Invoke());
             _gameController.CorrectTurn((int)needRotate);
         }
+
+        public void ResetTurn()
+        {
+            island.transform.DORotate(new Vector3(0, 0, 0), 0);
+            _gameController.CorrectTurn(0);
+        }
     }
 }

@@ -299,6 +299,9 @@ namespace Script.GameLogic.Stars
             collectedStars = 0;
             _currentStep = 1000;
             _animationStar.DORewind();
+            _animationStar.DOComplete();
+            _particles.gameObject.SetActive(false);
+            
             OnUpdatedCollectingStars?.Invoke();
         }
 
