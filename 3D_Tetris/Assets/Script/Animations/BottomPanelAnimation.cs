@@ -33,6 +33,8 @@ public class BottomPanelAnimation : MonoBehaviour
                     gameObject.SetActive(false);
                     _hide.Rewind();
                 });
+        
+        gameObject.SetActive(false);
     }
     
     // Update is called once per frame
