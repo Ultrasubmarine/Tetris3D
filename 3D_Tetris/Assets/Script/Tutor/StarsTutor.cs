@@ -50,13 +50,13 @@ namespace Script.Tutor
             do
             {
                 IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ;
-                blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);
+                blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
                 blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
                 razn = blocksXZ.Except(blocksAnswerXZ);
 
                 if (!razn.Any())
                 {
-                    RealizationBox.Instance.generator.SetRandomPosition(ElementData.newElement);
+                    RealizationBox.Instance.generator.SetRandomPosition(ElementData.Instance.newElement);
                     RealizationBox.Instance.projectionLineManager.UpdateProjectionLines();
                     RealizationBox.Instance.projection.CreateProjection();
                 }
@@ -86,7 +86,7 @@ namespace Script.Tutor
             RealizationBox.Instance.generator._answerElement.gameObject.SetActive(true);
             
             IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ, razn;
-            blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);
+            blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
             blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
             razn = blocksXZ.Except(blocksAnswerXZ);
             if (!razn.Any())
@@ -108,7 +108,7 @@ namespace Script.Tutor
         void FinishMove(JoystickState state)
         {
             IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ, razn;
-            blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);
+            blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
             blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
             razn = blocksXZ.Except(blocksAnswerXZ);
             if (!razn.Any())

@@ -4,50 +4,50 @@ using UnityEngine;
 
 namespace Script.GameLogic.TetrisElement
 {
-    public static class ElementData
+    public class ElementData: Singleton<ElementData> {
+    public event Action onNewElementUpdate;
+    public event Action onMergeElement;
+    public Element newElement { get; private set; }
+
+    public Func<Element> loader;
+    public List<Element> mergerElements => _mergerElements;
+
+    private List<Element> _mergerElements;
+    
+    private void Start()
     {
-        public static event Action onNewElementUpdate;
-        public static event Action onMergeElement;
-        public static Element newElement { get; private set; }
+        _mergerElements = new List<Element>();
+    }
 
-        public static Func<Element> loader;
-        public static List<Element> mergerElements => _mergerElements;
+    public void LoadNewElement()
+    {
+        if (!Equals(newElement, null))
+            return;
+        newElement = loader.Invoke();
+        onNewElementUpdate?.Invoke();
+    }
 
-        private static List<Element> _mergerElements;
-        
-        static ElementData()
-        {
-            _mergerElements = new List<Element>();
-        }
+    public void MergeNewElement()
+    {
+        _mergerElements.Add(newElement);
+        onMergeElement?.Invoke();
+        newElement = null;
+    }
 
-        public static void LoadNewElement()
-        {
-            if (!Equals(newElement, null))
-                return;
-            newElement = loader.Invoke();
-            onNewElementUpdate?.Invoke();
-        }
+    public void MergeElement(Element element)
+    {
+        _mergerElements.Add(element);
+    }
 
-        public static void MergeNewElement()
-        {
-            _mergerElements.Add(newElement);
-            onMergeElement?.Invoke();
-            newElement = null;
-        }
+    public void RemoveMergedElement(Element element)
+    {
+        _mergerElements.Remove(element);
+    }
 
-        public static void MergeElement(Element element)
-        {
-            _mergerElements.Add(element);
-        }
-        public static void RemoveMergedElement(Element element)
-        {
-            _mergerElements.Remove(element);
-        }
-
-        public static void RemoveAll()
-        {
-            _mergerElements.Clear();
-            newElement = null;
-        }
+    public void RemoveAll()
+    {
+        _mergerElements.Clear();
+        newElement = null;
+    }
     }
 }

@@ -7,12 +7,14 @@ public class DropState : AbstractState<TetrisState>
     private Generator _generator;
     private ElementDropper _elementDropper;
     private PlaneMatrix _matrix;
-
+    private ElementData _elementData;
+    
     public DropState()
     {
         _myState = TetrisState.Drop;
 
         _elementDropper = RealizationBox.Instance.elementDropper;
+        _elementData = ElementData.Instance;
         _matrix = RealizationBox.Instance.matrix;
     }
 
@@ -26,8 +28,8 @@ public class DropState : AbstractState<TetrisState>
             return;
         }
         
-        var empty = _matrix.CheckEmptyPlaсe(ElementData.newElement, new Vector3Int(0, -1, 0));
-        if (empty && !ElementData.newElement.isFreeze)
+        var empty = _matrix.CheckEmptyPlaсe(_elementData.newElement, new Vector3Int(0, -1, 0));
+        if (empty && !_elementData.newElement.isFreeze)
         {
             _elementDropper.StartDropElement();
             

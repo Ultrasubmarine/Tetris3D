@@ -12,6 +12,8 @@ namespace Script.GameLogic.TetrisElement
         
         private PlaneMatrix _matrix;
 
+        private ElementData _elementData;
+        
         private InfluenceManager _influence;
 
         private int _dropElementCount;
@@ -27,6 +29,7 @@ namespace Script.GameLogic.TetrisElement
             _fsm = RealizationBox.Instance.FSM;
             _influence = RealizationBox.Instance.influenceManager;
             _cleaner = RealizationBox.Instance.elementCleaner;
+            _elementData = ElementData.Instance;
             
             vectorDirection = new Vector3Int[4];
             vectorDirection[0] = new Vector3Int(1, 0, 0);
@@ -48,7 +51,7 @@ namespace Script.GameLogic.TetrisElement
             bool can = false;
             foreach (var p in vectorDirection)
             {
-                if (_matrix.CheckEmptyPlaсe(ElementData.newElement, p, false))
+                if (_matrix.CheckEmptyPlaсe( _elementData.newElement, p, false))
                 {
                     can = true;
                     break;
@@ -66,13 +69,13 @@ namespace Script.GameLogic.TetrisElement
         public void StartDropElement()
         {
             _isWaitingMerge = false;
-            ElementData.newElement.LogicDrop();
-            _influence.AddDrop(ElementData.newElement.myTransform, Vector3.down, global::Speed.timeDrop, CallDrop);
+            _elementData.newElement.LogicDrop();
+            _influence.AddDrop( _elementData.newElement.myTransform, Vector3.down, global::Speed.timeDrop, CallDrop);
             
-            var pickableBlocks = _matrix.GetPickableBlocksForElement(ElementData.newElement);
+            var pickableBlocks = _matrix.GetPickableBlocksForElement( _elementData.newElement);
             foreach (var pBlock in pickableBlocks)
             {
-                pBlock.Pick(ElementData.newElement);
+                pBlock.Pick( _elementData.newElement);
                 _matrix.UnbindBlock(pBlock);
                 _cleaner.DeletePickableBlock((PickableBlock)pBlock);
             }
@@ -83,7 +86,7 @@ namespace Script.GameLogic.TetrisElement
             if (_fsm.GetCurrentState() == TetrisState.Restart)
                 return;
             
-            if (!ElementData.newElement)
+            if (! _elementData.newElement)
                 return;
             if(_fsm.GetCurrentState() != TetrisState.WaitInfluence)
                 InfluenceData.delayedDrop = true;
@@ -106,7 +109,7 @@ namespace Script.GameLogic.TetrisElement
         private int DropAllElements()
         {
             _dropElementCount = 0;
-            foreach (var item in ElementData.mergerElements)
+            foreach (var item in  _elementData.mergerElements)
             {
                 var empty = _matrix.CheckEmptyPlaсe(item, new Vector3Int(0, -1, 0));
                 if (empty && !item.isFreeze) //если коллизии нет, элемент может падать вниз

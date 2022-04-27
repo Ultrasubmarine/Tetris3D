@@ -14,12 +14,14 @@ namespace Script.Animations
         
         private Pool<GameObject> _pool;
         private PlaneMatrix _planeMatrix;
-        
+        private ElementData _elementData;
         private void Start()
         {
             _pool = new Pool<GameObject>(_particleSystem);
-            ElementData.onMergeElement += StartAnimationParticle;
+            _elementData = ElementData.Instance;
+            _elementData.onMergeElement += StartAnimationParticle;
             _planeMatrix = RealizationBox.Instance.matrix;
+            
         }
 
         private void StartAnimationParticle()
@@ -27,7 +29,7 @@ namespace Script.Animations
             
             List<Vector3> positions = new List<Vector3>();
 
-            foreach (var block in ElementData.newElement.blocks)
+            foreach (var block in _elementData.newElement.blocks)
             {
                 if (block._coordinates.y == 0)
                 {
@@ -36,7 +38,7 @@ namespace Script.Animations
                 }
 
                 var otherBlock = _planeMatrix.GetBlockInPlace(block._coordinates.x.ToIndex(), block._coordinates.y - 1, block._coordinates.z.ToIndex());
-                if (otherBlock != null && !ElementData.newElement.blocks.Contains(otherBlock))
+                if (otherBlock != null && !_elementData.newElement.blocks.Contains(otherBlock))
                 {
                     positions.Add(block.transform.position);
                 }
@@ -60,7 +62,7 @@ namespace Script.Animations
 
         private void OnDestroy()
         {
-            ElementData.onMergeElement -= StartAnimationParticle;
+            _elementData.onMergeElement -= StartAnimationParticle;
         }
     }
 }

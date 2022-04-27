@@ -13,8 +13,12 @@ public class GenerationState : AbstractState<TetrisState>
 
     public override void Enter(TetrisState last)
     {
-        ElementData.LoadNewElement();
-        ElementData.newElement.myTransform.parent = _elementDropper.transform;
+        ElementData.Instance.LoadNewElement();
+        if(_elementDropper.transform == null)
+        Debug.Log("_elementDropper.transform == null");
+        if(ElementData.Instance.newElement.myTransform == null)
+            Debug.Log("ElementData.newElement.myTransform  == null");
+        ElementData.Instance.newElement.myTransform.parent = _elementDropper.transform;
 
         _FSM.SetNewState(TetrisState.Drop);
     }

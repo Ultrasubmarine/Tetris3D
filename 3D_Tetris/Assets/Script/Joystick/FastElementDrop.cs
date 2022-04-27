@@ -15,7 +15,7 @@ public class FastElementDrop : MonoBehaviour
         _influenceManager = RealizationBox.Instance.influenceManager;
         _joystick = RealizationBox.Instance.joystick;
 
-        ElementData.onMergeElement += ResetFastSpeed;
+        ElementData.Instance.onMergeElement += ResetFastSpeed;
         RealizationBox.Instance.tapsEvents.OnDoubleTap += SetFastSpeed;
     }
 
@@ -34,6 +34,6 @@ public class FastElementDrop : MonoBehaviour
 
     private void OnDestroy()
     {
-        ElementData.onMergeElement -= ResetFastSpeed;
+        ElementData.Instance.onMergeElement -= ResetFastSpeed;
     }
 }

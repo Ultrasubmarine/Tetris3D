@@ -10,7 +10,8 @@ public class Projection : MonoBehaviour
 {
     private TetrisFSM _fsm;
     private PlaneMatrix _matrix;
-
+    private ElementData _elementData;
+    
     [SerializeField] private GameObject _prefab;
     [SerializeField] private float _heightProjection = 0.1f;
 
@@ -21,21 +22,22 @@ public class Projection : MonoBehaviour
     {
         _matrix = PlaneMatrix.Instance;
         _fsm = RealizationBox.Instance.FSM;
-
+        _elementData = ElementData.Instance;
+        
         _pool = new Pool<GameObject>(_prefab, transform);
         Invoke(nameof(LastStart), 1f);
     }
 
     private void LastStart()
     {
-        ElementData.onNewElementUpdate += CreateProjection;
+        _elementData.onNewElementUpdate += CreateProjection;
         
         _fsm.AddListener(TetrisState.MergeElement, () => Destroy());
     }
 
     public void CreateProjection()
     {
-        var obj = ElementData.newElement;
+        var obj = _elementData.newElement;
 
         Destroy();
 
@@ -61,6 +63,6 @@ public class Projection : MonoBehaviour
 
     private void OnDestroy()
     {
-        ElementData.onNewElementUpdate -= CreateProjection;
+        _elementData.onNewElementUpdate -= CreateProjection;
     }
 }

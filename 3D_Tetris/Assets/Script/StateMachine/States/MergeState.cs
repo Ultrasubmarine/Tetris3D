@@ -20,8 +20,8 @@ public class MergeState : AbstractState<TetrisState>
 
     public override void Enter(TetrisState last)
     {
-        _matrix.BindToMatrix(ElementData.newElement);
-        ElementData.MergeNewElement();
+        _matrix.BindToMatrix(ElementData.Instance.newElement);
+        ElementData.Instance.MergeNewElement();
         _generator.DestroyOldDuplicate();
         _projLineManager.UpdatePickableProjections();
         _projLineManager.Clear();

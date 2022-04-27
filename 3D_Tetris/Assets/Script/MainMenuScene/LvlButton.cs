@@ -1,4 +1,5 @@
-﻿using Script;
+﻿using DG.Tweening;
+using Script;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,7 +24,8 @@ public class LvlButton : MonoBehaviour
     }
     
     public void SelectLvlSettings(LvlSettings lvl)
-    {
+    { 
+        DOTween.KillAll();
        LvlLoader.instance.Select(lvl);
     }
 }

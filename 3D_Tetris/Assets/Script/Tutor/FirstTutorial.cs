@@ -96,7 +96,7 @@ namespace Script.Tutor
             IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ, razn;
             do
             {
-                blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);
+                blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
                 blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
                 razn = blocksXZ.Except(blocksAnswerXZ);
                 
@@ -134,7 +134,7 @@ namespace Script.Tutor
         {
             if (state == TetrisState.EndInfluence)
             {
-                var blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);
+                var blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
             
                 var blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
 
@@ -178,7 +178,7 @@ namespace Script.Tutor
             _thirdTutor.DOKill();
             _thirdTutor.DOFade(0, 0.3f);
             
-            ElementData.onNewElementUpdate +=  SixthStep;
+            ElementData.Instance.onNewElementUpdate +=  SixthStep;
             RealizationBox.Instance.slowManager.SetPauseSlow(false);
         }
         
@@ -190,7 +190,7 @@ namespace Script.Tutor
             }
             if (_amountSetElements > 1)
             {
-                ElementData.onNewElementUpdate -=  SixthStep;
+                ElementData.Instance.onNewElementUpdate -=  SixthStep;
                 
                 RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDrag;
               //  RealizationBox.Instance.tapsEvents.enabled = false;
@@ -238,10 +238,10 @@ namespace Script.Tutor
         {
             /*if (obj != TetrisState.EndInfluence)
                 return;*/
-            if (state == JoystickState.Show || ElementData.newElement == null)
+            if (state == JoystickState.Show || ElementData.Instance.newElement == null)
                 return;
             
-            var blocksXZ = ElementData.newElement.blocks.Select(b => b.xz);
+            var blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
             
             var blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
 

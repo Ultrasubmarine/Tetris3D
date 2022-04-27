@@ -32,6 +32,7 @@ namespace Script.Projections
         private Pool<ProjectionLine> _pool;
         private PlaneMatrix _matrix;
         private float _lateYElementPosition;
+        private ElementData _elementData;
         
         private void Start()
         {
@@ -40,15 +41,16 @@ namespace Script.Projections
             
             _pool = new Pool<ProjectionLine>(_prefab, this.transform);
             _matrix = RealizationBox.Instance.matrix;
-
-            ElementData.onNewElementUpdate += UpdateProjectionLines;
+            _elementData = ElementData.Instance;
+            
+            _elementData.onNewElementUpdate += UpdateProjectionLines;
         }
 
         public void UpdateProjectionLines()
         {
             Clear();
 
-             foreach (var block in ElementData.newElement.projectionBlocks)
+             foreach (var block in  _elementData.newElement.projectionBlocks)
              {
                  var o = _pool.Pop(true);
                 o.transform.localPosition = new Vector3(block.xz.x, 0, block.xz.z);
@@ -60,20 +62,20 @@ namespace Script.Projections
                 _projections.Add(new ProjectionLineStruct(o, block));
              }
 
-             _lateYElementPosition = ElementData.newElement.transform.position.y;
+             _lateYElementPosition =  _elementData.newElement.transform.position.y;
         }
 
         private void Update()
         {
-            if (ElementData.newElement == null)
+            if ( _elementData.newElement == null)
                 return;
             
-            var delta = _lateYElementPosition - ElementData.newElement.transform.position.y;
+            var delta = _lateYElementPosition -  _elementData.newElement.transform.position.y;
             foreach (var proj in _projections)
             {
                 proj.projection.IncrementHeight( delta );
             }
-            _lateYElementPosition = ElementData.newElement.transform.position.y;
+            _lateYElementPosition =  _elementData.newElement.transform.position.y;
         }
         
         public void Clear()
@@ -87,7 +89,7 @@ namespace Script.Projections
 
         public void OnDestroy()
         {
-            ElementData.onNewElementUpdate -= UpdateProjectionLines;
+            _elementData.onNewElementUpdate -= UpdateProjectionLines;
         }
         
         public void AddPickableProjection(PickableBlock pBlock)

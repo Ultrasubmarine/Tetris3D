@@ -45,7 +45,7 @@ public class GameController : MonoBehaviour
 
     public void Move(move touch)
     {
-        if (Equals(ElementData.newElement))
+        if (Equals(ElementData.Instance.newElement))
             return;
 
         switch (touch)

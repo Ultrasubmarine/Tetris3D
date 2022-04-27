@@ -11,6 +11,7 @@ namespace Script.GameLogic.TetrisElement
         
         private PlaneMatrix _matrix;
         private GameLogicPool _pool;
+        private ElementData _elementData;
         
         private Transform _myTransform;
 
@@ -18,28 +19,29 @@ namespace Script.GameLogic.TetrisElement
         {
             _matrix = RealizationBox.Instance.matrix;
             _pool = RealizationBox.Instance.gameLogicPool;
-
+            _elementData = ElementData.Instance;
+            
             _myTransform = transform;
         }
 
         public void CutElement()
         {
             var k = 0;
-            var countK = ElementData.mergerElements.Count;
+            var countK =  _elementData.mergerElements.Count;
             while (k < countK)
             {
-                var cutBlocks = ElementData.mergerElements[k].GetNotAttachedBlocks();
+                var cutBlocks =  _elementData.mergerElements[k].GetNotAttachedBlocks();
                 if (cutBlocks != null)
                 {
                     var newElement = _pool.CreateEmptyElement();
-                    newElement.name = ElementData.mergerElements[k] + "1" ;
-                    newElement.myTransform.localPosition = ElementData.mergerElements[k].myTransform.localPosition;
+                    newElement.name =  _elementData.mergerElements[k] + "1" ;
+                    newElement.myTransform.localPosition =  _elementData.mergerElements[k].myTransform.localPosition;
                     newElement.SetBlocks(cutBlocks);
                     foreach (var block in newElement.blocks) block.myTransform.parent = newElement.myTransform;
 
                     newElement._isBind = true;
 
-                    ElementData.mergerElements.Add(newElement);
+                    _elementData.mergerElements.Add(newElement);
                     newElement.myTransform.parent = _myTransform;
                     countK++;
                 }
@@ -50,7 +52,7 @@ namespace Script.GameLogic.TetrisElement
 
         public void ClearElementsFromDeletedBlocks()
         {
-            foreach (var element in ElementData.mergerElements)
+            foreach (var element in  _elementData.mergerElements)
             {
                 var deletedList = element.blocks.Where(s => s.isDestroy).ToArray();
                 if (deletedList.ToArray().Length > 0)
@@ -70,12 +72,12 @@ namespace Script.GameLogic.TetrisElement
 
         private void DeleteEmptyElement()
         {
-            var elements = ElementData.mergerElements;
+            var elements =  _elementData.mergerElements;
             for (var i = 0; i < elements.Count;)
                 if (elements[i].CheckEmpty())
                 {
                     var tmp = elements[i];
-                    ElementData.mergerElements.Remove(elements[i]);
+                    _elementData.mergerElements.Remove(elements[i]);
                     _pool.DeleteElement(tmp);
                 }
                 else
@@ -86,7 +88,7 @@ namespace Script.GameLogic.TetrisElement
 
         public void DeleteAllElements()
         {
-            var elements = ElementData.mergerElements;
+            var elements =  _elementData.mergerElements;
             foreach (var item in elements)
             {
                 _matrix.UnbindToMatrix(item);
@@ -95,15 +97,14 @@ namespace Script.GameLogic.TetrisElement
                 _pool.DeleteElement(item);
             }
             
-            if (!Equals(ElementData.newElement, null))
+            if (!Equals( _elementData.newElement, null))
             {
-                ClearDeletedBlocks(ElementData.newElement.blocks.ToArray());
-                ElementData.newElement.RemoveBlocksInList(ElementData.newElement.blocks.ToArray());
-                _pool.DeleteElement(ElementData.newElement);
+                ClearDeletedBlocks( _elementData.newElement.blocks.ToArray());
+                _elementData.newElement.RemoveBlocksInList( _elementData.newElement.blocks.ToArray());
+                _pool.DeleteElement( _elementData.newElement);
             }
 
-
-            ElementData.RemoveAll();
+            ElementData.Instance.RemoveAll();
 
             onDeleteAllElements?.Invoke();
         }

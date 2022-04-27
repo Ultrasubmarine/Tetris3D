@@ -13,6 +13,7 @@ namespace Script.StateMachine.States
         private GameController _gameController;
         private ProjectionLineManager _projectionLineManager;
         private Projection _projection;
+        private ElementData _elementData;
         
         public MoveState()
         {
@@ -21,18 +22,19 @@ namespace Script.StateMachine.States
             _gameController = RealizationBox.Instance.gameController;
             _projectionLineManager = RealizationBox.Instance.projectionLineManager;
             _projection = RealizationBox.Instance.projection;
+            _elementData = ElementData.Instance;
         }
         
         public override void Enter(TetrisState last)
         {
-            if (CheckOpportunity(ElementData.newElement, InfluenceData.direction))
+            if (CheckOpportunity(_elementData.newElement, InfluenceData.direction))
             {
                 _gameController.OnMoveActionApply(true, InfluenceData.direction);
-                Logic(InfluenceData.direction, ElementData.newElement);
+                Logic(InfluenceData.direction, _elementData.newElement);
 
                 Vector3Int vectorDirection = SetVectorMove(InfluenceData.direction);
 
-                _influence.AddMove(ElementData.newElement, vectorDirection, global::Speed.timeMove,
+                _influence.AddMove(_elementData.newElement, vectorDirection, global::Speed.timeMove,
                     () =>
                     {
                         _FSM.SetNewState(TetrisState.EndInfluence);

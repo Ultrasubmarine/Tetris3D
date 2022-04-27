@@ -65,7 +65,7 @@ namespace Script.GameLogic
               // element.InitializationAfterGeneric(currentYpos);
                element.myTransform.position = new Vector3(pos.x, pos.y /*+ currentYpos - size*/, pos.z);
                element.myTransform.parent = parentTransform;
-               ElementData.MergeElement(element);
+               ElementData.Instance.MergeElement(element);
                _matrix.BindToMatrix(element);
                element.isPreconstruct = true;
            }

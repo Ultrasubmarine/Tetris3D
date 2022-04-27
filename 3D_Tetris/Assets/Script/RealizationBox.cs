@@ -107,6 +107,6 @@ public class RealizationBox : Singleton<RealizationBox>
 
     private void Start()
     {
-        ElementData.loader = () => { return _generator.GenerationNewElement(_elementDropper.transform); };
+        ElementData.Instance.loader = () => { return _generator.GenerationNewElement(_elementDropper.transform); };
     }
 }
