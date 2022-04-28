@@ -4,6 +4,7 @@ using Script;
 using Script.Controller;
 using Script.Controller.TouchController;
 using Script.GameLogic;
+using Script.GameLogic.Bomb;
 using Script.GameLogic.Stars;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
@@ -59,6 +60,8 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private StarUI _starUI;
     [SerializeField] private LvlElementsSetter _lvlElementsSetter;
     [SerializeField] private DestroyedLayerParticles _destroyedLayerParticles;
+
+    [SerializeField] private BombsManager _bombsManager;
     
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
@@ -90,6 +93,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public StarUI starUI => _starUI;
     public LvlElementsSetter lvlElementsSetter => _lvlElementsSetter;
     public DestroyedLayerParticles destroyedLayerParticles => _destroyedLayerParticles;
+    public BombsManager bombsManager => _bombsManager;
     
     private Dictionary<TutorType, GameObject> _tutors;
     

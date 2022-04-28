@@ -20,6 +20,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     public int limitHeight => _limitHeight;
 
     public event Action<int> OnDestroyLayer;
+    public event Action<Vector3> OnDestroyBlock;
     public event Action<bool> OnDestroyLayerEnd; // true - if destroy lvl
     
     protected override void Init()
@@ -215,6 +216,28 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         }
     }
 
+    public void DestroyBlocksAround(Vector3Int point, List<Vector3Int> directions, bool collectStars = false)
+    {
+        foreach (var d in directions)
+        {
+            Vector3Int pos = new Vector3Int(point.x + d.x, point.y + d.y, point.z + d.z);
+            if(pos.OutOfIndexLimit())
+                continue;
+            if(CheckEmptyPlace(pos.x,pos.y, pos.z))
+                continue;
+            
+            if(collectStars)
+                _matrix[pos.x, pos.y, pos.z].Collect();
+            
+            _matrix[pos.x, pos.y, pos.z].isDestroy = true;
+            
+            OnDestroyBlock?.Invoke(pos);
+            _matrix[pos.x, pos.y, pos.z] = null;
+        }
+        
+        _matrix[point.x, point.y, point.z].isDestroy = true;
+        _matrix[point.x, point.y, point.z] = null;
+    }
     #endregion
 
     public Vector3Int FindLowerAccessiblePlace()

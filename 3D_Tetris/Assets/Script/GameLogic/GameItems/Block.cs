@@ -113,6 +113,17 @@ public class Block : MonoBehaviour
         oreol.gameObject.SetActive(true);
     }
 
+    public void TransformToBomb(Mesh _starMesh, Material _starMaterial)
+    {
+        isStar = true;
+        _meshFilter.mesh = _starMesh;
+        mesh.material = _starMaterial;
+        
+        _star.SetActive(true);
+        _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
+       // oreol.gameObject.SetActive(true);
+    }
+    
     public void Collect()
     {
         OnCollected?.Invoke(this);

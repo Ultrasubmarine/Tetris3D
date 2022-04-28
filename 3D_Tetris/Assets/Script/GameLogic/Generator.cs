@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using IntegerExtension;
+using Script.GameLogic.Bomb;
 using Script.Influence;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -112,6 +113,7 @@ public class Generator : MonoBehaviour
     private PlaneMatrix _matrix;
     private HeightHandler _heightHandler;
     private GameCamera _gameCamera;
+    private BombsManager _bombsManager;
     
     private bool[,,] _castMatrix;
     private Vector3Int _minPoint;
@@ -135,7 +137,8 @@ public class Generator : MonoBehaviour
         _pool = RealizationBox.Instance.gameLogicPool;
         _heightHandler = RealizationBox.Instance.haightHandler;
         _gameCamera = RealizationBox.Instance.gameCamera;
-
+        _bombsManager = RealizationBox.Instance.bombsManager;
+            
         _castMatrix = new bool[3, 5, 3];
         
         _answerElement= _pool.CreateEmptyElement();
@@ -156,8 +159,9 @@ public class Generator : MonoBehaviour
         _castMatrix = CreateCastMatrix(_minPoint.y);
 
       //  GeneratePickableBlock();
-      
-        var newElement = GenerateElement();
+
+        var e = _bombsManager.MakeBomb();
+        var newElement = e == null? GenerateElement(): e;
         
         CreateDuplicate(newElement);
 

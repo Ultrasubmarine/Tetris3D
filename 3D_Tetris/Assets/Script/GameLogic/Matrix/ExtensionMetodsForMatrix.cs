@@ -25,6 +25,11 @@ namespace IntegerExtension
             return index - _difference;
         }
 
+        public static Vector3Int ToIndex(this Vector3Int coordinat)
+        {
+            return new Vector3Int(coordinat.x.ToIndex(), coordinat.y, coordinat.z.ToIndex());
+        }
+
         public static bool OutOfCoordinatLimit(this Vector3Int coordinat)
         {
             if (Mathf.Abs(coordinat.x) > _absMinCoordinat || coordinat.y < 0 ||

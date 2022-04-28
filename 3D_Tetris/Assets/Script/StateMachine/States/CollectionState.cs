@@ -1,4 +1,5 @@
 ﻿using Helper.Patterns.FSM;
+using Script.GameLogic.Bomb;
 using UnityEngine;
 
 public class CollectionState : AbstractState<TetrisState>
@@ -16,7 +17,6 @@ public class CollectionState : AbstractState<TetrisState>
     {
         _matrix.OnDestroyLayerEnd += OnCollectEnd;
         _matrix.CollectLayers();
-        
         //  _heightHandler.CalculateHeight();
         base.Enter(last);
     }

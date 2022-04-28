@@ -44,7 +44,10 @@ MonoBehaviour:
     - score: 72
       stepOfHardElement: 3
       growBlocksAnywhere: 0
-    pGenerateNeededElement: 0.75
+    probabilitySettings:
+      layerDown: 0
+      neighbours: 0
+      startPoints: 0
   _lvlElements:
   - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
     blocks:
@@ -58,7 +61,5 @@ MonoBehaviour:
     - {x: 1, y: 0, z: 2}
     - {x: 0, y: 0, z: 2}
     - {x: 2, y: 0, z: 2}
-  _startState: 8
-  _starPlaces:
-  - amountStars: 1
-    position: {x: 2, y: 0, z: 0}
+  _startState: 0
+  _starPlaces: []
