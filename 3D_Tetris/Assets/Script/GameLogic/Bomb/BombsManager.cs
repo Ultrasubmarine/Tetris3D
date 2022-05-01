@@ -101,7 +101,6 @@ namespace Script.GameLogic.Bomb
             {
                 var boom = _particlePool.Pop();
                 boom.transform.position = po;
-        
                 _activeParticles.Add(boom);
             }
             Invoke(nameof(DestroyParticle), _timeForShowStop);
