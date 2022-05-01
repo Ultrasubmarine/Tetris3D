@@ -42,7 +42,8 @@ public class Block : MonoBehaviour
     public MeshRenderer mesh { get; private set; }
 
     MeshFilter _meshFilter;
-
+    MeshFilter _extraMeshFilter;
+    
     private static Mesh _meshCube;
     
     public bool isStar { get; private set; }
@@ -59,7 +60,8 @@ public class Block : MonoBehaviour
         myTransform = transform;
         mesh = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
-
+        _extraMeshFilter = _star.GetComponent<MeshFilter>();
+        
         if (_meshCube == null)
             _meshCube = _meshFilter.mesh;
     }
@@ -105,7 +107,7 @@ public class Block : MonoBehaviour
     public void TransformToStar(Mesh _starMesh, Material _starMaterial)
     {
         isStar = true;
-        // _meshFilter.mesh = _starMesh;
+        _extraMeshFilter.mesh = _starMesh;
         mesh.material = _starMaterial;
         
         _star.SetActive(true);
@@ -116,7 +118,7 @@ public class Block : MonoBehaviour
     public void TransformToBomb(Mesh _starMesh, Material _starMaterial)
     {
         isStar = true;
-        _meshFilter.mesh = _starMesh;
+        _extraMeshFilter.mesh = _starMesh;
         mesh.material = _starMaterial;
         
         _star.SetActive(true);

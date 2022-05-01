@@ -20,7 +20,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     public int limitHeight => _limitHeight;
 
     public event Action<int> OnDestroyLayer;
-    public event Action<Vector3> OnDestroyBlock;
+    public event Action<List<Vector3>> OnDestroyBlock;
     public event Action<bool> OnDestroyLayerEnd; // true - if destroy lvl
     
     protected override void Init()
@@ -218,6 +218,8 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
 
     public void DestroyBlocksAround(Vector3Int point, List<Vector3Int> directions, bool collectStars = false)
     {
+        List<Vector3> destroyPos = new List<Vector3>();
+        
         foreach (var d in directions)
         {
             Vector3Int pos = new Vector3Int(point.x + d.x, point.y + d.y, point.z + d.z);
@@ -230,13 +232,16 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
                 _matrix[pos.x, pos.y, pos.z].Collect();
             
             _matrix[pos.x, pos.y, pos.z].isDestroy = true;
-            
-            OnDestroyBlock?.Invoke(pos);
+
+            destroyPos.Add(_matrix[pos.x, pos.y, pos.z].myTransform.position);
             _matrix[pos.x, pos.y, pos.z] = null;
         }
         
+        destroyPos.Add(_matrix[point.x, point.y, point.z].myTransform.position);
         _matrix[point.x, point.y, point.z].isDestroy = true;
         _matrix[point.x, point.y, point.z] = null;
+        
+        OnDestroyBlock?.Invoke(destroyPos);
     }
     #endregion
 
