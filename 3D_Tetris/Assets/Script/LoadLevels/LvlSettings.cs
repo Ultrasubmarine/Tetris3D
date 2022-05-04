@@ -25,6 +25,12 @@ namespace Script
         public ProbabilitySettings probabilitySettings;
     }
 
+    [Serializable]
+    public struct BombsSettings
+    {
+        public bool makeBombs;
+    }
+    
     [CreateAssetMenu(fileName = "LvlSettings", menuName = "Lvl", order = 0)]
     public class LvlSettings : ScriptableObject
     {
@@ -36,6 +42,7 @@ namespace Script
         public List<CreatedElement> lvlElements => _lvlElements;
         public TetrisState startState => _startState;
         public List<StarPlace> starPlaces => _starPlaces;
+        public BombsSettings bombsSettings => _bombsSettings;
         
         [SerializeField] private TutorType _tutorType;
         [SerializeField] private List<ChangeSpeedInfo> _speedSettings;
@@ -45,5 +52,6 @@ namespace Script
         [SerializeField] private List<CreatedElement> _lvlElements;
         [SerializeField] private TetrisState _startState = TetrisState.GenerateElement;
         [SerializeField] private List<StarPlace> _starPlaces;
+        [SerializeField] private BombsSettings _bombsSettings;
     }
 }

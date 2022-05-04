@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour
             tutor.SetActive(true);
         }
 
-
         box.speedChanger.SetSpeedPoints(lvl.speedSettings);
         
         box.score.SetWinScore(lvl.winScore);
@@ -61,6 +60,9 @@ public class GameManager : MonoBehaviour
 
         box.lvlElementsSetter.createdElements = new List<CreatedElement>(lvl.lvlElements);
         box.FSM.startState= lvl.startState;
+
+        box.bombsManager.lvlWithBombs = lvl.bombsSettings.makeBombs;
+        
         _startState = lvl.startState;  
     }
 
