@@ -230,6 +230,8 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
             
             if(collectStars)
                 _matrix[pos.x, pos.y, pos.z].Collect();
+            else
+                _matrix[pos.x, pos.y, pos.z].Destroy();
             
             _matrix[pos.x, pos.y, pos.z].isDestroy = true;
 

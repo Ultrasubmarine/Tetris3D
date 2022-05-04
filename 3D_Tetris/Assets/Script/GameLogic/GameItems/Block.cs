@@ -50,6 +50,8 @@ public class Block : MonoBehaviour
 
     public Action<Block> OnCollected;
 
+    public Action<Block> OnDestroyed;
+    
     public Transform oreol;
     
     [SerializeField] private GameObject _star;
@@ -131,6 +133,11 @@ public class Block : MonoBehaviour
         OnCollected?.Invoke(this);
         //if (isStar) 
         // animation TO DO
+    }
+
+    public void Destroy() // for bombs
+    {
+        OnDestroyed?.Invoke(this);
     }
     // FOR override & pickable blocks
     public virtual bool IsPickable()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using DG.Tweening;
 using IntegerExtension;
 using UnityEngine;
@@ -197,7 +198,8 @@ namespace Script.GameLogic.Stars
             }
             
             _stars.Add(rndBlock); 
-            rndBlock.OnCollected += CollectStar; 
+            rndBlock.OnCollected += CollectStar;
+            rndBlock.OnDestroyed += DestroyStar;
             CreateAnimation(rndBlock);
         }
 
@@ -257,6 +259,7 @@ namespace Script.GameLogic.Stars
         public void CollectStar(Block star)
         {
             star.OnCollected -= CollectStar;
+            star.OnDestroyed -= DestroyStar;
             collectedStars++;
             _stars.Remove(star);
 
@@ -280,6 +283,24 @@ namespace Script.GameLogic.Stars
             RealizationBox.Instance.starUIAnimation.StartAnimation();
         }
 
+        public void DestroyStar(Block star)
+        {
+            star.OnCollected -= CollectStar;
+            star.OnDestroyed -= DestroyStar;
+            
+            _stars.Remove(star);
+
+            StarInfo rStr;
+            foreach (var s in _rotationStars)
+            {
+                if (s.block == star)
+                {
+                    rStr = s;
+                    _rotationStars.Remove(rStr);
+                    break;
+                }
+            }
+        }
         public void FinishCollectAnimation() // doesnt work when few stars are collected
         {
             onCollectedAnimationWaiting = false;
@@ -293,6 +314,7 @@ namespace Script.GameLogic.Stars
             foreach (var s in _stars)
             {
                 s.OnCollected -= CollectStar;
+                s.OnDestroyed -= DestroyStar;
             }
             _stars.Clear();
             _applicants.Clear();
