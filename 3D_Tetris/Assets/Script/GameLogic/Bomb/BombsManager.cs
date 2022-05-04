@@ -45,11 +45,7 @@ namespace Script.GameLogic.Bomb
        private Sequence _boomTextAnimation;
        [SerializeField] private float firstMove = 40;
        [SerializeField] private float firstMoveTime = 1;
-        
-       [SerializeField] private float reverseMove;
-       [SerializeField] private float reverseMoveTime;
-       [SerializeField] private float wait = 0.2f;
-        
+
        [SerializeField] private float dissapeadScale;
        [SerializeField] private float dissapeadScaleTime;
 
@@ -66,18 +62,14 @@ namespace Script.GameLogic.Bomb
             
             _matrix.OnDestroyBlock += OnDestroyBlock;
             
-         //   _boomTextAnimation = DOTween.Sequence().SetAutoKill(false).Pause();
+           _boomTextAnimation = DOTween.Sequence().SetAutoKill(false).Pause();
             
-            // rt =  _boomText.gameObject.GetComponent<RectTransform>();
-            // _boomTextAnimation.Append(rt.DOLocalMoveY(rt.localPosition.y + firstMove, firstMoveTime).From(rt.localPosition.y))
-            //     .Join( _boomText.DOFade(1, firstMoveTime / 2).From(0, false))
-            //     .Append(rt.DOLocalMoveY(rt.localPosition.y + firstMove - reverseMove, reverseMoveTime))
-            //     .AppendInterval(wait)
-            //     .Append( _boomText.DOFade(0, dissapeadScaleTime))
-            //     .Join(rt.DOScale(Vector3.one * dissapeadScale, dissapeadScaleTime))
-            //     .OnComplete(() => rt.localScale = Vector3.one);
-            //
-            
+            rt =  _boomText.gameObject.GetComponent<RectTransform>();
+        
+            _boomTextAnimation.Append( _boomText.DOFade(1, firstMoveTime / 2).From(0, false))
+                .Append( _boomText.DOFade(0, dissapeadScaleTime))
+                .Join(rt.DOScale(Vector3.one * dissapeadScale, dissapeadScaleTime))
+                .OnComplete(() => rt.localScale = Vector3.one);
         }
 
         public Element MakeBomb()
@@ -137,8 +129,8 @@ namespace Script.GameLogic.Bomb
                 boom.transform.position = po;
                 _activeParticles.Add(boom);
             }
-            
-            
+
+            SetBoomText(pos[pos.Count - 1]);
             Invoke(nameof(DestroyParticle), _timeForShowStop);
         }
 
@@ -151,20 +143,21 @@ namespace Script.GameLogic.Bomb
             _activeParticles.Clear();
         }
 
-        // public void SetBoomText(Vector3 pos)
-        // {
-        //     rt.anchoredPosition = WorldToCanvas(pos);
-        //     
-        //     
-        // }
-        //
-        // private Vector2 WorldToCanvas(Vector3 world_position)
-        // {
-        //     var viewport_position = Camera.main.WorldToViewportPoint(world_position);
-        //     var canvas_rect = _canvas.GetComponent<RectTransform>();
-        //
-        //     return new Vector2((viewport_position.x * canvas_rect.sizeDelta.x) - (canvas_rect.sizeDelta.x * 0.5f),
-        //         (viewport_position.y * canvas_rect.sizeDelta.y) - (canvas_rect.sizeDelta.y * 0.5f));
-        // }
+        public void SetBoomText(Vector3 pos)
+        {
+            rt.anchoredPosition = WorldToCanvas(pos) + new Vector2(0,firstMove);
+
+            _boomTextAnimation.Rewind();
+            _boomTextAnimation.Play();
+        }
+        
+        private Vector2 WorldToCanvas(Vector3 world_position)
+        {
+            var viewport_position = Camera.main.WorldToViewportPoint(world_position);
+            var canvas_rect = _canvas.GetComponent<RectTransform>();
+        
+            return new Vector2((viewport_position.x * canvas_rect.sizeDelta.x) - (canvas_rect.sizeDelta.x * 0.5f),
+                (viewport_position.y * canvas_rect.sizeDelta.y) - (canvas_rect.sizeDelta.y * 0.5f));
+        }
     }
 }
