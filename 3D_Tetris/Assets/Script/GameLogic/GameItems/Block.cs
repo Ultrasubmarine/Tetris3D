@@ -40,7 +40,8 @@ public class Block : MonoBehaviour
 
     public Transform myTransform { get; private set; }
     public MeshRenderer mesh { get; private set; }
-
+    public MeshRenderer extraMesh { get; private set; }
+    
     MeshFilter _meshFilter;
     MeshFilter _extraMeshFilter;
     
@@ -61,6 +62,7 @@ public class Block : MonoBehaviour
     {
         myTransform = transform;
         mesh = GetComponent<MeshRenderer>();
+        extraMesh = _star.GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
         _extraMeshFilter = _star.GetComponent<MeshFilter>();
         
@@ -106,26 +108,34 @@ public class Block : MonoBehaviour
         oreol.gameObject.SetActive(false);
     }
 
-    public void TransformToStar(Mesh _starMesh, Material _starMaterial)
+    public void TransformToStar(Mesh _starMesh, Material _starMaterial, Material _blockMaterial)
     {
         isStar = true;
+        
+        mesh.material = _blockMaterial;
+        
         _extraMeshFilter.mesh = _starMesh;
-        mesh.material = _starMaterial;
+        extraMesh.material = _starMaterial;
         
         _star.SetActive(true);
         _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
         oreol.gameObject.SetActive(true);
     }
 
-    public void TransformToBomb(Mesh _starMesh, Material _starMaterial)
+    public void TransformToBomb(Mesh _bombMesh, Material _bombMaterial, Material _blockMaterial, Vector3 _rotation)
     {
         isStar = true;
-        _extraMeshFilter.mesh = _starMesh;
-        mesh.material = _starMaterial;
         
+        mesh.material = _blockMaterial;
+        
+        _extraMeshFilter.mesh = _bombMesh;
+        extraMesh.material = _bombMaterial;
+
         _star.SetActive(true);
         _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
-       // oreol.gameObject.SetActive(true);
+
+        _star.transform.localEulerAngles = _rotation;
+        // oreol.gameObject.SetActive(true);
     }
     
     public void Collect()

@@ -57,7 +57,8 @@ namespace Script.GameLogic.Stars
         private int _currentStep;
         
         [SerializeField] private Mesh _starMesh;
-        [SerializeField] private Material _starmaterial;
+        [FormerlySerializedAs("_starmaterial")] [SerializeField] private Material _blockMaterial;
+        [SerializeField] private Material _starMaterial;
 
         // Animation
         [Header("Animation")]
@@ -243,7 +244,7 @@ namespace Script.GameLogic.Stars
                     }).
               OnComplete(()=> 
               {
-                  block.TransformToStar(_starMesh, _starmaterial);
+                  block.TransformToStar(_starMesh, _starMaterial,_blockMaterial);
                   
                   _animationPath.RemoveAt(2);
                   _animationStar.DOKill();

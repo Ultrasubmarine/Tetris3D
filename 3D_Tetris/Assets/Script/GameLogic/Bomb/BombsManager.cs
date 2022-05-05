@@ -5,6 +5,7 @@ using DG.Tweening;
 using Helper.Patterns;
 using IntegerExtension;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.GameLogic.Bomb
 {
@@ -18,7 +19,8 @@ namespace Script.GameLogic.Bomb
         
         public bool lvlWithBombs { get; set; }
         
-       [SerializeField] private Material _material;
+       [FormerlySerializedAs("_material")] [SerializeField] private Material _blockMaterial;
+       [SerializeField] private Material _bombMaterial;
        [SerializeField] private Mesh _bombMesh;
 
        [SerializeField] private bool _ignoreSlow = true;
@@ -50,6 +52,15 @@ namespace Script.GameLogic.Bomb
        [SerializeField] private float dissapeadScaleTime;
 
        [SerializeField] private Canvas _canvas;
+
+       [SerializeField] private Vector3 _bombRotation;
+       
+       
+       // particles
+       [SerializeField] private GameObject _particles;
+       [SerializeField] private Vector3 _localParticlePosition;
+       
+       
         private void Start()
         {
             _pool = RealizationBox.Instance.gameLogicPool;
@@ -88,10 +99,17 @@ namespace Script.GameLogic.Bomb
             }
             
             var element = _pool.CreateEmptyElement();
-            _pool.CreateBlock(Vector3Int.zero, element, _material);
+            _pool.CreateBlock(Vector3Int.zero, element, _blockMaterial);
 
-            element.blocks[0].TransformToBomb(_bombMesh, _material);
+            element.blocks[0].TransformToBomb(_bombMesh, _bombMaterial, _blockMaterial,_bombRotation);
+            
+            //add particles
+            _particles.SetActive(true);
+            _particles.transform.parent = element.blocks[0].transform;
+            _particles.transform.localPosition = _localParticlePosition;
             _bombs.Add(element.blocks[0]);
+            
+            
             return element;
         }
 
@@ -131,6 +149,10 @@ namespace Script.GameLogic.Bomb
             }
 
             SetBoomText(pos[pos.Count - 1]);
+            
+            _particles.SetActive(false);
+            _particles.transform.parent = transform;
+            
             Invoke(nameof(DestroyParticle), _timeForShowStop);
         }
 
