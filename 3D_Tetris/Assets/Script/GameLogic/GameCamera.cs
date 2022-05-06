@@ -7,6 +7,8 @@ public class GameCamera : MonoBehaviour
 {
     public event Action onFirstAnimationEnd;
     public event Action onStabilizationEnd;
+
+    public Transform lookAtPoint => _lookAtPoint;
     
     [SerializeField] private Vector3 _startPoint;
     
@@ -22,7 +24,8 @@ public class GameCamera : MonoBehaviour
     [SerializeField] private float _timeStabilization;
 
     [SerializeField] private Transform _objectLook;
-    
+
+    [SerializeField] private Transform _lookAtPoint; // for objects which lookAt camera;
     private Camera _camera;
    
     private Transform _myTransform;

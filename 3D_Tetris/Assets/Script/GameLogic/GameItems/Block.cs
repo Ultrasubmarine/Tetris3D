@@ -117,6 +117,7 @@ public class Block : MonoBehaviour
         _extraMeshFilter.mesh = _starMesh;
         extraMesh.material = _starMaterial;
         
+       // Vector3.
         _star.layer = 11;//"element";
         _star.SetActive(true);
         _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);

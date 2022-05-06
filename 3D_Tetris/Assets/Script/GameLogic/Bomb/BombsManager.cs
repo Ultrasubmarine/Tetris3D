@@ -59,13 +59,15 @@ namespace Script.GameLogic.Bomb
        // particles
        [SerializeField] private GameObject _particles;
        [SerializeField] private Vector3 _localParticlePosition;
-       
+
+       private Transform _gameCamera;
        
         private void Start()
         {
             _pool = RealizationBox.Instance.gameLogicPool;
             _fsm = RealizationBox.Instance.FSM;
             _matrix = RealizationBox.Instance.matrix;
+            _gameCamera = RealizationBox.Instance.gameCamera.lookAtPoint;
             
             _bombs = new List<Block>();
             _particlePool = new Pool<GameObject>(_particleSystem,_particlesParent);
@@ -105,12 +107,23 @@ namespace Script.GameLogic.Bomb
             
             //add particles
             _particles.SetActive(true);
-            _particles.transform.parent = element.blocks[0].transform;
+            _particles.transform.parent = element.blocks[0].Star;
             _particles.transform.localPosition = _localParticlePosition;
             _bombs.Add(element.blocks[0]);
             
             
             return element;
+        }
+
+        private void Update()
+        {
+            if (_bombs.Count == 0)
+                return;
+
+            foreach (var b in _bombs)
+            {
+                b.Star.LookAt(_gameCamera);
+            }
         }
 
         public bool BoomBombs()
