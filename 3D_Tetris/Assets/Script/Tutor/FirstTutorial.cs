@@ -26,6 +26,9 @@ namespace Script.Tutor
         
         private Action OnMoveSuccess, OnMoveFail;
         private bool _generateNeedElement;
+
+        private IEnumerable<CoordinatXZ> blocksXZ;
+        private float usualSpeed;
         
         private void Start()
         {
@@ -93,87 +96,75 @@ namespace Script.Tutor
             _firstTutor.DOComplete();
             _firstTutor.DOFade(0, 0.1f).SetDelay(0.1f).OnComplete(() => _secondTutor.DOFade(1, 0.2f));
             
-            IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ, razn;
-            do
-            {
-                blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
-                blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
-                razn = blocksXZ.Except(blocksAnswerXZ);
-                
-                RealizationBox.Instance.generator.SetRandomPosition(RealizationBox.Instance.generator._answerElement);
-            } while (!razn.Any());
-            
-            RealizationBox.Instance.generator._answerElement.gameObject.SetActive(true);
+            blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
+
          //   RealizationBox.Instance.FSM.onStateChange += FinishMove;
-            RealizationBox.Instance.joystick.onStateChange += FinishMove;
-            RealizationBox.Instance.FSM.onStateChange += SecondDotFiveStep;
-            OnMoveSuccess += ThirdStep;
-        }
 
-        void ReturnToSecondStep()
-        {
-            // in second
-            OnMoveSuccess += ThirdStep;
+            RealizationBox.Instance.FSM.onStateChange += FinishMove;
+          //  RealizationBox.Instance.joystick.onStateChange += FinishMove;
             RealizationBox.Instance.FSM.onStateChange += SecondDotFiveStep;
-            _secondTutor.DOFade(1, 0.2f);
-
-            
-            RealizationBox.Instance.generator._answerElement.gameObject.SetActive(true);
-            //   RealizationBox.Instance.FSM.onStateChange += FinishMove;
-            
-            // in third
-            _thirdTutor.DOKill();
-            _thirdTutor.DOFade(0, 0.1f);
-            
-            OnMoveFail -= ReturnToSecondStep;
-            RealizationBox.Instance.tapsEvents.OnDoubleTap -= FourthStep;
-            RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
+         //   OnMoveSuccess += ThirdStep;
         }
 
         void SecondDotFiveStep(TetrisState state)
         {
             if (state == TetrisState.EndInfluence)
             {
-                var blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
-            
-                var blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
-
-                var razn = blocksXZ.Except(blocksAnswerXZ);
-                if (razn == null || razn.Count() == 0)
+                RealizationBox.Instance.FSM.onStateChange -= SecondDotFiveStep;
+                ElementData.Instance.onNewElementUpdate += ThirdStep;
+                RealizationBox.Instance.generator.fixedHightPosition = 9;
+                RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDouble;
+                
+                _secondTutor.DOFade(0, 0.1f);
+                if (RealizationBox.Instance.joystick.state == JoystickState.Show)
                 {
-                    _secondTutor.DOFade(0, 0.1f);
                     _secondDotFiveTutor.DOFade(1, 0.2f);
+
+                    RealizationBox.Instance.joystick.onStateChange += SecondDotFiveFinish;
                 }
                 else
                 {
-                    _secondTutor.DOFade(1, 0.2f);
-                    _secondDotFiveTutor.DOFade(0, 0.1f);
+                    RealizationBox.Instance.slowManager.SetPauseSlow(false);
                 }
             }
         }
         
+        void SecondDotFiveFinish(JoystickState state)
+        {
+            if (state == JoystickState.Hide)
+            {
+                RealizationBox.Instance.joystick.onStateChange -= SecondDotFiveFinish;
+                RealizationBox.Instance.slowManager.SetPauseSlow(false);
+                
+                _secondDotFiveTutor.DOFade(0, 0.2f);
+            }
+        }
         
         void ThirdStep() // double tap
         {
-            OnMoveSuccess -= ThirdStep;
-            OnMoveFail += ReturnToSecondStep;
-            RealizationBox.Instance.FSM.onStateChange -= SecondDotFiveStep;
-            
-            _secondTutor.DOKill();
-            _secondDotFiveTutor.DOKill();
-            _secondDotFiveTutor.DOFade(0, 0.3f);
-            _secondTutor.DOFade(0, 0.3f).SetDelay(0.2f).
-                OnComplete(() => _thirdTutor.DOFade(1, 0.1f).OnComplete(() =>
-                {
-                    RealizationBox.Instance.tapsEvents.OnDoubleTap += FourthStep;
-                    RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDouble;
-                }));
+            ElementData.Instance.onNewElementUpdate -= ThirdStep;
+          //  OnMoveSuccess -= ThirdStep;
+       //     OnMoveFail += ReturnToSecondStep;
+       
+            _thirdTutor.DOFade(1, 0.2f);
+            usualSpeed = global::Speed.timeDrop;
+            global::Speed.SetTimeDrop(2.5f);
+           
+           RealizationBox.Instance.tapsEvents.OnDoubleTap += FourthStep;
+           ElementData.Instance.onNewElementUpdate += ThirdStepIgnore;
         }
 
+        void ThirdStepIgnore()
+        {
+            ElementData.Instance.onNewElementUpdate -= ThirdStepIgnore;
+            FourthStep();
+        }
+        
         void FourthStep() // continue placing elements 
         {
-            OnMoveFail -= ReturnToSecondStep;
-            
+            global::Speed.SetTimeDrop(usualSpeed);
+         //   OnMoveFail -= ReturnToSecondStep;
+            ElementData.Instance.onNewElementUpdate -= ThirdStepIgnore;
             RealizationBox.Instance.tapsEvents.OnDoubleTap -= FourthStep;
             _thirdTutor.DOKill();
             _thirdTutor.DOFade(0, 0.3f);
@@ -228,33 +219,38 @@ namespace Script.Tutor
             RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.None;
             _hand.DOKill();
             
-            RealizationBox.Instance.joystick.onStateChange -= FinishMove;
+        //    RealizationBox.Instance.joystick.onStateChange -= FinishMove;
             RealizationBox.Instance.generator._generateNeedElement = _generateNeedElement;
            // RealizationBox.Instance.FSM.onStateChange -= FinishMove;
         }
 
-        
-        void FinishMove(JoystickState state)//TetrisState obj)
-        {
-            /*if (obj != TetrisState.EndInfluence)
-                return;*/
-            if (state == JoystickState.Show || ElementData.Instance.newElement == null)
-                return;
-            
-            var blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
-            
-            var blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
 
-            var razn = blocksXZ.Except(blocksAnswerXZ);
-            if (razn == null || razn.Count() == 0)
-            {
+        void FinishMove(TetrisState state)
+        {
+            if(state == TetrisState.EndInfluence)
                 OnMoveSuccess?.Invoke();
-            }
-            else
-            {
-                OnMoveFail?.Invoke();
-            }
         }
+        
+     
+        //
+        // void FinishMove(JoystickState state)//TetrisState obj)
+        // {
+        //     /*if (obj != TetrisState.EndInfluence)
+        //         return;*/
+        //     if (state == JoystickState.Show || ElementData.Instance.newElement == null)
+        //         return;
+        //     
+        //     var blocksAnswerXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
+        //     var razn = blocksXZ.Except(blocksAnswerXZ);
+        //     if (razn.Count() > 0)
+        //     {
+        //         OnMoveSuccess?.Invoke();
+        //     }
+        //     else
+        //     {
+        //         OnMoveFail?.Invoke();
+        //     }
+        // }
  
     }
 }
