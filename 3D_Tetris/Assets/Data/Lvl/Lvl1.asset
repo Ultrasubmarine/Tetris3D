@@ -20,12 +20,13 @@ MonoBehaviour:
     score: 36
   - time: 0.3
     score: 63
-  _winScore: 99
+  _winScore: 0
   _starSettings:
-    collectStar: 0
-    maxStarsInPlace: 0
-    winAmount: 0
-    stepsBetweenStar: 0
+    collectStar: 1
+    maxStarsInPlace: 1
+    winAmount: 1
+    stepsBetweenStar: 6
+    firstStep: 0
   _generatorSettings:
     points:
     - score: 0
@@ -44,3 +45,5 @@ MonoBehaviour:
   _lvlElements: []
   _startState: 0
   _starPlaces: []
+  _bombsSettings:
+    makeBombs: 0

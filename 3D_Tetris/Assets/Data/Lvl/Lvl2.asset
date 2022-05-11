@@ -30,6 +30,7 @@ MonoBehaviour:
     maxStarsInPlace: 3
     winAmount: 9
     stepsBetweenStar: 4
+    firstStep: 100
   _generatorSettings:
     points:
     - score: 0
@@ -65,3 +66,5 @@ MonoBehaviour:
   _starPlaces:
   - amountStars: 1
     position: {x: 2, y: 0, z: 0}
+  _bombsSettings:
+    makeBombs: 0

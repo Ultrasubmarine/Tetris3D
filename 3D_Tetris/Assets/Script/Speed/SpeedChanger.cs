@@ -58,5 +58,6 @@ namespace Script.Speed
                 currentIndex++;
             }
         }
+        
     }
 }

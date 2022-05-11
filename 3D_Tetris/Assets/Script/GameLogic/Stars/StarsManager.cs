@@ -54,7 +54,7 @@ namespace Script.GameLogic.Stars
         public bool onCollectedAnimationWaiting { get; private set; }
 
         public int stepsBetweenStar { get; set; }
-        private int _currentStep;
+        [FormerlySerializedAs("_currentStep")] public int currentStep;
         
         [SerializeField] private Mesh _starMesh;
         [FormerlySerializedAs("_starmaterial")] [SerializeField] private Material _blockMaterial;
@@ -92,7 +92,7 @@ namespace Script.GameLogic.Stars
       
         private void Start()
         {
-            _currentStep = 1000;
+          //  currentStep = 1000;
             _rotationStars = new List<StarInfo>();
             _stars = new List<Block>();
             _applicants = new List<Block>();
@@ -123,15 +123,6 @@ namespace Script.GameLogic.Stars
             if (_stars.Count >= _maxStarsAmount)
                 return false;
 
-            foreach (var p in starPlaces)
-            {
-                if (!_matrix.CheckEmptyPlace(p.position.x, p.position.y, p.position.z))
-                {
-                    _currentStep = 0;
-                    return true;
-                }
-            }
-            
             _applicants.Clear();
             for (int i = 0; i <= _matrix.height; i++)
             {
@@ -144,20 +135,30 @@ namespace Script.GameLogic.Stars
                 AddApplicants(_matrix.wight-1, i, _matrix.wight-1);
             }
 
-            if (_applicants.Count == 0)
+            bool starPlace = false;
+            foreach (var p in starPlaces)
             {
-                _currentStep++;
+                if (!_matrix.CheckEmptyPlace(p.position.x, p.position.y, p.position.z))
+                {
+                    starPlace = true;
+                    break;
+                }
+            }
+            
+            if (_applicants.Count == 0 && !starPlace)
+            {
+                currentStep++;
                 return false;
             }
             
-            if (_currentStep < stepsBetweenStar)
+            if (currentStep < stepsBetweenStar)
             {
-                _currentStep++;
+                currentStep++;
                 return false;
             }
             else
             {
-                _currentStep = 0;
+                currentStep = 0;
                 return true;
             }
         }
@@ -320,7 +321,7 @@ namespace Script.GameLogic.Stars
             _stars.Clear();
             _applicants.Clear();
             collectedStars = 0;
-            _currentStep = 1000;
+            currentStep = 1000;
             _animationStar.DORewind();
             _animationStar.DOComplete();
             _particles.gameObject.SetActive(false);

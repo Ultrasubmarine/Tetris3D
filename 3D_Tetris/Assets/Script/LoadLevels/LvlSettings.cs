@@ -16,6 +16,7 @@ namespace Script
         public int maxStarsInPlace;
         public int winAmount;
         public int stepsBetweenStar;
+        public int firstStep;
     }
     
     [Serializable]
