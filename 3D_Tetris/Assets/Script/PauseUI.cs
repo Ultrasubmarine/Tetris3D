@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class PauseUI : MonoBehaviour
 {
     [SerializeField] private BottomPanelAnimation _pausePanel;
-    
     [SerializeField] private BottomPanelAnimation _gamePanel;
-
+    [SerializeField] private BottomPanelAnimation _topGamePanel;
+    
     private InfluenceManager _influenceManager;
     private MovementJoystick _joystick;
     private TapsEvents _tapsEvents;
@@ -34,6 +34,7 @@ public class PauseUI : MonoBehaviour
         {
             _pausePanel.Show();
             _gamePanel.Hide();
+            _topGamePanel.Hide();
             
             _joystick.Hide();
             _joystick.enabled = false;
@@ -45,6 +46,7 @@ public class PauseUI : MonoBehaviour
         }
         else
         {
+            _topGamePanel.Show();
             _gamePanel.Show();
             _pausePanel.Hide();
             
