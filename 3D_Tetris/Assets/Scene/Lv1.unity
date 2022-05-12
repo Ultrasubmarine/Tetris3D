@@ -1077,6 +1077,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e361ae9dea3c34d1abaefd15b9401187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Stars:
+  - {fileID: 1482226171}
+  - {fileID: 1569067200}
+  - {fileID: 1085512324}
+  - {fileID: 1923822217}
+  - {fileID: 879045431}
   _oreol: {fileID: 731941984}
   _starRotationSpeed: 25
   _star: {fileID: 1294755798}
@@ -1107,7 +1113,7 @@ MonoBehaviour:
   _time: 1.5
   _scale: {x: 100, y: 100, z: 100}
   _fromScale: {x: 1, y: 1, z: 1}
-  _timeDisappear: 1
+  _timeDisappear: 0.6
   Stars:
   - {fileID: 1482226171}
   - {fileID: 1569067200}
@@ -4342,6 +4348,7 @@ MonoBehaviour:
   _settingsPanel: {fileID: 547163896}
   _gameplayBottomPanel: {fileID: 2082029544}
   _winPanel: {fileID: 284028056}
+  _topGamePanel: {fileID: 1782275821}
 --- !u!4 &311359820
 Transform:
   m_ObjectHideFlags: 0
@@ -14514,6 +14521,7 @@ MonoBehaviour:
   _lvlElementsSetter: {fileID: 732303374}
   _destroyedLayerParticles: {fileID: 101087938}
   _bombsManager: {fileID: 1616382876}
+  _pauseUI: {fileID: 2130227425}
 --- !u!4 &1237479897
 Transform:
   m_ObjectHideFlags: 0
@@ -25578,6 +25586,7 @@ MonoBehaviour:
   _collectStarsLvl: 1
   _maxStarsAmount: 6
   _neededStars: 15
+  currentStep: 0
   _starMesh: {fileID: 8195499056177016675, guid: 2c8e4014c3c8a439fa117f39999ef875,
     type: 3}
   _blockMaterial: {fileID: 2100000, guid: 4a7e242d1fbda3847bd19c6c0e9ba228, type: 2}

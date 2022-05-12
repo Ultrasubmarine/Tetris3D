@@ -21,6 +21,10 @@ public class MiniStarUIAnimation : MonoBehaviour
     [SerializeField] private float _deltaMove = 20f;
     [SerializeField] private float _starRotationSpeed = 20;
     private float _rotation;  //common oreol rotation
+
+    private bool _dissapearPause = false;
+    private int _dissapearAmount = 0;
+    
     
     // Start is called before the first frame update
     void Start()
@@ -72,11 +76,19 @@ public class MiniStarUIAnimation : MonoBehaviour
         for (int i = 0; i < amount; i++)
         {
             Stars[i].animation.Complete();
-            Stars[i].animationsDissapear.Rewind();
-            Stars[i].animationsDissapear.Play();
+         //   Stars[i].animationsDissapear.Rewind();
+          //  Stars[i].animationsDissapear.Play();
         }
     }
 
+    public void CompleteDissapear(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+         //   Stars[i].animationsDissapear.Complete();
+        }
+    }
+    
     // Update is called once per frame
     void Update()
     {
@@ -106,6 +118,29 @@ public class MiniStarUIAnimation : MonoBehaviour
             Stars[i].animationsDissapear.Complete();
             
          //   Stars[i].starMesh.material.SetColor(0,new Color(m.color.r, m.color.g, m.color.b,0f));
+        }
+    }
+
+    public void Pause(bool isPause)
+    {
+        if (isPause)
+        {
+            for (int i = 0; i < Stars.Length; i++)
+            {
+                if (Stars[i].animationsDissapear.IsPlaying())
+                {
+                    Stars[i].animationsDissapear.Pause();
+                    _dissapearAmount = i;
+                }
+            }
+        }
+        else if (_dissapearAmount > 0)
+        {
+            for (int i = 0; i < _dissapearAmount; i++)
+            {
+                Stars[i].animationsDissapear.Play();
+            }
+            _dissapearAmount = 0;
         }
     }
 }

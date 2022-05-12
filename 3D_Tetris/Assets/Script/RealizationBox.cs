@@ -62,7 +62,7 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private DestroyedLayerParticles _destroyedLayerParticles;
 
     [SerializeField] private BombsManager _bombsManager;
-    
+    [SerializeField] private PauseUI _pauseUI;
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
     public PlaneMatrix matrix => _matrix;
@@ -94,6 +94,8 @@ public class RealizationBox : Singleton<RealizationBox>
     public LvlElementsSetter lvlElementsSetter => _lvlElementsSetter;
     public DestroyedLayerParticles destroyedLayerParticles => _destroyedLayerParticles;
     public BombsManager bombsManager => _bombsManager;
+    
+    public PauseUI pauseUI => _pauseUI;
     
     private Dictionary<TutorType, GameObject> _tutors;
     

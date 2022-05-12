@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BottomPanelAnimation _gameplayBottomPanel;
     
     [SerializeField] private CanvasGroup _winPanel;
-    
+    [SerializeField] private CanvasGroup _topGamePanel;
     private TetrisFSM _fsm;
 
     private TetrisState _startState;
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
 
     private void LastStart()
     {
-        _fsm.AddListener(TetrisState.LoseGame, OnLoseGame);
+      //  _fsm.AddListener(TetrisState.LoseGame, OnLoseGame);
     }
 
     public void StartGame()
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     //    _fsm.StartFSM();
     }
 
-    private void OnLoseGame()
+    public void OnLoseGame()
     {
         foreach (var panel in _losePanels)
         {
@@ -141,5 +141,18 @@ public class GameManager : MonoBehaviour
         _winPanel.gameObject.SetActive(true);
         _winPanel.DOFade(1, 0.4f);
         _winPanel.transform.DOMoveY(_winPanel.transform.position.y, 0.4f).From(_winPanel.transform.position.y - 250);
+        
+        
+    }
+
+    public void ResetPause()
+    {
+        
+    }
+    
+    public void HideGamePanels()
+    {
+        _topGamePanel.DOFade(0, 0.1f);
+        _topGamePanel.interactable = false;
     }
 }
