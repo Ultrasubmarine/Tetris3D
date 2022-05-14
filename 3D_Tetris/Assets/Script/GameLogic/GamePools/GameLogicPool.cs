@@ -8,15 +8,19 @@ public class GameLogicPool : MonoBehaviour
     [SerializeField] private GameObject _elementPrefab;
     [SerializeField] private GameObject _blockPrefab;
     [SerializeField] private GameObject _pickableBlockPrefab;
-
+    [SerializeField] private GameObject _miniBlockPrefab;
+    
     [SerializeField] private Transform _elementPoolParent;
     [SerializeField] private Transform _blockPoolParent;
     [SerializeField] private Transform _pickableBlockPoolParent;
+   // [SerializeField] private Transform _miniBlockPoolParent;
     
     private Pool<Element> _elementPool;
     private Pool<Block>   _blockPool;
     private Pool<PickableBlock> _pickableBlockPool;
-
+    
+    private Pool<Block> _miniBlockPool;
+    
     private Pool<Element> _activeElements;
     
     public Element CreateEmptyElement()
@@ -83,5 +87,6 @@ public class GameLogicPool : MonoBehaviour
         _elementPool = new Pool<Element>(_elementPrefab.GetComponent<Element>(), _elementPoolParent);
         _blockPool = new Pool<Block>(_blockPrefab.GetComponent<Block>(), _blockPoolParent);
         _pickableBlockPool = new Pool<PickableBlock>(_pickableBlockPrefab.GetComponent<PickableBlock>(), _pickableBlockPoolParent);
+     //   _miniBlockPool = new Pool<Block>(_miniBlockPrefab.GetComponent<Block>(), _miniBlockPoolParent);
     }
 }

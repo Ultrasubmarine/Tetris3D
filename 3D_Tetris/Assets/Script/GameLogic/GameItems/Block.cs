@@ -100,6 +100,8 @@ public class Block : MonoBehaviour
         isDestroy = false;
         myTransform.position = Vector3.zero;
         myTransform.rotation = Quaternion.identity;
+       // myTransform.localScale = Vector3.one * 0.97f;
+        
         isStar = false;
       //  _meshFilter.mesh = _meshCube;
         

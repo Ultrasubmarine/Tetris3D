@@ -130,6 +130,8 @@ public class Generator : MonoBehaviour
     [SerializeField] public ProbabilitySettings _probabilitySettings = new ProbabilitySettings(20,5,10);
 
     private Element _lastGenerateElement;
+
+    [SerializeField] private Transform _mini;
     
     private void Start()
     {
@@ -144,7 +146,12 @@ public class Generator : MonoBehaviour
         _answerElement= _pool.CreateEmptyElement();
         _answerElement.myTransform.parent = _answerElementParent.transform;
         _answerElement.myTransform.position = new Vector3(0,0.42f, 0);
-        _answerElement.gameObject.SetActive(false);
+        _answerElement.transform.parent = _mini;
+        _answerElement.transform.localPosition = Vector3.zero;
+        _answerElement.transform.localScale = Vector3.one * 70;
+     //   _answerElement.transform.parent = this.transform;
+        
+      //  _answerElement.gameObject.SetActive(false);
     }
 
     public void GeneratePickableBlock()
@@ -163,7 +170,7 @@ public class Generator : MonoBehaviour
         var e = _bombsManager.MakeBomb();
         var newElement = e == null? GenerateElement(): e;
         
-        CreateDuplicate(newElement);
+        CreateDuplicate(newElement,newElement.blocks[0].GetComponent<MeshRenderer>().material);
 
         var pos = elementParent.position;
 
@@ -494,27 +501,30 @@ public class Generator : MonoBehaviour
         return _castMatrix[indices.x, indices.y, indices.z];
     }
 
-    private void CreateDuplicate( Element element)
+    private void CreateDuplicate( Element element, Material material)
     {
+   //     _answerElement.transform.parent = this.transform;
+        
        // _answerElementParent.SetActive(true);
         Vector3Int stabiliation = new Vector3Int(1, 0, 1);
         
         foreach (var item in element.blocks)
         {
-            var position = item.myTransform.position;
-            Vector3Int v = stabiliation + new Vector3Int((int) position.x, (int) position.y, (int) position.z);
-            _pool.CreateBlock(v, _answerElement, _BonusMaterial);
+            var position = item._coordinates;
+            Vector3Int v = new Vector3Int((int) position.x, (int) position.y, (int) position.z);
+            _pool.CreateBlock(v, _answerElement,material);
         }
 
         foreach (var block in _answerElement.blocks)
         {
-            block.transform.localScale = Vector3.one * 0.9f;
+            block.transform.localScale = Vector3.one * 0.97f;
         }
+
+        // var answerPosition = _answerElement.myTransform.position;
+        // answerPosition = new Vector3(answerPosition.x, 0.42f + _minPoint.y, answerPosition.z);
+        //  _answerElement.myTransform.position = answerPosition; 
         
-        var answerPosition = _answerElement.myTransform.position;
-        answerPosition = new Vector3(answerPosition.x, 0.42f + _minPoint.y, answerPosition.z);
-        _answerElement.myTransform.position = answerPosition; 
-        //_answerElement.gameObject.SetActive(true);
+        _answerElement.gameObject.SetActive(true);
     }
 
     public void DestroyOldDuplicate()

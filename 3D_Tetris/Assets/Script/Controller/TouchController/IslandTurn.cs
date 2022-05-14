@@ -12,7 +12,8 @@ namespace Script.Controller.TouchController
         public bool isTurnIsland => isTurn;
         
         [SerializeField] private GameObject island;
-
+        [SerializeField] private GameObject miniatur;
+        
         [SerializeField] private float _speedForCorrectRotate = 0.5f;
         [SerializeField] private float _speedForCorrectRotateForSwipe = 0.5f;
         
@@ -46,6 +47,8 @@ namespace Script.Controller.TouchController
           //  if (state && RealizationBox.Instance.FSM.GetCurrentState() == TetrisState.CreateStar)
           //      return;
             island.transform.DOComplete();
+            miniatur.transform.DOComplete();
+            
             isTurn = state;
             
             if (state)
@@ -70,6 +73,7 @@ namespace Script.Controller.TouchController
 
                 angle = Mathf.Clamp(angle, -90.0f / _swipeTime, 90.0f / _swipeTime);
                 island.transform.Rotate(Vector3.up, angle );
+                miniatur.transform.Rotate(Vector3.up, angle );
                 lastPosition = Input.mousePosition.x;
             }
         }
@@ -110,12 +114,14 @@ namespace Script.Controller.TouchController
             }
             
             island.transform.DORotate(new Vector3(0, needRotate, 0), speed).OnComplete(() => OnEndTurn.Invoke());
+            miniatur.transform.DORotate(new Vector3(0, needRotate, 0), speed);
             _gameController.CorrectTurn((int)needRotate);
         }
 
         public void ResetTurn()
         {
             island.transform.DORotate(new Vector3(0, 0, 0), 0);
+            miniatur.transform.DORotate(new Vector3(0, 0, 0), 0);
             _gameController.CorrectTurn(0);
         }
     }

@@ -1077,7 +1077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e361ae9dea3c34d1abaefd15b9401187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Stars:
+  _miniStars:
   - {fileID: 1482226171}
   - {fileID: 1569067200}
   - {fileID: 1085512324}
@@ -1210,7 +1210,7 @@ GameObject:
   - component: {fileID: 70055465}
   - component: {fileID: 70055468}
   m_Layer: 0
-  m_Name: StarCanvas
+  m_Name: 3DCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1229,6 +1229,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1479431856}
+  - {fileID: 993844877}
   m_Father: {fileID: 1836002386}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6175,6 +6176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   island: {fileID: 876679917}
+  miniatur: {fileID: 993844876}
   _speedForCorrectRotate: 0.2
   _speedForCorrectRotateForSwipe: 0.5
 --- !u!1001 &485570055
@@ -12546,6 +12548,42 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990787277}
   m_Mesh: {fileID: 4300008, guid: 208d5b086925fee43a86954cd82c6e1c, type: 3}
+--- !u!1 &993844876
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 993844877}
+  m_Layer: 0
+  m_Name: nextElement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &993844877
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993844876}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.00025749207}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 70055464}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -199.98091, y: -299.99283}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1018615688
 GameObject:
   m_ObjectHideFlags: 0
@@ -17201,6 +17239,7 @@ MonoBehaviour:
     type: 3}
   _pickableBlockPrefab: {fileID: 708639632095135415, guid: f642e670e57384c7ba9726cc6c46a1b0,
     type: 3}
+  _miniBlockPrefab: {fileID: 0}
   _elementPoolParent: {fileID: 1155972832}
   _blockPoolParent: {fileID: 1413799074}
   _pickableBlockPoolParent: {fileID: 1286559696}
@@ -23647,6 +23686,7 @@ MonoBehaviour:
     layerDown: 20
     neighbours: 5
     startPoints: 10
+  _mini: {fileID: 993844877}
 --- !u!4 &1634487028
 Transform:
   m_ObjectHideFlags: 0
