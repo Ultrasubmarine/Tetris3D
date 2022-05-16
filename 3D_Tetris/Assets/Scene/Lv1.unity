@@ -6175,7 +6175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   island: {fileID: 876679917}
-  miniatur: {fileID: 993844876}
+  extraTurn: []
   _speedForCorrectRotate: 0.2
   _speedForCorrectRotateForSwipe: 0.5
 --- !u!1001 &485570055
@@ -12580,7 +12580,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -150, y: -200.00003}
+  m_AnchoredPosition: {x: -150, y: -200}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1018615688
@@ -23641,6 +23641,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1634487028}
   - component: {fileID: 1634487027}
+  - component: {fileID: 1634487029}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -23687,6 +23688,7 @@ MonoBehaviour:
     neighbours: 5
     startPoints: 10
   _mini: {fileID: 993844877}
+  _lineBanManager: {fileID: 1634487029}
 --- !u!4 &1634487028
 Transform:
   m_ObjectHideFlags: 0
@@ -23706,6 +23708,23 @@ Transform:
   m_Father: {fileID: 876679918}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1634487029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634487026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6013617d0d6a4ada82c92bb0618a296f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBan: 0
+  amountForBan: 3
+  currentAmountForBan: 0
+  freezeSteps: 2
+  currentFreeze: 0
 --- !u!1 &1661149411
 GameObject:
   m_ObjectHideFlags: 0

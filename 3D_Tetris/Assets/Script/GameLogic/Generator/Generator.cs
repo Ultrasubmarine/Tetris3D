@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using IntegerExtension;
+using Script.GameLogic;
 using Script.GameLogic.Bomb;
 using Script.Influence;
 using UnityEngine.Serialization;
@@ -94,10 +95,21 @@ public struct BanLineElement
             ClearLine();
     }
 }
+
+public struct AbstractElementInfo
+{
+    public List<Vector3Int> blocks;
+    public Material material;
+    public List<CoordinatXZ> matrixCoordinat;
+}
+
 public class Generator : MonoBehaviour
 {
     private GameLogicPool _pool;
 
+    public AbstractElementInfo abstractElementInfo => _abstractElementInfo;
+    public Action<AbstractElementInfo> onNextElementGenerated;
+    
     [SerializeField] private Material[] _MyMaterial;
     [SerializeField] private GameObject _answerElementParent;
     public Material freezeMaterial;
@@ -120,6 +132,8 @@ public class Generator : MonoBehaviour
 
     public Element _answerElement;
 
+    private AbstractElementInfo _abstractElementInfo;
+    
     public int fixedHightPosition = 0;
 
     [SerializeField] public int stepOfHardElement = 2; // 1-min 3-max
@@ -132,6 +146,8 @@ public class Generator : MonoBehaviour
     private Element _lastGenerateElement;
 
     [SerializeField] private Transform _mini;
+
+    [SerializeField] private LineBanManager _lineBanManager;
     
     private void Start()
     {
@@ -144,14 +160,14 @@ public class Generator : MonoBehaviour
         _castMatrix = new bool[3, 5, 3];
         
         _answerElement= _pool.CreateEmptyElement();
-        _answerElement.myTransform.parent = _answerElementParent.transform;
-        _answerElement.myTransform.position = new Vector3(0,0.42f, 0);
+        //_answerElement.myTransform.parent = _answerElementParent.transform;
+       // _answerElement.myTransform.position = new Vector3(0,0.42f, 0);
         _answerElement.transform.parent = _mini;
         _answerElement.transform.localPosition = Vector3.zero;
         _answerElement.transform.localRotation = Quaternion.identity;
         _answerElement.transform.localScale = Vector3.one * 70;
 
-        RealizationBox.Instance.islandTurn.miniatur = _answerElement.gameObject;
+        RealizationBox.Instance.islandTurn.extraTurn.Add(_answerElement.myTransform);
         //   _answerElement.transform.parent = this.transform;
 
         //  _answerElement.gameObject.SetActive(false);
@@ -294,101 +310,169 @@ public class Generator : MonoBehaviour
     
     private Element GenerateElement()
     {
-        var indexMat = Random.Range(0, _MyMaterial.Length - 1);
-
-        var createElement = _pool.CreateEmptyElement();
-
         _castMatrix = CreateCastMatrix(_minPoint.y);
+        List<Vector3Int> blockPositions;
+
         do
         {
-           // Debug.ClearDeveloperConsole();
-            //Debug.Log("not change");
-            if (isLineElement(createElement) && banLineElement.isBan)
+            // // Debug.ClearDeveloperConsole();
+            //  //Debug.Log("not change");
+            //  if (isLineElement(createElement) && banLineElement.isBan)
+            //  {
+            //    //  Debug.ClearDeveloperConsole();
+            //    //  Debug.Log("change pos");
+            //      foreach (var b in createElement.blocks)
+            //      {
+            //          _castMatrix[b._coordinates.x.ToIndex(), b._coordinates.y, b._coordinates.z.ToIndex()] = true; // clear
+            //          _pool.DeleteBlock(b);
+            //      }
+            //      createElement.blocks.Clear();
+            //  }
+
+            blockPositions = GenerateBlocksCoordinates();
+
+            if (!_lineBanManager.CanCreateElement(blockPositions))
             {
-              //  Debug.ClearDeveloperConsole();
-              //  Debug.Log("change pos");
-                foreach (var b in createElement.blocks)
+                foreach (var b in blockPositions)
                 {
-                    _castMatrix[b._coordinates.x.ToIndex(), b._coordinates.y, b._coordinates.z.ToIndex()] = true; // clear
-                    _pool.DeleteBlock(b);
+                    _castMatrix[b.x, b.y, b.z] = true; // clear
                 }
-                createElement.blocks.Clear();
-            }
 
-            var firstPoint = GetStartEmptyPosition();
-            var lastPoint = firstPoint;
-            _castMatrix[firstPoint.x, firstPoint.y, firstPoint.z] = false;
-
-            Vector3Int deltaY = new Vector3Int(0, firstPoint.y, 0);
-            _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
-
-            
-            List<IndexVector> freePlaces = new List<IndexVector>();
-            List<Vector3Int> generatePoints = new List<Vector3Int>();
-            
-            generatePoints.Add(lastPoint);
-            Vector3Int elementComplexity = Vector3Int.zero;
-            for (var i = 0; i < 3; i++)
-            {
-                if (growBlocksAnywhere)
-                {
-                    freePlaces.Clear();
-                    foreach (var block in generatePoints)
-                    {
-                        freePlaces.AddRange(FoundFreePlacesAround(firstPoint, block, elementComplexity));
-                    }
-                }
-                else
-                    freePlaces = FoundFreePlacesAround(firstPoint, lastPoint, elementComplexity);
-                if (freePlaces.Count == 0)
-                    break;
-                
-                var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
-                var different = generatePoint.parentPoint - generatePoint.newPoint;
-                lastPoint = generatePoint.newPoint;
-                
-                _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
-                _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;
-                generatePoints.Add(lastPoint);
-                
-                if (different.x != 0)
-                    elementComplexity.x = 1;
-                else if (different.y != 0)
-                    elementComplexity.y = 1;
-                else if (different.z != 0)
-                    elementComplexity.z = 1;
-            }
-
-            if (isLineElement(createElement))
-            {
-                if (banLineElement.isBan)
-                    //change element.Add random block
-                {
-                    // elementComplexity = Vector3Int.zero;
-                    //
-                    // freePlaces.Clear();
-                    // freePlaces = FoundFreePlacesAround(lastPoint, lastPoint,elementComplexity, true);
-                    //
-                    // var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
-                    // lastPoint = generatePoint.newPoint;
-                    // _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
-                    // Debug.Log("cheat BLOCK CrEATED");
-                }
-                else
-                {
-                    banLineElement.IncrementLine();
-                }
+                blockPositions.Clear();
             }
             else
             {
-                banLineElement.NotLine();
+                break;
             }
+            // var firstPoint = GetStartEmptyPosition();
+            // var lastPoint = firstPoint;
+            // _castMatrix[firstPoint.x, firstPoint.y, firstPoint.z] = false;
+            //
+            // Vector3Int deltaY = new Vector3Int(0, firstPoint.y, 0);
+            //_pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
+            // List<IndexVector> freePlaces = new List<IndexVector>();
+            // List<Vector3Int> generatePoints = new List<Vector3Int>();
+            //
+            // generatePoints.Add(lastPoint);
+            // Vector3Int elementComplexity = Vector3Int.zero;
+            // for (var i = 0; i < 3; i++)
+            // {
+            //     if (growBlocksAnywhere)
+            //     {
+            //         freePlaces.Clear();
+            //         foreach (var block in generatePoints)
+            //         {
+            //             freePlaces.AddRange(FoundFreePlacesAround(firstPoint, block, elementComplexity));
+            //         }
+            //     }
+            //     else
+            //         freePlaces = FoundFreePlacesAround(firstPoint, lastPoint, elementComplexity);
+            //     if (freePlaces.Count == 0)
+            //         break;
+            //     
+            //     var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
+            //     var different = generatePoint.parentPoint - generatePoint.newPoint;
+            //     lastPoint = generatePoint.newPoint;
+            //     
+            //     _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
+            //     _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;
+            //     generatePoints.Add(lastPoint);
+            //     
+            //     if (different.x != 0)
+            //         elementComplexity.x = 1;
+            //     else if (different.y != 0)
+            //         elementComplexity.y = 1;
+            //     else if (different.z != 0)
+            //         elementComplexity.z = 1;
+            // }
 
-        } while (isLineElement(createElement) && banLineElement.isBan); // "generateCount < 15" - if creating another element is impossible
-            
+            // if (isLineElement(createElement))
+            // {
+            //     if (banLineElement.isBan)
+            //         //change element.Add random block
+            //     {
+            //         // elementComplexity = Vector3Int.zero;
+            //         //
+            //         // freePlaces.Clear();
+            //         // freePlaces = FoundFreePlacesAround(lastPoint, lastPoint,elementComplexity, true);
+            //         //
+            //         // var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
+            //         // lastPoint = generatePoint.newPoint;
+            //         // _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
+            //         // Debug.Log("cheat BLOCK CrEATED");
+            //     }
+            //     else
+            //     {
+            //         banLineElement.IncrementLine();
+            //     }
+            // }
+            // else
+            // {
+            //     banLineElement.NotLine();
+            // }
+
+        } while (true); //(isLineElement(createElement) && banLineElement.isBan); // "generateCount < 15" - if creating another element is impossible
+         
+        var indexMat = Random.Range(0, _MyMaterial.Length - 1);
+        var createElement = _pool.CreateEmptyElement();
+
+        foreach (var p in blockPositions)
+        {
+            _pool.CreateBlock(p, createElement, _MyMaterial[indexMat]);
+        }
         return createElement;
     }
 
+    private List<Vector3Int> GenerateBlocksCoordinates()
+    {
+        List<Vector3Int> position = new List<Vector3Int>();
+        
+        var firstPoint = GetStartEmptyPosition();
+        var lastPoint = firstPoint;
+        _castMatrix[firstPoint.x, firstPoint.y, firstPoint.z] = false;
+
+        Vector3Int deltaY = new Vector3Int(0, firstPoint.y, 0);
+      //  _pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
+        position.Add( lastPoint - deltaY);
+            
+        List<IndexVector> freePlaces = new List<IndexVector>();
+        List<Vector3Int> generatePoints = new List<Vector3Int>();
+            
+        generatePoints.Add(lastPoint);
+        var elementComplexity = Vector3Int.zero;
+        for (var i = 0; i < 3; i++)
+        {
+            if (growBlocksAnywhere)
+            {
+                freePlaces.Clear();
+                foreach (var block in generatePoints)
+                {
+                    freePlaces.AddRange(FoundFreePlacesAround(firstPoint, block, elementComplexity));
+                }
+            }
+            else
+                freePlaces = FoundFreePlacesAround(firstPoint, lastPoint, elementComplexity);
+            if (freePlaces.Count == 0)
+                break;
+                
+            var generatePoint = freePlaces[Random.Range(0, freePlaces.Count)];
+            var different = generatePoint.parentPoint - generatePoint.newPoint;
+            lastPoint = generatePoint.newPoint;
+             
+            position.Add( lastPoint - deltaY);
+            //_pool.CreateBlock(lastPoint - deltaY, createElement, _MyMaterial[indexMat]);
+            _castMatrix[lastPoint.x, lastPoint.y, lastPoint.z] = false;
+            generatePoints.Add(lastPoint);
+                
+            if (different.x != 0)
+                elementComplexity.x = 1;
+            else if (different.y != 0)
+                elementComplexity.y = 1;
+            else if (different.z != 0)
+                elementComplexity.z = 1;
+        }
+        return position;
+    }
     private bool isLineElement(Element element)
     {
         if (element.blocks.Count != 3)
