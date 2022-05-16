@@ -115,6 +115,18 @@ namespace Script.GameLogic.Bomb
             return element;
         }
 
+        public bool CanMakeBomb()
+        {
+            if (!lvlWithBombs)
+                return false;
+            
+            if (_currentStep < _stepForBomb)
+            {
+                return false;
+            }
+
+            return true;
+        }
         private void Update()
         {
             if (_bombs.Count == 0)

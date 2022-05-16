@@ -21,20 +21,22 @@ namespace Script.GameLogic
             _nextElement.myTransform.localScale = Vector3.one * 70;
 
             RealizationBox.Instance.islandTurn.extraTurn.Add(_nextElement.myTransform);
-         //   RealizationBox.Instance.
+            RealizationBox.Instance.generator.onNextElementGenerated += CreateNextElement;
         }
 
-        private void CreateNextElement( Element element, Material material)
+        private void CreateNextElement(AbstractElementInfo element)
         {
+            Clear();
+            
             float xMax, zMax , yMax, xMin, zMin, yMin;
             xMax = zMax = yMax = int.MinValue;
             xMin = zMin = yMin = int.MaxValue;
         
             for(int i = 0; i<element.blocks.Count; i++)
             {
-                var position = element.blocks[i]._coordinates;
+                var position = element.blocks[i];
                 Vector3Int v = new Vector3Int((int) position.x, (int) position.y, (int) position.z);
-                _pool.CreateBlock(v, _nextElement,material);
+                _pool.CreateBlock(v, _nextElement,element.material);
 
                 Vector3 ansPos = _nextElement.blocks[i].myTransform.localPosition;
                 xMax = xMax < ansPos.x? ansPos.x : xMax;
@@ -57,6 +59,16 @@ namespace Script.GameLogic
                 block.myTransform.localPosition = np;
                 block.myTransform.localScale = Vector3.one * 0.97f;
             }
+        }
+
+        public void Clear()
+        {
+            foreach (var block in _nextElement.blocks)
+            {
+                block.myTransform.localScale = Vector3.one * 0.97f;
+                _pool.DeleteBlock(block);
+            }
+            _nextElement.RemoveBlocksInList(_nextElement.blocks.ToArray());
         }
     }
 }
