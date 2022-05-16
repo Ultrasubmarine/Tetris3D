@@ -12,7 +12,7 @@ namespace Script.Controller.TouchController
         public bool isTurnIsland => isTurn;
         
         [SerializeField] private GameObject island;
-        [SerializeField] private GameObject miniatur;
+        [SerializeField] public GameObject miniatur;
         
         [SerializeField] private float _speedForCorrectRotate = 0.5f;
         [SerializeField] private float _speedForCorrectRotateForSwipe = 0.5f;
