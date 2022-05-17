@@ -245,6 +245,44 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         
         OnDestroyBlock?.Invoke(destroyPos);
     }
+    
+    public void DestroyBlocksInLayers(Vector3Int point, int layersAmount, bool collectStars = false)
+    {
+        List<Vector3> destroyPos = new List<Vector3>();
+
+        for (int y = point.y; y > point.y - layersAmount && y >= 0; y--)
+        {
+            for (var x = 0; x < wight; x++)
+            for (var z = 0; z < wight; z++)
+            {
+                Vector3Int pos = new Vector3Int(x, y, z);
+                
+                if(pos.OutOfIndexLimit())
+                    continue;
+                if(CheckEmptyPlace(pos.x,pos.y, pos.z))
+                    continue;
+            
+                if(collectStars)
+                    _matrix[pos.x, pos.y, pos.z].Collect();
+                else
+                    _matrix[pos.x, pos.y, pos.z].Destroy();
+            
+                _matrix[pos.x, pos.y, pos.z].isDestroy = true;
+
+                if (point.x == x && point.y == y && point.z == z)
+                    continue;
+                
+                destroyPos.Add(_matrix[pos.x, pos.y, pos.z].myTransform.position);
+                _matrix[pos.x, pos.y, pos.z] = null;
+            }
+        }
+        
+        destroyPos.Add(_matrix[point.x, point.y, point.z].myTransform.position);
+        _matrix[point.x, point.y, point.z].isDestroy = true;
+        _matrix[point.x, point.y, point.z] = null;
+        
+        OnDestroyBlock?.Invoke(destroyPos);
+    }
     #endregion
 
     public Vector3Int FindLowerAccessiblePlace()

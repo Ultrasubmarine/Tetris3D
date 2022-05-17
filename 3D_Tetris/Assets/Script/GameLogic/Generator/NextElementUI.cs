@@ -8,6 +8,7 @@ namespace Script.GameLogic
     {
         [SerializeField] private Transform _nextElementParent;
         [SerializeField] private GameObject _bomb;
+        [SerializeField] private GameObject _bigBomb;
         
         private Element _nextElement;
         private GameLogicPool _pool;
@@ -33,13 +34,6 @@ namespace Script.GameLogic
             switch (element.type)
             {
                 case ElementType.none: return;
-                case ElementType.bomb:
-                {
-                    _bomb.SetActive(true);
-                    _bomb.transform.DOScale(new Vector3(110, 110, 110), 0.8f).From(Vector3.one * 100).SetLoops(-1,LoopType.Yoyo);
-
-                    break;
-                }
                 case ElementType.element:
                 {
                     float xMax, zMax , yMax, xMin, zMin, yMin;
@@ -75,6 +69,20 @@ namespace Script.GameLogic
                     }
                     break;
                 }
+                case ElementType.bomb:
+                {
+                    _bomb.SetActive(true);
+                    _bomb.transform.DOScale(new Vector3(110, 110, 110), 0.8f).From(Vector3.one * 100).SetLoops(-1,LoopType.Yoyo);
+
+                    break;
+                }
+                case ElementType.bigBomb:
+                {
+                    _bigBomb.SetActive(true);
+                    _bigBomb.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
+
+                    break;
+                }
             }
         }
 
@@ -89,6 +97,9 @@ namespace Script.GameLogic
 
             _bomb.transform.DOKill();
             _bomb.SetActive(false);
+            
+            _bigBomb.transform.DOKill();
+            _bigBomb.SetActive(false);
         }
     }
 }

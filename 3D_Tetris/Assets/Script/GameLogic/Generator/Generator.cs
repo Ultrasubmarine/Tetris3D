@@ -41,6 +41,7 @@ public enum ElementType
     none,
     element,
     bomb,
+    bigBomb,
 }
 public struct AbstractElementInfo
 {
@@ -149,6 +150,11 @@ public class Generator : MonoBehaviour
         return newElement;
     }
 
+    public void SetNextAsBigBomb()
+    {
+        _nextElement.type = ElementType.bigBomb;
+        onNextElementGenerated?.Invoke(_nextElement);
+    }
     public void GenerateNextElement(bool callback = true)
     {
         List<Vector3Int> exceptPositions = new List<Vector3Int>();
@@ -310,6 +316,8 @@ public class Generator : MonoBehaviour
     {
         if (_nextElement.type == ElementType.bomb)
             return _bombsManager.MakeBomb();
+        else if (_nextElement.type == ElementType.bigBomb)
+            return _bombsManager.MakeBomb(true);
         
         var createElement = _pool.CreateEmptyElement();
 

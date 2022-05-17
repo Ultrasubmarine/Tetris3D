@@ -25,10 +25,11 @@ namespace Script.GameLogic.Bomb
 
        [SerializeField] private bool _ignoreSlow = true;
 
-       private List<Block> _bombs;
+       private Block _bomb, _bigBomb;
 
        [SerializeField] private List<Vector3Int> _directions;
-
+       [SerializeField] private int _destroyLayersAmount = 2; //For Big Bomb
+       
        [SerializeField] private int _stepForBomb;
 
        [SerializeField] private float _timeForShowStop = 0.5f;
@@ -54,12 +55,15 @@ namespace Script.GameLogic.Bomb
        [SerializeField] private Canvas _canvas;
 
        [SerializeField] private Vector3 _bombRotation;
-       
-       
+
        // particles
        [SerializeField] private GameObject _particles;
        [SerializeField] private Vector3 _localParticlePosition;
 
+       //BB-Text for big bomb
+       [SerializeField] private GameObject _BBText;
+       [SerializeField] private Vector3 _localBBTextPosition;
+       
        private Transform _gameCamera;
        
         private void Start()
@@ -69,7 +73,6 @@ namespace Script.GameLogic.Bomb
             _matrix = RealizationBox.Instance.matrix;
             _gameCamera = RealizationBox.Instance.gameCamera.lookAtPoint;
             
-            _bombs = new List<Block>();
             _particlePool = new Pool<GameObject>(_particleSystem,_particlesParent);
             _activeParticles = new List<GameObject>();
             
@@ -85,24 +88,34 @@ namespace Script.GameLogic.Bomb
                 .OnComplete(() => rt.localScale = Vector3.one);
         }
 
-        public Element MakeBomb()
+        public Element MakeBomb(bool isBig = false)
         {
             _currentStep = 0;
             
             var element = _pool.CreateEmptyElement();
             _pool.CreateBlock(Vector3Int.zero, element, _blockMaterial);
 
-            element.blocks[0].TransformToBomb(_bombMesh, _bombMaterial, _blockMaterial,_bombRotation);
+            element.blocks[0].TransformToBomb(_bombMesh, _bombMaterial, _blockMaterial,_bombRotation, isBig);
             
             //add particles
             _particles.SetActive(true);
             _particles.transform.parent = element.blocks[0].Star;
             _particles.transform.localPosition = _localParticlePosition;
-            _bombs.Add(element.blocks[0]);
+
+            if (isBig)
+            {
+                _BBText.SetActive(true);
+                _BBText.transform.SetParent(element.blocks[0].Star);
+                _BBText.transform.localPosition = _localBBTextPosition;
+                _BBText.transform.localRotation = Quaternion.Euler(0, 180, 0);
+                _bigBomb = element.blocks[0];
+            }
+            else
+                _bomb = element.blocks[0];
             
             return element;
         }
-
+        
         public bool CanMakeBomb()
         {
             if (!lvlWithBombs)
@@ -119,33 +132,38 @@ namespace Script.GameLogic.Bomb
         
         private void Update()
         {
-            if (_bombs.Count == 0)
+            if (Equals(_bomb, null) && Equals(_bigBomb, null))
                 return;
 
-            foreach (var b in _bombs)
-            {
-                b.Star.LookAt(_gameCamera);
-            }
+            if(!Equals(_bomb, null)) 
+                _bomb.Star.LookAt(_gameCamera);
+            else
+                _bigBomb.Star.LookAt(_gameCamera);
         }
 
         public bool BoomBombs()
         {
             bool boom = false;
-            foreach (var b in _bombs)
+            
+            if(!Equals(_bomb,null))
             {
-                RealizationBox.Instance.matrix.DestroyBlocksAround(b._coordinates.ToIndex(), _directions);
+                RealizationBox.Instance.matrix.DestroyBlocksAround(_bomb._coordinates.ToIndex(), _directions);
                 boom = true;
-                
+            }
+            else if (!Equals(_bigBomb, null))
+            {
+                RealizationBox.Instance.matrix.DestroyBlocksInLayers(_bigBomb._coordinates.ToIndex(), _destroyLayersAmount);
+                boom = true;
             }
             
-            if(_bombs.Count == 0)
+            if(!boom)
                 OnBoomEnded?.Invoke();
             else
             {
-               
                 Invoke(nameof(BoomAnimationEnd), _timeForShowStop);
             }
-            _bombs.Clear();
+            
+            _bomb = _bigBomb = null;
             return boom;
         }
 
@@ -166,7 +184,10 @@ namespace Script.GameLogic.Bomb
             SetBoomText(pos[pos.Count - 1]);
             
             _particles.SetActive(false);
-            _particles.transform.parent = transform;
+            _particles.transform.SetParent(transform);
+            
+            _BBText.SetActive(false);
+            _BBText.transform.SetParent(transform);
             
             Invoke(nameof(DestroyParticle), _timeForShowStop);
         }

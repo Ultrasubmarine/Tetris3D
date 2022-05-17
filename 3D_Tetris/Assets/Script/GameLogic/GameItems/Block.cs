@@ -126,7 +126,7 @@ public class Block : MonoBehaviour
         oreol.gameObject.SetActive(true);
     }
 
-    public void TransformToBomb(Mesh _bombMesh, Material _bombMaterial, Material _blockMaterial, Vector3 _rotation)
+    public void TransformToBomb(Mesh _bombMesh, Material _bombMaterial, Material _blockMaterial, Vector3 _rotation, bool isBig)
     {
         isStar = true;
         
@@ -137,7 +137,11 @@ public class Block : MonoBehaviour
 
         _star.layer = 15;//"Outlined";
         _star.SetActive(true);
-        _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
+        
+        if(isBig)
+            _star.transform.DOScale(Vector3.one, 0.8f).From(Vector3.one * 1.4f).SetLoops(-1,LoopType.Yoyo);
+        else
+            _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
 
         _star.transform.localEulerAngles = _rotation;
         // oreol.gameObject.SetActive(true);
