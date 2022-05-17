@@ -21,7 +21,7 @@ namespace Script.StateMachine.States
 
         public override void Enter(TetrisState last)
         {
-            if (_pauseUI)
+            if (_pauseUI.isPause)
             {
                 _pauseUI.onPauseStateChange += WaitPause;
             }

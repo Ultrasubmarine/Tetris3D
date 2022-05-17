@@ -41,8 +41,10 @@ namespace Script.Controller.TouchController
         {
             _gameController = RealizationBox.Instance.gameController;
             RealizationBox.Instance.tapsEvents.OnDragIceIsland += () =>Turn(true);
-        }
 
+            RealizationBox.Instance.FSM.OnStart += ResetTurn;
+        }
+        
         public void Turn(bool state)
         {
           //  if (state && RealizationBox.Instance.FSM.GetCurrentState() == TetrisState.CreateStar)

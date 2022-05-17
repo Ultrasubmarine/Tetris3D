@@ -87,18 +87,7 @@ namespace Script.GameLogic.Bomb
 
         public Element MakeBomb()
         {
-            if (!lvlWithBombs)
-                return null;
-            
-            if (_currentStep < _stepForBomb)
-            {
-                _currentStep++;
-                return null;
-            }
-            else
-            {
-                _currentStep = 0;
-            }
+            _currentStep = 0;
             
             var element = _pool.CreateEmptyElement();
             _pool.CreateBlock(Vector3Int.zero, element, _blockMaterial);
@@ -111,7 +100,6 @@ namespace Script.GameLogic.Bomb
             _particles.transform.localPosition = _localParticlePosition;
             _bombs.Add(element.blocks[0]);
             
-            
             return element;
         }
 
@@ -122,11 +110,13 @@ namespace Script.GameLogic.Bomb
             
             if (_currentStep < _stepForBomb)
             {
+                _currentStep++;
                 return false;
             }
 
             return true;
         }
+        
         private void Update()
         {
             if (_bombs.Count == 0)

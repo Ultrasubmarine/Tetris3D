@@ -104,18 +104,18 @@ public class Generator : MonoBehaviour
             
         _castMatrix = new bool[3, 5, 3];
         
-        _answerElement= _pool.CreateEmptyElement();
-        //_answerElement.myTransform.parent = _answerElementParent.transform;
-       // _answerElement.myTransform.position = new Vector3(0,0.42f, 0);
-        _answerElement.transform.parent = _mini;
-        _answerElement.transform.localPosition = Vector3.zero;
-        _answerElement.transform.localRotation = Quaternion.identity;
-        _answerElement.transform.localScale = Vector3.one * 70;
-
-        RealizationBox.Instance.islandTurn.extraTurn.Add(_answerElement.myTransform);
-        //   _answerElement.transform.parent = this.transform;
-
-        //  _answerElement.gameObject.SetActive(false);
+       //  _answerElement= _pool.CreateEmptyElement();
+       //  //_answerElement.myTransform.parent = _answerElementParent.transform;
+       // // _answerElement.myTransform.position = new Vector3(0,0.42f, 0);
+       //  _answerElement.transform.parent = _mini;
+       //  _answerElement.transform.localPosition = Vector3.zero;
+       //  _answerElement.transform.localRotation = Quaternion.identity;
+       //  _answerElement.transform.localScale = Vector3.one * 70;
+       //
+       //  RealizationBox.Instance.islandTurn.extraTurn.Add(_answerElement.myTransform);
+       //  //   _answerElement.transform.parent = this.transform;
+       //
+       //  //  _answerElement.gameObject.SetActive(false);
         _nextElement = new AbstractElementInfo();
         _nextElement.type = ElementType.none;
         _nextElement.blocks = new List<Vector3Int>();
@@ -470,54 +470,54 @@ public class Generator : MonoBehaviour
         return _castMatrix[indices.x, indices.y, indices.z];
     }
 
-    private void CreateDuplicate( Element element, Material material)
-    {
-   //     _answerElement.transform.parent = this.transform;
-        
-       // _answerElementParent.SetActive(true);
-        Vector3Int stabiliation = new Vector3Int(1, 0, 1);
-
-        float xMax, zMax , yMax, xMin, zMin, yMin;
-        xMax = zMax = yMax = int.MinValue;
-        xMin = zMin = yMin = int.MaxValue;
-        
-        for(int i = 0; i<element.blocks.Count; i++)
-        {
-            var position = element.blocks[i]._coordinates;
-            Vector3Int v = new Vector3Int((int) position.x, (int) position.y, (int) position.z);
-            _pool.CreateBlock(v, _answerElement,material);
-
-            Vector3 ansPos = _answerElement.blocks[i].myTransform.localPosition;
-            xMax = xMax < ansPos.x? ansPos.x : xMax;
-            zMax = zMax < ansPos.z? ansPos.z : zMax;
-            yMax = yMax < ansPos.y? ansPos.y : yMax;
-            
-            xMin = xMin > ansPos.x? ansPos.x : xMin;
-            zMin = zMin > ansPos.z? ansPos.z : zMin;
-            yMin = yMin > ansPos.y? ansPos.y : yMin;
-        }
-
-        float xCenter, zCenter, yCenter;
-        xCenter = (xMax + xMin) / 2f;
-        zCenter = (zMax + zMin) / 2f;
-        yCenter = (yMax + yMin) / 2f;
-        
-        foreach (var block in _answerElement.blocks)
-        {
-            Vector3 np = block.myTransform.localPosition - new Vector3(xCenter, yCenter, zCenter);
-            block.myTransform.localPosition = np;
-            block.myTransform.localScale = Vector3.one * 0.97f;
-        }
-
-        // var answerPosition = _answerElement.myTransform.position;
-        // answerPosition = new Vector3(answerPosition.x, 0.42f + _minPoint.y, answerPosition.z);
-        //  _answerElement.myTransform.position = answerPosition; 
-
-       
-      //  _answerElement.transform.localPosition = Vector3.zero;
-        Debug.Log("local position: " +  _answerElement.transform.localPosition);
-        _answerElement.gameObject.SetActive(true);
-    }
+   //  private void CreateDuplicate( Element element, Material material)
+   //  {
+   // //     _answerElement.transform.parent = this.transform;
+   //      
+   //     // _answerElementParent.SetActive(true);
+   //      Vector3Int stabiliation = new Vector3Int(1, 0, 1);
+   //
+   //      float xMax, zMax , yMax, xMin, zMin, yMin;
+   //      xMax = zMax = yMax = int.MinValue;
+   //      xMin = zMin = yMin = int.MaxValue;
+   //      
+   //      for(int i = 0; i<element.blocks.Count; i++)
+   //      {
+   //          var position = element.blocks[i]._coordinates;
+   //          Vector3Int v = new Vector3Int((int) position.x, (int) position.y, (int) position.z);
+   //          _pool.CreateBlock(v, _answerElement,material);
+   //
+   //          Vector3 ansPos = _answerElement.blocks[i].myTransform.localPosition;
+   //          xMax = xMax < ansPos.x? ansPos.x : xMax;
+   //          zMax = zMax < ansPos.z? ansPos.z : zMax;
+   //          yMax = yMax < ansPos.y? ansPos.y : yMax;
+   //          
+   //          xMin = xMin > ansPos.x? ansPos.x : xMin;
+   //          zMin = zMin > ansPos.z? ansPos.z : zMin;
+   //          yMin = yMin > ansPos.y? ansPos.y : yMin;
+   //      }
+   //
+   //      float xCenter, zCenter, yCenter;
+   //      xCenter = (xMax + xMin) / 2f;
+   //      zCenter = (zMax + zMin) / 2f;
+   //      yCenter = (yMax + yMin) / 2f;
+   //      
+   //      foreach (var block in _answerElement.blocks)
+   //      {
+   //          Vector3 np = block.myTransform.localPosition - new Vector3(xCenter, yCenter, zCenter);
+   //          block.myTransform.localPosition = np;
+   //          block.myTransform.localScale = Vector3.one * 0.97f;
+   //      }
+   //
+   //      // var answerPosition = _answerElement.myTransform.position;
+   //      // answerPosition = new Vector3(answerPosition.x, 0.42f + _minPoint.y, answerPosition.z);
+   //      //  _answerElement.myTransform.position = answerPosition; 
+   //
+   //     
+   //    //  _answerElement.transform.localPosition = Vector3.zero;
+   //      Debug.Log("local position: " +  _answerElement.transform.localPosition);
+   //      _answerElement.gameObject.SetActive(true);
+   //  }
 
     public void DestroyOldDuplicate()
     {
@@ -585,5 +585,9 @@ public class Generator : MonoBehaviour
             _lastGenerateElement.RemoveBlocksInList(_lastGenerateElement.blocks.ToArray());
             _pool.DeleteElement(_lastGenerateElement);
         }
+        
+        _nextElement.blocks.Clear();
+        _nextElement.type = ElementType.none;
+        onNextElementGenerated.Invoke(_nextElement);
     }
 }

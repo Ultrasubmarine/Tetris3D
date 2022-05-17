@@ -25,7 +25,7 @@ public class MergeState : AbstractState<TetrisState>
     {
         _matrix.BindToMatrix(ElementData.Instance.newElement);
         ElementData.Instance.MergeNewElement();
-        _generator.DestroyOldDuplicate();
+      //  _generator.DestroyOldDuplicate();
      //   _projLineManager.UpdatePickableProjections();
         _projLineManager.Clear();
         
