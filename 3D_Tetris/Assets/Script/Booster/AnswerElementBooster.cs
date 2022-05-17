@@ -16,7 +16,7 @@ namespace Script.Booster
         public override void Apply()
         {
             base.Apply();
-            _generator.ShowAnswerElement();
+          //  _generator.ShowAnswerElement();
         }
     }
 }

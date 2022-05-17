@@ -58,7 +58,8 @@ public class GameManager : MonoBehaviour
         
         box.generatorChanger.SetGeneratorSettings(lvl.generatorSettings.points);
         box.generator._probabilitySettings = lvl.generatorSettings.probabilitySettings;
-
+        box.generator.exceptCurrentElementForNext = lvl.generatorSettings.exceptCurrentElementForNext;
+        
         box.lvlElementsSetter.createdElements = new List<CreatedElement>(lvl.lvlElements);
         box.FSM.startState= lvl.startState;
 

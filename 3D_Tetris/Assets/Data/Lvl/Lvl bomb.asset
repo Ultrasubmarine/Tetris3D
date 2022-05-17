@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55e305acaa644cd79e690bc068505a79, type: 3}
-  m_Name: Lvl test
+  m_Name: Lvl bomb
   m_EditorClassIdentifier: 
   _tutorType: 0
   _speedSettings:
@@ -49,6 +49,7 @@ MonoBehaviour:
       layerDown: 20
       neighbours: 5
       startPoints: 10
+    exceptCurrentElementForNext: 1
   _lvlElements:
   - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
     blocks:

@@ -47,21 +47,21 @@ namespace Script.Tutor
             RealizationBox.Instance.FSM.onStateChange -= OnGenerateFirstElement;
             
             IEnumerable<CoordinatXZ> razn;
-            do
-            {
-                IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ;
-                blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
-                blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
-                razn = blocksXZ.Except(blocksAnswerXZ);
-
-                if (!razn.Any())
-                {
-                    RealizationBox.Instance.generator.SetRandomPosition(ElementData.Instance.newElement);
-                    RealizationBox.Instance.projectionLineManager.UpdateProjectionLines();
-                    RealizationBox.Instance.projection.CreateProjection();
-                }
-                   
-            } while (!razn.Any());
+            // do
+            // {
+            //     IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ;
+            //     blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
+            //     blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
+            //     razn = blocksXZ.Except(blocksAnswerXZ);
+            //
+            //     if (!razn.Any())
+            //     {
+            //         RealizationBox.Instance.generator.SetRandomPosition(ElementData.Instance.newElement);
+            //         RealizationBox.Instance.projectionLineManager.UpdateProjectionLines();
+            //         RealizationBox.Instance.projection.CreateProjection();
+            //     }
+            //        
+            // } while (!razn.Any());
         }
       
         void FirstStep(TetrisState state)
@@ -83,17 +83,17 @@ namespace Script.Tutor
             Invoke(nameof(FirstStepPause),_timeStop);
 
             _tutor.DOFade(1, 1f);
-            RealizationBox.Instance.generator._answerElement.gameObject.SetActive(true);
+           // RealizationBox.Instance.generator._answerElement.gameObject.SetActive(true);
             
-            IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ, razn;
-            blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
-            blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
-            razn = blocksXZ.Except(blocksAnswerXZ);
-            if (!razn.Any())
-            {
-                _canPlace = true;
-                RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDouble;
-            }
+            // IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ, razn;
+            // blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
+            // blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
+            // razn = blocksXZ.Except(blocksAnswerXZ);
+            // if (!razn.Any())
+            // {
+            //     _canPlace = true;
+            //     RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDouble;
+            // }
 
             RealizationBox.Instance.joystick.onStateChange += FinishMove;
             RealizationBox.Instance.tapsEvents.OnDoubleTap += Finish;
@@ -109,18 +109,18 @@ namespace Script.Tutor
         {
             IEnumerable<CoordinatXZ> blocksXZ, blocksAnswerXZ, razn;
             blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
-            blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
-            razn = blocksXZ.Except(blocksAnswerXZ);
-            if (!razn.Any())
-            {
-                _canPlace = true;
-                RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDouble;
-            }
-            else
-            {
-                _canPlace = true;
-                RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
-            }
+        //    blocksAnswerXZ = RealizationBox.Instance.generator._answerElement.blocks.Select(b => b.xz);
+            // razn = blocksXZ.Except(blocksAnswerXZ);
+            // if (!razn.Any())
+            // {
+            //     _canPlace = true;
+            //     RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.SingleAndDouble;
+            // }
+            // else
+            // {
+            //     _canPlace = true;
+            //     RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
+            // }
         }
         
         void Finish()
@@ -147,7 +147,7 @@ namespace Script.Tutor
         {
             if (state == TetrisState.MergeElement)
             {
-                RealizationBox.Instance.generator._answerElement.gameObject.SetActive(false);
+            //    RealizationBox.Instance.generator._answerElement.gameObject.SetActive(false);
                 RealizationBox.Instance.FSM.onStateChange -= HideAnswerElement;
             }
         }

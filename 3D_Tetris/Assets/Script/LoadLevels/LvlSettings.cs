@@ -24,6 +24,7 @@ namespace Script
     {
         public List<ChangeGeneratorInfo> points;
         public ProbabilitySettings probabilitySettings;
+        public bool exceptCurrentElementForNext;
     }
 
     [Serializable]
