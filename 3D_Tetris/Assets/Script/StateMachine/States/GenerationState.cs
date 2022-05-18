@@ -13,6 +13,7 @@ public class GenerationState : AbstractState<TetrisState>
 
     public override void Enter(TetrisState last)
     {
+        base.Enter(last);
         ElementData.Instance.LoadNewElement();
         if(_elementDropper.transform == null)
         Debug.Log("_elementDropper.transform == null");

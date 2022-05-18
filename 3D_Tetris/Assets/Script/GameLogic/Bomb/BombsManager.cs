@@ -147,12 +147,12 @@ namespace Script.GameLogic.Bomb
             
             if(!Equals(_bomb,null))
             {
-                RealizationBox.Instance.matrix.DestroyBlocksAround(_bomb._coordinates.ToIndex(), _directions);
+                RealizationBox.Instance.matrix.DestroyBlocksAround(_bomb._coordinates.ToIndex(), _directions,true);
                 boom = true;
             }
             else if (!Equals(_bigBomb, null))
             {
-                RealizationBox.Instance.matrix.DestroyBlocksInLayers(_bigBomb._coordinates.ToIndex(), _destroyLayersAmount);
+                RealizationBox.Instance.matrix.DestroyBlocksInLayers(_bigBomb._coordinates.ToIndex(), _destroyLayersAmount, true);
                 boom = true;
             }
             
