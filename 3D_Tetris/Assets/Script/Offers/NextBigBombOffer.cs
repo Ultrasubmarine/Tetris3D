@@ -1,6 +1,8 @@
 using System;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 namespace Script.Offers
 {
@@ -11,7 +13,12 @@ namespace Script.Offers
         
         [SerializeField] private RectTransform _bombIcon;
         [SerializeField] private CanvasGroup _offer;
-    
+
+        [SerializeField] private int _betweenOffersSteps = 3;
+        [SerializeField] private int _inOneGameMax = 2;
+        private int _betweenOffersStepsCurrent;
+        private int _inOneGameCurrent;
+        
         [SerializeField] private int needOutOfLimitAmount = 5;
         [SerializeField] private int maxLessOfLimit = 1;
         
@@ -28,6 +35,8 @@ namespace Script.Offers
             _height = RealizationBox.Instance.haightHandler;
             
             RealizationBox.Instance.FSM.AddListener(TetrisState.GenerateElement, CheckShowOffer);
+            RealizationBox.Instance.FSM.AddListener(TetrisState.LoseGame, Hide);
+            RealizationBox.Instance.FSM.AddListener(TetrisState.WinGame, Hide);
 
             var rectTransform = _offer.GetComponent<RectTransform>();
             
@@ -44,11 +53,21 @@ namespace Script.Offers
                     _hide.Rewind();
                 });
             
-            _offer.gameObject.SetActive(false);
+            Clear();
+           // _show.Play();
         }
 
         public void CheckShowOffer()
         {
+            if (_inOneGameCurrent > _inOneGameMax)
+                return;
+
+            if (_betweenOffersStepsCurrent < _betweenOffersSteps)
+            {
+                _betweenOffersStepsCurrent++;
+                return;
+            }
+            
             int yLimit = _height.limitHeight - 3;
             int outOfLimitAmount = 0;
             int lessOfLimitAmount = 0;
@@ -87,6 +106,7 @@ namespace Script.Offers
             _show.Play();
             
             _bombIcon.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one * 1.2f).SetLoops(-1,LoopType.Yoyo);
+
         }
 
         private void Hide()
@@ -94,6 +114,23 @@ namespace Script.Offers
             _isShow = false;
             _hide.Rewind();
             _hide.Play();
+        }
+
+        public void Apply()
+        {
+            //todo ads
+
+            _betweenOffersStepsCurrent = 0;
+            _inOneGameCurrent++;
+            Hide();
+        }
+        public void Clear()
+        {
+            _offer.gameObject.SetActive(false);
+            _isShow = false;
+           
+            _betweenOffersStepsCurrent = _betweenOffersSteps + 1;
+            _inOneGameCurrent = 0;
         }
     }
 }
