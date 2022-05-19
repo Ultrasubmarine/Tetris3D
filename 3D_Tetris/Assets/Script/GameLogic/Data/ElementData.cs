@@ -27,6 +27,12 @@ namespace Script.GameLogic.TetrisElement
         onNewElementUpdate?.Invoke();
     }
 
+    public void ChangeNewElementToBigBomb()
+    {
+        if (!Equals(newElement, null))
+            return;
+        
+    }
     public void MergeNewElement()
     {
         _mergerElements.Add(newElement);

@@ -1,15 +1,20 @@
 using System;
 using DG.Tweening;
+using Script.GameLogic.Bomb;
+using Script.GameLogic.TetrisElement;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace Script.Offers
 {
-    public class NextBigBombOffer: MonoBehaviour
+    public class BigBombGamePlayOffer: MonoBehaviour
     {
         private PlaneMatrix _matrix;
         private HeightHandler _height;
+        private Generator _generator;
+        private ElementData _elementData;
+        private ChangeNewElementToBomb _changeNewElementToBomb;
         
         [SerializeField] private RectTransform _bombIcon;
         [SerializeField] private CanvasGroup _offer;
@@ -34,7 +39,10 @@ namespace Script.Offers
         {
             _matrix = RealizationBox.Instance.matrix;
             _height = RealizationBox.Instance.haightHandler;
-            
+            _generator = RealizationBox.Instance.generator;
+            _elementData = ElementData.Instance;
+            _changeNewElementToBomb = RealizationBox.Instance.changeNewElementToBomb;
+
             RealizationBox.Instance.FSM.AddListener(TetrisState.GenerateElement, CheckShowOffer);
             RealizationBox.Instance.FSM.AddListener(TetrisState.LoseGame, Hide);
             RealizationBox.Instance.FSM.AddListener(TetrisState.WinGame, Hide);
@@ -55,7 +63,8 @@ namespace Script.Offers
                 });
             
             Clear();
-           // _show.Play();
+
+            Show();
         }
 
         public void CheckShowOffer()
@@ -112,9 +121,9 @@ namespace Script.Offers
 
         private void Hide()
         {
-            _isShow = false;
-            _hide.Rewind();
-            _hide.Play();
+            // _isShow = false;
+            // _hide.Rewind();
+            // _hide.Play();
         }
 
         public void Apply()
@@ -124,6 +133,13 @@ namespace Script.Offers
             _betweenOffersStepsCurrent = 0;
             _inOneGameCurrent++;
             Hide();
+            
+            if(Equals(_elementData.newElement, null))
+                _generator.SetNextAsBigBomb();
+            else
+            {
+                _changeNewElementToBomb.ChangeToBomb(true);
+            }
         }
         public void Clear()
         {

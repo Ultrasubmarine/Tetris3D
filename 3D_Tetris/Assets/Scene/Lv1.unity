@@ -15808,7 +15808,8 @@ MonoBehaviour:
   _destroyedLayerParticles: {fileID: 101087938}
   _bombsManager: {fileID: 1616382876}
   _pauseUI: {fileID: 2130227425}
-  _nextBigBombOffer: {fileID: 2140919602}
+  _bigBombGamePlayOffer: {fileID: 2140919602}
+  _changeNewElementToBomb: {fileID: 1616382878}
 --- !u!4 &1237479897
 Transform:
   m_ObjectHideFlags: 0
@@ -20082,18 +20083,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1634487027}
-        m_TargetAssemblyTypeName: Generator, Assembly-CSharp
-        m_MethodName: SetNextAsBigBomb
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 2140919602}
         m_TargetAssemblyTypeName: Script.Offers.NextBigBombOffer, Assembly-CSharp
         m_MethodName: Apply
@@ -25741,6 +25730,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1616382877}
   - component: {fileID: 1616382876}
+  - component: {fileID: 1616382878}
   m_Layer: 0
   m_Name: BombsManager
   m_TagString: Untagged
@@ -25806,6 +25796,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1616382878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616382875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1cfc2efbf0347b09f644afa3dfa2593, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _particleSystem: {fileID: 6464322642620849592, guid: 2e58f103db4544aa6917cef749b49727,
+    type: 3}
+  _particlesParent: {fileID: 1714208756}
+  _timeForShowStop: 2
 --- !u!1 &1623312047
 GameObject:
   m_ObjectHideFlags: 0
@@ -39963,7 +39969,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &4616963102618154973
 GameObject:
   m_ObjectHideFlags: 0

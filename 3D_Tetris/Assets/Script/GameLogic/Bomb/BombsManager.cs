@@ -94,24 +94,8 @@ namespace Script.GameLogic.Bomb
             
             var element = _pool.CreateEmptyElement();
             _pool.CreateBlock(Vector3Int.zero, element, _blockMaterial);
-
-            element.blocks[0].TransformToBomb(_bombMesh, _bombMaterial, _blockMaterial,_bombRotation, isBig);
             
-            //add particles
-            _particles.SetActive(true);
-            _particles.transform.parent = element.blocks[0].Star;
-            _particles.transform.localPosition = _localParticlePosition;
-
-            if (isBig)
-            {
-                _BBText.SetActive(true);
-                _BBText.transform.SetParent(element.blocks[0].Star);
-                _BBText.transform.localPosition = _localBBTextPosition;
-                _BBText.transform.localRotation = Quaternion.Euler(0, 180, 0);
-                _bigBomb = element.blocks[0];
-            }
-            else
-                _bomb = element.blocks[0];
+            AddBomb(element.blocks[0], isBig);
             
             return element;
         }
@@ -128,6 +112,27 @@ namespace Script.GameLogic.Bomb
             }
 
             return true;
+        }
+
+        public void AddBomb(Block bomb, bool isBig)
+        {
+            bomb.TransformToBomb(_bombMesh, _bombMaterial, _blockMaterial,_bombRotation, isBig);
+
+            _particles.SetActive(true);
+            _particles.transform.parent = bomb.Star;
+            _particles.transform.localPosition = _localParticlePosition;
+
+            if (isBig)
+            {
+                _BBText.SetActive(true);
+                _BBText.transform.SetParent(bomb.Star);
+                _BBText.transform.localPosition = _localBBTextPosition;
+                _BBText.transform.localRotation = Quaternion.Euler(0, 180, 0);
+                
+                _bigBomb = bomb;
+            }   
+            else
+                _bomb = bomb;
         }
         
         private void Update()
@@ -188,6 +193,7 @@ namespace Script.GameLogic.Bomb
             
             _BBText.SetActive(false);
             _BBText.transform.SetParent(transform);
+            _BBText.transform.localScale = Vector3.one;
             
             Invoke(nameof(DestroyParticle), _timeForShowStop);
         }
