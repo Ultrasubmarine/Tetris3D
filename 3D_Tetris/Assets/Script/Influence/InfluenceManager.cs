@@ -81,10 +81,12 @@ namespace Script.Influence
 
         public void CalculateSpeed()
         {
-            if(!_fastMode)
+            if(!_fastMode )
                 currentSpeed = Mathf.Clamp(speed - _slowler.slow, 0 ,1);
-            else
-                currentSpeed = Mathf.Clamp(speed - _slowler.slow, 0 ,1) + _faster;
+            else if (_fastMode && _slowler.slow > 0.001)
+                currentSpeed = Mathf.Clamp(speed + _faster - _slowler.slow, 0 ,1);
+            else // _fastMode only
+                currentSpeed = speed + _faster;
         }
 
         public void SetSpeedMode(bool mode)
