@@ -14,8 +14,8 @@ namespace Script.StateMachine.States
         
         public override void Enter(TetrisState last)
         {
-            _joystick.Hide();
-            _joystick.enabled = false;
+            // _joystick.Hide();
+            // _joystick.enabled = false;
             base.Enter(last);
         }
 

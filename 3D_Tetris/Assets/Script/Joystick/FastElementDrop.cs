@@ -21,15 +21,15 @@ public class FastElementDrop : MonoBehaviour
 
     public void SetFastSpeed()
     {
-        _joystick.Hide();
-        _joystick.enabled = false;
+        // _joystick.Hide();
+        // _joystick.enabled = false;
         _influenceManager.SetSpeedMode(true);
     }
 
     public void ResetFastSpeed()
     {
-        _joystick.enabled = true;
-        _influenceManager.SetSpeedMode(false);
+        // _joystick.enabled = true;
+         _influenceManager.SetSpeedMode(false);
     }
 
     private void OnDestroy()
