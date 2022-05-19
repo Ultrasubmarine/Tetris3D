@@ -65,6 +65,9 @@ public class GameManager : MonoBehaviour
 
         box.bombsManager.lvlWithBombs = lvl.bombsSettings.makeBombs;
         
+        box.nextBigBombOffer.betweenOffersSteps = lvl.nextBombOfferSettings.betweenOffersSteps;
+        box.nextBigBombOffer.inOneGameMax = lvl.nextBombOfferSettings.inOneGameMax;
+
         _startState = lvl.startState;  
     }
 
@@ -142,8 +145,6 @@ public class GameManager : MonoBehaviour
         _winPanel.gameObject.SetActive(true);
         _winPanel.DOFade(1, 0.4f);
         _winPanel.transform.DOMoveY(_winPanel.transform.position.y, 0.4f).From(_winPanel.transform.position.y - 250);
-        
-        
     }
 
     public void ResetPause()

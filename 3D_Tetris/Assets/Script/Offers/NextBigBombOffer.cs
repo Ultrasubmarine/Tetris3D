@@ -13,9 +13,10 @@ namespace Script.Offers
         
         [SerializeField] private RectTransform _bombIcon;
         [SerializeField] private CanvasGroup _offer;
-
-        [SerializeField] private int _betweenOffersSteps = 3;
-        [SerializeField] private int _inOneGameMax = 2;
+        
+        public int betweenOffersSteps = 3;
+        public int inOneGameMax = 2;
+        
         private int _betweenOffersStepsCurrent;
         private int _inOneGameCurrent;
         
@@ -59,10 +60,10 @@ namespace Script.Offers
 
         public void CheckShowOffer()
         {
-            if (_inOneGameCurrent > _inOneGameMax)
+            if (_inOneGameCurrent > inOneGameMax)
                 return;
 
-            if (_betweenOffersStepsCurrent < _betweenOffersSteps)
+            if (_betweenOffersStepsCurrent < betweenOffersSteps)
             {
                 _betweenOffersStepsCurrent++;
                 return;
@@ -129,7 +130,7 @@ namespace Script.Offers
             _offer.gameObject.SetActive(false);
             _isShow = false;
            
-            _betweenOffersStepsCurrent = _betweenOffersSteps + 1;
+            _betweenOffersStepsCurrent = betweenOffersSteps + 1;
             _inOneGameCurrent = 0;
         }
     }

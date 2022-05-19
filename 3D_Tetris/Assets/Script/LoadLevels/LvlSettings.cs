@@ -33,6 +33,13 @@ namespace Script
         public bool makeBombs;
     }
     
+    [Serializable]
+    public struct NextBigBombOfferSettings
+    {
+        public int betweenOffersSteps;
+        public int inOneGameMax;
+    }
+    
     [CreateAssetMenu(fileName = "LvlSettings", menuName = "Lvl", order = 0)]
     public class LvlSettings : ScriptableObject
     {
@@ -45,6 +52,7 @@ namespace Script
         public TetrisState startState => _startState;
         public List<StarPlace> starPlaces => _starPlaces;
         public BombsSettings bombsSettings => _bombsSettings;
+        public NextBigBombOfferSettings nextBombOfferSettings => _nextBigBombOfferSettings;
         
         [SerializeField] private TutorType _tutorType;
         [SerializeField] private List<ChangeSpeedInfo> _speedSettings;
@@ -55,5 +63,6 @@ namespace Script
         [SerializeField] private TetrisState _startState = TetrisState.GenerateElement;
         [SerializeField] private List<StarPlace> _starPlaces;
         [SerializeField] private BombsSettings _bombsSettings;
+        [SerializeField] private NextBigBombOfferSettings _nextBigBombOfferSettings;
     }
 }

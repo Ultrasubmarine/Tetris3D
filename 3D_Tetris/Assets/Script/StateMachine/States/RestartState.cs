@@ -30,6 +30,8 @@ namespace Script.StateMachine.States
             RealizationBox.Instance.speedChanger.ResetSpeed();                  
             RealizationBox.Instance.generatorChanger.ResetGenerator();
             
+            RealizationBox.Instance.bombsManager.Clear();
+            RealizationBox.Instance.nextBigBombOffer.Clear();
           //  _FSM.StartFSM();
         }
 

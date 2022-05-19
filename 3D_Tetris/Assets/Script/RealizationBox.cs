@@ -8,6 +8,7 @@ using Script.GameLogic.Bomb;
 using Script.GameLogic.Stars;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
+using Script.Offers;
 using Script.Projections;
 using Script.Speed;
 using UnityEngine;
@@ -63,6 +64,8 @@ public class RealizationBox : Singleton<RealizationBox>
 
     [SerializeField] private BombsManager _bombsManager;
     [SerializeField] private PauseUI _pauseUI;
+    [SerializeField] private NextBigBombOffer _nextBigBombOffer;
+    
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
     public PlaneMatrix matrix => _matrix;
@@ -94,6 +97,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public LvlElementsSetter lvlElementsSetter => _lvlElementsSetter;
     public DestroyedLayerParticles destroyedLayerParticles => _destroyedLayerParticles;
     public BombsManager bombsManager => _bombsManager;
+    public NextBigBombOffer nextBigBombOffer => _nextBigBombOffer;
     
     public PauseUI pauseUI => _pauseUI;
     

@@ -15808,6 +15808,7 @@ MonoBehaviour:
   _destroyedLayerParticles: {fileID: 101087938}
   _bombsManager: {fileID: 1616382876}
   _pauseUI: {fileID: 2130227425}
+  _nextBigBombOffer: {fileID: 2140919602}
 --- !u!4 &1237479897
 Transform:
   m_ObjectHideFlags: 0
@@ -33522,11 +33523,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f74fe1d8aca540f4bbec13741c560248, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _applyButton: {fileID: 1537091371}
   _bombIcon: {fileID: 1423653791}
   _offer: {fileID: 4782035}
-  _betweenOffersSteps: 3
-  _inOneGameMax: 2
+  betweenOffersSteps: 3
+  inOneGameMax: 2
   needOutOfLimitAmount: 5
   maxLessOfLimit: 1
   _yMove: -100
