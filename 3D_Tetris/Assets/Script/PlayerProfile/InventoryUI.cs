@@ -15,7 +15,7 @@ namespace Script.PlayerProfile
         //big bomb
         [SerializeField] private TextMeshProUGUI _bombAmountText;
         [SerializeField] private RectTransform _bombRect;
-        private Sequence _changeAmountBombAnimation;
+        private Sequence _addBomb;
 
         [SerializeField] private float _time = 0.5f;
         private Sequence _applyBomb;
@@ -23,17 +23,31 @@ namespace Script.PlayerProfile
         
         private void Start()
         {
-            
+            SetBombAmountText();
             if (!gamePlayState)
             {
                 PlayerSaveProfile.instance.onBombAmountChange += AddBigBombInInventory;
+                
+                // todo fix this ugly code 
+                _panel.onShowEnded += () =>
+                {
+                    _addBomb.Rewind();
+                    _addBomb.Play();
+                };
+                
+                _addBomb= DOTween.Sequence().SetAutoKill(false).Pause();
+                _addBomb.AppendInterval(0.7f)
+                    .Append(_bombRect.DOScale(Vector3.one * 1.3f, 0.3f).From(Vector3.one).OnComplete(()=>SetBombAmountText()))
+                    .Append(_bombRect.DOScale(Vector3.one, _time / 2))
+                    .AppendInterval(0.2f)
+                    .OnComplete(() => _panel.Hide());
             }
             else
             {
              //   PlayerSaveProfile.instance.onBombAmountChange += UpdateVisibility;
                 
                 _applyBomb = DOTween.Sequence().SetAutoKill(false).Pause();
-                _applyBomb.Append(_bombRect.DOScale(Vector3.one * 1.3f, 0.3f).From(Vector3.one))
+                _applyBomb.Append(_bombRect.DOScale(Vector3.one * 1.3f, 0.3f).From(Vector3.one).OnComplete(()=>SetBombAmountText()))
                     .Append(_bombRect.DOScale(Vector3.one, _time / 2))
                     .OnComplete(() => UpdateVisibility());
             }
@@ -58,7 +72,7 @@ namespace Script.PlayerProfile
         
         public void AddBigBombInInventory(int amount)
         {
-            
+            _panel.Show();
         }
 
         

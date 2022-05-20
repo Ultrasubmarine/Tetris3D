@@ -1,10 +1,12 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using UnityEngine;
 
 [RequireComponent(typeof(CanvasGroup))]
 [RequireComponent(typeof(RectTransform))]
 public class BottomPanelAnimation : MonoBehaviour
 {
+    public Action onShowEnded;
     private CanvasGroup _canvasGroup;
 
     private RectTransform _rectTransform;
@@ -24,7 +26,7 @@ public class BottomPanelAnimation : MonoBehaviour
 
         _show = DOTween.Sequence().SetAutoKill(false).Pause();
         _show.Append(_canvasGroup.DOFade(1, _time / 2).From(0))
-            .Join(_rectTransform.DOAnchorPosY(0, _time / 2).From(Vector2.up * _yMove));//From(125,false))
+            .Join(_rectTransform.DOAnchorPosY(0, _time / 2).From(Vector2.up * _yMove)).OnComplete(() => onShowEnded?.Invoke());//From(125,false))
         
         _hide = DOTween.Sequence().SetAutoKill(false).Pause();
         _hide.Append(_canvasGroup.DOFade(0, _time / 2).From(1))

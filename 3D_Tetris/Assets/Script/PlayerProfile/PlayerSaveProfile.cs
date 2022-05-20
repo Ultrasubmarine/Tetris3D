@@ -27,8 +27,9 @@ namespace Script.PlayerProfile
         private SaveData _data;
 
 
-        private void Start()
+        protected override void Awake()
         {
+            base.Awake();
             Load();
         }
 
