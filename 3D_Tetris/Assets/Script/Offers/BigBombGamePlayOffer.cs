@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using Script.GameLogic.Bomb;
 using Script.GameLogic.TetrisElement;
+using Script.PlayerProfile;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
@@ -72,6 +73,9 @@ namespace Script.Offers
             if (_inOneGameCurrent > inOneGameMax)
                 return;
 
+            if (PlayerSaveProfile.instance._bombAmount > 0)
+                return;
+            
             if (_betweenOffersStepsCurrent < betweenOffersSteps)
             {
                 _betweenOffersStepsCurrent++;

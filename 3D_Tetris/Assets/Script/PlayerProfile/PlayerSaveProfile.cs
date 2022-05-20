@@ -16,6 +16,10 @@ namespace Script.PlayerProfile
     
     public class PlayerSaveProfile :MonoBehaviourSingleton<PlayerSaveProfile>
     {
+        public Action<int> onLevelChange;
+        public Action<int> onBombAmountChange;
+        public Action<int> onBestScoreChange;
+        
         public int _lvl => _data.lvl;
         public int _bombAmount => _data.bombAmount;
         public int _bestScore => _data.bestScore;
@@ -31,18 +35,21 @@ namespace Script.PlayerProfile
         public void SetLvl(int lvl)
         {
             _data.lvl = lvl;
+            onLevelChange?.Invoke(lvl);
             Save();
         }
         
         public void SetBombAmount(int amount)
         {
             _data.bombAmount = amount;
+            onBombAmountChange?.Invoke(amount);
             Save();
         }
         
         public void SetBestScore(int score)
         {
             _data.bestScore = score;
+            onBestScoreChange?.Invoke(score);
             Save();
         }
         

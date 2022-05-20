@@ -3600,6 +3600,7 @@ GameObject:
   - component: {fileID: 242537987}
   - component: {fileID: 242537986}
   - component: {fileID: 242537985}
+  - component: {fileID: 242537988}
   m_Layer: 0
   m_Name: Bomb (Y)
   m_TagString: Untagged
@@ -3681,6 +3682,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 242537983}
   m_CullTransparentMesh: 1
+--- !u!114 &242537988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242537983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fa3be5d6e9f1614db6d9f9e5aa1b9d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _time: 0.5
+  _yMove: -100
 --- !u!1 &249115423
 GameObject:
   m_ObjectHideFlags: 0
@@ -15403,9 +15418,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Script.Offers.BigBombMapOffer, Assembly-CSharp
-        m_MethodName: Apply
+      - m_Target: {fileID: 1557815082285658523}
+        m_TargetAssemblyTypeName: Script.PlayerProfile.InventoryUI, Assembly-CSharp
+        m_MethodName: UseBigBomb
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26654,8 +26669,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 9, y: -75}
-  m_SizeDelta: {x: 92.5, y: 73.801}
+  m_AnchoredPosition: {x: -1.1186066, y: -79}
+  m_SizeDelta: {x: 115.9453, y: 73.801}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1648609786
 MonoBehaviour:
@@ -26707,14 +26722,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 75
-  m_fontSizeBase: 75
+  m_fontSize: 65
+  m_fontSizeBase: 65
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -35084,6 +35099,23 @@ Transform:
   m_Father: {fileID: 7284278667455887136}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1557815082285658523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6209483958699174625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffda94c339742c78a807a499765a73e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _panel: {fileID: 242537988}
+  gamePlayState: 1
+  _bombAmountText: {fileID: 1648609786}
+  _bombRect: {fileID: 1893976748}
+  _time: 0.5
 --- !u!23 &1605895546146666933
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -41484,6 +41516,8 @@ GameObject:
   - component: {fileID: 4894804182173767985}
   - component: {fileID: 4427243720850336124}
   - component: {fileID: 5365988214203064787}
+  - component: {fileID: 1557815082285658523}
+  - component: {fileID: 9053030938186986742}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -45210,6 +45244,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8959142231993222355}
   m_CullTransparentMesh: 0
+--- !u!225 &9053030938186986742
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6209483958699174625}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!4 &9099363498832738434
 Transform:
   m_ObjectHideFlags: 0
