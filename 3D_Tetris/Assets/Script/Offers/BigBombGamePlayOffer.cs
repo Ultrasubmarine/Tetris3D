@@ -64,7 +64,7 @@ namespace Script.Offers
             
             Clear();
 
-            Show();
+          //  Show();
         }
 
         public void CheckShowOffer()
@@ -121,9 +121,9 @@ namespace Script.Offers
 
         private void Hide()
         {
-            // _isShow = false;
-            // _hide.Rewind();
-            // _hide.Play();
+            _isShow = false;
+            _hide.Rewind();
+            _hide.Play();
         }
 
         public void Apply()
