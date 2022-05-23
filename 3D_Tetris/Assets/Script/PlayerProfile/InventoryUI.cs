@@ -7,6 +7,8 @@ namespace Script.PlayerProfile
 {
     public class InventoryUI: MonoBehaviour
     {
+        private Generator _generator;
+        
         private bool _isShow = false;
         [SerializeField] private BottomPanelAnimation _panel;
 
@@ -21,6 +23,8 @@ namespace Script.PlayerProfile
         
         private void Start()
         {
+            _generator = RealizationBox.Instance.generator;
+            
             SetBombAmountText();
   
             _applyBomb = DOTween.Sequence().SetAutoKill(false).Pause();
@@ -36,7 +40,7 @@ namespace Script.PlayerProfile
             _applyBomb.Rewind();
             _applyBomb.Play();
 
-            if (PlayerSaveProfile.instance._bombAmount > 0)
+            if (PlayerSaveProfile.instance._bombAmount > 0 && _generator.nextElement.type != ElementType.bigBomb)
             {
                 PlayerSaveProfile.instance.SetBombAmount(PlayerSaveProfile.instance._bombAmount - 1);
                 RealizationBox.Instance.generator.SetNextAsBigBomb();
