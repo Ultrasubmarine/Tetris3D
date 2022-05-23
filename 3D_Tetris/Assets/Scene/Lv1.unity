@@ -26312,7 +26312,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 1}
   - {x: 0, y: 0, z: -1}
   _destroyLayersAmount: 2
-  _stepForBomb: 5
+  _stepForBomb: 12
   _timeForShowStop: 1.5
   _particleSystem: {fileID: 6464322642620849592, guid: 2f75c5385830e45fbbf9f54b1ab69ca3,
     type: 3}
@@ -35112,7 +35112,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _panel: {fileID: 242537988}
-  gamePlayState: 1
   _bombAmountText: {fileID: 1648609786}
   _bombRect: {fileID: 1893976748}
   _time: 0.5
@@ -41275,7 +41274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -41517,7 +41516,6 @@ GameObject:
   - component: {fileID: 4427243720850336124}
   - component: {fileID: 5365988214203064787}
   - component: {fileID: 1557815082285658523}
-  - component: {fileID: 9053030938186986742}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -45244,18 +45242,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8959142231993222355}
   m_CullTransparentMesh: 0
---- !u!225 &9053030938186986742
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6209483958699174625}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!4 &9099363498832738434
 Transform:
   m_ObjectHideFlags: 0
