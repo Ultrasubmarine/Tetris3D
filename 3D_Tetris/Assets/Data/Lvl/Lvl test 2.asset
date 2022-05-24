@@ -49,8 +49,14 @@ MonoBehaviour:
       layerDown: 20
       neighbours: 5
       startPoints: 10
+    exceptCurrentElementForNext: 0
   _lvlElements: []
   _startState: 8
   _starPlaces: []
   _bombsSettings:
     makeBombs: 1
+    bombStep: 0
+  _nextBigBombOfferSettings:
+    betweenOffersSteps: 0
+    inOneGameMax: 0
+  _lvl: 2

@@ -28,7 +28,7 @@ MonoBehaviour:
   _starSettings:
     collectStar: 1
     maxStarsInPlace: 3
-    winAmount: 2
+    winAmount: 9
     stepsBetweenStar: 4
     firstStep: 100
   _generatorSettings:
@@ -49,6 +49,7 @@ MonoBehaviour:
       layerDown: 20
       neighbours: 5
       startPoints: 10
+    exceptCurrentElementForNext: 1
   _lvlElements:
   - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
     blocks:
@@ -68,3 +69,7 @@ MonoBehaviour:
     position: {x: 2, y: 0, z: 0}
   _bombsSettings:
     makeBombs: 0
+  _nextBigBombOfferSettings:
+    betweenOffersSteps: 0
+    inOneGameMax: 0
+  _lvl: 2

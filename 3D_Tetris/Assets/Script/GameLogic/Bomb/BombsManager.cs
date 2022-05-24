@@ -30,7 +30,7 @@ namespace Script.GameLogic.Bomb
        [SerializeField] private List<Vector3Int> _directions;
        [SerializeField] private int _destroyLayersAmount = 2; //For Big Bomb
        
-       [SerializeField] private int _stepForBomb;
+       [SerializeField] public int _stepForBomb;
 
        [SerializeField] private float _timeForShowStop = 0.5f;
      

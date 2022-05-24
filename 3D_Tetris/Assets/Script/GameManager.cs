@@ -10,6 +10,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public int currentLvl { get; private set; }
+    
     [SerializeField] private GameObject[] _losePanels;
     
     [SerializeField] private BottomPanelAnimation _settingsPanel;
@@ -39,6 +41,8 @@ public class GameManager : MonoBehaviour
         var lvl = LvlLoader.instance.lvlSettings;
         var box = RealizationBox.Instance;
 
+
+        currentLvl = lvl.lvl;
         if (lvl.tutorType != TutorType.None)
         {
             GameObject tutor = RealizationBox.Instance.GetTutor(lvl.tutorType);
@@ -64,6 +68,7 @@ public class GameManager : MonoBehaviour
         box.FSM.startState= lvl.startState;
 
         box.bombsManager.lvlWithBombs = lvl.bombsSettings.makeBombs;
+        box.bombsManager._stepForBomb = lvl.bombsSettings.bombStep;
         
         box.bigBombGamePlayOffer.betweenOffersSteps = lvl.nextBombOfferSettings.betweenOffersSteps;
         box.bigBombGamePlayOffer.inOneGameMax = lvl.nextBombOfferSettings.inOneGameMax;

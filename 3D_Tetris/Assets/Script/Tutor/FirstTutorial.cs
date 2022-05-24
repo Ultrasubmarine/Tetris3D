@@ -65,6 +65,7 @@ namespace Script.Tutor
             _bottomPanel.alpha = 0;
             _bottomPanel.interactable = false;
 
+            RealizationBox.Instance.nextElementUI.gameObject.SetActive(false);
             FirstStep();
         }
         
@@ -221,6 +222,8 @@ namespace Script.Tutor
         //    RealizationBox.Instance.joystick.onStateChange -= FinishMove;
             RealizationBox.Instance.generator._generateNeedElement = _generateNeedElement;
            // RealizationBox.Instance.FSM.onStateChange -= FinishMove;
+           
+           RealizationBox.Instance.nextElementUI.gameObject.SetActive(true);
         }
 
 

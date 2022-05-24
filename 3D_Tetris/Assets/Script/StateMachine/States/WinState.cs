@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Helper.Patterns.FSM;
+using Script.PlayerProfile;
 using UnityEngine;
 
 namespace Script.StateMachine.States
@@ -16,6 +17,10 @@ namespace Script.StateMachine.States
         public override void Enter(TetrisState last)
         {
             base.Enter(last);
+            
+            if(PlayerSaveProfile.instance._lvl < RealizationBox.Instance.gameManager.currentLvl)
+                PlayerSaveProfile.instance.SetLvl(RealizationBox.Instance.gameManager.currentLvl);
+            
             if (_pauseUI.isPause)
             {
                 _pauseUI.onPauseStateChange += WaitPause;

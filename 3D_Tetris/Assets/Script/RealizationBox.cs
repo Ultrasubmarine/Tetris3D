@@ -66,6 +66,8 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private PauseUI _pauseUI;
     [SerializeField] private BigBombGamePlayOffer _bigBombGamePlayOffer;
     [SerializeField] private ChangeNewElementToBomb _changeNewElementToBomb;
+
+    [SerializeField] private NextElementUI _nextElementUI;
     
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
@@ -100,6 +102,8 @@ public class RealizationBox : Singleton<RealizationBox>
     public BombsManager bombsManager => _bombsManager;
     public BigBombGamePlayOffer bigBombGamePlayOffer => _bigBombGamePlayOffer;
     public ChangeNewElementToBomb changeNewElementToBomb => _changeNewElementToBomb;
+    
+    public NextElementUI nextElementUI => _nextElementUI;
     public PauseUI pauseUI => _pauseUI;
     
     private Dictionary<TutorType, GameObject> _tutors;
