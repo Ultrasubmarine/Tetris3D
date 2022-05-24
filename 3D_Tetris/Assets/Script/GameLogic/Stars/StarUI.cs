@@ -14,14 +14,29 @@ namespace Script.GameLogic.Stars
         private void Start()
         {
             _starsManager = RealizationBox.Instance.starsManager;
-            _starsManager.OnUpdatedCollectingStars += OnUpdateScore;
-            RealizationBox.Instance.starUIAnimation.OnUpdateStartScoreText += OnUpdateScore;
-            _text.text = _starsManager.collectedStars + " / " + _starsManager.neededStars;
+
+            if (!RealizationBox.Instance.gameManager.infinity)
+            {
+                _starsManager.OnUpdatedCollectingStars += OnUpdateScore;
+                RealizationBox.Instance.starUIAnimation.OnUpdateStartScoreText += OnUpdateScore;
+                _text.text = _starsManager.collectedStars + " / " + _starsManager.neededStars;
+            }
+            else
+            {
+                _starsManager.OnUpdatedCollectingStars += OnUpdateInfinityScore;
+                RealizationBox.Instance.starUIAnimation.OnUpdateStartScoreText += OnUpdateInfinityScore;
+                _text.text = _starsManager.collectedStars.ToString();
+            }
         }
 
         public void OnUpdateScore()
         {
             _text.text = _starsManager.collectedStars + " / " + _starsManager.neededStars;
+        }
+
+        public void OnUpdateInfinityScore()
+        {
+            _text.text = _starsManager.collectedStars.ToString();
         }
     }
 }

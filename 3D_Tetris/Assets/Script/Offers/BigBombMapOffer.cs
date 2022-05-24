@@ -7,6 +7,10 @@ namespace Script.Offers
 {
     public class BigBombMapOffer : MonoBehaviour
     {
+        private static int useInGame;
+        [SerializeField] private int maxUseInGame = 2;
+        
+        
         [SerializeField] private RectTransform _bombIcon;
         [SerializeField] private CanvasGroup _offer;
         [SerializeField] private GameObject _particles;
@@ -40,7 +44,8 @@ namespace Script.Offers
                 });
             
             Clear();
-            Show();
+            if(useInGame <maxUseInGame)
+                Show();
         }
 
         public void CheckShowOffer()
@@ -66,6 +71,7 @@ namespace Script.Offers
 
         public void Apply()
         {
+            useInGame++;
             //todo ads
             PlayerSaveProfile.instance.SetBombAmount(PlayerSaveProfile.instance._bombAmount + 1);
             Hide();

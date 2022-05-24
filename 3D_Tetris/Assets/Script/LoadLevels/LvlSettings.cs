@@ -45,6 +45,7 @@ namespace Script
     public class LvlSettings : ScriptableObject
     {
         public int lvl => _lvl;
+        public bool infinity => _infinity;
         public TutorType tutorType { get {return _tutorType; } }
         public List<ChangeSpeedInfo> speedSettings => _speedSettings;
         public int winScore => _winScore;
@@ -66,6 +67,8 @@ namespace Script
         [SerializeField] private List<StarPlace> _starPlaces;
         [SerializeField] private BombsSettings _bombsSettings;
         [SerializeField] private NextBigBombOfferSettings _nextBigBombOfferSettings;
+        
         [SerializeField] private int _lvl;
+        [SerializeField] private bool _infinity;
     }
 }

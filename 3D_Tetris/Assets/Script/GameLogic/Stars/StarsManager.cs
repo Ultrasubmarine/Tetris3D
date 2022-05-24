@@ -150,8 +150,13 @@ namespace Script.GameLogic.Stars
                 currentStep++;
                 return false;
             }
-            
-            if (currentStep < stepsBetweenStar)
+
+            if (RealizationBox.Instance.gameManager.infinity && _stars.Count == 0)
+            {
+                currentStep = 0;
+                return true;
+            }
+            else if (currentStep < stepsBetweenStar)
             {
                 currentStep++;
                 return false;

@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using Helper.Patterns.FSM;
+using Script.PlayerProfile;
 using Script.Projections;
 
 namespace Script.StateMachine.States
@@ -21,6 +22,11 @@ namespace Script.StateMachine.States
 
         public override void Enter(TetrisState last)
         {
+            if (PlayerSaveProfile.instance._bestScore < RealizationBox.Instance.starsManager.collectedStars)
+            {
+                PlayerSaveProfile.instance.SetBestScore(RealizationBox.Instance.starsManager.collectedStars);
+            }
+            
             if (_pauseUI.isPause)
             {
                 _pauseUI.onPauseStateChange += WaitPause;

@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 {
     public int currentLvl { get; private set; }
     
+    public bool infinity { get; private set; }
+    
     [SerializeField] private GameObject[] _losePanels;
     
     [SerializeField] private BottomPanelAnimation _settingsPanel;
@@ -24,6 +26,11 @@ public class GameManager : MonoBehaviour
     private TetrisState _startState;
     
     public event Action OnReplay;
+
+    private void Awake()
+    {
+        infinity = LvlLoader.instance.lvlSettings.infinity;
+    }
 
     private void Start()
     {
@@ -40,9 +47,10 @@ public class GameManager : MonoBehaviour
     {
         var lvl = LvlLoader.instance.lvlSettings;
         var box = RealizationBox.Instance;
-
-
+        
         currentLvl = lvl.lvl;
+        infinity = lvl.infinity;
+        
         if (lvl.tutorType != TutorType.None)
         {
             GameObject tutor = RealizationBox.Instance.GetTutor(lvl.tutorType);

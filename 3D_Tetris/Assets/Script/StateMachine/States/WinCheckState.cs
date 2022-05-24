@@ -10,19 +10,21 @@ namespace Script.StateMachine.States
         private Score _score;
         private GameCamera _gameCamera;
         private StarsManager _starsManager;
+        private GameManager _gameManager;
 
         public WinCheckState()
         {
             _score = RealizationBox.Instance.score;
             _gameCamera = RealizationBox.Instance.gameCamera;
             _starsManager = RealizationBox.Instance.starsManager;
+            _gameManager = RealizationBox.Instance.gameManager;
         }
 
         public override void Enter(TetrisState last)
         {
             base.Enter(last);
             
-            if (_score.CheckWin() && _starsManager.CheckWin())
+            if (_score.CheckWin() && _starsManager.CheckWin() && !_gameManager.infinity)
                 _FSM.SetNewState(TetrisState.WinGame);
             else
             {
