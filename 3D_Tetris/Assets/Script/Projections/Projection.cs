@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using Helper.Patterns;
 using IntegerExtension;
+using JetBrains.Annotations;
 using Script.GameLogic.TetrisElement;
 
 public class Projection : MonoBehaviour
@@ -41,17 +42,21 @@ public class Projection : MonoBehaviour
 
         Destroy();
 
-        var positionProjection = obj.blocks.Select(b => b.xz).Distinct();
-
-        foreach (var item in positionProjection)
+       List<CoordinatXZ> used = new List<CoordinatXZ>();
+       foreach (var block in obj.blocks)
         {
-            float y = _matrix.MinHeightInCoordinates(item.x.ToIndex(), item.z.ToIndex());
+            if(used.Contains(block.xz))
+                continue;
+            
+            float y = _matrix.MinHeightInCoordinatesAfterPoint(block.xz.x.ToIndex(), block.xz.z.ToIndex(), block.coordinates.y);
 
-            var posProjection = new Vector3(item.x, y + _heightProjection, item.z);
+            var posProjection = new Vector3(block.xz.x, y + _heightProjection, block.xz.z);
 
             var o = _pool.Pop(true);
             o.transform.localPosition = posProjection;
             _projectionsList.Add(o);
+            
+            used.Add(block.xz);
         }
     }
 

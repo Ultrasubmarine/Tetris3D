@@ -55,7 +55,7 @@ namespace Script.Projections
                  var o = _pool.Pop(true);
                 o.transform.localPosition = new Vector3(block.xz.x, 0, block.xz.z);
                 
-                float minHeightInCoordinates = _matrix.MinHeightInCoordinates(block.xz.x.ToIndex(), block.xz.z.ToIndex());
+                float minHeightInCoordinates = _matrix.MinHeightInCoordinatesAfterPoint(block.xz.x.ToIndex(), block.xz.z.ToIndex(), block.coordinates.y);
                 o.SetMinBottomHeight(minHeightInCoordinates);
 
                 o.SetHeight(block._coordinates.y);

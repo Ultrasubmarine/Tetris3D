@@ -313,6 +313,14 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
                 return y + 1;
         return 0;
     }
+    
+    public int MinHeightInCoordinatesAfterPoint(int x_index, int z_index, int y_point)
+    {
+        for (var y = y_point; y >= 0; --y)
+            if (!ReferenceEquals(_matrix[x_index, y, z_index], null) && !_matrix[x_index, y, z_index].IsPickable())
+                return y + 1;
+        return 0;
+    }
 
     public void Clear()
     {
