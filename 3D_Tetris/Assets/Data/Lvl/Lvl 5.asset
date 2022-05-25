@@ -41,10 +41,10 @@ MonoBehaviour:
       growBlocksAnywhere: 1
     - score: 36
       stepOfHardElement: 2
-      growBlocksAnywhere: 1
-    - score: 72
-      stepOfHardElement: 3
       growBlocksAnywhere: 0
+    - score: 72
+      stepOfHardElement: 2
+      growBlocksAnywhere: 1
     probabilitySettings:
       layerDown: 25
       neighbours: 5
@@ -65,12 +65,8 @@ MonoBehaviour:
     - {x: 0, y: 4, z: 0}
     - {x: 0, y: 5, z: 0}
     - {x: 0, y: 5, z: 2}
-    - {x: 0, y: 6, z: 2}
-    - {x: 0, y: 6, z: 0}
-    - {x: 0, y: 7, z: 0}
-    - {x: 0, y: 7, z: 2}
-    - {x: 0, y: 6, z: 1}
-    - {x: 0, y: 7, z: 1}
+    - {x: 0, y: 5, z: 1}
+    - {x: 0, y: 4, z: 1}
   - material: {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
     blocks:
     - {x: 1, y: 0, z: 2}
@@ -81,32 +77,24 @@ MonoBehaviour:
     - {x: 1, y: 2, z: 0}
     - {x: 1, y: 3, z: 0}
     - {x: 1, y: 3, z: 2}
-    - {x: 1, y: 4, z: 2}
-    - {x: 1, y: 4, z: 0}
-    - {x: 1, y: 5, z: 0}
-    - {x: 1, y: 5, z: 2}
-    - {x: 1, y: 4, z: 1}
-    - {x: 1, y: 5, z: 1}
+    - {x: 1, y: 3, z: 1}
+    - {x: 1, y: 2, z: 1}
   - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
     blocks:
     - {x: 2, y: 0, z: 2}
     - {x: 2, y: 0, z: 0}
     - {x: 2, y: 1, z: 0}
     - {x: 2, y: 1, z: 2}
-    - {x: 2, y: 2, z: 2}
-    - {x: 2, y: 2, z: 0}
-    - {x: 2, y: 3, z: 0}
-    - {x: 2, y: 3, z: 2}
-    - {x: 2, y: 3, z: 1}
-    - {x: 2, y: 2, z: 1}
+    - {x: 2, y: 0, z: 1}
+    - {x: 2, y: 1, z: 1}
   _startState: 8
   _starPlaces:
   - amountStars: 1
-    position: {x: 0, y: 6, z: 1}
+    position: {x: 0, y: 4, z: 1}
   - amountStars: 1
-    position: {x: 1, y: 4, z: 1}
+    position: {x: 1, y: 2, z: 1}
   - amountStars: 1
-    position: {x: 2, y: 2, z: 1}
+    position: {x: 2, y: 0, z: 1}
   _bombsSettings:
     makeBombs: 1
     bombStep: 6
