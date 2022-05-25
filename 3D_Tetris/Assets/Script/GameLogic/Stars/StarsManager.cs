@@ -68,6 +68,7 @@ namespace Script.GameLogic.Stars
         [Header("Animation")]
         [SerializeField] private Transform _rotationStar;
         [SerializeField] private Transform _animationStar;
+        [SerializeField] private TrailRenderer _starTail;
         [SerializeField] private float _highestPathPos = 32;
 
         [SerializeField] private float _firstPointR = 2.5f;
@@ -236,7 +237,11 @@ namespace Script.GameLogic.Stars
             _animationStar.gameObject.SetActive(true);
             _animationStar.localPosition = _animationPath[0];//new Vector3(0, _highestPathPos, 0);//
             _animationStar.LookAt(_cameraTransform);//Camera.main.transform);
-            _animationStar.DOLocalPath(_animationPath.ToArray(), 2, PathType.CatmullRom, PathMode.Ignore, gizmoColor : Color.green).
+            _animationStar.DOLocalPath(_animationPath.ToArray(), 2, PathType.CatmullRom, PathMode.Ignore, gizmoColor : Color.green).OnPlay(()=>
+                {
+                    _rotationStar.gameObject.SetActive(true);
+                    _starTail.Clear();
+                }).
                     OnUpdate(() =>
                     {
                         _fallStarAngle += Time.deltaTime *_fallStarRotationSpeed;
@@ -262,10 +267,13 @@ namespace Script.GameLogic.Stars
                   
                   _animationPath.RemoveAt(2);
                   _animationStar.DOKill();
-                  _animationStar.gameObject.SetActive(false);
+                  
+               //   _starTail.SetActive(false);
+                  _rotationStar.gameObject.SetActive(false);
+                  _starTail.Clear();
+                  _rotationStars.Add(new StarInfo(block, 0));
                   
                   OnCreatedStar?.Invoke();
-                  _rotationStars.Add(new StarInfo(block, 0));
               });
 
             //_animationStar.DOLocalRotate(Vector3.forward, 4).SetLoops(-1,LoopType.Incremental);
