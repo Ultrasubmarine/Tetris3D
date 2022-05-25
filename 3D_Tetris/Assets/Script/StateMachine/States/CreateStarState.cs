@@ -51,6 +51,11 @@ namespace Script.StateMachine.States
 
         public void OnCreatedStar()
         {
+            if (_starsManager.allPlaceInFirstStep && _starsManager.starPlaces.Count > 0)
+            {
+                _starsManager.CreateStar();
+                return;
+            }
             _starsManager.OnCreatedStar -= OnCreatedStar;
             if (_FSM.GetCurrentState() == TetrisState.Restart)
                 return;

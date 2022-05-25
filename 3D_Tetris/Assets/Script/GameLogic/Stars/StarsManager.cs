@@ -39,7 +39,11 @@ namespace Script.GameLogic.Stars
         { _collectStarsLvl = value; 
             if (!_collectStarsLvl) {RealizationBox.Instance.starUI.gameObject.SetActive(false);}
         } }
-    
+
+
+        public bool onlyStarPlace;
+        public bool allPlaceInFirstStep;
+        
         public int collectedStars { get; private set; }
         public int neededStars { get { return _neededStars;} set { _neededStars = value; } }
         public int maxStarsAmount { get { return _maxStarsAmount;} set { _maxStarsAmount = value; } }
@@ -144,7 +148,11 @@ namespace Script.GameLogic.Stars
                     break;
                 }
             }
-            
+
+            if (!starPlace && onlyStarPlace)
+            {
+                return false;
+            }
             if (_applicants.Count == 0 && !starPlace)
             {
                 currentStep++;

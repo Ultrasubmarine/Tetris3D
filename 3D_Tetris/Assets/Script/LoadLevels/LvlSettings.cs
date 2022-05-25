@@ -17,6 +17,8 @@ namespace Script
         public int winAmount;
         public int stepsBetweenStar;
         public int firstStep;
+        public bool allPlaceInFirstStep;
+        public bool onlyStarPlace;
     }
     
     [Serializable]

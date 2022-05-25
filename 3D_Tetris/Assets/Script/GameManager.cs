@@ -61,12 +61,14 @@ public class GameManager : MonoBehaviour
         
         box.score.SetWinScore(lvl.winScore);
 
+        box.starsManager.allPlaceInFirstStep = lvl.starSettings.allPlaceInFirstStep;
         box.starsManager.neededStars = lvl.starSettings.winAmount;
         box.starsManager.collectStarLvlLvl = lvl.starSettings.collectStar;
         box.starsManager.maxStarsAmount = lvl.starSettings.maxStarsInPlace;
         box.starsManager.stepsBetweenStar = lvl.starSettings.stepsBetweenStar;
         box.starsManager.starPlaces = new List<StarPlace>(lvl.starPlaces);
         box.starsManager.currentStep = lvl.starSettings.firstStep;
+        box.starsManager.onlyStarPlace = lvl.starSettings.onlyStarPlace;
         
         box.generatorChanger.SetGeneratorSettings(lvl.generatorSettings.points);
         box.generator._probabilitySettings = lvl.generatorSettings.probabilitySettings;

@@ -29,6 +29,7 @@ MonoBehaviour:
     winAmount: 1
     stepsBetweenStar: 0
     firstStep: 1000
+    allPlaceInFirstStep: 0
   _generatorSettings:
     points:
     - score: 0
@@ -44,7 +45,7 @@ MonoBehaviour:
       stepOfHardElement: 3
       growBlocksAnywhere: 0
     probabilitySettings:
-      layerDown: 15
+      layerDown: 20
       neighbours: 5
       startPoints: 10
     exceptCurrentElementForNext: 0
@@ -88,3 +89,4 @@ MonoBehaviour:
     betweenOffersSteps: 0
     inOneGameMax: 1
   _lvl: 3
+  _infinity: 0
