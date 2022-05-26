@@ -1,10 +1,24 @@
 ﻿using UnityEngine;
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
 
 namespace Script.ObjectEngine
 {
     public interface TurnInfluence
     {
-        
+        Social.ReportScore(null, null, bool suc);
+
+        Social.LoadScores("Leaderboard01", scores => {
+            if (scores.Length > 0)
+            {
+                Debug.Log("Got " + scores.Length + " scores");
+                string myScores = "Leaderboard:\n";
+                foreach (IScore score in scores)
+                    myScores += "\t" + score.userID + " " + score.formattedValue + " " + score.date + "\n";
+                Debug.Log(myScores);
+            }
+            else
+                Debug.Log("No scores loaded");
 //        bool TurnElement(Transform obj, int angle, float time, GameObject target)
 //        {
 //            float deltaAngle;
