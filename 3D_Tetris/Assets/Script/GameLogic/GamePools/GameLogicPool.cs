@@ -86,7 +86,7 @@ public class GameLogicPool : MonoBehaviour
     {
         _elementPool = new Pool<Element>(_elementPrefab.GetComponent<Element>(), _elementPoolParent);
         _blockPool = new Pool<Block>(_blockPrefab.GetComponent<Block>(), _blockPoolParent);
-        _pickableBlockPool = new Pool<PickableBlock>(_pickableBlockPrefab.GetComponent<PickableBlock>(), _pickableBlockPoolParent);
+     //   _pickableBlockPool = new Pool<PickableBlock>(_pickableBlockPrefab.GetComponent<PickableBlock>(), _pickableBlockPoolParent);
      //   _miniBlockPool = new Pool<Block>(_miniBlockPrefab.GetComponent<Block>(), _miniBlockPoolParent);
     }
 }
