@@ -29,17 +29,12 @@ public class MiniStarUIAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var m =  Stars[0].starMesh.material;
-        var m2 =  Stars[0].oreolRender.color;
-        
         for (int i = 0; i < Stars.Length; i++)
         {
             float FinishPoint = -Stars[i].myTransform.sizeDelta.y + Stars[i].myTransform.anchoredPosition.y;
 
 
-            Stars[i].animation.Append(Stars[i].starMesh.material
-                    .DOColor(new Color(m.color.r, m.color.g, m.color.b, 1f), _time / 3)
-                    .From(new Color(m.color.r, m.color.g, m.color.b, 0f))) 
+            Stars[i].animation.Append(Stars[i].starCanvasGroup.DOFade(1f, _time/3).From(0f))
                 .Join(Stars[i].myTransform.DOAnchorPosY(Stars[i].myTransform.anchoredPosition.y, _time / 2).From(Vector2.down * Screen.height / 2));
 
           int ind = i;
@@ -48,15 +43,15 @@ public class MiniStarUIAnimation : MonoBehaviour
               onAnimationFinished?.Invoke(ind);
           });
           
-          Stars[i].animationsDissapear
-              .Append(Stars[i].oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear/3))
-                .Append(Stars[i].starMesh.material.DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear));
-          
-          Stars[i].animationsDissapear.OnComplete(() =>
-            {
-                _isShowStars = false;
-                Stars[ind].gameObject.SetActive(false);
-            });
+          // Stars[i].animationsDissapear
+          //     .Append(Stars[i].oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear/3))
+          //       .Append(Stars[i].starCanvasGroup.material.DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear));
+          //
+          // Stars[i].animationsDissapear.OnComplete(() =>
+          //   {
+          //       _isShowStars = false;
+          //       Stars[ind].gameObject.SetActive(false);
+          //   });
 
           Stars[i].gameObject.SetActive(false);
         }
@@ -108,14 +103,14 @@ public class MiniStarUIAnimation : MonoBehaviour
     public void Clear(int amount)
     {
         _isShowStars = false;
-        var m =  Stars[0].starMesh.material;
+       // var m =  Stars[0].starCanvasGroup.material;
         
         for (int i = 0; i < amount; i++)
         {
             Stars[i].animation.Rewind();
             Stars[i].animation.Complete();
-            Stars[i].animationsDissapear.Rewind();
-            Stars[i].animationsDissapear.Complete();
+      //      Stars[i].animationsDissapear.Rewind();
+       //     Stars[i].animationsDissapear.Complete();
             
          //   Stars[i].starMesh.material.SetColor(0,new Color(m.color.r, m.color.g, m.color.b,0f));
         }

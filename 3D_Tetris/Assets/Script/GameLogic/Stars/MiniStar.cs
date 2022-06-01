@@ -7,14 +7,14 @@ using UnityEngine;
 public class MiniStar : MonoBehaviour
 {
     public GameObject star => _star;
-    public MeshRenderer starMesh => _starMesh;
-    public SpriteRenderer oreolRender => _oreolRender;
+    public CanvasGroup starCanvasGroup => _starCanvasGroup;
+    public CanvasGroup oreolRender => _oreolRender;
     public RectTransform myTransform => _myTransform;
     public Transform oreol => _oreol;
     
     [SerializeField] private GameObject _star;
-    [SerializeField] private MeshRenderer _starMesh;
-    [SerializeField] private SpriteRenderer _oreolRender;
+    [SerializeField] private CanvasGroup _starCanvasGroup;
+    [SerializeField] private CanvasGroup _oreolRender;
     [SerializeField] private Transform _oreol;
     private RectTransform _myTransform;
 

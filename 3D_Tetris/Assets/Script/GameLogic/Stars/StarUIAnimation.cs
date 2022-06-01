@@ -72,17 +72,12 @@ namespace Script.GameLogic.Stars
                     .From(Vector2.up * FinishPoint).SetLoops(3, LoopType.Yoyo)).OnComplete(() => OnShowEnd())
                 //HIDE PART
                 .Append(_oreol2.DOFade(0f, _timeDisappear / 2).From(1f))
-                // .Join(_miniStars[0].oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2)
-                //     .From(new Color(m2.r, m2.g, m2.b, 1f)))
-                // .Join(_miniStars[1].oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2)
-                //     .From(new Color(m2.r, m2.g, m2.b, 1f)))
-                // .Join(_miniStars[2].oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2)
-                //     .From(new Color(m2.r, m2.g, m2.b, 1f)))
-                // .Join(_miniStars[3].oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2)
-                //     .From(new Color(m2.r, m2.g, m2.b, 1f)))
-                // .Join(_miniStars[4].oreolRender.DOColor(new Color(m2.r, m2.g, m2.b, 0f), _timeDisappear / 2)
-                //     .From(new Color(m2.r, m2.g, m2.b, 1f)))
-                .Append(myTransform.DOAnchorPosY(-StarPanelTransform.sizeDelta.y / 4, _timeDisappear)).OnUpdate(() =>
+                .Join(_miniStars[0].oreolRender.DOFade(0f, _timeDisappear / 2).From(1f))
+                .Join(_miniStars[1].oreolRender.DOFade(0f, _timeDisappear / 2).From(1f))
+                .Join(_miniStars[2].oreolRender.DOFade(0f, _timeDisappear / 2).From(1f))
+                .Join(_miniStars[3].oreolRender.DOFade(0f, _timeDisappear / 2).From(1f))
+                .Join(_miniStars[4].oreolRender.DOFade(0f, _timeDisappear / 2).From(1f))
+                .Append(myTransform.DOAnchorPosY(-StarPanelTransform.sizeDelta.y / 4, _timeDisappear).OnUpdate(() =>
                 {
                     _currentTime += Time.deltaTime;
                     if (!_isScoreTextUpdated && _currentTime > _timeDisappear * 0.75f)
@@ -90,21 +85,14 @@ namespace Script.GameLogic.Stars
                         OnUpdateStartScoreText?.Invoke();
                         _isScoreTextUpdated = true;
                     }
-                })
-                .Join(_star2.DOFade(0f, _timeDisappear).From(1f));
-                
-              //      .From(new Color(m2.r, m2.g, m2.b, 1f)));
-                // .Join(_miniStars[0].starMesh.material.
-                //     DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear).From(new Color(m.color.r, m.color.g, m.color.b, 1f)))
-                // .Join(_miniStars[1].starMesh.material
-                //     .DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear).From(new Color(m.color.r, m.color.g, m.color.b, 1f)))
-                // .Join(_miniStars[2].starMesh.material
-                //     .DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear).From(new Color(m.color.r, m.color.g, m.color.b, 1f)))
-                // .Join(_miniStars[3].starMesh.material
-                //     .DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear).From(new Color(m.color.r, m.color.g, m.color.b, 1f)))
-                // .Join(_miniStars[4].starMesh.material
-                //     .DOColor(new Color(m.color.r, m.color.g, m.color.b, 0f), _timeDisappear).From(new Color(m.color.r, m.color.g, m.color.b, 1f)));
-
+                }))
+                .Join(_star2.DOFade(0f, _timeDisappear).From(1f))
+                .Join(_miniStars[0].starCanvasGroup.DOFade(0f, _timeDisappear).From(1f))
+                .Join(_miniStars[1].starCanvasGroup.DOFade(0f, _timeDisappear).From(1f))
+                .Join(_miniStars[2].starCanvasGroup.DOFade(0f, _timeDisappear).From(1f))
+                .Join(_miniStars[3].starCanvasGroup.DOFade(0f, _timeDisappear).From(1f))
+                .Join(_miniStars[4].starCanvasGroup.DOFade(0f, _timeDisappear).From(1f));
+            
             animation.OnComplete(() =>
             {
                 RealizationBox.Instance.FSM.onStateChange -= onFSMStateChange;
@@ -113,11 +101,11 @@ namespace Script.GameLogic.Stars
                 _collectStarsInAnimation = 0;
                 _dissapearAfterComplete = false;
                 
-                // _miniStars[0].gameObject.SetActive(false);
-                // _miniStars[1].gameObject.SetActive(false);
-                // _miniStars[2].gameObject.SetActive(false);
-                // _miniStars[3].gameObject.SetActive(false);
-                // _miniStars[4].gameObject.SetActive(false);
+                _miniStars[0].gameObject.SetActive(false);
+                _miniStars[1].gameObject.SetActive(false);
+                _miniStars[2].gameObject.SetActive(false);
+                _miniStars[3].gameObject.SetActive(false);
+                _miniStars[4].gameObject.SetActive(false);
                 
                 OnAnimationEnd?.Invoke();
             });
@@ -155,25 +143,23 @@ namespace Script.GameLogic.Stars
 
         public void StartAnimation()
         {
-            animation.Rewind();
-            animation.Play();
-            // _collectStarsInAnimation++;
-            // _isScoreTextUpdated = false;
-            //
-            // if(_collectStarsInAnimation < 2)
-            // { 
-            //    // _star.SetActive(true);
-            //     animation.Rewind();
-            //     animation.Play();
-            // }
-            // else
-            // {
-            //     if (_collectStarsInAnimation < 3)
-            //     {
-            // //        _miniStarUIAnimation.onAnimationFinished += OnMiniStarsFinished;
-            //     }
-            // //    _miniStarUIAnimation.ShowMiniStar(_collectStarsInAnimation-2);
-            // }
+            _collectStarsInAnimation++;
+            _isScoreTextUpdated = false;
+            
+            if(_collectStarsInAnimation < 2)
+            { 
+               // _star.SetActive(true);
+                animation.Rewind();
+                animation.Play();
+            }
+            else
+            {
+                if (_collectStarsInAnimation < 3)
+                {
+            //        _miniStarUIAnimation.onAnimationFinished += OnMiniStarsFinished;
+                }
+                _miniStarUIAnimation.ShowMiniStar(_collectStarsInAnimation-2);
+            }
         }
 
         public void OnMiniStarsFinished(int index)
@@ -183,21 +169,6 @@ namespace Script.GameLogic.Stars
                 _miniStarUIAnimation.onAnimationFinished -= OnMiniStarsFinished;
             }
                 
-        }
-        public void DissapearAnimation()
-         {
-        //     if (_startDissapear)
-        //         return;
-            
-            _miniStarUIAnimation.DissapearStars(_collectStarsInAnimation-1);
-            animation.Complete();
-        //    animationDissapear.Rewind();
-        //    _startDissapear = true;
-         //   animationDissapear.Play();
-            
-
-            if (RealizationBox.Instance.pauseUI.isPause)
-                Pause(true);
         }
 
         public void onFSMStateChange( TetrisState state)
@@ -225,10 +196,7 @@ namespace Script.GameLogic.Stars
                 
             }
             _collectStarsInAnimation = 1;
-     //       animationDissapear.Rewind();
-      //      animationDissapear.Complete();
-
-           
+            
             _isScoreTextUpdated = false;
             _currentTime = 0;
             _collectStarsInAnimation = 0;
@@ -246,11 +214,6 @@ namespace Script.GameLogic.Stars
                     _pauseOn = StarPause.show;
                     animation.Pause();
                 }
-               // else if (animationDissapear.IsPlaying())
-                // {
-                //     _pauseOn = StarPause.dissapear;
-                //     animationDissapear.Pause();
-                // }
                 else
                 {
                     _pauseOn = StarPause.none;
@@ -266,14 +229,8 @@ namespace Script.GameLogic.Stars
                         animation.Play();
                         break;
                     }
-                    // case StarPause.dissapear:
-                    // {
-                    //     animationDissapear.Play();
-                    //     break;
-                    // }
                 }
             }
-            
         }
     }
 }
