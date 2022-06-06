@@ -68,7 +68,7 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private ChangeNewElementToBomb _changeNewElementToBomb;
 
     [SerializeField] private NextElementUI _nextElementUI;
-    
+    [SerializeField] private EvilBoxManager _evilBoxManager;
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
     public PlaneMatrix matrix => _matrix;
@@ -105,6 +105,7 @@ public class RealizationBox : Singleton<RealizationBox>
     
     public NextElementUI nextElementUI => _nextElementUI;
     public PauseUI pauseUI => _pauseUI;
+    public EvilBoxManager evilBoxManager => _evilBoxManager;
     
     private Dictionary<TutorType, GameObject> _tutors;
     

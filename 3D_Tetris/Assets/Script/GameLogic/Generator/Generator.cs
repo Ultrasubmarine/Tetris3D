@@ -42,6 +42,7 @@ public enum ElementType
     element,
     bomb,
     bigBomb,
+    evilBox,
 }
 public struct AbstractElementInfo
 {
@@ -72,6 +73,7 @@ public class Generator : MonoBehaviour
     private HeightHandler _heightHandler;
     private GameCamera _gameCamera;
     private BombsManager _bombsManager;
+    private EvilBoxManager _evilBoxManager;
     
     private bool[,,] _castMatrix;
     private Vector3Int _minPoint;
@@ -98,7 +100,8 @@ public class Generator : MonoBehaviour
         _heightHandler = RealizationBox.Instance.haightHandler;
         _gameCamera = RealizationBox.Instance.gameCamera;
         _bombsManager = RealizationBox.Instance.bombsManager;
-            
+        _evilBoxManager = RealizationBox.Instance.evilBoxManager;
+        
         _castMatrix = new bool[3, 5, 3];
         
         _nextElement = new AbstractElementInfo();
@@ -166,6 +169,11 @@ public class Generator : MonoBehaviour
         if (_bombsManager.CanMakeBomb())
         {
             _nextElement.type = ElementType.bomb;
+            _evilBoxManager.IncrementStep();
+        }
+        else if (_evilBoxManager.CanMakeEvilBox())
+        {
+            _nextElement.type = ElementType.evilBox;
         }
         else
         {
@@ -318,6 +326,8 @@ public class Generator : MonoBehaviour
             return _bombsManager.MakeBomb();
         else if (_nextElement.type == ElementType.bigBomb)
             return _bombsManager.MakeBomb(true);
+        else if (_nextElement.type == ElementType.evilBox)
+            return _evilBoxManager.MakeEvilBox();
         
         var createElement = _pool.CreateEmptyElement();
 

@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e305acaa644cd79e690bc068505a79, type: 3}
+  m_Name: Lvl2 1
+  m_EditorClassIdentifier: 
+  _tutorType: 0
+  _speedSettings:
+  - time: 0.45
+    score: 0
+  - time: 0.35
+    score: 27
+  - time: 0.25
+    score: 45
+  - time: 0.2
+    score: 72
+  - time: 0.25
+    score: 81
+  _winScore: 0
+  _starSettings:
+    collectStar: 1
+    maxStarsInPlace: 3
+    winAmount: 9
+    stepsBetweenStar: 4
+    firstStep: 100
+  _generatorSettings:
+    points:
+    - score: 0
+      stepOfHardElement: 2
+      growBlocksAnywhere: 0
+    - score: 18
+      stepOfHardElement: 2
+      growBlocksAnywhere: 1
+    - score: 36
+      stepOfHardElement: 2
+      growBlocksAnywhere: 1
+    - score: 72
+      stepOfHardElement: 3
+      growBlocksAnywhere: 0
+    probabilitySettings:
+      layerDown: 20
+      neighbours: 5
+      startPoints: 10
+    exceptCurrentElementForNext: 1
+  _lvlElements:
+  - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
+    blocks:
+    - {x: 1, y: 0, z: 0}
+    - {x: 2, y: 0, z: 0}
+    - {x: 2, y: 0, z: 1}
+  - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
+    blocks:
+    - {x: 0, y: 0, z: 1}
+    - {x: 1, y: 0, z: 1}
+    - {x: 1, y: 0, z: 2}
+    - {x: 0, y: 0, z: 2}
+    - {x: 2, y: 0, z: 2}
+  _startState: 8
+  _starPlaces:
+  - amountStars: 1
+    position: {x: 2, y: 0, z: 0}
+  _bombsSettings:
+    makeBombs: 0
+  _nextBigBombOfferSettings:
+    betweenOffersSteps: 0
+    inOneGameMax: 0
+  _lvl: 2

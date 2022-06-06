@@ -215,7 +215,7 @@ namespace Script.GameLogic.Stars
             
             _stars.Add(rndBlock); 
             rndBlock.OnCollected += CollectStar;
-            rndBlock.OnDestroyed += DestroyStar;
+            rndBlock.OnDestroyed += CollectStar;//DestroyStar;
             CreateAnimation(rndBlock);
         }
 
@@ -282,7 +282,7 @@ namespace Script.GameLogic.Stars
         public void CollectStar(Block star)
         {
             star.OnCollected -= CollectStar;
-            star.OnDestroyed -= DestroyStar;
+            star.OnDestroyed -= CollectStar;//DestroyStar;
             collectedStars++;
             _stars.Remove(star);
 
@@ -309,7 +309,7 @@ namespace Script.GameLogic.Stars
         public void DestroyStar(Block star)
         {
             star.OnCollected -= CollectStar;
-            star.OnDestroyed -= DestroyStar;
+            star.OnDestroyed -= CollectStar;//DestroyStar;
             
             _stars.Remove(star);
 

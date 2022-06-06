@@ -9,7 +9,7 @@ public class GameLogicPool : MonoBehaviour
     [SerializeField] private GameObject _blockPrefab;
     [SerializeField] private GameObject _pickableBlockPrefab;
     [SerializeField] private GameObject _miniBlockPrefab;
-    
+
     [SerializeField] private Transform _elementPoolParent;
     [SerializeField] private Transform _blockPoolParent;
     [SerializeField] private Transform _pickableBlockPoolParent;

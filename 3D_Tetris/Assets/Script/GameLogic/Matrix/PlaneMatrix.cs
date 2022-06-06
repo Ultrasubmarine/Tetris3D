@@ -176,7 +176,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         for (var y = 0; y < _limitHeight; y++)
             if (CheckCollectedInLayer(y))
             {
-                DestroyLayer(y);
+                CollectLayer(y);
                 RealizationBox.Instance.gameCamera.onStabilizationEnd += OnCameraStabilizationEnd;
                 RealizationBox.Instance.gameCamera.SetStabilization();
                 return;
@@ -199,7 +199,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         return true;
     }
 
-    private void DestroyLayer(int layer)
+    private void CollectLayer(int layer)
     {
         OnDestroyLayer?.Invoke(layer);
         
@@ -228,10 +228,10 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
             if(CheckEmptyPlace(pos.x,pos.y, pos.z))
                 continue;
             
-            if(collectStars)
-                _matrix[pos.x, pos.y, pos.z].Collect();
-            else
-                _matrix[pos.x, pos.y, pos.z].Destroy();
+          //  if(collectStars)
+          //     _matrix[pos.x, pos.y, pos.z].Collect();
+          //else
+            _matrix[pos.x, pos.y, pos.z].Destroy();
             
             _matrix[pos.x, pos.y, pos.z].isDestroy = true;
 

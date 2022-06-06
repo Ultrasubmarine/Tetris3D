@@ -100,7 +100,7 @@ public class Block : MonoBehaviour
         isDestroy = false;
         myTransform.position = Vector3.zero;
         myTransform.rotation = Quaternion.identity;
-       // myTransform.localScale = Vector3.one * 0.97f;
+        // myTransform.localScale = Vector3.one * 0.97f;
         
         isStar = false;
       //  _meshFilter.mesh = _meshCube;
@@ -124,6 +124,9 @@ public class Block : MonoBehaviour
         _star.SetActive(true);
         _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
         oreol.gameObject.SetActive(true);
+        
+        oreol.localPosition = Vector3.zero;
+        oreol.transform.localEulerAngles = Vector3.zero;
     }
 
     public void TransformToBomb(Mesh _bombMesh, Material _bombMaterial, Material _blockMaterial, Vector3 _rotation, bool isBig)
@@ -144,6 +147,32 @@ public class Block : MonoBehaviour
             _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
 
         _star.transform.localEulerAngles = _rotation;
+        
+        oreol.transform.localEulerAngles = Vector3.zero;
+        oreol.localPosition = Vector3.zero;
+        // oreol.gameObject.SetActive(true);
+    }
+    
+    public void TransformToBox(Mesh _boxMesh, Material _boxMaterial, Material _blockMaterial, Vector3 _rotation)
+    {
+        isStar = true;
+        
+        mesh.material = _blockMaterial;
+        
+        _extraMeshFilter.mesh = _boxMesh;
+        extraMesh.material = _boxMaterial;
+
+        _star.layer = 11;//"element";
+        _star.SetActive(true);
+        
+        _star.transform.DOScale(new Vector3(0.92f, 0.92f, 0.92f), 1f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
+
+        _star.transform.localEulerAngles = Vector3.zero;
+        
+        oreol.gameObject.SetActive(true);
+        oreol.transform.localEulerAngles = new Vector3(90, 0, 0);
+        oreol.localPosition = new Vector3(0,0.1f,0f);
+       // _star.transform.localEulerAngles = _rotation;
         // oreol.gameObject.SetActive(true);
     }
     
