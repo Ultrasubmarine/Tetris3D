@@ -27,9 +27,19 @@ public class CollectionState : AbstractState<TetrisState>
 
         if (_FSM.GetCurrentState() == TetrisState.Restart)
             return;
-        
-        if(isDestroy)
-            _FSM.SetNewState(TetrisState.AllElementsDrop);
+
+        if (isDestroy)
+        {
+            //collect in previous collect state 
+            if (RealizationBox.Instance.evilBoxManager.isOpenedBox)
+            {
+                _FSM.SetNewState(TetrisState.OpenEvilBox);
+            }
+            else
+            {
+                _FSM.SetNewState(TetrisState.AllElementsDrop);
+            }
+        }
         else
         {
             _heightHandler.CalculateHeight();

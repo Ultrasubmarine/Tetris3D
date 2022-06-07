@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Helper.Patterns;
 using IntegerExtension;
+using Script.GameLogic.TetrisElement;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = System.Random;
 
 namespace Script.GameLogic
 {
@@ -13,11 +16,14 @@ namespace Script.GameLogic
         private GameLogicPool _pool;
         private TetrisFSM _fsm;
         private PlaneMatrix _matrix;
+        private HeightHandler _heightHandler;
+        private GameCamera _gameCamera;
         
         public Action OnBoomEnded;
         
         public bool lvlWithEvilBox { get; set; }
         
+        [SerializeField]  private Material _boxBlocksMaterial;
        [FormerlySerializedAs("_material")] [SerializeField] private Material _blockMaterial;
        [SerializeField] private Material _boxMaterial;
        [SerializeField] private Mesh _boxMesh;
@@ -30,13 +36,21 @@ namespace Script.GameLogic
        [SerializeField] private float _timeForShowStop = 0.5f;
      
        [SerializeField] private GameObject _particleSystem;
-
+       [SerializeField] private GameObject _createBlockParticleSystem;
+       
        [SerializeField] private Transform _particlesParent;
-           
+
+       [SerializeField] private int _minBlocksInBox;
+       
+       [SerializeField] private int _maxBlocksInBox;
+
+       
        public int _currentStep = 1000;
        
+       private Pool<GameObject> _createBlockParticlePool;
        private Pool<GameObject> _particlePool;
        private List<GameObject> _activeParticles;
+       private List<GameObject> _createBlockActiveParticles;
 
        private Sequence _boomTextAnimation;
 
@@ -48,19 +62,23 @@ namespace Script.GameLogic
        [SerializeField] private GameObject _particles;
        [SerializeField] private Vector3 _localParticlePosition;
        [SerializeField] private float _starRotationSpeed = 20.0f;
-       
-       private Transform _gameCamera;
+
+       private bool _isOpenedBox = false;
+       public bool isOpenedBox => _isOpenedBox;
        
         private void Start()
         {
             _pool = RealizationBox.Instance.gameLogicPool;
             _fsm = RealizationBox.Instance.FSM;
             _matrix = RealizationBox.Instance.matrix;
-            _gameCamera = RealizationBox.Instance.gameCamera.lookAtPoint;
+            _gameCamera = RealizationBox.Instance.gameCamera;
+            _heightHandler = RealizationBox.Instance.haightHandler;
             
             _particlePool = new Pool<GameObject>(_particleSystem,_particlesParent);
+            _createBlockParticlePool = new Pool<GameObject>(_createBlockParticleSystem,_particlesParent);
             _activeParticles = new List<GameObject>();
-          
+            _createBlockActiveParticles = new List<GameObject>();
+
             _boxes = new List<Block>();
             _particles2 = new Dictionary<Block, GameObject>();
         }
@@ -156,6 +174,8 @@ namespace Script.GameLogic
             box.OnDestroyed -= OnDestroyBox;
             box.OnCollected -= OnCollectBox;
             DestroyParticle(box);
+
+            _isOpenedBox = true;
         }
         
         // public bool BoomBombs()
@@ -209,13 +229,72 @@ namespace Script.GameLogic
         //     
         //     Invoke(nameof(DestroyParticle), _timeForShowStop);
         // }
-
+        
         public void DestroyParticle(Block box)
         {
             _particlePool.Push(_particles2[box]);
             _particles2.Remove(box);
         }
 
+        public void OpenEvilBox()
+        {
+            if (!_isOpenedBox)
+                return;
+
+            _isOpenedBox = false;
+            
+            int amount = 3;
+            List<CoordinatXZ> usedPositions = new List<CoordinatXZ>();
+            List<Block> blocks = new List<Block>();
+            
+            for (int i = 0; i < amount; i++)
+            {
+                var element = _pool.CreateEmptyElement();
+                _pool.CreateBlock(Vector3Int.zero, element, _boxBlocksMaterial);
+                
+                var pos = RealizationBox.Instance.elementDropper.transform.position;
+                
+                // выравниваем элемент относительно координат y 
+                var min_y = element.blocks.Min(s => s.coordinates.y);
+                var max_y = element.blocks.Max(s => s.coordinates.y);
+
+                var size = max_y - min_y;
+
+                int currentYpos = _heightHandler.limitHeight + 1;
+                element.InitializationAfterGeneric(currentYpos);
+                element.myTransform.position = new Vector3(pos.x, pos.y + currentYpos - size, pos.z);
+
+                RealizationBox.Instance.generator.SetRandomPosition(element, usedPositions);
+                ElementData.Instance.MergeElement(element);
+                
+                usedPositions.Add(element.blocks[0].xz);
+                blocks.Add(element.blocks[0]);
+            }
+
+            OnAddBlock(blocks);
+        }
+      
+        
+        public void OnAddBlock(List<Block> pos)
+        {
+            foreach (var po in pos)
+            {
+                var boom = _createBlockParticlePool.Pop();
+                boom.transform.position = po.myTransform.position;
+                _createBlockActiveParticles.Add(boom);
+            }
+            Invoke(nameof(DestroyParticle), _timeForShowStop);
+        }
+
+        public void DestroyParticle()
+        {
+            foreach (var ap in _createBlockActiveParticles)
+            {
+                _createBlockParticlePool.Push(ap);
+            }
+            _createBlockActiveParticles.Clear();
+        }
+        
         public void Clear()
         {
             foreach (var box in _boxes)

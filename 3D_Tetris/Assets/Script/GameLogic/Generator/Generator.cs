@@ -491,7 +491,7 @@ public class Generator : MonoBehaviour
 
     #region RandomMove
 
-    public void SetRandomPosition(Element element)
+    public void SetRandomPosition(Element element, List<CoordinatXZ> exceptList = null)
     {
         // first step
         int x_min, z_min, x_max, z_max;
@@ -519,14 +519,19 @@ public class Generator : MonoBehaviour
         //third step
         int x_move, z_move;
         
-        x_move = Random.Range(0, _matrix.wight - size.x);
-        z_move = Random.Range(0,_matrix.wight - size.z);
-        
-        foreach (var block in element.blocks)
+        do
         {
-            block.OffsetCoordinates(x_move, 0,  z_move);
-        }
-        MoveInfluence.MomentaryMove(element, new Vector3(x_move, 0, z_move));
+            x_move = Random.Range(0, _matrix.wight - size.x);
+            z_move = Random.Range(0, _matrix.wight - size.z);
+            
+            foreach (var block in element.blocks)
+            {
+                block.OffsetCoordinates(x_move, 0,  z_move);
+            }
+            MoveInfluence.MomentaryMove(element, new Vector3(x_move, 0, z_move));
+            
+        } while (exceptList != null && exceptList.Contains(element.blocks[0].xz)); // veeeery bad code
+
     }
     
     #endregion
