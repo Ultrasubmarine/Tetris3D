@@ -42,6 +42,15 @@ namespace Script
         public int betweenOffersSteps;
         public int inOneGameMax;
     }
+
+    [Serializable]
+    public struct EvilBoxSettings
+    {
+        public bool lvlWithEvilBox;
+        public int boxStep;
+        public int currentBoxStep;
+    }
+        
     
     [CreateAssetMenu(fileName = "LvlSettings", menuName = "Lvl", order = 0)]
     public class LvlSettings : ScriptableObject
@@ -58,6 +67,7 @@ namespace Script
         public List<StarPlace> starPlaces => _starPlaces;
         public BombsSettings bombsSettings => _bombsSettings;
         public NextBigBombOfferSettings nextBombOfferSettings => _nextBigBombOfferSettings;
+        public EvilBoxSettings evilBoxSettings => _evilBoxSettings;
         
         [SerializeField] private TutorType _tutorType;
         [SerializeField] private List<ChangeSpeedInfo> _speedSettings;
@@ -69,6 +79,7 @@ namespace Script
         [SerializeField] private List<StarPlace> _starPlaces;
         [SerializeField] private BombsSettings _bombsSettings;
         [SerializeField] private NextBigBombOfferSettings _nextBigBombOfferSettings;
+        [SerializeField] private EvilBoxSettings _evilBoxSettings;
         
         [SerializeField] private int _lvl;
         [SerializeField] private bool _infinity;

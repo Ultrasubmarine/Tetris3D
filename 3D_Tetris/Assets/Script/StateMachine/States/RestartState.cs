@@ -31,6 +31,7 @@ namespace Script.StateMachine.States
             RealizationBox.Instance.generatorChanger.ResetGenerator();
             
             RealizationBox.Instance.bombsManager.Clear();
+            RealizationBox.Instance.evilBoxManager.Clear();
             RealizationBox.Instance.bigBombGamePlayOffer.Clear();
           //  _FSM.StartFSM();
         }

@@ -80,7 +80,9 @@ public class GameManager : MonoBehaviour
         box.bombsManager.lvlWithBombs = lvl.bombsSettings.makeBombs;
         box.bombsManager._stepForBomb = lvl.bombsSettings.bombStep;
         
-        box.evilBoxManager.lvlWithEvilBox = true;
+        box.evilBoxManager.lvlWithEvilBox = lvl.evilBoxSettings.lvlWithEvilBox;
+        box.evilBoxManager._stepForBomb = lvl.evilBoxSettings.boxStep;
+        box.evilBoxManager._currentStep = lvl.evilBoxSettings.currentBoxStep;
         
         box.bigBombGamePlayOffer.betweenOffersSteps = lvl.nextBombOfferSettings.betweenOffersSteps;
         box.bigBombGamePlayOffer.inOneGameMax = lvl.nextBombOfferSettings.inOneGameMax;

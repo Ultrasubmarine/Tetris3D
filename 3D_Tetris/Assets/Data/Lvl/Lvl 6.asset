@@ -10,27 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55e305acaa644cd79e690bc068505a79, type: 3}
-  m_Name: Lvl2 1
+  m_Name: Lvl 6
   m_EditorClassIdentifier: 
   _tutorType: 0
   _speedSettings:
-  - time: 0.45
-    score: 0
   - time: 0.35
+    score: 0
+  - time: 0.28
     score: 27
-  - time: 0.25
+  - time: 0.23
     score: 45
   - time: 0.2
     score: 72
-  - time: 0.25
+  - time: 0.17
     score: 81
   _winScore: 0
   _starSettings:
     collectStar: 1
-    maxStarsInPlace: 3
-    winAmount: 9
-    stepsBetweenStar: 4
-    firstStep: 100
+    maxStarsInPlace: 6
+    winAmount: 13
+    stepsBetweenStar: 3
+    firstStep: 1000
+    allPlaceInFirstStep: 0
+    onlyStarPlace: 0
   _generatorSettings:
     points:
     - score: 0
@@ -56,20 +58,42 @@ MonoBehaviour:
     - {x: 1, y: 0, z: 0}
     - {x: 2, y: 0, z: 0}
     - {x: 2, y: 0, z: 1}
+    - {x: 0, y: 0, z: 0}
   - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
     blocks:
-    - {x: 0, y: 0, z: 1}
     - {x: 1, y: 0, z: 1}
     - {x: 1, y: 0, z: 2}
-    - {x: 0, y: 0, z: 2}
     - {x: 2, y: 0, z: 2}
+    - {x: 0, y: 0, z: 1}
+  - material: {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
+    blocks:
+    - {x: 1, y: 1, z: 1}
+    - {x: 1, y: 2, z: 1}
+    - {x: 1, y: 3, z: 1}
+    - {x: 1, y: 4, z: 1}
+    - {x: 1, y: 5, z: 1}
+  - material: {fileID: 2100000, guid: 226f55984c3a8465e95eb6762d5a9113, type: 2}
+    blocks:
+    - {x: 0, y: 5, z: 2}
+    - {x: 1, y: 6, z: 0}
+    - {x: 1, y: 6, z: 1}
+    - {x: 1, y: 7, z: 0}
+    - {x: 0, y: 6, z: 1}
+    - {x: 0, y: 6, z: 2}
+    - {x: 0, y: 7, z: 1}
   _startState: 8
   _starPlaces:
   - amountStars: 1
     position: {x: 2, y: 0, z: 0}
   _bombsSettings:
-    makeBombs: 0
+    makeBombs: 1
+    bombStep: 10
   _nextBigBombOfferSettings:
-    betweenOffersSteps: 0
-    inOneGameMax: 0
-  _lvl: 2
+    betweenOffersSteps: 30
+    inOneGameMax: 1
+  _evilBoxSettings:
+    lvlWithEvilBox: 1
+    boxStep: 3
+    currentBoxStep: 1000
+  _lvl: 4
+  _infinity: 0
