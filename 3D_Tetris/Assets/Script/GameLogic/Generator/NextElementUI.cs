@@ -9,6 +9,7 @@ namespace Script.GameLogic
         [SerializeField] private Transform _nextElementParent;
         [SerializeField] private GameObject _bomb;
         [SerializeField] private GameObject _bigBomb;
+        [SerializeField] private GameObject _evilBox;
         
         private Element _nextElement;
         private GameLogicPool _pool;
@@ -83,6 +84,13 @@ namespace Script.GameLogic
 
                     break;
                 }
+                case ElementType.evilBox:
+                {
+                    _evilBox.SetActive(true);
+                    _evilBox.transform.DOScale(new Vector3(0.9f, 0.9f, 0.9f), 1f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
+
+                    break;
+                }
             }
         }
 
@@ -100,6 +108,9 @@ namespace Script.GameLogic
             
             _bigBomb.transform.DOKill();
             _bigBomb.SetActive(false);
+            
+            _evilBox.transform.DOKill();
+            _evilBox.SetActive(false);
         }
     }
 }
