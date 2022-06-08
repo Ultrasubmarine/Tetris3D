@@ -143,7 +143,9 @@ namespace Script.GameLogic.Stars
             bool starPlace = false;
             foreach (var p in starPlaces)
             {
-                if (!_matrix.CheckEmptyPlace(p.position.x, p.position.y, p.position.z))
+                var b = _matrix.GetBlockInPlace(p.position.x, p.position.y, p.position.z);
+                
+                if (b && b.blockType != BlockType.box)
                 {
                     starPlace = true;
                     break;
@@ -180,7 +182,7 @@ namespace Script.GameLogic.Stars
         void AddApplicants(int x, int y, int z)
         {
             var b = _matrix.GetBlockInPlace(x, y, z);
-            if (b)
+            if (b && b.blockType != BlockType.box)
             {   
                 _applicants.Add(b);    
             }
@@ -193,7 +195,8 @@ namespace Script.GameLogic.Stars
             int ind = -1;
             for (int i=0; i < starPlaces.Count; i++)
             {
-                if (!_matrix.CheckEmptyPlace(starPlaces[i].position.x, starPlaces[i].position.y, starPlaces[i].position.z))
+                var b = _matrix.GetBlockInPlace(starPlaces[i].position.x, starPlaces[i].position.y, starPlaces[i].position.z);
+                if (b && b.blockType != BlockType.box)
                 {
                     ind = i;
                     break;

@@ -28,6 +28,13 @@ public struct CoordinatXZ
     }
 }
 
+public enum BlockType
+{
+    simple,
+    box,
+    strong,
+}
+
 public class Block : MonoBehaviour
 {
   //  public Vector3Int xyz;
@@ -57,6 +64,8 @@ public class Block : MonoBehaviour
     
     [SerializeField] private GameObject _star;
     public Transform Star => _star.transform;
+
+    public BlockType blockType;
     
     private void Awake()
     {
@@ -108,6 +117,8 @@ public class Block : MonoBehaviour
         _star.SetActive(false);
         _star.transform.DOKill();
         oreol.gameObject.SetActive(false);
+
+        blockType = BlockType.simple;
     }
 
     public void TransformToStar(Mesh _starMesh, Material _starMaterial, Material _blockMaterial)
@@ -174,6 +185,8 @@ public class Block : MonoBehaviour
         oreol.localPosition = new Vector3(0,0.1f,0f);
        // _star.transform.localEulerAngles = _rotation;
         // oreol.gameObject.SetActive(true);
+        
+        blockType = BlockType.box;
     }
     
     public void Collect()
