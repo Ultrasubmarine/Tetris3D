@@ -27,10 +27,12 @@ MonoBehaviour:
   _winScore: 0
   _starSettings:
     collectStar: 1
-    maxStarsInPlace: 6
-    winAmount: 13
+    maxStarsInPlace: 3
+    winAmount: 9
     stepsBetweenStar: 3
     firstStep: 1000
+    allPlaceInFirstStep: 0
+    onlyStarPlace: 0
   _generatorSettings:
     points:
     - score: 0
@@ -51,42 +53,47 @@ MonoBehaviour:
       startPoints: 10
     exceptCurrentElementForNext: 1
   _lvlElements:
-  - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
+  - material: {fileID: 2100000, guid: 3963cdb215dc4f54ab8f2d3dabaff056, type: 2}
     blocks:
-    - {x: 1, y: 0, z: 0}
     - {x: 2, y: 0, z: 0}
-    - {x: 2, y: 0, z: 1}
-    - {x: 0, y: 0, z: 0}
-  - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
+    - {x: 2, y: 1, z: 0}
+    - {x: 2, y: 2, z: 0}
+    - {x: 2, y: 3, z: 0}
+    - {x: 2, y: 4, z: 0}
+  - material: {fileID: 2100000, guid: 3963cdb215dc4f54ab8f2d3dabaff056, type: 2}
     blocks:
-    - {x: 1, y: 0, z: 1}
-    - {x: 1, y: 0, z: 2}
-    - {x: 2, y: 0, z: 2}
-    - {x: 0, y: 0, z: 1}
+    - {x: 0, y: 0, z: 2}
+    - {x: 0, y: 1, z: 2}
+    - {x: 0, y: 2, z: 2}
+    - {x: 0, y: 3, z: 2}
+    - {x: 0, y: 4, z: 2}
   - material: {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
     blocks:
-    - {x: 1, y: 1, z: 1}
-    - {x: 1, y: 2, z: 1}
-    - {x: 1, y: 3, z: 1}
-    - {x: 1, y: 4, z: 1}
-    - {x: 1, y: 5, z: 1}
-  - material: {fileID: 2100000, guid: 226f55984c3a8465e95eb6762d5a9113, type: 2}
+    - {x: 2, y: 5, z: 0}
+    - {x: 1, y: 5, z: 0}
+    - {x: 0, y: 5, z: 0}
+    - {x: 0, y: 5, z: 1}
+  - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
     blocks:
     - {x: 0, y: 5, z: 2}
-    - {x: 1, y: 6, z: 0}
-    - {x: 1, y: 6, z: 1}
-    - {x: 1, y: 7, z: 0}
-    - {x: 0, y: 6, z: 1}
-    - {x: 0, y: 6, z: 2}
-    - {x: 0, y: 7, z: 1}
+    - {x: 1, y: 5, z: 2}
+    - {x: 2, y: 5, z: 2}
+    - {x: 2, y: 5, z: 1}
   _startState: 8
   _starPlaces:
   - amountStars: 1
     position: {x: 2, y: 0, z: 0}
+  - amountStars: 1
+    position: {x: 0, y: 0, z: 2}
   _bombsSettings:
     makeBombs: 1
     bombStep: 10
   _nextBigBombOfferSettings:
     betweenOffersSteps: 30
     inOneGameMax: 1
+  _evilBoxSettings:
+    lvlWithEvilBox: 0
+    boxStep: 0
+    currentBoxStep: 0
   _lvl: 4
+  _infinity: 0

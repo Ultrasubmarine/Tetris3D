@@ -7,7 +7,7 @@ using IntegerExtension;
 using Script.GameLogic.TetrisElement;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 namespace Script.GameLogic
 {
@@ -63,8 +63,8 @@ namespace Script.GameLogic
        [SerializeField] private Vector3 _localParticlePosition;
        [SerializeField] private float _starRotationSpeed = 20.0f;
 
-       private bool _isOpenedBox = false;
-       public bool isOpenedBox => _isOpenedBox;
+       private int _isOpenedBox = 0;
+       public int isOpenedBox => _isOpenedBox;
 
        private Sequence _uiBoxAnimation;
        [SerializeField] private RectTransform _evilBoxRectTransform;
@@ -74,6 +74,9 @@ namespace Script.GameLogic
        [SerializeField] private float _timeMoving = 0.2f;
        private float _rotation;
        [SerializeField] private RectTransform _oreolTransform;
+
+
+       [SerializeField] private int _minBox, _maxBox;
        private void Start()
         {
             _pool = RealizationBox.Instance.gameLogicPool;
@@ -212,7 +215,7 @@ namespace Script.GameLogic
             box.OnCollected -= OnCollectBox;
             DestroyParticle(box);
 
-            _isOpenedBox = true;
+            _isOpenedBox++;
         }
 
         public void UiBoxAnimation()
@@ -279,7 +282,7 @@ namespace Script.GameLogic
         
         public bool OpenEvilBox()
         {
-            if (!_isOpenedBox)
+            if (_isOpenedBox ==0)
                 return false;
              
             
@@ -290,14 +293,15 @@ namespace Script.GameLogic
       
         public void OpenEvilBoxLogic()
         {
-            if (!_isOpenedBox)
+            if (_isOpenedBox == 0)
                 return;
 
-            _isOpenedBox = false;
+            int amount = Random.Range(_minBox* _isOpenedBox,_maxBox* isOpenedBox);
+            amount = amount >9? 9: amount; // sorryyyyyy for it
             
-            int amount = 3;
             List<CoordinatXZ> usedPositions = new List<CoordinatXZ>();
             List<Block> blocks = new List<Block>();
+            
             
             for (int i = 0; i < amount; i++)
             {
@@ -324,6 +328,7 @@ namespace Script.GameLogic
             }
 
             OnAddBlock(blocks);
+            _isOpenedBox = 0;
         }
         
         public void OnAddBlock(List<Block> pos)

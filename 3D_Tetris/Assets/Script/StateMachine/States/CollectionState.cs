@@ -15,7 +15,7 @@ public class CollectionState : AbstractState<TetrisState>
 
     public override void Enter(TetrisState last)
     {
-        RealizationBox.Instance.elementDropper.SetAllDropFastSpeed(1);
+        RealizationBox.Instance.elementDropper.SetAllDropFastSpeed(1f);
         
         _matrix.OnDestroyLayerEnd += OnCollectEnd;
         _matrix.CollectLayers();
@@ -39,7 +39,7 @@ public class CollectionState : AbstractState<TetrisState>
         if (isDestroy)
         {
             //collect in previous collect state 
-            if (RealizationBox.Instance.evilBoxManager.isOpenedBox)
+            if (RealizationBox.Instance.evilBoxManager.isOpenedBox > 0)
             {
                 _FSM.SetNewState(TetrisState.OpenEvilBox);
             }
