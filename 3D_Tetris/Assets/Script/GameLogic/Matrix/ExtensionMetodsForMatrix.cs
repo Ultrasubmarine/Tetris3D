@@ -38,6 +38,13 @@ namespace IntegerExtension
             return false;
         }
 
+        public static bool OutOfCoordinatLimit(this CoordinatXZ coordinat)
+        {
+            if (Mathf.Abs(coordinat.x) > _absMinCoordinat ||
+                Mathf.Abs(coordinat.z) > _absMinCoordinat)
+                return true;
+            return false;
+        }
         public static bool OutOfIndexLimit(this Vector3Int index)
         {
             if (index.x < 0 || index.x >= _wight || index.y < 0 || index.z < 0 || index.z >= _wight)

@@ -491,7 +491,7 @@ public class Generator : MonoBehaviour
 
     #region RandomMove
 
-    public void SetRandomPosition(Element element, List<CoordinatXZ> exceptList = null)
+    public void SetRandomPosition(Element element)
     {
         // first step
         int x_min, z_min, x_max, z_max;
@@ -518,22 +518,61 @@ public class Generator : MonoBehaviour
 
         //third step
         int x_move, z_move;
+   
+        x_move = Random.Range(0, _matrix.wight - size.x);
+        z_move = Random.Range(0, _matrix.wight - size.z);
+
+        foreach (var block in element.blocks)
+        {
+            block.OffsetCoordinates(x_move, 0,  z_move);
+        }
+        MoveInfluence.MomentaryMove(element, new Vector3(x_move, 0, z_move));
+    }
+    
+    public void SetRandomPositionForEvilBlox(Element element, List<CoordinatXZ> exceptList = null)
+    {
+        // first step
+        int x_min, z_min, x_max, z_max;
+        x_min = z_min = _matrix.wight;
+        x_max = z_max = 0;
+
+        foreach (var block in element.blocks)
+        {
+            x_max = Mathf.Max(block._coordinates.x, x_max);
+            z_max = Mathf.Max(block._coordinates.z, z_max);
+            
+            x_min = Mathf.Min(block._coordinates.x, x_min);
+            z_min = Mathf.Min(block._coordinates.z, z_min);
+        }
+        Vector3Int size = new Vector3Int(x_max - x_min,0, z_max - z_min);
+        
+        //second step
+        int minCoordinate = 0.ToCoordinat();
+        foreach (var block in element.blocks)
+        {
+            block.OffsetCoordinates(minCoordinate - x_min, 0,  minCoordinate - z_min);
+        }
+        MoveInfluence.MomentaryMove(element, new Vector3(minCoordinate - x_min, 0, minCoordinate - z_min));
+
+        //third step
+        int x_move, z_move;
+        CoordinatXZ newCoordinats; // for evilbox only
         
         do
         {
-            x_move = Random.Range(0, _matrix.wight - size.x);
-            z_move = Random.Range(0, _matrix.wight - size.z);
-            
-            foreach (var block in element.blocks)
-            {
-                block.OffsetCoordinates(x_move, 0,  z_move);
-            }
-            MoveInfluence.MomentaryMove(element, new Vector3(x_move, 0, z_move));
-            
-        } while (exceptList != null && exceptList.Contains(element.blocks[0].xz)); // veeeery bad code
+            x_move = Random.Range(0, _matrix.wight - size.x + 1);
+            z_move = Random.Range(0, _matrix.wight - size.z + 1);
 
+            newCoordinats = new CoordinatXZ(element.blocks[0].coordinates.x + x_move,element.blocks[0].coordinates.z + z_move);
+
+        } while (exceptList != null && exceptList.Contains(newCoordinats)); // veeeery bad code
+
+        foreach (var block in element.blocks)
+        {
+            block.OffsetCoordinates(x_move, 0,  z_move);
+        }
+        MoveInfluence.MomentaryMove(element, new Vector3(x_move, 0, z_move));
     }
-    
     #endregion
 
     public void Clear()
