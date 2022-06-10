@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
 
         box.bombsManager.lvlWithBombs = lvl.bombsSettings.makeBombs;
         box.bombsManager._stepForBomb = lvl.bombsSettings.bombStep;
+        box.bombsManager._currentStep = lvl.bombsSettings.currentStep;
         
         box.evilBoxManager.lvlWithEvilBox = lvl.evilBoxSettings.lvlWithEvilBox;
         box.evilBoxManager._stepForBomb = lvl.evilBoxSettings.boxStep;

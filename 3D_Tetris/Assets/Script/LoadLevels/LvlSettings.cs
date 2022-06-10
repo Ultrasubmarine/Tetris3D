@@ -34,6 +34,7 @@ namespace Script
     {
         public bool makeBombs;
         public int bombStep;
+        public int currentStep;
     }
     
     [Serializable]
