@@ -19,7 +19,7 @@ namespace Script.GameLogic
         private HeightHandler _heightHandler;
         private GameCamera _gameCamera;
         
-        public Action OnBoomEnded;
+        public Action OnOpenBoxEnded;
         
         public bool lvlWithEvilBox { get; set; }
         
@@ -65,8 +65,16 @@ namespace Script.GameLogic
 
        private bool _isOpenedBox = false;
        public bool isOpenedBox => _isOpenedBox;
-       
-        private void Start()
+
+       private Sequence _uiBoxAnimation;
+       [SerializeField] private RectTransform _evilBoxRectTransform;
+       [SerializeField] private CanvasGroup _oreol;
+       [SerializeField] private float _time = 0.7f;
+       [SerializeField] private float _deltaMove;
+       [SerializeField] private float _timeMoving = 0.2f;
+       private float _rotation;
+       [SerializeField] private RectTransform _oreolTransform;
+       private void Start()
         {
             _pool = RealizationBox.Instance.gameLogicPool;
             _fsm = RealizationBox.Instance.FSM;
@@ -81,6 +89,35 @@ namespace Script.GameLogic
 
             _boxes = new List<Block>();
             _particles2 = new Dictionary<Block, GameObject>();
+
+            CanvasGroup boxCanvas = _evilBoxRectTransform.gameObject.GetComponent<CanvasGroup>();
+            _uiBoxAnimation = DOTween.Sequence().SetAutoKill(false).Pause();
+            _uiBoxAnimation 
+                .Append(_evilBoxRectTransform.DOAnchorPosY(Screen.height / 2 + 100, _time / 2).From(Vector2.up * (Screen.height / 2 - 400)))
+                .Join(boxCanvas.DOFade(1f, _time / 2.5f).From(0f))
+                .Append(_evilBoxRectTransform.DOAnchorPosY(Screen.height / 2 + 100, _timeMoving)
+                    .From(Vector2.up *(Screen.height / 2)).SetLoops(3, LoopType.Yoyo))
+                .Join(_oreol.DOFade(1,_timeMoving/4 ).From(0).OnComplete(() =>
+                {
+                    OpenEvilBoxLogic();
+                }))
+                //HIDE PART
+                .Append(_oreol.DOFade(0,_time/4 ).From(1))
+                .Append(_evilBoxRectTransform.DOAnchorPosY(Screen.height / 2 + 100, _time/3))
+                .Join(boxCanvas.DOFade(0f, _time/3).From(1f))
+                .OnComplete( ()=>OnOpenBoxEnded?.Invoke());
+
+            _uiBoxAnimation.OnUpdate(() =>
+            {
+                _rotation += Time.deltaTime * _starRotationSpeed;
+                if (_rotation > 360.0f)
+                {
+                    _rotation = 0.0f;
+                }
+
+                _oreolTransform.localRotation = Quaternion.Euler(0, 0, _rotation);
+            });
+            _uiBoxAnimation.Complete();
         }
 
         public Element MakeEvilBox()
@@ -177,7 +214,11 @@ namespace Script.GameLogic
 
             _isOpenedBox = true;
         }
-        
+
+        public void UiBoxAnimation()
+        {
+            
+        }
         // public bool BoomBombs()
         // {
         //     bool boom = false;
@@ -235,8 +276,19 @@ namespace Script.GameLogic
             _particlePool.Push(_particles2[box]);
             _particles2.Remove(box);
         }
-
-        public void OpenEvilBox()
+        
+        public bool OpenEvilBox()
+        {
+            if (!_isOpenedBox)
+                return false;
+             
+            
+            _uiBoxAnimation.Rewind();
+            _uiBoxAnimation.Play();
+            return true;
+        }
+      
+        public void OpenEvilBoxLogic()
         {
             if (!_isOpenedBox)
                 return;
@@ -273,7 +325,6 @@ namespace Script.GameLogic
 
             OnAddBlock(blocks);
         }
-      
         
         public void OnAddBlock(List<Block> pos)
         {

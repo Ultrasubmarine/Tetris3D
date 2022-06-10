@@ -1,4 +1,5 @@
 using Helper.Patterns.FSM;
+using Script.GameLogic;
 using Script.GameLogic.TetrisElement;
 
 namespace Script.StateMachine.States
@@ -19,8 +20,18 @@ namespace Script.StateMachine.States
         public override void Enter(TetrisState last)
         {
             base.Enter(last);
+
+            if (RealizationBox.Instance.evilBoxManager.OpenEvilBox())
+                RealizationBox.Instance.evilBoxManager.OnOpenBoxEnded += OnOpenBoxEnded;
+            else
+                _FSM.SetNewState(TetrisState.AllElementsDrop);
+        }
+
+        public void OnOpenBoxEnded()
+        {
+            RealizationBox.Instance.evilBoxManager.OnOpenBoxEnded -= OnOpenBoxEnded;
             
-            RealizationBox.Instance.evilBoxManager.OpenEvilBox();
+            RealizationBox.Instance.elementDropper.SetAllDropFastSpeed(0.7f);
             _FSM.SetNewState(TetrisState.AllElementsDrop);
         }
 

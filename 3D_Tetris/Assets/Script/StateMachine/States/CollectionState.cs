@@ -15,6 +15,8 @@ public class CollectionState : AbstractState<TetrisState>
 
     public override void Enter(TetrisState last)
     {
+        RealizationBox.Instance.elementDropper.SetAllDropFastSpeed(1);
+        
         _matrix.OnDestroyLayerEnd += OnCollectEnd;
         _matrix.CollectLayers();
         //  _heightHandler.CalculateHeight();
@@ -28,6 +30,12 @@ public class CollectionState : AbstractState<TetrisState>
         if (_FSM.GetCurrentState() == TetrisState.Restart)
             return;
 
+        if (_heightHandler.CheckOutOfLimit())
+        {
+            _FSM.SetNewState(TetrisState.LoseGame);
+            return;
+        }
+        
         if (isDestroy)
         {
             //collect in previous collect state 

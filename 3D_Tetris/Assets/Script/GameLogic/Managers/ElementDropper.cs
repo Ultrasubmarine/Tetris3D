@@ -20,6 +20,8 @@ namespace Script.GameLogic.TetrisElement
 
         private ElementCleaner _cleaner;
 
+        private float _allDropFast = 1;
+        
         private bool _isWaitingMerge = false;
         [SerializeField] private float _waitMergeTime = 0.4f;
         private Vector3Int[] vectorDirection;
@@ -106,6 +108,10 @@ namespace Script.GameLogic.TetrisElement
             _fsm.SetNewState(TetrisState.Collection);
         }
 
+        public void SetAllDropFastSpeed(float fast)
+        {
+            _allDropFast = fast;
+        }
         private int DropAllElements()
         {
             _dropElementCount = 0;
@@ -120,7 +126,7 @@ namespace Script.GameLogic.TetrisElement
                     _dropElementCount++;
                     item.LogicDrop();
 
-                    _influence.AddDrop(item.myTransform, Vector3.down, global::Speed.timeDropAfterDestroy,
+                    _influence.AddDrop(item.myTransform, Vector3.down, global::Speed.timeDropAfterDestroy * _allDropFast,
                         DecrementDropElementsCount);
                     
                     var pickableBlocks = _matrix.GetPickableBlocksForElement(item);
@@ -137,7 +143,7 @@ namespace Script.GameLogic.TetrisElement
                         _matrix.BindToMatrix(item);
                 }
             }
-
+            
             return _dropElementCount;
         }
 
