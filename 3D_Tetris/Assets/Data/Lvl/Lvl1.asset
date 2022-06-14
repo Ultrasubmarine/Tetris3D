@@ -25,19 +25,15 @@ MonoBehaviour:
     collectStar: 1
     maxStarsInPlace: 1
     winAmount: 1
-    stepsBetweenStar: 14
+    stepsBetweenStar: 7
     firstStep: 0
+    allPlaceInFirstStep: 0
+    onlyStarPlace: 0
   _generatorSettings:
     points:
     - score: 0
-      stepOfHardElement: 1
-      growBlocksAnywhere: 0
-    - score: 27
       stepOfHardElement: 2
       growBlocksAnywhere: 0
-    - score: 63
-      stepOfHardElement: 2
-      growBlocksAnywhere: 1
     probabilitySettings:
       layerDown: 20
       neighbours: 5
@@ -48,7 +44,14 @@ MonoBehaviour:
   _starPlaces: []
   _bombsSettings:
     makeBombs: 0
+    bombStep: 0
+    currentStep: 0
   _nextBigBombOfferSettings:
     betweenOffersSteps: 0
     inOneGameMax: 0
+  _evilBoxSettings:
+    lvlWithEvilBox: 0
+    boxStep: 0
+    currentBoxStep: 0
   _lvl: 1
+  _infinity: 0
