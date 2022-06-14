@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Numerics;
 using DG.Tweening;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 public struct CoordinatXZ
 {
@@ -113,7 +116,8 @@ public class Block : MonoBehaviour
         
         isStar = false;
       //  _meshFilter.mesh = _meshCube;
-        
+
+        _star.transform.localPosition = Vector3.zero;
         _star.SetActive(false);
         _star.transform.DOKill();
         oreol.gameObject.SetActive(false);
@@ -133,7 +137,14 @@ public class Block : MonoBehaviour
        // Vector3.
         _star.layer = 11;//"element";
         _star.SetActive(true);
+
+        if (blockType == BlockType.stone)
+        {
+            _star.transform.localPosition = new  Vector3(0, -0.1f, 0);
+        }
+      
         _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
+        
         oreol.gameObject.SetActive(true);
         
         oreol.localPosition = Vector3.zero;
