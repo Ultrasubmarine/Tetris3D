@@ -32,7 +32,7 @@ public enum BlockType
 {
     simple,
     box,
-    strong,
+    stone,
 }
 
 public class Block : MonoBehaviour
@@ -188,7 +188,13 @@ public class Block : MonoBehaviour
         
         blockType = BlockType.box;
     }
-    
+
+    public void TransformToStone(Material _blockMaterial)
+    {
+        mesh.material = _blockMaterial;
+        
+        blockType = BlockType.stone;
+    }
     public void Collect()
     {
         OnCollected?.Invoke(this);

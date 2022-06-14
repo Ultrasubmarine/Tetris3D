@@ -6,6 +6,7 @@ using Script.Controller.TouchController;
 using Script.GameLogic;
 using Script.GameLogic.Bomb;
 using Script.GameLogic.Stars;
+using Script.GameLogic.StoneBlock;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
 using Script.Offers;
@@ -69,6 +70,8 @@ public class RealizationBox : Singleton<RealizationBox>
 
     [SerializeField] private NextElementUI _nextElementUI;
     [SerializeField] private EvilBoxManager _evilBoxManager;
+    [SerializeField] private StoneBlockManager _stoneBlockManager;
+    
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
     public PlaneMatrix matrix => _matrix;
@@ -106,6 +109,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public NextElementUI nextElementUI => _nextElementUI;
     public PauseUI pauseUI => _pauseUI;
     public EvilBoxManager evilBoxManager => _evilBoxManager;
+    public StoneBlockManager stoneBlockManager => _stoneBlockManager;
     
     private Dictionary<TutorType, GameObject> _tutors;
     

@@ -5,6 +5,7 @@ using System.Linq;
 using IntegerExtension;
 using Script.GameLogic;
 using Script.GameLogic.Bomb;
+using Script.GameLogic.StoneBlock;
 using Script.Influence;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -50,6 +51,7 @@ public struct AbstractElementInfo
     public List<Vector3Int> blocks;
     public Material material;
     public List<CoordinatXZ> matrixCoordinat;
+    public bool stone;
 }
 
 public class Generator : MonoBehaviour
@@ -74,6 +76,7 @@ public class Generator : MonoBehaviour
     private GameCamera _gameCamera;
     private BombsManager _bombsManager;
     private EvilBoxManager _evilBoxManager;
+    private StoneBlockManager _stoneBlockManager;
     
     private bool[,,] _castMatrix;
     private Vector3Int _minPoint;
@@ -101,6 +104,7 @@ public class Generator : MonoBehaviour
         _gameCamera = RealizationBox.Instance.gameCamera;
         _bombsManager = RealizationBox.Instance.bombsManager;
         _evilBoxManager = RealizationBox.Instance.evilBoxManager;
+        _stoneBlockManager = RealizationBox.Instance.stoneBlockManager;
         
         _castMatrix = new bool[3, 5, 3];
         
@@ -209,6 +213,14 @@ public class Generator : MonoBehaviour
             _nextElement.blocks.Clear();
             _nextElement.blocks = blockPositions;
             _nextElement.material = _MyMaterial[ Random.Range(0, _MyMaterial.Length - 1)];
+
+            if (_stoneBlockManager.CanTransformToStone())
+            {
+                _nextElement.stone = true;
+                _nextElement.material = _stoneBlockManager.blockMaterial;
+            }
+            else
+                _nextElement.stone = false;
         }
 
         if (callback)
@@ -334,6 +346,11 @@ public class Generator : MonoBehaviour
         foreach (var p in _nextElement.blocks)
         {
             _pool.CreateBlock(p, createElement, _nextElement.material);
+        }
+
+        if (_nextElement.stone)
+        {
+            _stoneBlockManager.TransformToStone(createElement);
         }
         return createElement;
     }

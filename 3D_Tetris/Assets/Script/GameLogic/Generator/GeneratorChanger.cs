@@ -41,8 +41,6 @@ namespace Script.GameLogic
     
         public void ResetGenerator()
         {
-            
-            
             _currentIndex = 0;
             SetGeneratorSettings(_startSettings);
             

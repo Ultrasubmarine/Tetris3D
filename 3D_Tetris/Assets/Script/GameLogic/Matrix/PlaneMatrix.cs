@@ -192,10 +192,20 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
 
     private bool CheckCollectedInLayer(int layer)
     {
+        int stoneAmount = 0;
+        
         for (var x = 0; x < wight; x++)
         for (var z = 0; z < wight; z++)
+        {
             if (ReferenceEquals(_matrix[x, layer, z], null) || _matrix[x, layer, z].IsPickable())
                 return false;
+            if (_matrix[x, layer, z].blockType == BlockType.stone)
+                stoneAmount++;
+        }
+
+        if (stoneAmount == 9)
+            return false;
+        
         return true;
     }
 
@@ -206,6 +216,9 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         for (var x = 0; x < wight; x++)
         for (var z = 0; z < wight; z++)
         {
+            if(_matrix[x,layer,z].blockType == BlockType.stone)
+                continue;
+            
             _matrix[x, layer, z].isDestroy = true;
             
             if(_matrix[x, layer, z].IsPickable())
