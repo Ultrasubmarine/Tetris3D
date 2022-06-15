@@ -17,6 +17,7 @@ namespace Script.GameLogic.StoneBlock
         [SerializeField] private int _maxStoneBlocks; // ???
         [SerializeField] public int _stepForStoneBlock;
         public int _currentStep = 1000;
+        public int _currentStepSave = 1000;
         
         private List<Block> _stoneBlocks;
 
@@ -59,7 +60,13 @@ namespace Script.GameLogic.StoneBlock
 
         public void Clear()
         {
+            _currentStep = _currentStepSave;
             
+            foreach (var block in _stoneBlocks)
+            { 
+                block.OnDestroyed -= OnDestroyStoneBlock;
+            }
+            _stoneBlocks.Clear();
         }
     }
 }

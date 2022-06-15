@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Script.GameLogic.StoneBlock;
 using Script.GameLogic.TetrisElement;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace Script.GameLogic
     {
         public Material material;
         public List<Vector3Int> blocks;
+        public bool isStone;
     }
     public class LvlElementsSetter: MonoBehaviour
     {
@@ -20,13 +22,14 @@ namespace Script.GameLogic
        private PlaneMatrix _matrix;
        private GameLogicPool _pool;
        private ElementDropper _elementDropper;
+       private StoneBlockManager _stoneBlockManager;
        
        public void Init()
        {
            _matrix = RealizationBox.Instance.matrix;
            _pool = RealizationBox.Instance.gameLogicPool;
            _elementDropper = RealizationBox.Instance.elementDropper;
-          
+           _stoneBlockManager = RealizationBox.Instance.stoneBlockManager;
        }
 
        private void Start()
@@ -50,6 +53,9 @@ namespace Script.GameLogic
                {
                    _pool.CreateBlock(position, element, e.material);
                }
+               
+               if(e.isStone)
+                   _stoneBlockManager.TransformToStone(element);
                
                // выравниваем элемент относительно координат y 
                var min_y = element.blocks.Min(s => s.coordinates.y);

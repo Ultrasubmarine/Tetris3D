@@ -52,7 +52,13 @@ MonoBehaviour:
       neighbours: 5
       startPoints: 10
     exceptCurrentElementForNext: 1
-  _lvlElements: []
+  _lvlElements:
+  - material: {fileID: 2100000, guid: a5af7ee3fbc0443f49ff3d339a2d14ac, type: 2}
+    blocks:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 1}
+    - {x: 0, y: 0, z: 2}
+    isStone: 1
   _startState: 8
   _starPlaces: []
   _bombsSettings:

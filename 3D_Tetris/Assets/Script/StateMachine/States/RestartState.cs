@@ -33,7 +33,9 @@ namespace Script.StateMachine.States
             RealizationBox.Instance.bombsManager.Clear();
             RealizationBox.Instance.evilBoxManager.Clear();
             RealizationBox.Instance.bigBombGamePlayOffer.Clear();
-          //  _FSM.StartFSM();
+            RealizationBox.Instance.stoneBlockManager.Clear();
+            
+            //  _FSM.StartFSM();
         }
 
         public override void Exit(TetrisState last)
