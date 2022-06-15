@@ -31218,7 +31218,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1087fc33c65441d39af5d851a4ff0203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blockMaterial: {fileID: 2100000, guid: a5af7ee3fbc0443f49ff3d339a2d14ac, type: 2}
+  lvlWithStone: 1
+  _stoneCellMesh: {fileID: -5495902117074765545, guid: 9d418d6b487564bab94891934b351937,
+    type: 3}
+  _cellMaterial: {fileID: 2100000, guid: a5af7ee3fbc0443f49ff3d339a2d14ac, type: 2}
+  _blockMaterial: {fileID: 2100000, guid: 14e7b5b4d105c421dba4dd9d10e5b195, type: 2}
   _maxStoneBlocks: 10
   _stepForStoneBlock: 3
   _currentStep: 1000

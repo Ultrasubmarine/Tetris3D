@@ -52,6 +52,13 @@ namespace Script
         public int currentBoxStep;
     }
         
+    [Serializable]
+    public struct StoneBlockSettings
+    {
+        public bool lvlWithStoneBlocks;
+        public int stoneStep;
+        public int currentStoneStep;
+    }
     
     [CreateAssetMenu(fileName = "LvlSettings", menuName = "Lvl", order = 0)]
     public class LvlSettings : ScriptableObject
@@ -69,7 +76,8 @@ namespace Script
         public BombsSettings bombsSettings => _bombsSettings;
         public NextBigBombOfferSettings nextBombOfferSettings => _nextBigBombOfferSettings;
         public EvilBoxSettings evilBoxSettings => _evilBoxSettings;
-        
+        public StoneBlockSettings stoneBlockSettings => _stoneBlockSettings;
+            
         [SerializeField] private TutorType _tutorType;
         [SerializeField] private List<ChangeSpeedInfo> _speedSettings;
         [SerializeField] private int _winScore;
@@ -81,6 +89,7 @@ namespace Script
         [SerializeField] private BombsSettings _bombsSettings;
         [SerializeField] private NextBigBombOfferSettings _nextBigBombOfferSettings;
         [SerializeField] private EvilBoxSettings _evilBoxSettings;
+        [SerializeField] private StoneBlockSettings _stoneBlockSettings;
         
         [SerializeField] private int _lvl;
         [SerializeField] private bool _infinity;

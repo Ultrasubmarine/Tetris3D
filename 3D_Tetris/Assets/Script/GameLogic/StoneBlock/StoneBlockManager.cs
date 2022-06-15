@@ -8,8 +8,10 @@ namespace Script.GameLogic.StoneBlock
     public class StoneBlockManager: MonoBehaviour
     {
         public Material blockMaterial => _blockMaterial;
-        private bool lvlWithStone = true;
+        public bool lvlWithStone = true;
 
+        [SerializeField] private Mesh _stoneCellMesh;
+        [SerializeField] private Material _cellMaterial;
         [SerializeField] private Material _blockMaterial;
         
         [SerializeField] private int _maxStoneBlocks; // ???
@@ -42,7 +44,7 @@ namespace Script.GameLogic.StoneBlock
         {
             foreach (var block in element.blocks)
             {
-                block.TransformToStone(_blockMaterial);
+                block.TransformToStone(_stoneCellMesh, _cellMaterial,_blockMaterial);
                 
                 block.OnDestroyed += OnDestroyStoneBlock;
                 _stoneBlocks.Add(block);

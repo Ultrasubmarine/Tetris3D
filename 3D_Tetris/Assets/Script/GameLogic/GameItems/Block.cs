@@ -200,10 +200,15 @@ public class Block : MonoBehaviour
         blockType = BlockType.box;
     }
 
-    public void TransformToStone(Material _blockMaterial)
+    public void TransformToStone(Mesh _cellMesh, Material _cellMaterial, Material blockMaterial)
     {
-        mesh.material = _blockMaterial;
+        _star.layer = 11;//"element";
+        _star.SetActive(true);
         
+        _extraMeshFilter.mesh = _cellMesh;
+        extraMesh.material = _cellMaterial;
+        
+        mesh.material = blockMaterial;
         blockType = BlockType.stone;
     }
     public void Collect()
