@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Script.GameLogic.StoneBlock;
 using UnityEngine;
 
 namespace Script.GameLogic
@@ -13,11 +14,13 @@ namespace Script.GameLogic
         
         private Element _nextElement;
         private GameLogicPool _pool;
+        private StoneBlockManager _stoneManager;
         
         private void Start()
         {
             _pool = RealizationBox.Instance.gameLogicPool;
-
+            _stoneManager = RealizationBox.Instance.stoneBlockManager;
+            
             _nextElement= _pool.CreateEmptyElement();
             _nextElement.myTransform.parent = _nextElementParent;
             _nextElement.myTransform.localPosition = Vector3.zero;
@@ -62,6 +65,11 @@ namespace Script.GameLogic
                     zCenter = (zMax + zMin) / 2f;
                     yCenter = (yMax + yMin) / 2f;
         
+                    if (element.stone)
+                    {
+                        RealizationBox.Instance.stoneBlockManager.TransformToStone(_nextElement);
+                    }
+                    
                     foreach (var block in _nextElement.blocks)
                     {
                         Vector3 np = block.myTransform.localPosition - new Vector3(xCenter, yCenter, zCenter);

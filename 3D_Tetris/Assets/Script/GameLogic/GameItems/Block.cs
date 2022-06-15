@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using DG.Tweening;
+using Unity.Mathematics;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
@@ -118,6 +119,8 @@ public class Block : MonoBehaviour
       //  _meshFilter.mesh = _meshCube;
 
         _star.transform.localPosition = Vector3.zero;
+        _star.transform.localScale = Vector3.one;
+        _star.transform.rotation = quaternion.identity;
         _star.SetActive(false);
         _star.transform.DOKill();
         oreol.gameObject.SetActive(false);
@@ -202,6 +205,7 @@ public class Block : MonoBehaviour
 
     public void TransformToStone(Mesh _cellMesh, Material _cellMaterial, Material blockMaterial)
     {
+        _star.transform.rotation = quaternion.identity;
         _star.layer = 11;//"element";
         _star.SetActive(true);
         
