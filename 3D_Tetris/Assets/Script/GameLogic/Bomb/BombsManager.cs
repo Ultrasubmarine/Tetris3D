@@ -39,6 +39,7 @@ namespace Script.GameLogic.Bomb
        [SerializeField] private Transform _particlesParent;
            
        public int _currentStep = 1000;
+       public int _currentStepSave = 1000;
        
        private Pool<GameObject> _particlePool;
        private List<GameObject> _activeParticles;
@@ -226,6 +227,7 @@ namespace Script.GameLogic.Bomb
 
         public void Clear()
         {
+            _currentStep = _currentStepSave;
             _bomb = null;
             _bigBomb = null;
         }

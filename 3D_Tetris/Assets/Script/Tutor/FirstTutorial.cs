@@ -12,7 +12,7 @@ namespace Script.Tutor
     public class FirstTutorial : MonoBehaviour
     {
         [SerializeField] private CanvasGroup _firstTutor;
-        [SerializeField] private float _timeStop;
+        [SerializeField] private float _timeStop = 0.75f;
 
         [SerializeField] private CanvasGroup _secondTutor;
         [SerializeField] private CanvasGroup _secondDotFiveTutor;
@@ -178,7 +178,7 @@ namespace Script.Tutor
         {
             if (++_amountSetElements == 1)
             {
-                RealizationBox.Instance.generator.fixedHightPosition = 10;
+                RealizationBox.Instance.generator.fixedHightPosition = 12;
             }
             if (_amountSetElements > 1)
             {

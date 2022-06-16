@@ -46,6 +46,7 @@ namespace Script.GameLogic
 
        
        public int _currentStep = 1000;
+       public int _currentStepSave = 1000;
        
        private Pool<GameObject> _createBlockParticlePool;
        private Pool<GameObject> _particlePool;
@@ -291,6 +292,7 @@ namespace Script.GameLogic
         
         public void Clear()
         {
+            _currentStep = _currentStepSave;
             foreach (var box in _boxes)
             {
                 box.OnDestroyed -= OnDestroyBox;
