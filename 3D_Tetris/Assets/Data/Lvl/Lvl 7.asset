@@ -27,12 +27,12 @@ MonoBehaviour:
   _winScore: 0
   _starSettings:
     collectStar: 1
-    maxStarsInPlace: 6
-    winAmount: 13
+    maxStarsInPlace: 3
+    winAmount: 3
     stepsBetweenStar: 3
-    firstStep: 0
-    allPlaceInFirstStep: 0
-    onlyStarPlace: 0
+    firstStep: 1000
+    allPlaceInFirstStep: 1
+    onlyStarPlace: 1
   _generatorSettings:
     points:
     - score: 0
@@ -55,26 +55,36 @@ MonoBehaviour:
   _lvlElements:
   - material: {fileID: 2100000, guid: a5af7ee3fbc0443f49ff3d339a2d14ac, type: 2}
     blocks:
-    - {x: 0, y: 0, z: 0}
     - {x: 0, y: 0, z: 1}
-    - {x: 0, y: 0, z: 2}
+    - {x: 0, y: 1, z: 1}
+    - {x: 0, y: 2, z: 1}
+    - {x: 0, y: 2, z: 0}
+    - {x: 0, y: 2, z: 2}
+    - {x: 0, y: 3, z: 2}
+    - {x: 0, y: 3, z: 0}
     isStone: 1
   _startState: 8
-  _starPlaces: []
+  _starPlaces:
+  - amountStars: 1
+    position: {x: 0, y: 0, z: 1}
+  - amountStars: 1
+    position: {x: 0, y: 2, z: 0}
+  - amountStars: 1
+    position: {x: 0, y: 2, z: 2}
   _bombsSettings:
     makeBombs: 1
-    bombStep: 10
-    currentStep: 0
+    bombStep: 3
+    currentStep: 2
   _nextBigBombOfferSettings:
     betweenOffersSteps: 30
     inOneGameMax: 1
   _evilBoxSettings:
-    lvlWithEvilBox: 0
-    boxStep: 3
+    lvlWithEvilBox: 1
+    boxStep: 5
     currentBoxStep: 1000
   _stoneBlockSettings:
-    lvlWithStoneBlocks: 1
-    stoneStep: 3
-    currentStoneStep: 100
-  _lvl: 6
+    lvlWithStoneBlocks: 0
+    stoneStep: 15
+    currentStoneStep: 0
+  _lvl: 7
   _infinity: 0
