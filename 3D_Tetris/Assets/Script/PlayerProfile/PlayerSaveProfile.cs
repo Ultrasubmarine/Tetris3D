@@ -33,6 +33,13 @@ namespace Script.PlayerProfile
             Load();
         }
 
+        public void IncrementLvl()
+        {
+            _data.lvl++;
+            onLevelChange?.Invoke(_data.lvl);
+            Save();
+        }
+        
         public void SetLvl(int lvl)
         {
             _data.lvl = lvl;
