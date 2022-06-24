@@ -112,7 +112,7 @@ namespace Script.Offers
                 Hide();
         }
 
-        private void Show()
+        public void Show()
         {
             _isShow = true;
             _offer.gameObject.SetActive(true);
