@@ -27,7 +27,8 @@ namespace Script.GameLogic
             _nextElement.myTransform.localRotation = Quaternion.identity;
             _nextElement.myTransform.localScale = Vector3.one * 70;
 
-            RealizationBox.Instance.islandTurn.extraTurn.Add(_nextElement.myTransform);
+            RealizationBox.Instance.islandTurn.extraTurn.Add(_nextElementParent);
+            
             RealizationBox.Instance.generator.onNextElementGenerated += CreateNextElement;
         }
 
@@ -48,7 +49,7 @@ namespace Script.GameLogic
                     {
                         var position = element.blocks[i];
                         Vector3Int v = new Vector3Int((int) position.x, (int) position.y, (int) position.z);
-                        _pool.CreateBlock(v, _nextElement,element.material);
+                        _pool.CreateMiniBlock(v, _nextElement,element.material);
 
                         Vector3 ansPos = _nextElement.blocks[i].myTransform.localPosition;
                         xMax = xMax < ansPos.x? ansPos.x : xMax;
@@ -106,8 +107,7 @@ namespace Script.GameLogic
         {
             foreach (var block in _nextElement.blocks)
             {
-                block.myTransform.localScale = Vector3.one * 0.97f;
-                _pool.DeleteBlock(block);
+                _pool.DeleteMiniBlock(block);
             }
             _nextElement.RemoveBlocksInList(_nextElement.blocks.ToArray());
 

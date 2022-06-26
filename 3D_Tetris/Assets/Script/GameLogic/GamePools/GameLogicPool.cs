@@ -12,6 +12,7 @@ public class GameLogicPool : MonoBehaviour
 
     [SerializeField] private Transform _elementPoolParent;
     [SerializeField] private Transform _blockPoolParent;
+    [SerializeField] private Transform _miniBlockPoolParent;
     [SerializeField] private Transform _pickableBlockPoolParent;
    // [SerializeField] private Transform _miniBlockPoolParent;
     
@@ -39,6 +40,18 @@ public class GameLogicPool : MonoBehaviour
         element.AddBlock(currBlock);
     }
 
+    
+    public void CreateMiniBlock(Vector3Int position, Element element, Material material)
+    {
+        var currBlock = _miniBlockPool.Pop(true);
+        currBlock.mesh.material = material;
+        currBlock.SetCoordinates(position.x.ToCoordinat(), position.y, position.z.ToCoordinat());
+
+        currBlock.myTransform.parent = element.myTransform;
+        SetBlockPosition(currBlock);
+        element.AddBlock(currBlock);
+    }
+    
     public PickableBlock CreatePickableBlock(Vector3Int position)
     {
         var currBlock = _pickableBlockPool.Pop(true);
@@ -75,6 +88,14 @@ public class GameLogicPool : MonoBehaviour
         _blockPool.Push(block);
     }
     
+    public void DeleteMiniBlock(Block block)
+    {
+        if (Equals(block, null))
+            return;
+        block.gameObject.SetActive(false);
+        _miniBlockPool.Push(block);
+    }
+    
     public void DeletePickableBlock(PickableBlock pBlock)
     {
         pBlock.gameObject.SetActive(false);
@@ -86,6 +107,8 @@ public class GameLogicPool : MonoBehaviour
     {
         _elementPool = new Pool<Element>(_elementPrefab.GetComponent<Element>(), _elementPoolParent);
         _blockPool = new Pool<Block>(_blockPrefab.GetComponent<Block>(), _blockPoolParent);
+        _miniBlockPool = new Pool<Block>(_blockPrefab.GetComponent<Block>(), _miniBlockPoolParent);
+        
      //   _pickableBlockPool = new Pool<PickableBlock>(_pickableBlockPrefab.GetComponent<PickableBlock>(), _pickableBlockPoolParent);
      //   _miniBlockPool = new Pool<Block>(_miniBlockPrefab.GetComponent<Block>(), _miniBlockPoolParent);
     }
