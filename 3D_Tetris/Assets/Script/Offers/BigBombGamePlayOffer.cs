@@ -6,6 +6,7 @@ using Script.PlayerProfile;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 
 namespace Script.Offers
 {
@@ -18,7 +19,12 @@ namespace Script.Offers
         private ChangeNewElementToBomb _changeNewElementToBomb;
         
         [SerializeField] private RectTransform _bombIcon;
-        [SerializeField] private CanvasGroup _offer;
+        [SerializeField] private CanvasGroup _offerButtonCanvas;
+        [SerializeField] private Button _offerButton;
+        
+        [SerializeField] private CanvasGroup _offerExtraPanel;
+        [SerializeField] private Button _extraPanelCloseButton;
+        [SerializeField] private Button _extraPanelAdsButton;
         
         public int betweenOffersSteps = 3;
         public int inOneGameMax = 2;
@@ -32,10 +38,10 @@ namespace Script.Offers
         private bool _isShow = false;
         
         //Animation
-        private Sequence _show, _hide;
+        private Sequence _showBtn, _hideBtn;
         [SerializeField] private float _yMove = -100;
         [SerializeField] private float _time = 0.5f;
-        
+
         private void Start()
         {
             _matrix = RealizationBox.Instance.matrix;
@@ -44,31 +50,36 @@ namespace Script.Offers
             _elementData = ElementData.Instance;
             _changeNewElementToBomb = RealizationBox.Instance.changeNewElementToBomb;
 
-            RealizationBox.Instance.FSM.AddListener(TetrisState.GenerateElement, CheckShowOffer);
-            RealizationBox.Instance.FSM.AddListener(TetrisState.LoseGame, Hide);
-            RealizationBox.Instance.FSM.AddListener(TetrisState.WinGame, Hide);
+            RealizationBox.Instance.FSM.AddListener(TetrisState.GenerateElement, CheckShowOfferBtn);
+            RealizationBox.Instance.FSM.AddListener(TetrisState.LoseGame, HideBtn);
+            RealizationBox.Instance.FSM.AddListener(TetrisState.WinGame, HideBtn);
 
-            var rectTransform = _offer.GetComponent<RectTransform>();
+            var rectTransform = _offerButtonCanvas.GetComponent<RectTransform>();
             
-            _show = DOTween.Sequence().SetAutoKill(false).Pause();
-            _show.Append(_offer.DOFade(1, _time / 2).From(0))
+            _showBtn = DOTween.Sequence().SetAutoKill(false).Pause();
+            _showBtn.Append(_offerButtonCanvas.DOFade(1, _time / 2).From(0))
                 .Join(rectTransform.DOAnchorPosY(0, _time / 2).From(Vector2.up * _yMove));
 
-            _hide = DOTween.Sequence().SetAutoKill(false).Pause();
-            _hide.Append(_offer.DOFade(0, _time / 2).From(1))
+            _hideBtn = DOTween.Sequence().SetAutoKill(false).Pause();
+            _hideBtn.Append(_offerButtonCanvas.DOFade(0, _time / 2).From(1))
                 .Join(rectTransform.DOAnchorPosY(_yMove, _time / 2).From(Vector2.zero)).OnComplete( () =>
                 {
                     _bombIcon.DOKill();
-                    _offer.gameObject.SetActive(false);
-                    _hide.Rewind();
+                    _offerButtonCanvas.gameObject.SetActive(false);
+                    _hideBtn.Rewind();
                 });
             
             Clear();
 
-          //  Show();
+            _offerButton.onClick.AddListener(OnOfferButtonClick);
+            
+            _extraPanelCloseButton.onClick.AddListener(HideExtraPanel);
+            _extraPanelAdsButton.onClick.AddListener(OnAdsButtonClick);
+         //   HideExtraPanel();
+            //  Show();
         }
 
-        public void CheckShowOffer()
+        public void CheckShowOfferBtn()
         {
             if (_inOneGameCurrent > inOneGameMax)
                 return;
@@ -89,7 +100,7 @@ namespace Script.Offers
             if (_height.currentHeight < yLimit)
             {
                 if (_isShow)
-                    Hide();
+                    HideBtn();
                 return;
             }
             
@@ -107,36 +118,69 @@ namespace Script.Offers
             }
 
             if (outOfLimitAmount >= needOutOfLimitAmount && !_isShow)
-                Show();
+                ShowBtn();
             else if(outOfLimitAmount < needOutOfLimitAmount && _isShow)
-                Hide();
+                HideBtn();
         }
 
-        public void Show()
+        public void ShowBtn()
         {
             _isShow = true;
-            _offer.gameObject.SetActive(true);
-            _show.Rewind();
-            _show.Play();
+            _offerButtonCanvas.gameObject.SetActive(true);
+            _showBtn.Rewind();
+            _showBtn.Play();
             
             _bombIcon.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one * 1.2f).SetLoops(-1,LoopType.Yoyo);
 
         }
 
-        private void Hide()
+        private void HideBtn()
         {
             _isShow = false;
-            _hide.Rewind();
-            _hide.Play();
+            _hideBtn.Rewind();
+            _hideBtn.Play();
         }
 
-        public void Apply()
+
+        private void ShowExtraPanel()
+        {
+            _offerExtraPanel.gameObject.SetActive(true);
+            _offerExtraPanel.DOFade(1, _time / 2).From(0);
+            RealizationBox.Instance.influenceManager.enabled = false;
+        }
+
+        public void HideExtraPanel()
+        {
+            _offerExtraPanel.DOFade(0, _time / 2).From(1)
+                .OnComplete(()=>
+                {
+                    _offerExtraPanel.gameObject.SetActive(false);
+                    RealizationBox.Instance.influenceManager.enabled = true;
+                });
+        }
+
+
+        public void OnOfferButtonClick()
+        {
+            if (true) // currency < 1000
+                ShowExtraPanel();
+            else
+                MakeBigBomb();
+        }
+
+        public void OnAdsButtonClick()
         {
             //todo ads
-
+            HideExtraPanel();
+            MakeBigBomb();
+        }
+        
+        public void MakeBigBomb()
+        {
+           
             _betweenOffersStepsCurrent = 0;
             _inOneGameCurrent++;
-            Hide();
+            HideBtn();
             
             if(Equals(_elementData.newElement, null))
                 _generator.SetNextAsBigBomb();
@@ -147,11 +191,13 @@ namespace Script.Offers
         }
         public void Clear()
         {
-            _offer.gameObject.SetActive(false);
+            _offerButtonCanvas.gameObject.SetActive(false);
             _isShow = false;
            
             _betweenOffersStepsCurrent = betweenOffersSteps + 1;
             _inOneGameCurrent = 0;
+            
+            _offerExtraPanel.gameObject.SetActive(false);
         }
     }
 }
