@@ -18,6 +18,7 @@ public class SlowManager : MonoBehaviour
 
     [SerializeField] private float _slowFreezeElement = 0.85f;
     
+    [SerializeField] private float _slowOffer = 0.8f;
     public struct Slow
     {
         public Timer timer;
@@ -50,6 +51,8 @@ public class SlowManager : MonoBehaviour
     private bool _isPauseSlow;
 
     private bool _isFeezeSlow = false;
+
+    private bool _isOfferSlow = false;
     
     private Slow? FreezeElementModeSlow;
     
@@ -71,6 +74,12 @@ public class SlowManager : MonoBehaviour
     public void SetPauseSlow(bool isPause)
     {
         _isPauseSlow = isPause;
+        CalculateSlow();
+    }
+
+    public void SetOfferSlow(bool isOfferSlow)
+    {
+        _isOfferSlow = isOfferSlow;
         CalculateSlow();
     }
     
@@ -123,7 +132,7 @@ public class SlowManager : MonoBehaviour
         TurnModeSlow = null;
         CalculateSlow();
     }
-
+    
     private void Start()
     {
         _moveTouchController = RealizationBox.Instance.moveTouchController;
@@ -162,6 +171,10 @@ public class SlowManager : MonoBehaviour
         else if (_isFeezeSlow)
         {
             _slowlerValue = _slowFreezeElement;
+        }
+        else if (_isOfferSlow)
+        {
+            _slowlerValue = _slowOffer;
         }
         else
         {

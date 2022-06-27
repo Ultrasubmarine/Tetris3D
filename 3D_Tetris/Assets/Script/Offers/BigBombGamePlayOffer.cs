@@ -131,7 +131,7 @@ namespace Script.Offers
             _showBtn.Play();
             
             _bombIcon.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one * 1.2f).SetLoops(-1,LoopType.Yoyo);
-
+            RealizationBox.Instance.slowManager.SetOfferSlow(true);
         }
 
         private void HideBtn()
@@ -139,6 +139,8 @@ namespace Script.Offers
             _isShow = false;
             _hideBtn.Rewind();
             _hideBtn.Play();
+
+            RealizationBox.Instance.slowManager.SetOfferSlow(false);
         }
 
 
@@ -157,6 +159,7 @@ namespace Script.Offers
                     _offerExtraPanel.gameObject.SetActive(false);
                     RealizationBox.Instance.influenceManager.enabled = true;
                 });
+            
         }
 
 
