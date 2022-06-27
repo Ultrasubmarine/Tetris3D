@@ -167,7 +167,7 @@ public class Block : MonoBehaviour
         _star.SetActive(true);
         
         if(isBig)
-            _star.transform.DOScale(Vector3.one, 0.8f).From(Vector3.one * 1.4f).SetLoops(-1,LoopType.Yoyo);
+            _star.transform.DOScale(Vector3.one, 0.8f).From(Vector3.one * 1.1f).SetLoops(-1,LoopType.Yoyo);
         else
             _star.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.8f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
 

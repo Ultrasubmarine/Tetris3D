@@ -22,9 +22,11 @@ namespace Script.GameLogic.Bomb
        [FormerlySerializedAs("_material")] [SerializeField] private Material _blockMaterial;
        [SerializeField] private Material _bombMaterial;
        [SerializeField] private Mesh _bombMesh;
-
+       [SerializeField] private Mesh _bigBombMesh;
+       
        [SerializeField] private bool _ignoreSlow = true;
 
+       public bool bigBombFalling => _bigBomb != null ? true : false;
        private Block _bomb, _bigBomb;
 
        [SerializeField] private List<Vector3Int> _directions;
@@ -44,9 +46,9 @@ namespace Script.GameLogic.Bomb
        private Pool<GameObject> _particlePool;
        private List<GameObject> _activeParticles;
 
-       [SerializeField] private CanvasGroup _boomText;
-       private RectTransform rt;
-       private Sequence _boomTextAnimation;
+       [SerializeField] private CanvasGroup _boomText, _bigBoomText;
+       private RectTransform rt, rt2;
+       private Sequence _boomTextAnimation, _bigBoomTextAnimation;
        [SerializeField] private float firstMove = 40;
        [SerializeField] private float firstMoveTime = 1;
 
@@ -61,10 +63,6 @@ namespace Script.GameLogic.Bomb
        [SerializeField] private GameObject _particles;
        [SerializeField] private Vector3 _localParticlePosition;
 
-       //BB-Text for big bomb
-       [SerializeField] private GameObject _BBText;
-       [SerializeField] private Vector3 _localBBTextPosition;
-       
        private Transform _gameCamera;
        
         private void Start()
@@ -87,6 +85,13 @@ namespace Script.GameLogic.Bomb
                 .Append( _boomText.DOFade(0, dissapeadScaleTime))
                 .Join(rt.DOScale(Vector3.one * dissapeadScale, dissapeadScaleTime))
                 .OnComplete(() => rt.localScale = Vector3.one);
+            
+            _bigBoomTextAnimation = DOTween.Sequence().SetAutoKill(false).Pause();
+            rt2 =  _bigBoomText.gameObject.GetComponent<RectTransform>();
+            _bigBoomTextAnimation.Append( _bigBoomText.DOFade(1, firstMoveTime / 1.5f).From(0, false))
+                .Append( _bigBoomText.DOFade(0, dissapeadScaleTime*1.3f))
+                .Join(rt2.DOScale(Vector3.one * dissapeadScale, dissapeadScaleTime*1.3f))
+                .OnComplete(() => rt2.localScale = Vector3.one);
         }
 
         public Element MakeBomb(bool isBig = false)
@@ -117,7 +122,7 @@ namespace Script.GameLogic.Bomb
 
         public void AddBomb(Block bomb, bool isBig)
         {
-            bomb.TransformToBomb(_bombMesh, _bombMaterial, _blockMaterial,_bombRotation, isBig);
+            bomb.TransformToBomb(isBig? _bigBombMesh:_bombMesh, _bombMaterial, _blockMaterial,_bombRotation, isBig);
 
             _particles.SetActive(true);
             _particles.transform.parent = bomb.Star;
@@ -125,13 +130,9 @@ namespace Script.GameLogic.Bomb
 
             if (isBig)
             {
-                _BBText.SetActive(true);
-                _BBText.transform.SetParent(bomb.Star);
-                _BBText.transform.localPosition = _localBBTextPosition;
-                _BBText.transform.localRotation = Quaternion.Euler(0, 180, 0);
-                
+                _bomb = null;
                 _bigBomb = bomb;
-            }   
+            }
             else
                 _bomb = bomb;
         }
@@ -178,7 +179,7 @@ namespace Script.GameLogic.Bomb
             OnBoomEnded?.Invoke();
         }
 
-        public void OnDestroyBlock(List<Vector3> pos)
+        public void OnDestroyBlock(List<Vector3> pos, bool isBig)
         {
             foreach (var po in pos)
             {
@@ -187,14 +188,10 @@ namespace Script.GameLogic.Bomb
                 _activeParticles.Add(boom);
             }
 
-            SetBoomText(pos[pos.Count - 1]);
+            SetBoomText(pos[pos.Count - 1],isBig);
             
             _particles.SetActive(false);
             _particles.transform.SetParent(transform);
-            
-            _BBText.SetActive(false);
-            _BBText.transform.SetParent(transform);
-            _BBText.transform.localScale = Vector3.one;
             
             Invoke(nameof(DestroyParticle), _timeForShowStop);
         }
@@ -208,8 +205,17 @@ namespace Script.GameLogic.Bomb
             _activeParticles.Clear();
         }
 
-        public void SetBoomText(Vector3 pos)
+        public void SetBoomText(Vector3 pos, bool isBig)
         {
+            if (isBig)
+            {
+                rt2.anchoredPosition = WorldToCanvas(pos) + new Vector2(0,firstMove);
+
+                _bigBoomTextAnimation.Rewind();
+                _bigBoomTextAnimation.Play();
+                return;
+            }
+            
             rt.anchoredPosition = WorldToCanvas(pos) + new Vector2(0,firstMove);
 
             _boomTextAnimation.Rewind();

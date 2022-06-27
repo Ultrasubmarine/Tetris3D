@@ -28,9 +28,17 @@ public class DropState : AbstractState<TetrisState>
             return;
         }
         
+        if (RealizationBox.Instance.bombsManager.bigBombFalling &&
+            _elementData.newElement.blocks[0]._coordinates.y - 1 <= RealizationBox.Instance.haightHandler.currentHeight)
+        {
+            _FSM.SetNewState(TetrisState.MergeElement);
+            return;
+        }
+        
         var empty = _matrix.CheckEmptyPlaсe(_elementData.newElement, new Vector3Int(0, -1, 0));
         if (empty && !_elementData.newElement.isFreeze)
         {
+          
             _elementDropper.StartDropElement();
             
             _FSM.SetNewState(TetrisState.WaitInfluence);

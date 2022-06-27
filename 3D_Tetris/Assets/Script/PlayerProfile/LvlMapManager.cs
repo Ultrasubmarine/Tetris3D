@@ -55,9 +55,6 @@ namespace Script.PlayerProfile
             var normalizeBtnPos = btn.anchoredPosition.y * koff;
 
             var contentNormalizeSize = 0;//= _scroller.GetComponent<RectTransform>().rect.size.y * koff;
-            
-            
-            Debug.Log( " n pos: " + (normalizeBtnPos - contentNormalizeSize/2));
             return normalizeBtnPos - contentNormalizeSize/2;
         }
     }
