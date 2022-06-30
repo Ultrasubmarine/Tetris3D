@@ -196,6 +196,7 @@ namespace Script.GameLogic
             box.OnDestroyed -= OnDestroyBox;
             box.OnCollected -= OnCollectBox;
             DestroyParticle(box);
+            _boxes.Remove(box);
         }
 
         public void OnCollectBox(Block box)
@@ -203,7 +204,8 @@ namespace Script.GameLogic
             box.OnDestroyed -= OnDestroyBox;
             box.OnCollected -= OnCollectBox;
             DestroyParticle(box);
-
+            _boxes.Remove(box);
+            
             _isOpenedBox++;
         }
 

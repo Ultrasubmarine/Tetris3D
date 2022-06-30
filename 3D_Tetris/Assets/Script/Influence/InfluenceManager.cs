@@ -39,9 +39,9 @@ namespace Script.Influence
             _slowler.onUpdateValue += CalculateSpeed;
         }
 
-        public void AddDrop(Transform obj, Vector3 offset, float speed, Action callBack = null)
+        public void AddDrop(Transform obj, Vector3 offset, float speed, Action callBack = null, bool isIgnoreSlow = false)
         {
-            var info = new DropInfluence(obj,offset, speed, callBack);
+            var info = new DropInfluence(obj,offset, speed, callBack, isIgnoreSlow);
             _influences.Add(info);
         }
 
@@ -72,7 +72,7 @@ namespace Script.Influence
             {
                 var item = _influences[i];
 
-                if (item.Update(currentSpeed))
+                if (item.Update( item.IsIgnoreSlow()? 1: currentSpeed))
                     _influences.Remove(item);
                 else
                     i++;

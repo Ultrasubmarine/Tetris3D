@@ -41,6 +41,7 @@ namespace Script.Offers
         private Sequence _showBtn, _hideBtn;
         [SerializeField] private float _yMove = -100;
         [SerializeField] private float _time = 0.5f;
+        private FastElementDrop _fastElementDrop;
 
         private void Start()
         {
@@ -49,7 +50,8 @@ namespace Script.Offers
             _generator = RealizationBox.Instance.generator;
             _elementData = ElementData.Instance;
             _changeNewElementToBomb = RealizationBox.Instance.changeNewElementToBomb;
-
+            _fastElementDrop = RealizationBox.Instance.fastElementDrop;
+            
             RealizationBox.Instance.FSM.AddListener(TetrisState.GenerateElement, CheckShowOfferBtn);
             RealizationBox.Instance.FSM.AddListener(TetrisState.LoseGame, HideBtn);
             RealizationBox.Instance.FSM.AddListener(TetrisState.WinGame, HideBtn);
@@ -191,6 +193,8 @@ namespace Script.Offers
             {
                 _changeNewElementToBomb.ChangeToBigBomb(true);
             }
+
+            _fastElementDrop.ResetFastSpeed();
         }
         public void Clear()
         {

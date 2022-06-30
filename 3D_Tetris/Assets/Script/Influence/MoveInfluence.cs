@@ -53,7 +53,12 @@ namespace Script.Influence
         {
             _callBack = null;
         }
-        
+
+        public bool IsIgnoreSlow()
+        {
+            return true;
+        }
+
         private bool Move(float speed = 1)
         {
             if (_currentTime + Time.fixedDeltaTime < _allTime)

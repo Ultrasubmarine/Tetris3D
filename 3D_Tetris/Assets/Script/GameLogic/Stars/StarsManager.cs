@@ -351,6 +351,7 @@ namespace Script.GameLogic.Stars
             _animationStar.DORewind();
             _animationStar.DOComplete();
             _particles.gameObject.SetActive(false);
+            _rotationStars.Clear();
             
             OnUpdatedCollectingStars?.Invoke();
         }

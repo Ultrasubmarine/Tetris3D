@@ -16,7 +16,12 @@ namespace Script.StateMachine.States
             RealizationBox.Instance.islandTurn.ResetTurn();
             RealizationBox.Instance.projectionLineManager.Clear();              
             RealizationBox.Instance.projection.Destroy();                       
-                    
+            
+            RealizationBox.Instance.bombsManager.Clear();
+            RealizationBox.Instance.evilBoxManager.Clear();
+            RealizationBox.Instance.bigBombGamePlayOffer.Clear();
+            RealizationBox.Instance.stoneBlockManager.Clear();
+            
             RealizationBox.Instance.influenceManager.ClearAllInfluences();  
             RealizationBox.Instance.elementCleaner.DeleteAllElements(); 
             RealizationBox.Instance.generator.Clear();
@@ -29,12 +34,7 @@ namespace Script.StateMachine.States
             RealizationBox.Instance.gameCamera.SetPositionWithoutAnimation();   
             RealizationBox.Instance.speedChanger.ResetSpeed();                  
             RealizationBox.Instance.generatorChanger.ResetGenerator();
-            
-            RealizationBox.Instance.bombsManager.Clear();
-            RealizationBox.Instance.evilBoxManager.Clear();
-            RealizationBox.Instance.bigBombGamePlayOffer.Clear();
-            RealizationBox.Instance.stoneBlockManager.Clear();
-            
+
             //  _FSM.StartFSM();
         }
 

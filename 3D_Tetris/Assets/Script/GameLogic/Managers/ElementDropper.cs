@@ -127,7 +127,7 @@ namespace Script.GameLogic.TetrisElement
                     item.LogicDrop();
 
                     _influence.AddDrop(item.myTransform, Vector3.down, global::Speed.timeDropAfterDestroy * _allDropFast,
-                        DecrementDropElementsCount);
+                        DecrementDropElementsCount, true);
                     
                     var pickableBlocks = _matrix.GetPickableBlocksForElement(item);
                     foreach (var pBlock in pickableBlocks)

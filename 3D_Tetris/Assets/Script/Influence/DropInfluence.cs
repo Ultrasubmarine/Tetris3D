@@ -14,8 +14,9 @@ namespace Script.ObjectEngine
         private float _currentTime;
 
         private Action _callBack;
+        private bool _isIgnoreSlow;
         
-        public DropInfluence(Transform transform, Vector3 direction, float allTime, Action action)
+        public DropInfluence(Transform transform, Vector3 direction, float allTime, Action action, bool isIgnoreSlow = false)
         {
             _transform = transform;
         
@@ -25,6 +26,7 @@ namespace Script.ObjectEngine
             _allTime = allTime;
             _currentTime = 0;
             _callBack = action;
+            _isIgnoreSlow = isIgnoreSlow;
         }
         
         public bool Update(float speed = 1)
@@ -41,6 +43,11 @@ namespace Script.ObjectEngine
         public void UnlinkCallback()
         {
             _callBack = null;
+        }
+
+        public bool IsIgnoreSlow()
+        {
+            return _isIgnoreSlow;
         }
 
         private bool Drop(float speed = 1)

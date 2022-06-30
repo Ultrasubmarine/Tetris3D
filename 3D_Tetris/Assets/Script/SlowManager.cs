@@ -18,7 +18,7 @@ public class SlowManager : MonoBehaviour
 
     [SerializeField] private float _slowFreezeElement = 0.85f;
     
-    [SerializeField] private float _slowOffer = 0.8f;
+    [SerializeField] private float _slowOffer = 0.7f;
     public struct Slow
     {
         public Timer timer;

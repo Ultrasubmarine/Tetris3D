@@ -62,7 +62,8 @@ namespace Script.GameLogic.Bomb
        // particles
        [SerializeField] private GameObject _particles;
        [SerializeField] private Vector3 _localParticlePosition;
-
+       [SerializeField] private Vector3 _localParticlePositionForBig;
+       
        private Transform _gameCamera;
        
         private void Start()
@@ -126,8 +127,8 @@ namespace Script.GameLogic.Bomb
 
             _particles.SetActive(true);
             _particles.transform.parent = bomb.Star;
-            _particles.transform.localPosition = _localParticlePosition;
-
+            _particles.transform.localPosition = isBig? _localParticlePositionForBig: _localParticlePosition;
+            
             if (isBig)
             {
                 _bomb = null;
@@ -236,6 +237,9 @@ namespace Script.GameLogic.Bomb
             _currentStep = _currentStepSave;
             _bomb = null;
             _bigBomb = null;
+            
+            _particles.SetActive(false);
+            _particles.transform.SetParent(transform);
         }
     }
 }

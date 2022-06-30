@@ -973,7 +973,7 @@ RectTransform:
   - {fileID: 704329844}
   - {fileID: 2091371180}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2991,7 +2991,7 @@ RectTransform:
   - {fileID: 860144863}
   - {fileID: 1398364020}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4678,7 +4678,7 @@ RectTransform:
   - {fileID: 2077010513}
   - {fileID: 592580972}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -6312,12 +6312,12 @@ RectTransform:
   - {fileID: 200460295}
   - {fileID: 463863503}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 4.5682983, y: -3.0253906}
+  m_SizeDelta: {x: 87.4971, y: 88.2793}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &359532589
 MonoBehaviour:
@@ -6737,7 +6737,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &389028078
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6752,7 +6752,7 @@ RectTransform:
   m_Children:
   - {fileID: 786702005}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9079,7 +9079,7 @@ RectTransform:
   - {fileID: 1661149412}
   - {fileID: 1035705693}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -11259,7 +11259,7 @@ RectTransform:
   m_Children:
   - {fileID: 1028667795}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -13905,7 +13905,7 @@ GameObject:
   - component: {fileID: 889526032}
   - component: {fileID: 889526031}
   m_Layer: 0
-  m_Name: Offer
+  m_Name: BigBombOffer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16708,7 +16708,6 @@ RectTransform:
   m_Children:
   - {fileID: 483158829}
   - {fileID: 640033092}
-  - {fileID: 2073917333}
   - {fileID: 38568429}
   - {fileID: 1398397799}
   - {fileID: 1354349761}
@@ -16723,6 +16722,7 @@ RectTransform:
   - {fileID: 359532588}
   - {fileID: 389028078}
   - {fileID: 1418878540}
+  - {fileID: 2073917333}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17599,6 +17599,7 @@ MonoBehaviour:
   _nextElementUI: {fileID: 993844878}
   _evilBoxManager: {fileID: 38514836}
   _stoneBlockManager: {fileID: 1867887511}
+  _fastElementDrop: {fileID: 561712591}
 --- !u!4 &1237479897
 Transform:
   m_ObjectHideFlags: 0
@@ -17983,7 +17984,7 @@ RectTransform:
   - {fileID: 375275051}
   - {fileID: 552525953}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -18833,7 +18834,7 @@ RectTransform:
   - {fileID: 1782275818}
   - {fileID: 96324006}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -19812,7 +19813,7 @@ RectTransform:
   - {fileID: 1245194748}
   - {fileID: 1263603759}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -20322,7 +20323,7 @@ RectTransform:
   m_Children:
   - {fileID: 1297944654}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -20443,7 +20444,7 @@ RectTransform:
   m_Children:
   - {fileID: 110302396}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 10.871}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -28859,6 +28860,7 @@ MonoBehaviour:
   _bombRotation: {x: 320, y: 270, z: 80}
   _particles: {fileID: 303927001}
   _localParticlePosition: {x: -0.3, y: 1, z: 0.5}
+  _localParticlePositionForBig: {x: -1.26, y: 2.9, z: 1.16}
 --- !u!4 &1616382877
 Transform:
   m_ObjectHideFlags: 0
@@ -32140,7 +32142,7 @@ RectTransform:
   m_Children:
   - {fileID: 2130961177}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 4.325}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -34564,7 +34566,7 @@ RectTransform:
   - {fileID: 2106029481}
   - {fileID: 1316512925}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -34843,7 +34845,7 @@ MonoBehaviour:
   _slowTimeInJoystickMode: 5
   _slowProcInJoystickMode: 0.85
   _slowFreezeElement: 0.85
-  _slowOffer: 0.8
+  _slowOffer: 0.7
 --- !u!4 &2014896471
 Transform:
   m_ObjectHideFlags: 0
@@ -35100,7 +35102,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 2
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -44654,7 +44656,7 @@ PrefabInstance:
     - target: {fileID: 8179984935098445129, guid: 95b5634c63390460dba756365dddcf0c,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95b5634c63390460dba756365dddcf0c, type: 3}

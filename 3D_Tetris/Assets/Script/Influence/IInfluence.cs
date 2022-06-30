@@ -5,5 +5,8 @@
         bool Update(float speed = 1);
 
         void UnlinkCallback();
+
+        bool IsIgnoreSlow();
+        
     }
 }

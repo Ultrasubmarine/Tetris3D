@@ -71,6 +71,7 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private NextElementUI _nextElementUI;
     [SerializeField] private EvilBoxManager _evilBoxManager;
     [SerializeField] private StoneBlockManager _stoneBlockManager;
+    [SerializeField] private FastElementDrop _fastElementDrop;
     
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
@@ -110,6 +111,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public PauseUI pauseUI => _pauseUI;
     public EvilBoxManager evilBoxManager => _evilBoxManager;
     public StoneBlockManager stoneBlockManager => _stoneBlockManager;
+    public  FastElementDrop fastElementDrop => _fastElementDrop;
     
     private Dictionary<TutorType, GameObject> _tutors;
     
