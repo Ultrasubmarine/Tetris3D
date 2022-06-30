@@ -216,8 +216,12 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
         for (var x = 0; x < wight; x++)
         for (var z = 0; z < wight; z++)
         {
-            if(_matrix[x,layer,z].blockType == BlockType.stone)
-                continue;
+            if (_matrix[x, layer, z].blockType == BlockType.stone)
+            {
+                int currLives = _matrix[x, layer, z].DecreaseLives();
+                if (currLives > 0)
+                    continue;
+            }
             
             _matrix[x, layer, z].isDestroy = true;
             

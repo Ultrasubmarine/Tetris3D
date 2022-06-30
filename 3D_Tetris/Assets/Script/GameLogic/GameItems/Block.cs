@@ -46,15 +46,17 @@ public class Block : MonoBehaviour
     
     public Vector3Int _coordinates;
     public CoordinatXZ xz => new CoordinatXZ(coordinates.x, coordinates.z);
-
+    
     public bool isDestroy { get; set; }
 
+    public int lives { get; private set; } // for stone blocks only 
+    
     public Transform myTransform { get; private set; }
     public MeshRenderer mesh { get; private set; }
     public MeshRenderer extraMesh { get; private set; }
     
-    MeshFilter _meshFilter;
-    MeshFilter _extraMeshFilter;
+    public MeshFilter meshFilter { get; private set; }
+    public MeshFilter extraMeshFilter { get; private set; }
     
     private static Mesh _meshCube;
     
@@ -63,6 +65,8 @@ public class Block : MonoBehaviour
     public Action<Block> OnCollected;
 
     public Action<Block> OnDestroyed;
+    
+    public Action<Block> OnDamaged; // for stone
     
     public Transform oreol;
     
@@ -76,11 +80,11 @@ public class Block : MonoBehaviour
         myTransform = transform;
         mesh = GetComponent<MeshRenderer>();
         extraMesh = _star.GetComponent<MeshRenderer>();
-        _meshFilter = GetComponent<MeshFilter>();
-        _extraMeshFilter = _star.GetComponent<MeshFilter>();
+        meshFilter = GetComponent<MeshFilter>();
+        extraMeshFilter = _star.GetComponent<MeshFilter>();
         
         if (_meshCube == null)
-            _meshCube = _meshFilter.mesh;
+            _meshCube = meshFilter.mesh;
     }
 
     public Block()
@@ -134,7 +138,7 @@ public class Block : MonoBehaviour
         
         mesh.material = _blockMaterial;
         
-        _extraMeshFilter.mesh = _starMesh;
+        extraMeshFilter.mesh = _starMesh;
         extraMesh.material = _starMaterial;
         
        // Vector3.
@@ -156,11 +160,11 @@ public class Block : MonoBehaviour
 
     public void TransformToBomb(Mesh _bombMesh, Material _bombMaterial, Material _blockMaterial, Vector3 _rotation, bool isBig)
     {
-        isStar = true;
+    //    isStar = true;
         
         mesh.material = _blockMaterial;
         
-        _extraMeshFilter.mesh = _bombMesh;
+        extraMeshFilter.mesh = _bombMesh;
         extraMesh.material = _bombMaterial;
 
         _star.layer = 15;//"Outlined";
@@ -180,11 +184,11 @@ public class Block : MonoBehaviour
     
     public void TransformToBox(Mesh _boxMesh, Material _boxMaterial, Material _blockMaterial, Vector3 _rotation)
     {
-        isStar = true;
+     //   isStar = true;
         
         mesh.material = _blockMaterial;
         
-        _extraMeshFilter.mesh = _boxMesh;
+        extraMeshFilter.mesh = _boxMesh;
         extraMesh.material = _boxMaterial;
 
         _star.layer = 11;//"element";
@@ -203,15 +207,16 @@ public class Block : MonoBehaviour
         blockType = BlockType.box;
     }
 
-    public void TransformToStone(Mesh _cellMesh, Material _cellMaterial, Material blockMaterial)
+    public void TransformToStone(Mesh _cellMesh, Material _cellMaterial, Material blockMaterial, int lives)
     {
         _star.transform.rotation = Quaternion.identity;
         _star.layer = 11;//"element";
         _star.SetActive(true);
         
-        _extraMeshFilter.mesh = _cellMesh;
+        extraMeshFilter.mesh = _cellMesh;
         extraMesh.material = _cellMaterial;
-        
+
+        this.lives = lives;
         mesh.material = blockMaterial;
         blockType = BlockType.stone;
     }
@@ -222,6 +227,14 @@ public class Block : MonoBehaviour
         // animation TO DO
     }
 
+    /// returned int - amount of lives after decrease;
+    public int DecreaseLives()
+    {
+        --lives;
+        OnDamaged?.Invoke(this);
+        return lives;
+    }
+    
     public void Destroy() // for bombs
     {
         OnDestroyed?.Invoke(this);
