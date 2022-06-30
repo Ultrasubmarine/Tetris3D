@@ -55,5 +55,10 @@ namespace Script.GameLogic.TetrisElement
         _mergerElements.Clear();
         newElement = null;
     }
+
+    public void CustomSetNewElement(Element newNewElement)
+    {
+        newElement = newNewElement;
+    }
     }
 }

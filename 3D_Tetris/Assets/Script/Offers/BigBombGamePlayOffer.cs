@@ -81,17 +81,17 @@ namespace Script.Offers
 
         public void CheckShowOfferBtn()
         {
-            if (_inOneGameCurrent > inOneGameMax)
-                return;
+            // if (_inOneGameCurrent > inOneGameMax)
+            //     return;
 
-            if (PlayerSaveProfile.instance._bombAmount > 0)
-                return;
+            // if (PlayerSaveProfile.instance._bombAmount > 0)
+            //     return;
             
-            if (_betweenOffersStepsCurrent < betweenOffersSteps)
-            {
-                _betweenOffersStepsCurrent++;
-                return;
-            }
+            // if (_betweenOffersStepsCurrent < betweenOffersSteps)
+            // {
+            //     _betweenOffersStepsCurrent++;
+            //     return;
+            // }
             
             int yLimit = _height.limitHeight - 3;
             int outOfLimitAmount = 0;
@@ -189,7 +189,7 @@ namespace Script.Offers
                 _generator.SetNextAsBigBomb();
             else
             {
-                _changeNewElementToBomb.ChangeToBomb(true);
+                _changeNewElementToBomb.ChangeToBigBomb(true);
             }
         }
         public void Clear()

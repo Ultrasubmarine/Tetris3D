@@ -65,7 +65,7 @@ namespace Script.Tutor
             _bottomPanel.alpha = 0;
             _bottomPanel.interactable = false;
 
-            RealizationBox.Instance.nextElementUI.gameObject.SetActive(false);
+         //   RealizationBox.Instance.nextElementUI.gameObject.SetActive(false);
             FirstStep();
         }
         
