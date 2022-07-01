@@ -994,13 +994,17 @@ MonoBehaviour:
   _localParticlePosition: {x: 0, y: 0.1, z: 0}
   _starRotationSpeed: 20
   _evilBoxRectTransform: {fileID: 1277747995}
+  _evilBoxParentRectTransform: {fileID: 954921587}
   _oreol: {fileID: 375275048}
   _time: 0.7
   _deltaMove: 0
   _timeMoving: 0.2
   _oreolTransform: {fileID: 375275051}
-  _minBox: 3
-  _maxBox: 5
+  _canvas: {fileID: 1152037279}
+  _centerPoint: {fileID: 549631032}
+  _timeBlockmove: 0.75
+  _minBox: 5
+  _maxBox: 9
 --- !u!4 &38514837
 Transform:
   m_ObjectHideFlags: 0
@@ -1012,7 +1016,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 549631032}
   m_Father: {fileID: 0}
   m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6375,7 +6380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &359532588
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6649,8 +6654,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 480.3382, y: 480.3382}
+  m_AnchoredPosition: {x: -0.000011444, y: -0.00097275}
+  m_SizeDelta: {x: 391.99, y: 391.9886}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &378321921
 Transform:
@@ -9267,6 +9272,37 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1 &549631031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 549631032}
+  m_Layer: 0
+  m_Name: center
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &549631032
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549631031}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 38514837}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &552525952
 GameObject:
   m_ObjectHideFlags: 0
@@ -9303,8 +9339,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 144.76099}
-  m_SizeDelta: {x: 244.7778, y: 289.52197}
+  m_AnchoredPosition: {x: 0.000015259, y: 144.76}
+  m_SizeDelta: {x: 195.2003, y: 230.882}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &552525954
 CanvasGroup:
@@ -14830,6 +14866,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 951010016}
   m_CullTransparentMesh: 1
+--- !u!1 &954921586
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 954921587}
+  m_Layer: 5
+  m_Name: EvilBoxParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &954921587
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 954921586}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1277747995}
+  m_Father: {fileID: 1152037280}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -94.76099}
+  m_SizeDelta: {x: 244.7778, y: 289.52197}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &963328913 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4061492859372462, guid: 608548a572be463418d25f306ecd7df8,
@@ -16797,7 +16870,7 @@ RectTransform:
   - {fileID: 284028055}
   - {fileID: 1990063691}
   - {fileID: 178671697}
-  - {fileID: 1277747995}
+  - {fileID: 954921587}
   - {fileID: 359532588}
   - {fileID: 389028078}
   - {fileID: 1418878540}
@@ -18055,19 +18128,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1277747994}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 375275051}
   - {fileID: 552525953}
-  m_Father: {fileID: 1152037280}
-  m_RootOrder: 12
+  m_Father: {fileID: 954921587}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 985.239}
+  m_AnchoredPosition: {x: 0, y: 144.76099}
   m_SizeDelta: {x: 244.7778, y: 289.52197}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1277747996
@@ -18080,7 +18153,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1 &1283215337
 GameObject:
