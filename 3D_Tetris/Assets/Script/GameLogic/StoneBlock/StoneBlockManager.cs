@@ -24,7 +24,7 @@ namespace Script.GameLogic.StoneBlock
 
         [SerializeField] private int _stoneLives = 3;
         [SerializeField] private List<Mesh> _livesMaterial;
-        [SerializeField] private List<Mesh> _livesStarMaterial;
+        [SerializeField] private List<Material> _livesStarMaterial;
         
         private void Awake()
         {
@@ -73,29 +73,27 @@ namespace Script.GameLogic.StoneBlock
         {
             if (block.lives < 1) 
                 return;
-            
-            if(block.isStar)
-                block.meshFilter.mesh = GetStoneMesh(block.lives-1,true);
+
+            if (block.isStar)
+                block.mesh.material = GetStoneMaterial(block.lives - 1);
             else
-                block.extraMeshFilter.mesh = GetStoneMesh(block.lives-1);
+                block.extraMeshFilter.mesh = GetStoneMesh(block.lives - 1);
         }
         
-        public Mesh GetStoneMesh(int lives, bool star = false)
+        public Mesh GetStoneMesh(int lives)
         {
-            if (star)
-            {
-                if (_livesStarMaterial.Count <= lives)
+            if (_livesMaterial.Count <= lives)
                     return null;
 
-                return _livesStarMaterial[lives];
-            }
-            else
-            {
-                if (_livesMaterial.Count <= lives)
+                return _livesMaterial[lives];
+        }
+
+        public Material GetStoneMaterial(int lives) // for stars
+        {
+            if (_livesStarMaterial.Count <= lives)
                     return null;
 
-                return _livesMaterial[lives]; 
-            }
+            return _livesStarMaterial[lives];
         }
         
         public void Clear()
