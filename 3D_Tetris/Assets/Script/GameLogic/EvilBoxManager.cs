@@ -83,6 +83,7 @@ namespace Script.GameLogic
        [SerializeField] private Transform _centerPoint;
        [SerializeField] private float _timeBlockmove = 1f;
        private int _blockCompleteCounter;
+       private List<Block> _animationBlocks;
        
 
        [SerializeField] private int _minBox, _maxBox;
@@ -98,7 +99,8 @@ namespace Script.GameLogic
             _createBlockParticlePool = new Pool<GameObject>(_createBlockParticleSystem,_particlesParent);
             _activeParticles = new List<GameObject>();
             _createBlockActiveParticles = new List<GameObject>();
-
+            _animationBlocks = new List<Block>();
+            
             _boxes = new List<Block>();
             _particles2 = new Dictionary<Block, GameObject>();
 
@@ -113,10 +115,11 @@ namespace Script.GameLogic
                 .Join(_oreol.DOFade(1, _timeMoving / 4).From(0).OnComplete(() =>
                 {
                     OpenEvilBoxLogic();
+                    _uiBoxAnimation.Pause();
                 }))
                 //HIDE PART
                 .Append(_oreol.DOFade(0, _time / 4).From(1))
-             //   .Append(_evilBoxRectTransform.DOAnchorPosY(_evilBoxRectTransform.anchoredPosition.y + 100, _time / 3))
+                .Append(_evilBoxRectTransform.DOAnchorPosY(100, _time / 3))
                 .Join(boxCanvas.DOFade(0f, _time / 3).From(1f));
                // .OnComplete( ()=>OnOpenBoxEnded?.Invoke());
 
@@ -272,7 +275,7 @@ namespace Script.GameLogic
 
                 RealizationBox.Instance.generator.SetRandomPositionForEvilBlox(element, usedPositions);
                 
-                int currentYpos = Random.Range( _matrix.MinHeightInCoordinates(element.blocks[0]._coordinates.x.ToIndex(), element.blocks[0]._coordinates.z.ToIndex()) + 1, _heightHandler.limitHeight + 5);
+                int currentYpos = Random.Range( _matrix.MinHeightInCoordinates(element.blocks[0]._coordinates.x.ToIndex(), element.blocks[0]._coordinates.z.ToIndex()) + 1, _heightHandler.limitHeight + 1);
                 element.InitializationAfterGeneric(currentYpos);
                 element.myTransform.position = new Vector3(element.myTransform.position.x, pos.y + currentYpos - size, element.myTransform.position.z);
                 
@@ -281,43 +284,62 @@ namespace Script.GameLogic
                 usedPositions.Add(element.blocks[0].xz);
                 blocks.Add(element.blocks[0]);
                 Debug.Log("new block x: " + element.blocks[0].xz.x + " z: " + element.blocks[0].xz.z);
+                element.blocks[0].mesh.enabled = false;
             }
 
             BlockAnimations(blocks);
-            OnAddBlock(blocks);
+           // OnAddBlock(blocks);
             _isOpenedBox = 0;
         }
 
         private void BlockAnimations(List<Block> blocks)
         {
-            _blockCompleteCounter = blocks.Count;
-            foreach (var b in blocks)
-            {
-                var time = Random.Range(0, _timeBlockmove / 2);
-                b.transform.DOMove(b.transform.position, _timeBlockmove ).From(_centerPoint.position)
-                    .OnComplete(()=>OnBlockAnimationComplete());
-              //  b.transform.DOScale(b.transform.localScale, _timeBlockmove).From(Vector3.one * 0.3f);
-            }
+            _animationBlocks.Clear();
+            _animationBlocks = blocks;
+
+            OnBlockAnimationSequence();
         }
 
-        public void OnBlockAnimationComplete()
+        public void OnBlockAnimationSequence()
         {
-            _blockCompleteCounter--;
-            if (_blockCompleteCounter == 0)
+            if (_animationBlocks.Count > 0)
             {
+                var b = _animationBlocks[0];
+                b.mesh.enabled = true;
+                
+                var time = Vector3.Distance(_centerPoint.position, b.transform.position) / 10 * _timeBlockmove;
+
+                b.transform.DOMove(b.transform.position,  time).From(_centerPoint.position)
+                    .OnComplete(()=>OnBlockAnimationSequence()).OnUpdate(() =>
+                        {
+                            _rotation += Time.deltaTime * _starRotationSpeed;
+                            if (_rotation > 360.0f)
+                            {
+                                _rotation = 0.0f;
+                            }
+
+                            _oreolTransform.localRotation = Quaternion.Euler(0, 0, _rotation);
+                        });
+             //   b.transform.DOScale(b.transform.localScale, time).From(Vector3.one * 0.3f);
+                OnAddBlock(b);
+                
+                _animationBlocks.Remove(b);
+            }
+            else
+            {
+                DestroyParticle();
+                _uiBoxAnimation.Play();
                 OnOpenBoxEnded?.Invoke();
             }
         }
         
-        public void OnAddBlock(List<Block> pos)
+        public void OnAddBlock(Block block)
         {
-            foreach (var po in pos)
-            {
-                var boom = _createBlockParticlePool.Pop();
-                boom.transform.position = po.myTransform.position;
-                _createBlockActiveParticles.Add(boom);
-            }
-            Invoke(nameof(DestroyParticle), _timeForShowStop);
+            var boom = _createBlockParticlePool.Pop();
+            boom.transform.parent = block.myTransform;
+            boom.transform.localPosition = Vector3.zero;
+                
+            _createBlockActiveParticles.Add(boom);
         }
 
         public void DestroyParticle()
