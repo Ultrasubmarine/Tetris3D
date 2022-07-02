@@ -129,9 +129,19 @@ public class Block : MonoBehaviour
         _star.transform.DOKill();
         oreol.gameObject.SetActive(false);
 
+        mesh.enabled = true;
+        extraMesh.enabled = true;
+        
         blockType = BlockType.simple;
     }
 
+    public void Hide()
+    {
+        mesh.enabled = false;
+        extraMesh.enabled = false;
+        oreol.gameObject.SetActive(false);
+    }
+    
     public void TransformToStar(Mesh _starMesh, Material _starMaterial, Material _blockMaterial)
     {
         isStar = true;

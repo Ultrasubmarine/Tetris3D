@@ -231,6 +231,11 @@ namespace Script.GameLogic
             _particlePool.Push(_particles2[box]);
             _particles2.Remove(box);
         }
+
+        public bool CanOpenBox()
+        {
+            return _isOpenedBox != 0;
+        }
         
         public bool OpenEvilBox()
         {
@@ -309,7 +314,7 @@ namespace Script.GameLogic
                 
                 var time = Vector3.Distance(_centerPoint.position, b.transform.position) / 10 * _timeBlockmove;
 
-                b.transform.DOMove(b.transform.position,  time).From(_centerPoint.position)
+                b.transform.DOLocalMove(b.transform.localPosition,  time).From(b.transform.InverseTransformPoint(_centerPoint.position))
                     .OnComplete(()=>OnBlockAnimationSequence()).OnUpdate(() =>
                         {
                             _rotation += Time.deltaTime * _starRotationSpeed;

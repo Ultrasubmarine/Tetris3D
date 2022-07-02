@@ -29,7 +29,7 @@ public class MergeState : AbstractState<TetrisState>
      //   _projLineManager.UpdatePickableProjections();
         _projLineManager.Clear();
         
-        RealizationBox.Instance.joystick.gameObject.SetActive(false);
+        RealizationBox.Instance.joystick.Block(true);
         base.Enter(last);
         if(_bombsManager.BoomBombs())
             _FSM.SetNewState(TetrisState.AllElementsDrop);

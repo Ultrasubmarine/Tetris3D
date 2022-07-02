@@ -182,6 +182,15 @@ namespace Script.GameLogic.Stars
                 else
                     animation.Play(); //DissapearAnimation();
             }
+            if ((state == TetrisState.OpenEvilBox) && RealizationBox.Instance.evilBoxManager.CanOpenBox())
+            {
+                if (animation.IsPlaying()) //wait animation
+                {
+                    _dissapearAfterComplete = true;
+                }
+                else
+                    animation.Play(); //DissapearAnimation();
+            }
         }
 
         public void Clear()

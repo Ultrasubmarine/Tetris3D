@@ -26,7 +26,7 @@ public class CollectionState : AbstractState<TetrisState>
     public void OnCollectEnd(bool isDestroy)
     {
         _matrix.OnDestroyLayerEnd -= OnCollectEnd;
-
+        
         if (_FSM.GetCurrentState() == TetrisState.Restart)
             return;
 

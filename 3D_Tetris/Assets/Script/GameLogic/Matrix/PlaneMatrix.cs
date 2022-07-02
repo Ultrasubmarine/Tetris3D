@@ -224,6 +224,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
             }
             
             _matrix[x, layer, z].isDestroy = true;
+            _matrix[x, layer, z].Hide();
             
             if(_matrix[x, layer, z].IsPickable())
                 _matrix[x, layer, z].Pick(null);

@@ -62,6 +62,9 @@ namespace Script.Controller
 
         private LastAction _lastAction;
         
+        //block
+        private bool _isBlock;
+        
         private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
@@ -81,6 +84,16 @@ namespace Script.Controller
             isCenterReverseLastAction = false;
         }
 
+        public void Block(bool isLocked)
+        {
+            _isBlock = isLocked;
+
+            if (isLocked)
+            {
+                Hide();
+            }
+        }
+        
         private void Start()
         {
             _slowManager = RealizationBox.Instance.slowManager;
@@ -129,6 +142,9 @@ namespace Script.Controller
         
         public void Spawn()
         {
+            if (_isBlock)
+                return;
+            
             if (Input.touchCount != 1)
                 return;
 
