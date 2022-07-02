@@ -325,8 +325,10 @@ namespace Script.GameLogic
 
                             _oreolTransform.localRotation = Quaternion.Euler(0, 0, _rotation);
                         });
-             //   b.transform.DOScale(b.transform.localScale, time).From(Vector3.one * 0.3f);
+                
                 OnAddBlock(b);
+                b.transform.DOScale(b.transform.localScale, time).From(Vector3.one * 0.3f);
+                
                 
                 _animationBlocks.Remove(b);
             }
