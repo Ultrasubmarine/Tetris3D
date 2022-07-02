@@ -20,7 +20,8 @@ public class GenerationState : AbstractState<TetrisState>
         if(ElementData.Instance.newElement.myTransform == null)
             Debug.Log("ElementData.newElement.myTransform  == null");
         ElementData.Instance.newElement.myTransform.parent = _elementDropper.transform;
-
+        
+        RealizationBox.Instance.joystick.gameObject.SetActive(true);
         _FSM.SetNewState(TetrisState.Drop);
     }
 
