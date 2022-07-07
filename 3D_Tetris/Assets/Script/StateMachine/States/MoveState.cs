@@ -60,7 +60,8 @@ namespace Script.StateMachine.States
         {
             if (element == null) return false;
             var vectorDirection = SetVectorMove(direction);
-            return _matrix.CheckEmptyPlaсe(element, vectorDirection, true);
+            
+            return _matrix.CheckEmptyPlaсe(element, vectorDirection, !_influence.IsNearStartPosition());
         }
         
         private Vector3Int SetVectorMove(move direction)

@@ -59,6 +59,11 @@ namespace Script.Influence
             return true;
         }
 
+        public bool IsNearStartPosition()
+        {
+            return false;
+        }
+
         private bool Move(float speed = 1)
         {
             if (_currentTime + Time.fixedDeltaTime < _allTime)

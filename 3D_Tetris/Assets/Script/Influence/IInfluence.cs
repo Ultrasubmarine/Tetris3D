@@ -7,6 +7,7 @@
         void UnlinkCallback();
 
         bool IsIgnoreSlow();
-        
+
+        bool IsNearStartPosition();
     }
 }

@@ -22,7 +22,8 @@ namespace Script.Influence
         private SlowManager _slowler;
 
         [SerializeField] private int _faster = 0;
-
+        [SerializeField] private float _delayForMoveWindow;
+        
         private bool _fastMode = false;
         
         private void Awake()
@@ -39,9 +40,19 @@ namespace Script.Influence
             _slowler.onUpdateValue += CalculateSpeed;
         }
 
+        public bool IsNearStartPosition() // only for drop
+        {
+            if (_influences.Count == 1 && _influences[0].IsNearStartPosition())
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
         public void AddDrop(Transform obj, Vector3 offset, float speed, Action callBack = null, bool isIgnoreSlow = false)
         {
-            var info = new DropInfluence(obj,offset, speed, callBack, isIgnoreSlow);
+            var info = new DropInfluence(obj,offset, speed, callBack,_delayForMoveWindow, isIgnoreSlow);
             _influences.Add(info);
         }
 

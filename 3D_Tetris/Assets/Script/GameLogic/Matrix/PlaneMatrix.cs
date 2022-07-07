@@ -86,7 +86,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
     }
     #endregion
     
-    public bool CheckEmptyPlaсe(Element element, Vector3Int direction, bool forPlayerMove = false)
+    public bool CheckEmptyPlaсe(Element element, Vector3Int direction, bool checkUpperBlocks = false)
     {
         if (!element)
             return false;
@@ -112,7 +112,7 @@ public class PlaneMatrix : Singleton<PlaneMatrix>
                         newCoordinat.z.ToIndex()]))
                         return false;
                 }
-                if (forPlayerMove && newCoordinat.y + 1 < _height && !RealizationBox.Instance.elementDropper.isWaitingMerge)
+                if (checkUpperBlocks && newCoordinat.y + 1 < _height && !RealizationBox.Instance.elementDropper.isWaitingMerge)
                 {
                     if (!ReferenceEquals(_matrix[newCoordinat.x.ToIndex(), newCoordinat.y + 1, newCoordinat.z.ToIndex()], null))
                         return false;
