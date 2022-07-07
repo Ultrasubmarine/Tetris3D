@@ -82,7 +82,7 @@ namespace Script.GameLogic
                 case ElementType.bomb:
                 {
                     _bomb.SetActive(true);
-                    _bomb.transform.DOScale(new Vector3(110, 110, 110), 0.8f).From(Vector3.one * 100).SetLoops(-1,LoopType.Yoyo);
+                    _bomb.transform.DOScale(new Vector3(0.9f, 0.9f, 0.9f), 1f).From(Vector3.one).SetLoops(-1,LoopType.Yoyo);
 
                     break;
                 }
