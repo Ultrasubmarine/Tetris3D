@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Script;
+using Script.CheckPlace;
 using Script.Controller;
 using Script.Controller.TouchController;
 using Script.GameLogic;
@@ -72,6 +73,7 @@ public class RealizationBox : Singleton<RealizationBox>
     [SerializeField] private EvilBoxManager _evilBoxManager;
     [SerializeField] private StoneBlockManager _stoneBlockManager;
     [SerializeField] private FastElementDrop _fastElementDrop;
+    [SerializeField] private CheckPlaceManager _checkPlaceManager;
     
     public TetrisFSM FSM => _FSM;
     public GameManager gameManager => _gameManager;
@@ -106,6 +108,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public BombsManager bombsManager => _bombsManager;
     public BigBombGamePlayOffer bigBombGamePlayOffer => _bigBombGamePlayOffer;
     public ChangeNewElementToBomb changeNewElementToBomb => _changeNewElementToBomb;
+    public CheckPlaceManager checkPlaceManager => _checkPlaceManager;
     
     public NextElementUI nextElementUI => _nextElementUI;
     public PauseUI pauseUI => _pauseUI;
@@ -114,7 +117,7 @@ public class RealizationBox : Singleton<RealizationBox>
     public  FastElementDrop fastElementDrop => _fastElementDrop;
     
     private Dictionary<TutorType, GameObject> _tutors;
-    
+
     public GameObject GetTutor(TutorType t)
     {
         return _tutors[t];

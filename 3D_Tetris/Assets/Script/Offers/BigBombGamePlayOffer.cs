@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Script.CheckPlace;
 using Script.GameLogic.Bomb;
 using Script.GameLogic.TetrisElement;
 using Script.PlayerProfile;
@@ -42,6 +43,7 @@ namespace Script.Offers
         [SerializeField] private float _yMove = -100;
         [SerializeField] private float _time = 0.5f;
         private FastElementDrop _fastElementDrop;
+        private CheckPlaceManager _checkPlaceManager;
 
         private void Start()
         {
@@ -51,8 +53,11 @@ namespace Script.Offers
             _elementData = ElementData.Instance;
             _changeNewElementToBomb = RealizationBox.Instance.changeNewElementToBomb;
             _fastElementDrop = RealizationBox.Instance.fastElementDrop;
+            _checkPlaceManager = RealizationBox.Instance.checkPlaceManager;
             
-            RealizationBox.Instance.FSM.AddListener(TetrisState.GenerateElement, CheckShowOfferBtn);
+        //    RealizationBox.Instance.FSM.AddListener(TetrisState.GenerateElement, CheckShowOfferBtn);
+            ElementData.Instance.onNewElementUpdate += CheckShowOfferBtn;
+            
             RealizationBox.Instance.FSM.AddListener(TetrisState.LoseGame, HideBtn);
             RealizationBox.Instance.FSM.AddListener(TetrisState.WinGame, HideBtn);
 
@@ -80,7 +85,7 @@ namespace Script.Offers
          //   HideExtraPanel();
             //  Show();
         }
-
+        
         public void CheckShowOfferBtn()
         {
             // if (_inOneGameCurrent > inOneGameMax)
@@ -94,6 +99,12 @@ namespace Script.Offers
             //     _betweenOffersStepsCurrent++;
             //     return;
             // }
+            
+            if (!_checkPlaceManager.CheckAllPosition(ElementData.Instance.newElement))
+            {
+                ShowBtn();
+                return;
+            }
             
             int yLimit = _height.limitHeight - 3;
             int outOfLimitAmount = 0;

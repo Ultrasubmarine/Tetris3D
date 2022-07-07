@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using IntegerExtension;
+using Script.Controller;
 using Script.GameLogic.TetrisElement;
 using UnityEngine;
 
@@ -34,10 +35,45 @@ namespace Script.CheckPlace
             if (RealizationBox.Instance.bombsManager.isBombFalling)
                 return;
 
-            HighlightLoseGame(_elementData.newElement, !CheckPlace(_elementData.newElement));
+            HighlightLoseGame(_elementData.newElement, !CheckPlace(_elementData.newElement, Vector3Int.zero));
         }
 
-        private bool CheckPlace(Element element)
+        public bool CheckAllPosition(Element element)
+        {
+            foreach (var direction in (move[]) Enum.GetValues(typeof(move)))
+            {
+                var vectorDirection = SetVectorMove(direction);
+
+                for (int i = 1; i <= 2; i++)
+                {
+                    if (_matrix.CheckEmptyPlaсe(element, vectorDirection * i, true))
+                    {
+                        if (CheckPlace(_elementData.newElement, vectorDirection * i))
+                            return true;
+
+                    }
+                }
+            }
+            
+            return false;
+        }
+        
+        private Vector3Int SetVectorMove(move direction)
+        {
+            Vector3Int vectorDirection;
+            if (direction == move.x)
+                vectorDirection = new Vector3Int(1, 0, 0);
+            else if (direction == move.xm)
+                vectorDirection = new Vector3Int(-1, 0, 0);
+            else if (direction == move.z)
+                vectorDirection = new Vector3Int(0, 0, 1);
+            else // (direction == move._z)
+                vectorDirection = new Vector3Int(0, 0, -1);
+
+            return vectorDirection;
+        }
+        
+        private bool CheckPlace(Element element, Vector3Int offset)
         {
             var allXZ = element.projectionBlocks;
             
@@ -45,7 +81,11 @@ namespace Script.CheckPlace
             int diffY = 100;
             foreach (var b in allXZ)
             {
-                var _minY = _matrix.MinHeightInCoordinates(b.coordinates.x.ToIndex(), b.coordinates.z.ToIndex());
+                int x = b.coordinates.x + offset.x;
+                int z = b.coordinates.z + offset.z;
+                
+                var _minY = _matrix.MinHeightInCoordinates(x.ToIndex(), z.ToIndex());
+                            //_matrix.MinHeightInCoordinates(b.coordinates.x.ToIndex(), b.coordinates.z.ToIndex());
 
                 int currentDiff = b._coordinates.y - _minY;
                 if (currentDiff < diffY)

@@ -231,7 +231,7 @@ public class Generator : MonoBehaviour
     
     private bool[,,] CreateCastMatrix(int min)
     {
-        int y_size = _heightHandler.limitHeight;
+        int y_size = _heightHandler.limitHeight + 4;
         var castMatrix = new bool[3, y_size, 3];
         int barrier;
 
