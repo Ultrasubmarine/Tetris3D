@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
             panel.SetActive(true);
         }
        // _settingsPanel.Show();
-        _gameplayBottomPanel.Hide();
+    //    _gameplayBottomPanel.Hide();
     }
     
     private void OnWinGame()

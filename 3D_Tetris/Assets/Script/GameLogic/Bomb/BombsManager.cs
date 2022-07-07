@@ -26,6 +26,7 @@ namespace Script.GameLogic.Bomb
        
        [SerializeField] private bool _ignoreSlow = true;
 
+       public bool isBombFalling =>  (_bigBomb != null || _bomb != null )? true : false;
        public bool bigBombFalling => _bigBomb != null ? true : false;
        private Block _bomb, _bigBomb;
 

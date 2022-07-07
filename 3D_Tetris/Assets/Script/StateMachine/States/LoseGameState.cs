@@ -22,6 +22,8 @@ namespace Script.StateMachine.States
 
         public override void Enter(TetrisState last)
         {
+            RealizationBox.Instance.bigBombGamePlayOffer.HideBtn();
+            
             if (PlayerSaveProfile.instance._bestScore < RealizationBox.Instance.starsManager.collectedStars)
             {
                 PlayerSaveProfile.instance.SetBestScore(RealizationBox.Instance.starsManager.collectedStars);

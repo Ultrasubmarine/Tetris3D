@@ -136,7 +136,7 @@ namespace Script.Offers
             RealizationBox.Instance.slowManager.SetOfferSlow(true);
         }
 
-        private void HideBtn()
+        public void HideBtn()
         {
             _isShow = false;
             _hideBtn.Rewind();

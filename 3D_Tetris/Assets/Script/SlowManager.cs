@@ -52,7 +52,7 @@ public class SlowManager : MonoBehaviour
 
     private bool _isFeezeSlow = false;
 
-    private bool _isOfferSlow = false;
+    public bool _isOfferSlow = false;
     
     private Slow? FreezeElementModeSlow;
     

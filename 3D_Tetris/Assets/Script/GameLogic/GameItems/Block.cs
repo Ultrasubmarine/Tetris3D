@@ -3,6 +3,7 @@ using System.Numerics;
 using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
@@ -71,6 +72,8 @@ public class Block : MonoBehaviour
     public Transform oreol;
     
     [SerializeField] private GameObject _star;
+    [SerializeField] private Outline _outline;
+    
     public Transform Star => _star.transform;
 
     public BlockType blockType;
@@ -132,9 +135,22 @@ public class Block : MonoBehaviour
         mesh.enabled = true;
         extraMesh.enabled = true;
         
+        _outline.enabled = false;
+        mesh.enabled = true;
+        
         blockType = BlockType.simple;
     }
 
+    public void Outline(bool isOn)
+    {
+        _outline.enabled = isOn;
+        
+        if (blockType == BlockType.box)
+        {
+            mesh.enabled = isOn;
+        }
+    }
+    
     public void Hide()
     {
         mesh.enabled = false;
@@ -195,7 +211,8 @@ public class Block : MonoBehaviour
     public void TransformToBox(Mesh _boxMesh, Material _boxMaterial, Material _blockMaterial, Vector3 _rotation)
     {
      //   isStar = true;
-        
+
+        mesh.enabled = false;
         mesh.material = _blockMaterial;
         
         extraMeshFilter.mesh = _boxMesh;
