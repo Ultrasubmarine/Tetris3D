@@ -78,7 +78,7 @@ namespace Script.Offers
             
             Clear();
 
-            _offerButton.onClick.AddListener(OnOfferButtonClick);
+            _offerButton.onClick.AddListener(OnAdsButtonClick);//(OnOfferButtonClick);
             
             _extraPanelCloseButton.onClick.AddListener(HideExtraPanel);
             _extraPanelAdsButton.onClick.AddListener(OnAdsButtonClick);
