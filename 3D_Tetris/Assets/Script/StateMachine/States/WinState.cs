@@ -19,7 +19,7 @@ namespace Script.StateMachine.States
             base.Enter(last);
             
             if(PlayerSaveProfile.instance._lvl < RealizationBox.Instance.gameManager.currentLvl)
-                PlayerSaveProfile.instance.SetLvl(RealizationBox.Instance.gameManager.currentLvl);
+                PlayerSaveProfile.instance.SetCompletesLvl(RealizationBox.Instance.gameManager.currentLvl);
             
             if (_pauseUI.isPause)
             {
