@@ -43,13 +43,13 @@ namespace Script.PlayerProfile
             Save();
         }
         
-        public void SetCompletesLvl(int lvl)
+        public void CompleteCurrentLvl()
         {
-            _data.completedLvlData = lvl;
-            onLevelChange?.Invoke(lvl);
+            _data.completedLvlData = _data.currentLvlData;
+            onLevelChange?.Invoke( _data.completedLvlData);
             Save();
         }
-
+        
         public void SetBestScore(int score)
         {
             _data.bestScore = score;
@@ -83,6 +83,7 @@ namespace Script.PlayerProfile
             bf.Serialize(file, _data);
             file.Close();
             Debug.Log("Game data saved!");
+            
         }
 
         public void ResetSave()
@@ -98,7 +99,7 @@ namespace Script.PlayerProfile
         {
             if (_data.completedLvlData == _data.currentLvlData)
             {
-                IncrementLvl();
+                _data.lvl++;
                 if (_data.lvl <= _lvlList.lvls.Length - 1)
                     _data.currentLvlData = _data.lvl;
                 else
@@ -111,6 +112,11 @@ namespace Script.PlayerProfile
                 
                 Save();
             }
+        }
+
+        public LvlSettings GetCurrentLvlData()
+        {
+            return _lvlList.lvls[_data.currentLvlData];
         }
     }
 }

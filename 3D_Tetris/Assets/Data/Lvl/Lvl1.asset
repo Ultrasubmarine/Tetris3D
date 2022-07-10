@@ -41,7 +41,11 @@ MonoBehaviour:
     exceptCurrentElementForNext: 1
   _lvlElements: []
   _startState: 0
-  _starPlaces: []
+  _starPlaces:
+  - amountStars: 0
+    position: {x: 0, y: 0, z: 0}
+  - amountStars: 0
+    position: {x: 1, y: 1, z: 1}
   _bombsSettings:
     makeBombs: 0
     bombStep: 0
@@ -53,5 +57,9 @@ MonoBehaviour:
     lvlWithEvilBox: 0
     boxStep: 0
     currentBoxStep: 0
+  _stoneBlockSettings:
+    lvlWithStoneBlocks: 0
+    stoneStep: 0
+    currentStoneStep: 0
   _lvl: 1
   _infinity: 0

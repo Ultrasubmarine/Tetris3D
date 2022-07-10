@@ -60,7 +60,7 @@ namespace Script
         public int currentStoneStep;
     }
     
-    [CreateAssetMenu(fileName = "LvlSettings", menuName = "Lvl", order = 0)]
+    [CreateAssetMenu(fileName = "LvlSettings", menuName = "Lvl/Lvl", order = 0)]
     public class LvlSettings : ScriptableObject
     {
         public int lvl => _lvl;
