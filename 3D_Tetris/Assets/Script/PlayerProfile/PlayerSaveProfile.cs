@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace Script.PlayerProfile
 {
+    
     [Serializable]
     class SaveData
     {
@@ -15,28 +16,68 @@ namespace Script.PlayerProfile
         
         public int lvl = 0;
         public int bestScore = 0;
-        
-        
+
+        public Dictionary<Currency, int> wallet;
+
+        public SaveData(Dictionary<Currency, int> wallet)
+        {
+            this.wallet = wallet;
+        }
+    }
+
+    [Serializable]
+    public enum Currency
+    {
+        stars,
+        coin,
     }
     
     public class PlayerSaveProfile :MonoBehaviourSingleton<PlayerSaveProfile>
     {
         public Action<int> onLevelChange;
         public Action<int> onBestScoreChange;
-        
+
+        public Action<Currency, int> onCurrencyAmountChanged;
+            
         public int _lvl => _data.lvl;
         public int _bestScore => _data.bestScore;
         
         private SaveData _data;
         [SerializeField] private LvlList _lvlList;
+
+        public int GetCurrencyAmount(Currency type)
+        {
+            if (!_data.wallet.ContainsKey(type))
+                return 0;
+            return _data.wallet[type];
+        }
         
         protected override void Awake()
         {
             base.Awake();
             Load();
-            UpdateLvlData();
+            CheckWin();
         }
 
+
+        public void ChangeStarTo15()
+        {
+            ChangeCurrencyAmount(Currency.stars, 15);
+        }
+        
+        public void ChangeCurrencyAmount(Currency type, int offset)
+        {
+            if (_data.wallet.ContainsKey(type))
+            {
+                int current = _data.wallet[type];
+                _data.wallet[type] = current + offset;
+            }
+            else
+                _data.wallet[type] = offset;
+            
+            onCurrencyAmountChanged?.Invoke(type,_data.wallet[type]);
+            Save();
+        }
         
         public void IncrementLvl()
         {
@@ -65,7 +106,7 @@ namespace Script.PlayerProfile
            
             if (!File.Exists(Application.persistentDataPath + "/MySaveData.tds"))
             {
-                _data = new SaveData();
+                _data = new SaveData(new Dictionary<Currency, int>());
             }
             else
             { 
@@ -94,13 +135,14 @@ namespace Script.PlayerProfile
             {
                 File.Delete(Application.persistentDataPath + "/MySaveData.tds");
             }
-            _data = new SaveData();
+            _data = new SaveData(new Dictionary<Currency, int>());
         }
 
-        public void UpdateLvlData()
+        public void CheckWin()
         {
             if (_data.completedLvlData == _data.currentLvlData)
             {
+                AddReward(GetCurrentLvlData());
                 _data.lvl++;
                 if (_data.lvl <= _lvlList.lvls.Length - 1)
                     _data.currentLvlData = _data.lvl;
@@ -116,6 +158,16 @@ namespace Script.PlayerProfile
             }
         }
 
+        private void AddReward(LvlSettings completedLvl, bool x2 = false)
+        {
+            int reward = completedLvl.starSettings.winAmount;
+            
+            if (x2)
+                reward *= 2;
+
+            ChangeCurrencyAmount(Currency.stars, reward);
+            ChangeCurrencyAmount(Currency.coin, reward*2 );
+        }
         public LvlSettings GetCurrentLvlData()
         {
             return _lvlList.lvls[_data.currentLvlData];

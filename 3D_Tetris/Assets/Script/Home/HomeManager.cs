@@ -13,8 +13,10 @@ namespace Script.PlayerProfile
         
         private void Start()
         {
+            PlayerSaveProfile.instance.CheckWin();
             int lvl = PlayerSaveProfile.instance._lvl;
-            _lvlText.text = PlayerSaveProfile.instance._lvl.ToString() + " lvl";
+            _lvlText.text = (PlayerSaveProfile.instance._lvl+1).ToString() + " lvl";
+            
         }
 
         public void StartLvl()
