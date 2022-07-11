@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55e305acaa644cd79e690bc068505a79, type: 3}
-  m_Name: Lvl 8
+  m_Name: Lvl 9
   m_EditorClassIdentifier: 
   _tutorType: 0
   _speedSettings:
@@ -27,9 +27,9 @@ MonoBehaviour:
   _winScore: 0
   _starSettings:
     collectStar: 1
-    maxStarsInPlace: 2
-    winAmount: 5
-    stepsBetweenStar: 5
+    maxStarsInPlace: 3
+    winAmount: 6
+    stepsBetweenStar: 3
     firstStep: 1000
     allPlaceInFirstStep: 1
     onlyStarPlace: 0
@@ -58,31 +58,28 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0}
     - {x: 1, y: 0, z: 0}
     - {x: 2, y: 0, z: 0}
-    isStone: 0
-    isEvilBox: 1
-  - material: {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
-    blocks:
     - {x: 0, y: 1, z: 0}
-    - {x: 1, y: 1, z: 0}
-    - {x: 2, y: 1, z: 0}
+    - {x: 0, y: 2, z: 0}
     - {x: 1, y: 2, z: 0}
-    - {x: 1, y: 2, z: 1}
-    - {x: 1, y: 2, z: 2}
-    - {x: 1, y: 1, z: 2}
-    - {x: 1, y: 0, z: 2}
+    - {x: 2, y: 2, z: 0}
+    - {x: 2, y: 1, z: 0}
+    - {x: 2, y: 0, z: 2}
+    - {x: 0, y: 0, z: 2}
+    isStone: 1
+    isEvilBox: 0
+  - material: {fileID: 2100000, guid: 3963cdb215dc4f54ab8f2d3dabaff056, type: 2}
+    blocks:
+    - {x: 1, y: 1, z: 0}
     isStone: 0
     isEvilBox: 0
-  - material: {fileID: 2100000, guid: 226f55984c3a8465e95eb6762d5a9113, type: 2}
-    blocks:
-    - {x: 1, y: 3, z: 1}
-    isStone: 0
-    isEvilBox: 1
   _startState: 8
   _starPlaces:
   - amountStars: 1
-    position: {x: 2, y: 1, z: 0}
+    position: {x: 1, y: 1, z: 0}
   - amountStars: 1
-    position: {x: 0, y: 1, z: 0}
+    position: {x: 0, y: 0, z: 2}
+  - amountStars: 1
+    position: {x: 2, y: 0, z: 2}
   _bombsSettings:
     makeBombs: 1
     bombStep: 5
@@ -91,12 +88,12 @@ MonoBehaviour:
     betweenOffersSteps: 30
     inOneGameMax: 1
   _evilBoxSettings:
-    lvlWithEvilBox: 1
+    lvlWithEvilBox: 0
     boxStep: 5
     currentBoxStep: 0
   _stoneBlockSettings:
-    lvlWithStoneBlocks: 0
-    stoneStep: 7
+    lvlWithStoneBlocks: 1
+    stoneStep: 15
     currentStoneStep: 0
-  _lvl: 8
+  _lvl: 9
   _infinity: 0

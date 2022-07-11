@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tutorType: 0
   _speedSettings:
-  - time: 0.35
+  - time: 0.45
     score: 0
-  - time: 0.28
+  - time: 0.35
     score: 27
-  - time: 0.23
+  - time: 0.25
     score: 45
   - time: 0.2
     score: 72
@@ -27,12 +27,12 @@ MonoBehaviour:
   _winScore: 0
   _starSettings:
     collectStar: 1
-    maxStarsInPlace: 3
+    maxStarsInPlace: 1
     winAmount: 3
-    stepsBetweenStar: 3
+    stepsBetweenStar: 7
     firstStep: 1000
     allPlaceInFirstStep: 1
-    onlyStarPlace: 1
+    onlyStarPlace: 0
   _generatorSettings:
     points:
     - score: 0
@@ -55,36 +55,41 @@ MonoBehaviour:
   _lvlElements:
   - material: {fileID: 2100000, guid: a5af7ee3fbc0443f49ff3d339a2d14ac, type: 2}
     blocks:
+    - {x: 1, y: 0, z: 0}
     - {x: 0, y: 0, z: 1}
-    - {x: 0, y: 1, z: 1}
-    - {x: 0, y: 2, z: 1}
-    - {x: 0, y: 2, z: 0}
-    - {x: 0, y: 2, z: 2}
-    - {x: 0, y: 3, z: 2}
-    - {x: 0, y: 3, z: 0}
-    isStone: 1
+    - {x: 1, y: 0, z: 2}
+    - {x: 2, y: 0, z: 1}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
+    blocks:
+    - {x: 1, y: 0, z: 1}
+    - {x: 1, y: 1, z: 1}
+    isStone: 0
+    isEvilBox: 0
+  - material: {fileID: 2100000, guid: 226f55984c3a8465e95eb6762d5a9113, type: 2}
+    blocks:
+    - {x: 1, y: 2, z: 1}
+    isStone: 0
+    isEvilBox: 1
   _startState: 8
   _starPlaces:
   - amountStars: 1
-    position: {x: 0, y: 0, z: 1}
-  - amountStars: 1
-    position: {x: 0, y: 2, z: 0}
-  - amountStars: 1
-    position: {x: 0, y: 2, z: 2}
+    position: {x: 1, y: 0, z: 1}
   _bombsSettings:
     makeBombs: 1
-    bombStep: 3
-    currentStep: 2
+    bombStep: 7
+    currentStep: 0
   _nextBigBombOfferSettings:
     betweenOffersSteps: 30
     inOneGameMax: 1
   _evilBoxSettings:
     lvlWithEvilBox: 1
     boxStep: 5
-    currentBoxStep: 1000
+    currentBoxStep: 0
   _stoneBlockSettings:
     lvlWithStoneBlocks: 0
-    stoneStep: 15
+    stoneStep: 7
     currentStoneStep: 0
   _lvl: 7
   _infinity: 0

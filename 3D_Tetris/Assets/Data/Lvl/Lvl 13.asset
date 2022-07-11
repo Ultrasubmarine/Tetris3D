@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55e305acaa644cd79e690bc068505a79, type: 3}
-  m_Name: Lvl 8
+  m_Name: Lvl 13
   m_EditorClassIdentifier: 
   _tutorType: 0
   _speedSettings:
@@ -53,50 +53,57 @@ MonoBehaviour:
       startPoints: 10
     exceptCurrentElementForNext: 1
   _lvlElements:
+  - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
+    blocks:
+    - {x: 1, y: 0, z: 1}
+    - {x: 1, y: 1, z: 1}
+    - {x: 1, y: 2, z: 1}
+    - {x: 1, y: 3, z: 1}
+    - {x: 1, y: 4, z: 1}
+    - {x: 1, y: 5, z: 1}
+    isStone: 0
+    isEvilBox: 0
+  - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
+    blocks:
+    - {x: 1, y: 6, z: 0}
+    - {x: 2, y: 6, z: 1}
+    - {x: 1, y: 6, z: 2}
+    - {x: 0, y: 6, z: 1}
+    - {x: 1, y: 6, z: 1}
+    isStone: 0
+    isEvilBox: 0
+  - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
+    blocks:
+    - {x: 2, y: 0, z: 2}
+    - {x: 0, y: 0, z: 2}
+    isStone: 0
+    isEvilBox: 0
   - material: {fileID: 2100000, guid: a5af7ee3fbc0443f49ff3d339a2d14ac, type: 2}
     blocks:
     - {x: 0, y: 0, z: 0}
-    - {x: 1, y: 0, z: 0}
     - {x: 2, y: 0, z: 0}
-    isStone: 0
-    isEvilBox: 1
-  - material: {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
-    blocks:
-    - {x: 0, y: 1, z: 0}
-    - {x: 1, y: 1, z: 0}
-    - {x: 2, y: 1, z: 0}
-    - {x: 1, y: 2, z: 0}
-    - {x: 1, y: 2, z: 1}
-    - {x: 1, y: 2, z: 2}
-    - {x: 1, y: 1, z: 2}
-    - {x: 1, y: 0, z: 2}
-    isStone: 0
+    isStone: 1
     isEvilBox: 0
-  - material: {fileID: 2100000, guid: 226f55984c3a8465e95eb6762d5a9113, type: 2}
-    blocks:
-    - {x: 1, y: 3, z: 1}
-    isStone: 0
-    isEvilBox: 1
   _startState: 8
   _starPlaces:
   - amountStars: 1
-    position: {x: 2, y: 1, z: 0}
+    position: {x: 0, y: 0, z: 2}
   - amountStars: 1
-    position: {x: 0, y: 1, z: 0}
+    position: {x: 2, y: 0, z: 2}
   _bombsSettings:
     makeBombs: 1
-    bombStep: 5
-    currentStep: 0
+    bombStep: 6
+    currentStep: 4
   _nextBigBombOfferSettings:
     betweenOffersSteps: 30
     inOneGameMax: 1
   _evilBoxSettings:
     lvlWithEvilBox: 1
-    boxStep: 5
+    boxStep: 7
     currentBoxStep: 0
   _stoneBlockSettings:
-    lvlWithStoneBlocks: 0
-    stoneStep: 7
+    lvlWithStoneBlocks: 1
+    stoneStep: 16
     currentStoneStep: 0
-  _lvl: 8
+  _lvl: 13
   _infinity: 0
