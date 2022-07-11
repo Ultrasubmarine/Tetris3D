@@ -3,36 +3,41 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Script.PlayerProfile
 {
     [Serializable]
     class SaveData
     {
+        public int currentLvlData = 0;
+        public int completedLvlData = -1;
+        
         public int lvl = 0;
-        public int bombAmount = 0 ;
         public int bestScore = 0;
+        
+        
     }
     
     public class PlayerSaveProfile :MonoBehaviourSingleton<PlayerSaveProfile>
     {
         public Action<int> onLevelChange;
-        public Action<int> onBombAmountChange;
         public Action<int> onBestScoreChange;
         
         public int _lvl => _data.lvl;
-        public int _bombAmount => _data.bombAmount;
         public int _bestScore => _data.bestScore;
         
         private SaveData _data;
-
-
+        [SerializeField] private LvlList _lvlList;
+        
         protected override void Awake()
         {
             base.Awake();
             Load();
+            UpdateLvlData();
         }
 
+        
         public void IncrementLvl()
         {
             _data.lvl++;
@@ -40,17 +45,10 @@ namespace Script.PlayerProfile
             Save();
         }
         
-        public void SetLvl(int lvl)
+        public void CompleteCurrentLvl()
         {
-            _data.lvl = lvl;
-            onLevelChange?.Invoke(lvl);
-            Save();
-        }
-        
-        public void SetBombAmount(int amount)
-        {
-            _data.bombAmount = amount;
-            onBombAmountChange?.Invoke(amount);
+            _data.completedLvlData = _data.currentLvlData;
+            onLevelChange?.Invoke( _data.completedLvlData);
             Save();
         }
         
@@ -87,6 +85,7 @@ namespace Script.PlayerProfile
             bf.Serialize(file, _data);
             file.Close();
             Debug.Log("Game data saved!");
+            
         }
 
         public void ResetSave()
@@ -96,6 +95,30 @@ namespace Script.PlayerProfile
                 File.Delete(Application.persistentDataPath + "/MySaveData.tds");
             }
             _data = new SaveData();
+        }
+
+        public void UpdateLvlData()
+        {
+            if (_data.completedLvlData == _data.currentLvlData)
+            {
+                _data.lvl++;
+                if (_data.lvl <= _lvlList.lvls.Length - 1)
+                    _data.currentLvlData = _data.lvl;
+                else
+                {
+                    do
+                    {
+                        _data.currentLvlData = Random.Range(_lvlList.firstRepeatLvl, _lvlList.lvls.Length);
+                    } while (_data.currentLvlData == _data.completedLvlData );
+                }
+                
+                Save();
+            }
+        }
+
+        public LvlSettings GetCurrentLvlData()
+        {
+            return _lvlList.lvls[_data.currentLvlData];
         }
     }
 }

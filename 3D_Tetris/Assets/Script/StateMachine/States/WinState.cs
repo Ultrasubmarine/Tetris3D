@@ -17,9 +17,9 @@ namespace Script.StateMachine.States
         public override void Enter(TetrisState last)
         {
             base.Enter(last);
-            
-            if(PlayerSaveProfile.instance._lvl < RealizationBox.Instance.gameManager.currentLvl)
-                PlayerSaveProfile.instance.SetLvl(RealizationBox.Instance.gameManager.currentLvl);
+
+            if (!RealizationBox.Instance.gameManager.infinity)
+                PlayerSaveProfile.instance.CompleteCurrentLvl();
             
             if (_pauseUI.isPause)
             {
