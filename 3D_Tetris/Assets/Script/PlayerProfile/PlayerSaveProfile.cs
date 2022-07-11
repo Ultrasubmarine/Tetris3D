@@ -15,6 +15,8 @@ namespace Script.PlayerProfile
         
         public int lvl = 0;
         public int bestScore = 0;
+        
+        
     }
     
     public class PlayerSaveProfile :MonoBehaviourSingleton<PlayerSaveProfile>

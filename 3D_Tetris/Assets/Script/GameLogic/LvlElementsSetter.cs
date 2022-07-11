@@ -13,6 +13,7 @@ namespace Script.GameLogic
         public Material material;
         public List<Vector3Int> blocks;
         public bool isStone;
+        public bool isEvilBox;
     }
     public class LvlElementsSetter: MonoBehaviour
     {
@@ -23,6 +24,7 @@ namespace Script.GameLogic
        private GameLogicPool _pool;
        private ElementDropper _elementDropper;
        private StoneBlockManager _stoneBlockManager;
+       private EvilBoxManager _evilBoxManager;
        
        public void Init()
        {
@@ -30,6 +32,7 @@ namespace Script.GameLogic
            _pool = RealizationBox.Instance.gameLogicPool;
            _elementDropper = RealizationBox.Instance.elementDropper;
            _stoneBlockManager = RealizationBox.Instance.stoneBlockManager;
+           _evilBoxManager = RealizationBox.Instance.evilBoxManager;
        }
 
        private void Start()
@@ -56,6 +59,11 @@ namespace Script.GameLogic
                
                if(e.isStone)
                    _stoneBlockManager.TransformToStone(element);
+               else if(e.isEvilBox)
+                   foreach (var block in element.blocks)
+                   {
+                       _evilBoxManager.AddEvilBox(block);
+                   }
                
                // выравниваем элемент относительно координат y 
                var min_y = element.blocks.Min(s => s.coordinates.y);
