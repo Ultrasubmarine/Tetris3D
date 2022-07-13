@@ -20,10 +20,6 @@ MonoBehaviour:
     score: 27
   - time: 0.25
     score: 45
-  - time: 0.2
-    score: 72
-  - time: 0.25
-    score: 81
   _winScore: 0
   _starSettings:
     collectStar: 1
@@ -55,6 +51,8 @@ MonoBehaviour:
     - {x: 1, y: 0, z: 0}
     - {x: 2, y: 0, z: 0}
     - {x: 2, y: 0, z: 1}
+    isStone: 0
+    isEvilBox: 0
   - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
     blocks:
     - {x: 0, y: 0, z: 1}
@@ -62,6 +60,8 @@ MonoBehaviour:
     - {x: 1, y: 0, z: 2}
     - {x: 0, y: 0, z: 2}
     - {x: 2, y: 0, z: 2}
+    isStone: 0
+    isEvilBox: 0
   _startState: 8
   _starPlaces:
   - amountStars: 1
@@ -77,5 +77,9 @@ MonoBehaviour:
     lvlWithEvilBox: 0
     boxStep: 0
     currentBoxStep: 0
+  _stoneBlockSettings:
+    lvlWithStoneBlocks: 0
+    stoneStep: 0
+    currentStoneStep: 0
   _lvl: 2
   _infinity: 0
