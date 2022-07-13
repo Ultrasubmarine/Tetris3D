@@ -84,7 +84,7 @@ namespace Script.CheckPlace
                 int x = b.coordinates.x + offset.x;
                 int z = b.coordinates.z + offset.z;
                 
-                var _minY = _matrix.MinHeightInCoordinates(x.ToIndex(), z.ToIndex());
+                var _minY = _matrix.MinHeightInCoordinatesAfterPoint(x.ToIndex(), z.ToIndex(), b.coordinates.y);
                             //_matrix.MinHeightInCoordinates(b.coordinates.x.ToIndex(), b.coordinates.z.ToIndex());
 
                 int currentDiff = b._coordinates.y - _minY;
