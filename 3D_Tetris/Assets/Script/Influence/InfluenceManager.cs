@@ -25,6 +25,8 @@ namespace Script.Influence
         [SerializeField] private float _delayForMoveWindow;
         
         private bool _fastMode = false;
+
+        public Action OnMoveWindow;
         
         private void Awake()
         {
@@ -50,9 +52,9 @@ namespace Script.Influence
             return false;
         }
         
-        public void AddDrop(Transform obj, Vector3 offset, float speed, Action callBack = null, bool isIgnoreSlow = false)
+        public void AddDrop(Transform obj, Vector3 offset, float speed, Action callBack = null, bool isIgnoreSlow = false, bool checkMoveDelay = false)
         {
-            var info = new DropInfluence(obj,offset, speed, callBack,_delayForMoveWindow, isIgnoreSlow);
+            var info = new DropInfluence(obj,offset, speed, callBack,_delayForMoveWindow, isIgnoreSlow, checkMoveDelay? OnDelayMovement: null);
             _influences.Add(info);
         }
 
@@ -61,7 +63,11 @@ namespace Script.Influence
             var info = new MoveInfluence(element,offset, speed, callBack);
             _moveInfluences.Add(info);
         }
-        
+
+        public void OnDelayMovement()
+        {
+            OnMoveWindow?.Invoke();
+        }
         private void FixedUpdate()
         {
             var i = 0;

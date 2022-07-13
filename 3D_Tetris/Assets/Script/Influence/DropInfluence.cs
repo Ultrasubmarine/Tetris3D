@@ -6,6 +6,7 @@ namespace Script.ObjectEngine
 {
     public struct DropInfluence  : IInfluence
     {
+        private Action _onMoveDelay;
         private readonly Transform _transform;
         private readonly Vector3 _start;
         private readonly Vector3 _finish;
@@ -18,8 +19,8 @@ namespace Script.ObjectEngine
 
         private float _deltaForCheckNear; // max delta for nearPosition == true
         private bool _isNear;
-        
-        public DropInfluence(Transform transform, Vector3 direction, float allTime, Action action,  float deltaForCheckNear, bool isIgnoreSlow = false)
+
+        public DropInfluence(Transform transform, Vector3 direction, float allTime, Action action,  float deltaForCheckNear, bool isIgnoreSlow = false, Action moveDelayCallback = null)
         {
             _transform = transform;
         
@@ -33,6 +34,8 @@ namespace Script.ObjectEngine
 
             _deltaForCheckNear = deltaForCheckNear;
             _isNear = false;
+            
+            _onMoveDelay = moveDelayCallback;
         }
         
         public bool Update(float speed = 1)
@@ -68,9 +71,13 @@ namespace Script.ObjectEngine
         {
             _currentTime += Time.fixedDeltaTime /*(Time.deltaTime < 0.05? Time.deltaTime : 0.05f)*/ * speed;
             _transform.localPosition = Vector3.Lerp(_start, _finish, _currentTime / _allTime);
-            
-           _isNear = Math.Abs(_transform.localPosition.y - _finish.y) < _deltaForCheckNear;
 
+            if (!_isNear)
+            {
+                _isNear = Math.Abs(_transform.localPosition.y - _finish.y) < _deltaForCheckNear;
+                if(_isNear) _onMoveDelay?.Invoke();
+            }
+            
            if (_currentTime >= _allTime)
             {
                 _transform.localPosition = _finish;

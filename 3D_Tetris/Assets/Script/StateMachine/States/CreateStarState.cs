@@ -1,4 +1,5 @@
 using System.Runtime.Remoting.Messaging;
+using DG.Tweening;
 using UnityEngine;
 using Helper.Patterns.FSM;
 using Script.GameLogic.Stars;
@@ -10,13 +11,16 @@ namespace Script.StateMachine.States
     {
         private PlaneMatrix _matrix;
         private StarsManager _starsManager;
-
+        private TapsEvents _tapsEvents;
+        
         public CreateStarState ()
         {
             _myState = TetrisState.CreateStar;
 
             _matrix = RealizationBox.Instance.matrix;
             _starsManager = RealizationBox.Instance.starsManager;
+            _tapsEvents = RealizationBox.Instance.tapsEvents;
+            
         }
 
         public override void Enter(TetrisState last)
@@ -34,8 +38,9 @@ namespace Script.StateMachine.States
             {
                 _starsManager.OnCollectedStars += OnCollectedStar;
             }
-            else if (_starsManager.CanCreateStar()) 
+            else if (_starsManager.CanCreateStar())
             {
+                _tapsEvents.OnDoubleTap += OnDoubleTap;
                  _starsManager.OnCreatedStar += OnCreatedStar;
                  _starsManager.CreateStar();
             }
@@ -43,6 +48,10 @@ namespace Script.StateMachine.States
                 _FSM.SetNewState(TetrisState.GenerateElement);
         }
 
+        public void OnDoubleTap()
+        {
+            DOTween.timeScale = 2.5f;
+        }
         public override void Exit(TetrisState last)
         {
             _starsManager.OnCollectedStars -= OnCollectedStar;
@@ -56,6 +65,10 @@ namespace Script.StateMachine.States
                 _starsManager.CreateStar();
                 return;
             }
+            
+            _tapsEvents.OnDoubleTap -= OnDoubleTap;
+            DOTween.timeScale = 1;
+            
             _starsManager.OnCreatedStar -= OnCreatedStar;
             if (_FSM.GetCurrentState() == TetrisState.Restart)
                 return;

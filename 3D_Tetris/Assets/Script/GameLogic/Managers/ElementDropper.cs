@@ -1,4 +1,5 @@
-﻿using Script.GameLogic.GameItems;
+﻿using System;
+using Script.GameLogic.GameItems;
 using Script.Influence;
 using UnityEngine;
 
@@ -25,6 +26,9 @@ namespace Script.GameLogic.TetrisElement
         private bool _isWaitingMerge = false;
         [SerializeField] private float _waitMergeTime = 0.4f;
         private Vector3Int[] vectorDirection;
+
+        public Action OnDropEndCallback;
+        
         private void Start()
         {
             _matrix = RealizationBox.Instance.matrix;
@@ -72,7 +76,7 @@ namespace Script.GameLogic.TetrisElement
         {
             _isWaitingMerge = false;
             _elementData.newElement.LogicDrop();
-            _influence.AddDrop( _elementData.newElement.myTransform, Vector3.down, global::Speed.timeDrop, CallDrop);
+            _influence.AddDrop( _elementData.newElement.myTransform, Vector3.down, global::Speed.timeDrop, CallDrop, false, true);
             
             var pickableBlocks = _matrix.GetPickableBlocksForElement( _elementData.newElement);
             foreach (var pBlock in pickableBlocks)
@@ -90,6 +94,9 @@ namespace Script.GameLogic.TetrisElement
             
             if (! _elementData.newElement)
                 return;
+            
+            OnDropEndCallback?.Invoke();
+            
             if(_fsm.GetCurrentState() != TetrisState.WaitInfluence)
                 InfluenceData.delayedDrop = true;
             else

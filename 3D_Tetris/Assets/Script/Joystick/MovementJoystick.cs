@@ -1,5 +1,6 @@
 ﻿using System;
 using DG.Tweening;
+using Script.Influence;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -44,6 +45,7 @@ namespace Script.Controller
         private CanvasGroup _canvasGroup;
         
         private SlowManager _slowManager;
+        private InfluenceManager _influenceManager;
         
         private bool _isStickCanDrag;
 
@@ -97,12 +99,13 @@ namespace Script.Controller
         private void Start()
         {
             _slowManager = RealizationBox.Instance.slowManager;
+            _influenceManager = RealizationBox.Instance.influenceManager;
             
             RealizationBox.Instance.tapsEvents.OnSingleTap += Spawn;
             
             _canvasGroup.alpha = 0;
 
-            RealizationBox.Instance.FSM.AddListener(TetrisState.EndInfluence, OnEndInfluenseState);
+            RealizationBox.Instance.FSM.AddListener(TetrisState.EndInfluence, OnInfluenceEnded);
             RealizationBox.Instance.FSM.AddListener(TetrisState.MergeElement, OnTetrisMergeElement);
             
             _gameController = RealizationBox.Instance.gameController;
@@ -113,8 +116,13 @@ namespace Script.Controller
         {
             Hide();
         }
+
+        private void OnInfluenceEnded()
+        {
+            OnApplyJoystickPosition(false);
+        }
         
-        private void OnEndInfluenseState()
+        private void OnApplyJoystickPosition(bool ignoreLastSuccess)
         {
             if (!_isStickCanDrag)
                 return;
@@ -130,10 +138,17 @@ namespace Script.Controller
             if (currentRadius < _squareSpaceRadius)
             {
                 if(currentRadius > _squareMinRadiusMove)
-                    CheckMove(Input.GetTouch(0).position);
+                    CheckMove(Input.GetTouch(0).position, ignoreLastSuccess);
             }
         }
 
+        public void OnMoveDelay()
+        {
+            if (RealizationBox.Instance.FSM.GetCurrentState() != TetrisState.WaitInfluence)
+                return;
+            OnApplyJoystickPosition(true);
+        }
+        
         protected void OnJoystickStateChange(JoystickState newState)
         {
             state = newState;
@@ -156,6 +171,9 @@ namespace Script.Controller
             
             _skickSpace.position = Input.GetTouch(0).position ;  
             _stick.position = _skickSpace.position;
+
+            _influenceManager.OnMoveWindow += OnMoveDelay;
+            RealizationBox.Instance.elementDropper.OnDropEndCallback += OnMoveDelay;
         }
 
         public void Hide()
@@ -167,6 +185,8 @@ namespace Script.Controller
             _isStickCanDrag = false;
 
             _lastAction.Reset();
+            _influenceManager.OnMoveWindow -= OnMoveDelay;
+            RealizationBox.Instance.elementDropper.OnDropEndCallback -= OnMoveDelay;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -194,7 +214,7 @@ namespace Script.Controller
                 ReverseLastAction();
         }
 
-        private void CheckMove(Vector2 position)
+        private void CheckMove(Vector2 position, bool ignoreLastSuccess = false)
         {
             if (RealizationBox.Instance.FSM.GetCurrentState() != TetrisState.WaitInfluence)
                 return;
@@ -224,16 +244,19 @@ namespace Script.Controller
             else 
                 direct = move.x;
 
-            if (direct == _lastAction.direction)
+            if (!ignoreLastSuccess)
             {
-                if (_lastAction.isSuccess == false)
-                    return;
-                _lastAction.count++;
-            }
-            else
-            {
-                _lastAction.direction = direct;
-                _lastAction.count = 1;
+                if (direct == _lastAction.direction)
+                {
+                    if (_lastAction.isSuccess == false)
+                        return;
+                    _lastAction.count++;
+                }
+                else
+                {
+                    _lastAction.direction = direct;
+                    _lastAction.count = 1;
+                }
             }
             
             _lastAction.isReverseAction = false;
