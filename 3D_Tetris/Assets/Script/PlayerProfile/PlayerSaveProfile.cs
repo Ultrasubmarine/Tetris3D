@@ -18,7 +18,8 @@ namespace Script.PlayerProfile
         public int bestScore = 0;
 
         public Dictionary<Currency, int> wallet;
-
+        public bool x2Reward = false;
+        
         public SaveData(Dictionary<Currency, int> wallet)
         {
             this.wallet = wallet;
@@ -147,7 +148,9 @@ namespace Script.PlayerProfile
         {
             if (_data.completedLvlData == _data.currentLvlData)
             {
-                AddReward(GetCurrentLvlData());
+                AddReward(GetCurrentLvlData(),_data.x2Reward);
+                
+                _data.x2Reward = false;
                 _data.lvl++;
                 if (_data.lvl <= _lvlList.lvls.Length - 1)
                     _data.currentLvlData = _data.lvl;
@@ -176,6 +179,12 @@ namespace Script.PlayerProfile
         public LvlSettings GetCurrentLvlData()
         {
             return _lvlList.lvls[_data.currentLvlData];
+        }
+
+        public void SetRewardX2()
+        {
+            _data.x2Reward = true;
+            Save();
         }
     }
 }

@@ -5,7 +5,9 @@ using Script;
 using Script.GameLogic;
 using Script.GameLogic.Stars;
 using Script.GameLogic.TetrisElement;
+using Script.PlayerProfile;
 using Script.UI;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -20,6 +22,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BottomPanelAnimation _gameplayBottomPanel;
     
     [SerializeField] private CanvasGroup _winPanel;
+    [SerializeField] private RectTransform[] _rewardOreols;
+    [SerializeField] private TextMeshProUGUI _starRewardText, _coinRewardText;
+    [SerializeField] private GameObject _rewardX2Btn;
+    
     [SerializeField] private CanvasGroup _topGamePanel;
     private TetrisFSM _fsm;
 
@@ -89,7 +95,7 @@ public class GameManager : MonoBehaviour
         box.stoneBlockManager._stepForStoneBlock = lvl.stoneBlockSettings.stoneStep;
         box.stoneBlockManager._currentStep = box.stoneBlockManager._currentStepSave =  lvl.stoneBlockSettings.currentStoneStep;
 
-        _startState = lvl.startState;  
+        _startState = lvl.startState;
     }
 
     private void LastStart()
@@ -166,13 +172,33 @@ public class GameManager : MonoBehaviour
         _winPanel.gameObject.SetActive(true);
         _winPanel.DOFade(1, 0.4f);
         _winPanel.transform.DOMoveY(_winPanel.transform.position.y, 0.4f).From(_winPanel.transform.position.y - 250);
+        
+        foreach (var o in _rewardOreols)
+        {
+            o.DORotate(new Vector3 (0, 0,360), 3f).SetLoops(-1,LoopType.Yoyo).SetEase(Ease.Linear);
+        }
+
+        var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount;
+        _starRewardText.text = reward.ToString();
+        _coinRewardText.text = (reward * 2).ToString();
     }
 
     public void ResetPause()
     {
         
     }
-    
+
+    public void SetRewardX2()
+    {
+        //TODO ADS
+        PlayerSaveProfile.instance.SetRewardX2();
+        
+        var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount * 2;
+        _starRewardText.text = reward.ToString();
+        _coinRewardText.text = (reward * 2).ToString();
+        _rewardX2Btn.SetActive(false);
+        
+    }
     public void HideGamePanels()
     {
         _topGamePanel.DOFade(0, 0.1f);
