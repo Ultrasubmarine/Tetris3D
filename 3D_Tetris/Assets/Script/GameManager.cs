@@ -5,6 +5,7 @@ using Script;
 using Script.GameLogic;
 using Script.GameLogic.Stars;
 using Script.GameLogic.TetrisElement;
+using Script.Home;
 using Script.PlayerProfile;
 using Script.UI;
 using TMPro;
@@ -23,7 +24,7 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] private CanvasGroup _winPanel;
     [SerializeField] private RectTransform[] _rewardOreols;
-    [SerializeField] private TextMeshProUGUI _starRewardText, _coinRewardText;
+    [SerializeField] private CurrencyLabel _starReward, _coinReward;
     [SerializeField] private GameObject _rewardX2Btn;
     
     [SerializeField] private CanvasGroup _topGamePanel;
@@ -179,8 +180,8 @@ public class GameManager : MonoBehaviour
         }
 
         var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount;
-        _starRewardText.text = reward.ToString();
-        _coinRewardText.text = (reward * 2).ToString();
+        _starReward.SetCurrencyAmount( reward);
+        _coinReward.SetCurrencyAmount( reward * 2);
     }
 
     public void ResetPause()
@@ -194,8 +195,8 @@ public class GameManager : MonoBehaviour
         PlayerSaveProfile.instance.SetRewardX2();
         
         var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount * 2;
-        _starRewardText.text = reward.ToString();
-        _coinRewardText.text = (reward * 2).ToString();
+        _starReward.OnCurrencyAmountChanged(Currency.stars,reward);
+        _coinReward.OnCurrencyAmountChanged(Currency.coin,reward*2);
         _rewardX2Btn.SetActive(false);
         
     }

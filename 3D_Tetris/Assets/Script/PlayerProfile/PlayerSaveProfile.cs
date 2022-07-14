@@ -60,6 +60,10 @@ namespace Script.PlayerProfile
             CheckWin();
         }
 
+        public void Add5Stars()
+        {
+            ChangeCurrencyAmount(Currency.coin, 5);
+        }
         public bool ChangeCurrencyAmount(Currency type, int offset)
         {
             if (_data.wallet.ContainsKey(type))
