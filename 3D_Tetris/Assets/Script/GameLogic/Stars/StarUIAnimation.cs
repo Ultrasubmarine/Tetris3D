@@ -92,7 +92,7 @@ namespace Script.GameLogic.Stars
                 .Join(_miniStars[2].starCanvasGroup.DOFade(0f, _timeDisappear).From(1f))
                 .Join(_miniStars[3].starCanvasGroup.DOFade(0f, _timeDisappear).From(1f))
                 .Join(_miniStars[4].starCanvasGroup.DOFade(0f, _timeDisappear).From(1f));
-            
+
             animation.OnComplete(() =>
             {
                 RealizationBox.Instance.FSM.onStateChange -= onFSMStateChange;
