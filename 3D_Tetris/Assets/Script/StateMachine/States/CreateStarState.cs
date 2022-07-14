@@ -40,18 +40,13 @@ namespace Script.StateMachine.States
             }
             else if (_starsManager.CanCreateStar())
             {
-                _tapsEvents.OnDoubleTap += OnDoubleTap;
                  _starsManager.OnCreatedStar += OnCreatedStar;
                  _starsManager.CreateStar();
             }
             else
                 _FSM.SetNewState(TetrisState.GenerateElement);
         }
-
-        public void OnDoubleTap()
-        {
-            DOTween.timeScale = 2.5f;
-        }
+        
         public override void Exit(TetrisState last)
         {
             _starsManager.OnCollectedStars -= OnCollectedStar;
@@ -66,7 +61,6 @@ namespace Script.StateMachine.States
                 return;
             }
             
-            _tapsEvents.OnDoubleTap -= OnDoubleTap;
             DOTween.timeScale = 1;
             
             _starsManager.OnCreatedStar -= OnCreatedStar;
