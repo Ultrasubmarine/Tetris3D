@@ -52,8 +52,10 @@ namespace Script.GameLogic.TetrisElement
                 return false;
 
             if (RealizationBox.Instance.influenceManager.fastSpeed)
+            {
                 return false;
-            
+            }
+
             bool can = false;
             foreach (var p in vectorDirection)
             {

@@ -42,10 +42,6 @@ namespace Script.ObjectEngine
         {
             if (Drop(speed))
             {
-               if( IsNearStartPosition() )
-                   Debug.Log("MOVE WINDOW");
-         
-               
                 _callBack?.Invoke();
                 return true;
             }
@@ -80,6 +76,11 @@ namespace Script.ObjectEngine
             
            if (_currentTime >= _allTime)
             {
+                if (!_isNear) // if speed to match 
+                {
+                    _isNear = true;
+                    _onMoveDelay?.Invoke();
+                }
                 _transform.localPosition = _finish;
                 return true;
             }

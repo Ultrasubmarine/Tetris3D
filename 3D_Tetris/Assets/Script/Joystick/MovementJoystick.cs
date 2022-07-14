@@ -135,7 +135,7 @@ namespace Script.Controller
 
             var currentRadius = (x - _skickSpace.position.x) * (x - _skickSpace.position.x) + 
                                 (y - _skickSpace.position.y) * (y - _skickSpace.position.y);
-            if (currentRadius < _squareSpaceRadius)
+            //if (currentRadius < _squareSpaceRadius)
             {
                 if(currentRadius > _squareMinRadiusMove)
                     CheckMove(Input.GetTouch(0).position, ignoreLastSuccess);
