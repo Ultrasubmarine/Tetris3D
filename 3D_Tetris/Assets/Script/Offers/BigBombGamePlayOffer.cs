@@ -5,6 +5,7 @@ using Script.GameLogic.Bomb;
 using Script.GameLogic.TetrisElement;
 using Script.PlayerProfile;
 using UnityEngine;
+using TMPro;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
@@ -26,15 +27,12 @@ namespace Script.Offers
         [SerializeField] private CanvasGroup _offerExtraPanel;
         [SerializeField] private Button _extraPanelCloseButton;
         [SerializeField] private Button _extraPanelAdsButton;
-        
-        public int betweenOffersSteps = 3;
-        public int inOneGameMax = 2;
-        
-        private int _betweenOffersStepsCurrent;
-        private int _inOneGameCurrent;
-        
+
         [SerializeField] private int needOutOfLimitAmount = 5;
         [SerializeField] private int maxLessOfLimit = 1;
+
+        [SerializeField] private int _bombCost;
+        [SerializeField] private TextMeshProUGUI[] _textCurrency;
         
         private bool _isShow = false;
         
@@ -78,28 +76,21 @@ namespace Script.Offers
             
             Clear();
 
-            _offerButton.onClick.AddListener(OnAdsButtonClick);//(OnOfferButtonClick);
+            _offerButton.onClick.AddListener(OnOfferButtonClick);
             
             _extraPanelCloseButton.onClick.AddListener(HideExtraPanel);
             _extraPanelAdsButton.onClick.AddListener(OnAdsButtonClick);
          //   HideExtraPanel();
             //  Show();
+
+            foreach (var t in _textCurrency)
+            {
+                t.text = _bombCost.ToString();
+            }
         }
         
         public void CheckShowOfferBtn()
         {
-            // if (_inOneGameCurrent > inOneGameMax)
-            //     return;
-
-            // if (PlayerSaveProfile.instance._bombAmount > 0)
-            //     return;
-            
-            // if (_betweenOffersStepsCurrent < betweenOffersSteps)
-            // {
-            //     _betweenOffersStepsCurrent++;
-            //     return;
-            // }
-            
             if (!_checkPlaceManager.CheckAllPosition(ElementData.Instance.newElement))
             {
                 ShowBtn();
@@ -155,8 +146,7 @@ namespace Script.Offers
 
             RealizationBox.Instance.slowManager.SetOfferSlow(false);
         }
-
-
+        
         private void ShowExtraPanel()
         {
             _offerExtraPanel.gameObject.SetActive(true);
@@ -172,13 +162,11 @@ namespace Script.Offers
                     _offerExtraPanel.gameObject.SetActive(false);
                     RealizationBox.Instance.influenceManager.enabled = true;
                 });
-            
         }
-
-
+        
         public void OnOfferButtonClick()
         {
-            if (true) // currency < 1000
+            if (!PlayerSaveProfile.instance.ChangeCurrencyAmount(Currency.coin, -_bombCost)) // currency < 1000
                 ShowExtraPanel();
             else
                 MakeBigBomb();
@@ -193,9 +181,6 @@ namespace Script.Offers
         
         public void MakeBigBomb()
         {
-           
-            _betweenOffersStepsCurrent = 0;
-            _inOneGameCurrent++;
             HideBtn();
             
             if(Equals(_elementData.newElement, null))
@@ -207,13 +192,11 @@ namespace Script.Offers
 
             _fastElementDrop.ResetFastSpeed();
         }
+        
         public void Clear()
         {
             _offerButtonCanvas.gameObject.SetActive(false);
             _isShow = false;
-           
-            _betweenOffersStepsCurrent = betweenOffersSteps + 1;
-            _inOneGameCurrent = 0;
             
             _offerExtraPanel.gameObject.SetActive(false);
         }

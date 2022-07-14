@@ -89,9 +89,6 @@ public class GameManager : MonoBehaviour
         box.stoneBlockManager._stepForStoneBlock = lvl.stoneBlockSettings.stoneStep;
         box.stoneBlockManager._currentStep = box.stoneBlockManager._currentStepSave =  lvl.stoneBlockSettings.currentStoneStep;
 
-        box.bigBombGamePlayOffer.betweenOffersSteps = lvl.nextBombOfferSettings.betweenOffersSteps;
-        box.bigBombGamePlayOffer.inOneGameMax = lvl.nextBombOfferSettings.inOneGameMax;
-
         _startState = lvl.startState;  
     }
 

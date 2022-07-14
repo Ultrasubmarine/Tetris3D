@@ -59,24 +59,29 @@ namespace Script.PlayerProfile
             CheckWin();
         }
 
-
-        public void ChangeStarTo15()
-        {
-            ChangeCurrencyAmount(Currency.stars, 15);
-        }
-        
-        public void ChangeCurrencyAmount(Currency type, int offset)
+        public bool ChangeCurrencyAmount(Currency type, int offset)
         {
             if (_data.wallet.ContainsKey(type))
             {
+                if(_data.wallet[type] + offset < 0)
+                {
+                    return false;
+                }
                 int current = _data.wallet[type];
                 _data.wallet[type] = current + offset;
             }
             else
+            {
+                if (offset < 0)
+                {
+                    return false;
+                }
                 _data.wallet[type] = offset;
+            }
             
             onCurrencyAmountChanged?.Invoke(type,_data.wallet[type]);
             Save();
+            return true;
         }
         
         public void IncrementLvl()

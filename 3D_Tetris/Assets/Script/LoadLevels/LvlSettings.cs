@@ -36,13 +36,6 @@ namespace Script
         public int bombStep;
         public int currentStep;
     }
-    
-    [Serializable]
-    public struct NextBigBombOfferSettings
-    {
-        public int betweenOffersSteps;
-        public int inOneGameMax;
-    }
 
     [Serializable]
     public struct EvilBoxSettings
@@ -74,7 +67,6 @@ namespace Script
         public TetrisState startState => _startState;
         public List<StarPlace> starPlaces => _starPlaces;
         public BombsSettings bombsSettings => _bombsSettings;
-        public NextBigBombOfferSettings nextBombOfferSettings => _nextBigBombOfferSettings;
         public EvilBoxSettings evilBoxSettings => _evilBoxSettings;
         public StoneBlockSettings stoneBlockSettings => _stoneBlockSettings;
             
@@ -87,7 +79,6 @@ namespace Script
         [SerializeField] private TetrisState _startState = TetrisState.GenerateElement;
         [SerializeField] private List<StarPlace> _starPlaces;
         [SerializeField] private BombsSettings _bombsSettings;
-        [SerializeField] private NextBigBombOfferSettings _nextBigBombOfferSettings;
         [SerializeField] private EvilBoxSettings _evilBoxSettings;
         [SerializeField] private StoneBlockSettings _stoneBlockSettings;
         

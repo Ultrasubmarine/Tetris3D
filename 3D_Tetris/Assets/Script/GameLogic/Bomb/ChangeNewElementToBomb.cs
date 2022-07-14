@@ -28,7 +28,7 @@ namespace Script.GameLogic.Bomb
             _particlePool = new Pool<GameObject>(_particleSystem,_particlesParent);
             _activeParticles = new List<GameObject>();
         }
-        
+
         public void ChangeToBigBomb(bool isBig)
         {
             // clear old
