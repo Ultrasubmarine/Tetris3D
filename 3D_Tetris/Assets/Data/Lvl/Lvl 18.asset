@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55e305acaa644cd79e690bc068505a79, type: 3}
-  m_Name: Lvl 15
+  m_Name: Lvl 18
   m_EditorClassIdentifier: 
   _tutorType: 0
   _speedSettings:
@@ -27,12 +27,12 @@ MonoBehaviour:
   _winScore: 0
   _starSettings:
     collectStar: 1
-    maxStarsInPlace: 1
-    winAmount: 3
+    maxStarsInPlace: 5
+    winAmount: 7
     stepsBetweenStar: 5
     firstStep: 1000
-    allPlaceInFirstStep: 0
-    onlyStarPlace: 1
+    allPlaceInFirstStep: 1
+    onlyStarPlace: 0
   _generatorSettings:
     points:
     - score: 0
@@ -53,62 +53,39 @@ MonoBehaviour:
       startPoints: 10
     exceptCurrentElementForNext: 1
   _lvlElements:
-  - material: {fileID: 2100000, guid: a5af7ee3fbc0443f49ff3d339a2d14ac, type: 2}
+  - material: {fileID: 2100000, guid: 3963cdb215dc4f54ab8f2d3dabaff056, type: 2}
     blocks:
+    - {x: 2, y: 0, z: 2}
+    - {x: 2, y: 0, z: 1}
+    - {x: 2, y: 0, z: 0}
     - {x: 1, y: 0, z: 0}
-    - {x: 1, y: 1, z: 0}
-    - {x: 1, y: 2, z: 0}
-    - {x: 1, y: 3, z: 0}
-    - {x: 1, y: 4, z: 0}
     - {x: 0, y: 0, z: 0}
     - {x: 0, y: 1, z: 0}
     - {x: 0, y: 2, z: 0}
-    - {x: 0, y: 3, z: 0}
-    - {x: 0, y: 4, z: 0}
-    - {x: 0, y: 0, z: 1}
-    - {x: 0, y: 1, z: 1}
     - {x: 0, y: 2, z: 1}
-    - {x: 0, y: 3, z: 1}
-    - {x: 0, y: 4, z: 1}
-    - {x: 2, y: 0, z: 1}
-    - {x: 2, y: 1, z: 1}
-    - {x: 2, y: 2, z: 1}
-    - {x: 2, y: 3, z: 1}
-    - {x: 2, y: 4, z: 1}
-    - {x: 2, y: 0, z: 2}
-    - {x: 2, y: 1, z: 2}
+    - {x: 0, y: 2, z: 2}
+    - {x: 1, y: 2, z: 2}
     - {x: 2, y: 2, z: 2}
     - {x: 2, y: 3, z: 2}
     - {x: 2, y: 4, z: 2}
-    - {x: 1, y: 0, z: 2}
-    - {x: 1, y: 1, z: 2}
-    - {x: 1, y: 2, z: 2}
-    - {x: 1, y: 3, z: 2}
-    - {x: 1, y: 4, z: 2}
-    isStone: 1
-    isEvilBox: 0
-  - material: {fileID: 2100000, guid: 3963cdb215dc4f54ab8f2d3dabaff056, type: 2}
-    blocks:
-    - {x: 2, y: 0, z: 0}
-    - {x: 2, y: 1, z: 0}
-    - {x: 2, y: 2, z: 0}
-    - {x: 2, y: 3, z: 0}
+    - {x: 2, y: 4, z: 1}
     - {x: 2, y: 4, z: 0}
-    isStone: 0
-    isEvilBox: 1
-  - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
-    blocks:
-    - {x: 1, y: 4, z: 1}
+    - {x: 1, y: 4, z: 0}
+    - {x: 0, y: 4, z: 0}
+    - {x: 0, y: 5, z: 0}
+    - {x: 0, y: 6, z: 0}
+    - {x: 0, y: 6, z: 1}
+    - {x: 0, y: 6, z: 2}
     isStone: 0
     isEvilBox: 0
   _startState: 8
   _starPlaces:
   - amountStars: 1
-    position: {x: 1, y: 4, z: 1}
+    position: {x: 0, y: 1, z: 0}
   - amountStars: 1
-    position: {x: 2, y: 0, z: 1}
+    position: {x: 2, y: 3, z: 2}
   - amountStars: 1
-    position: {x: 1, y: 0, z: 2}
+    position: {x: 0, y: 5, z: 0}
   _bombsSettings:
     makeBombs: 1
     bombStep: 7
@@ -117,12 +94,12 @@ MonoBehaviour:
     betweenOffersSteps: 30
     inOneGameMax: 1
   _evilBoxSettings:
-    lvlWithEvilBox: 1
-    boxStep: 9
+    lvlWithEvilBox: 0
+    boxStep: 15
     currentBoxStep: 0
   _stoneBlockSettings:
-    lvlWithStoneBlocks: 1
-    stoneStep: 19
+    lvlWithStoneBlocks: 0
+    stoneStep: 20
     currentStoneStep: 0
-  _lvl: 15
+  _lvl: 18
   _infinity: 0

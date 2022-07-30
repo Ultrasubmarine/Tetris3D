@@ -1,0 +1,168 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e305acaa644cd79e690bc068505a79, type: 3}
+  m_Name: Lvl 17
+  m_EditorClassIdentifier: 
+  _tutorType: 0
+  _speedSettings:
+  - time: 0.45
+    score: 0
+  - time: 0.35
+    score: 27
+  - time: 0.25
+    score: 45
+  - time: 0.2
+    score: 72
+  - time: 0.17
+    score: 81
+  _winScore: 0
+  _starSettings:
+    collectStar: 1
+    maxStarsInPlace: 3
+    winAmount: 6
+    stepsBetweenStar: 3
+    firstStep: 1000
+    allPlaceInFirstStep: 1
+    onlyStarPlace: 0
+  _generatorSettings:
+    points:
+    - score: 0
+      stepOfHardElement: 2
+      growBlocksAnywhere: 0
+    - score: 18
+      stepOfHardElement: 2
+      growBlocksAnywhere: 1
+    - score: 36
+      stepOfHardElement: 2
+      growBlocksAnywhere: 1
+    - score: 72
+      stepOfHardElement: 3
+      growBlocksAnywhere: 0
+    probabilitySettings:
+      layerDown: 20
+      neighbours: 5
+      startPoints: 10
+    exceptCurrentElementForNext: 1
+  _lvlElements:
+  - material: {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
+    blocks:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 1, z: 0}
+    - {x: 0, y: 2, z: 0}
+    isStone: 1
+    isEvilBox: 0
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 0, z: 2}
+    - {x: 2, y: 1, z: 1}
+    - {x: 2, y: 2, z: 0}
+    - {x: 2, y: 3, z: 1}
+    - {x: 2, y: 4, z: 2}
+    - {x: 2, y: 5, z: 1}
+    - {x: 2, y: 6, z: 0}
+    isStone: 1
+    isEvilBox: 0
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 0, z: 0}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 6, z: 2}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 6, z: 1}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 5, z: 2}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 5, z: 0}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 4, z: 1}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 4, z: 0}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 3, z: 2}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 3, z: 0}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 2, z: 2}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 2, z: 1}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 1, z: 0}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 0, z: 1}
+    isStone: 0
+    isEvilBox: 1
+  - material: {fileID: 2100000, guid: 1b3ac64a38ece4a2f8ef4d7a05453c78, type: 2}
+    blocks:
+    - {x: 2, y: 1, z: 2}
+    isStone: 0
+    isEvilBox: 1
+  _startState: 8
+  _starPlaces:
+  - amountStars: 1
+    position: {x: 0, y: 0, z: 0}
+  - amountStars: 1
+    position: {x: 0, y: 1, z: 0}
+  - amountStars: 1
+    position: {x: 0, y: 2, z: 0}
+  _bombsSettings:
+    makeBombs: 1
+    bombStep: 10
+    currentStep: 0
+  _nextBigBombOfferSettings:
+    betweenOffersSteps: 30
+    inOneGameMax: 1
+  _evilBoxSettings:
+    lvlWithEvilBox: 1
+    boxStep: 15
+    currentBoxStep: 0
+  _stoneBlockSettings:
+    lvlWithStoneBlocks: 1
+    stoneStep: 20
+    currentStoneStep: 0
+  _lvl: 17
+  _infinity: 0
