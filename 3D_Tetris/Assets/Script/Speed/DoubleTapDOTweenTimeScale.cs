@@ -12,12 +12,12 @@ namespace Script.Speed
         {
             _fsm = RealizationBox.Instance.FSM;
             
-            RealizationBox.Instance.tapsEvents.OnDoubleTap += OnDoubleTap;
+            RealizationBox.Instance.tapsEvents.OnOneTap += OnTap;
             _fsm.AddListener(TetrisState.AllElementsDrop, ResetSpeed);
             _fsm.AddListener(TetrisState.OpenEvilBox, ResetSpeed);
         }
 
-        public void OnDoubleTap()
+        public void OnTap()
         {
             var state = _fsm.GetCurrentState();
             if(state == TetrisState.CreateStar || state == TetrisState.OpenEvilBox)

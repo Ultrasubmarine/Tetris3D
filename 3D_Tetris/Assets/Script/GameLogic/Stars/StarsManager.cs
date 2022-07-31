@@ -129,6 +129,9 @@ namespace Script.GameLogic.Stars
             if (_stars.Count >= _maxStarsAmount)
                 return false;
 
+            if (_stars.Count + collectedStars == neededStars)
+                return false;
+            
             _applicants.Clear();
             for (int i = 0; i <= _matrix.height; i++)
             {

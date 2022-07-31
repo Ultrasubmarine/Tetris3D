@@ -13,6 +13,10 @@ namespace Script.CheckPlace
         private HeightHandler _heightHandler;
         private ElementData _elementData;
 
+        public Action<int> OnDiffYCalculated;
+
+        public int currentDiffY { get; private set; }
+        
         private void Start()
         {
             _matrix = RealizationBox.Instance.matrix;
@@ -24,7 +28,7 @@ namespace Script.CheckPlace
         private void LastStart()
         {
             _elementData.onNewElementUpdate += CheckCurrentPlace;
-            RealizationBox.Instance.FSM.AddListener( TetrisState.Move, CheckCurrentPlace);
+          //  RealizationBox.Instance.FSM.AddListener( TetrisState.Move, CheckCurrentPlace);
         }
         
         public void CheckCurrentPlace()
@@ -33,8 +37,11 @@ namespace Script.CheckPlace
                 return ;
 
             if (RealizationBox.Instance.bombsManager.isBombFalling)
+            {
+                currentDiffY = -1;
                 return;
-
+            }
+            
             HighlightLoseGame(_elementData.newElement, !CheckPlace(_elementData.newElement, Vector3Int.zero));
         }
 
@@ -92,6 +99,7 @@ namespace Script.CheckPlace
                     diffY = currentDiff;
             }
 
+            currentDiffY = diffY;
             // check out of limit
             foreach (var b in element.blocks)
             {

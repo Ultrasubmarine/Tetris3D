@@ -31,9 +31,10 @@ public enum BlockingType
 public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandler {
  
     // You can add listeners in inspector
-    public  event Action OnSingleTap;
+    public  event Action OnSingleTap; // long
     public event Action OnDoubleTap;
- 
+    public event Action OnOneTap;
+    
     public event Action OnDragIceIsland;
     public event Action<SwipeDirection> OnSwipe;
     
@@ -175,6 +176,8 @@ public class TapsEvents : MonoBehaviour, IPointerDownHandler, IPointerExitHandle
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if(amountTap == 1)
+            OnOneTap?.Invoke();
         //  throw new NotImplementedException();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Helper.Patterns.FSM;
+using Script.CheckPlace;
 using Script.Controller;
 using Script.GameLogic.TetrisElement;
 using Script.Influence;
@@ -14,6 +15,8 @@ namespace Script.StateMachine.States
         private ProjectionLineManager _projectionLineManager;
         private Projection _projection;
         private ElementData _elementData;
+        private CheckPlaceManager _checkPlaceManager;
+        
         
         public MoveState()
         {
@@ -23,6 +26,7 @@ namespace Script.StateMachine.States
             _projectionLineManager = RealizationBox.Instance.projectionLineManager;
             _projection = RealizationBox.Instance.projection;
             _elementData = ElementData.Instance;
+            _checkPlaceManager = RealizationBox.Instance.checkPlaceManager;
         }
         
         public override void Enter(TetrisState last)
@@ -39,7 +43,8 @@ namespace Script.StateMachine.States
                     {
                         _FSM.SetNewState(TetrisState.EndInfluence);
                     });
-                
+
+                _checkPlaceManager.CheckCurrentPlace();
                 _projection.CreateProjection();
                 _projectionLineManager.UpdateProjectionLines();
                 base.Enter(last);

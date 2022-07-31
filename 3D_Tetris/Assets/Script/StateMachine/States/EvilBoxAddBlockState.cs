@@ -25,6 +25,12 @@ namespace Script.StateMachine.States
         {
             base.Enter(last);
 
+            if (_starsManager.CheckWin())
+            {
+                _FSM.SetNewState(TetrisState.AllElementsDrop);
+                return;
+            }
+            
             if (!_evilBoxManager.CanOpenBox())
             {
                 _FSM.SetNewState(TetrisState.AllElementsDrop);
