@@ -88,6 +88,7 @@ namespace Script.Home
         // Animation 
         public void AddCurrencyAnimation(int difference)
         {
+            _delayBetweenIcon = _animationDuration / difference;
             for (int i = 0; i < difference; i++)
             {
                 Invoke(nameof(SpawnIcon), i*_delayBetweenIcon);
