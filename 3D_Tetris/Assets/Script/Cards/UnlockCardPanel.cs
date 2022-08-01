@@ -43,21 +43,29 @@ namespace Script.Cards
             _image.sprite = sprite;
         }
 
-        public void Open()
+        public void OpenUnlocked()
+        {
+            foreach (var s in _showPuzzle)
+            {
+                s.DOFade(0, _timeAlphaOpen);
+            }
+            _image.gameObject.SetActive(true);
+        }
+
+        public void HideAll()
         {
             foreach (var p in _puzzle)
             {
                 p.alpha = 1;
             }
-
-            foreach (var s in _showPuzzle)
-            {
-                s.DOFade(0, _timeAlphaOpen);
-            }
+            _image.gameObject.SetActive(false);
         }
         
         public void Unlock()
         {
+            if(_showPuzzle.Count == _puzzle.Count)
+                return;
+            
             var lockedP = _puzzle.Except(_showPuzzle).ToArray();
 
             var unlocked = lockedP[Random.Range(0, lockedP.Count())];

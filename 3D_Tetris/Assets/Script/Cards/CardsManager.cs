@@ -18,6 +18,8 @@ namespace Script.Cards
         
         private int currentCard = 0;
 
+        [SerializeField] private GameObject _cardPrefab;
+        
         private void Start()
         {
             Load();
@@ -44,9 +46,10 @@ namespace Script.Cards
                 h.DOFade(0, _hideTime).From(1);
             }
             _unlockCardPanel.gameObject.SetActive(true);
-            _unlockCardPanel.canvasGroup.DOFade(1, _hideTime * 1.5f).From(0);
+            _unlockCardPanel.HideAll();
             
-            _unlockCardPanel.Open();
+            _unlockCardPanel.canvasGroup.DOFade(1, _hideTime * 1.5f).From(0)
+                .OnComplete(()=> _unlockCardPanel.OpenUnlocked());
         }
 
         public void CloseUnlockPanel()
@@ -56,6 +59,7 @@ namespace Script.Cards
                 h.DOFade(1, _hideTime* 1.5f).From(0);
             }
             
+            _unlockCardPanel.HideAll();
             _unlockCardPanel.canvasGroup.DOFade(0, _hideTime).From(1)
                 .OnComplete(()=>_unlockCardPanel.gameObject.SetActive(false));
             
