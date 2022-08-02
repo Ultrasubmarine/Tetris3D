@@ -57,6 +57,7 @@ namespace Script.Cards
             foreach (var p in _puzzle)
             {
                 p.alpha = 1;
+                p.DOKill();
             }
             _image.gameObject.SetActive(false);
         }

@@ -12,16 +12,19 @@ namespace Script.Cards
         [SerializeField] private float _hideTime;
         
         [SerializeField] private UnlockCardPanel _unlockCardPanel;
-        [SerializeField] private CardsList _cards;
-
+        [SerializeField] private CardsList _cardsData;
+        private List<CardIcon> _cards;
+        
         [SerializeField] private Button _openBtn;
         
         private int currentCard = 0;
 
         [SerializeField] private GameObject _cardPrefab;
+        [SerializeField] private Transform _cardsIconListParent;
         
         private void Start()
         {
+            _cards = new List<CardIcon>();
             Load();
             
             _openBtn.onClick.AddListener(Open);
@@ -31,7 +34,8 @@ namespace Script.Cards
 
         public void Load()
         {
-            _unlockCardPanel.Load(new List<int>(), _cards.cards[currentCard]);
+            CreateCardIconList();
+            _unlockCardPanel.Load(new List<int>(), _cardsData.cards[currentCard]);
         }
 
         public void Open()
@@ -47,7 +51,8 @@ namespace Script.Cards
             }
             _unlockCardPanel.gameObject.SetActive(true);
             _unlockCardPanel.HideAll();
-            
+
+            _unlockCardPanel.transform.DOScale(1, _hideTime * 1.5f).From(0.7f);
             _unlockCardPanel.canvasGroup.DOFade(1, _hideTime * 1.5f).From(0)
                 .OnComplete(()=> _unlockCardPanel.OpenUnlocked());
         }
@@ -60,9 +65,27 @@ namespace Script.Cards
             }
             
             _unlockCardPanel.HideAll();
+            _unlockCardPanel.transform.DOScale(0.7f, _hideTime).From(1);
             _unlockCardPanel.canvasGroup.DOFade(0, _hideTime).From(1)
                 .OnComplete(()=>_unlockCardPanel.gameObject.SetActive(false));
             
+        }
+
+        public void CreateCardIconList()
+        {
+            for (int i = 0; i < _cardsData.cards.Count; i++)
+            {
+                var ci = Instantiate(_cardPrefab, _cardsIconListParent).GetComponent<CardIcon>();
+                
+                ci.SetState(i < currentCard? CardState.unlocked: i == currentCard? CardState.current : CardState.locked);
+                ci.SetPicture(_cardsData.cards[i]);
+                _cards.Add(ci);
+            }
+        }
+
+        public void UpdateProgressCard()
+        {
+            _cards[currentCard].SetProgress("0 /6");
         }
     }
 }
