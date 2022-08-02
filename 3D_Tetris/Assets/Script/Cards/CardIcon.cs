@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,15 +14,24 @@ namespace Script.Cards
     
     public class CardIcon : MonoBehaviour
     {
+        public Action<int> OnButtonClick;
+        
         [SerializeField] private TextMeshProUGUI _text;
         
         [SerializeField] private GameObject _lock;
         [SerializeField] private GameObject _cardHider;
         [SerializeField] private GameObject _picture;
-
+        [SerializeField] private Button _button;
+        
         [SerializeField] private Image _image;
         private CardState _state;
+        private int _index;
         
+        private void Start()
+        {
+            _button.onClick.AddListener(() => OnButtonClick.Invoke(_index));
+        }
+
         public void SetState(CardState state)
         {
             _state = state;
@@ -33,6 +43,7 @@ namespace Script.Cards
                     _lock.SetActive(true);
                     _picture.SetActive(false);
                     _text.gameObject.SetActive(false);
+                    _button.gameObject.SetActive(false);
                     break;
                 }
                 case CardState.unlocked:
@@ -41,6 +52,7 @@ namespace Script.Cards
                     _lock.SetActive(false);
                     _picture.SetActive(true);
                     _text.gameObject.SetActive(false);
+                    _button.gameObject.SetActive(true);
                     break;
                 }
                 case CardState.current:
@@ -49,6 +61,7 @@ namespace Script.Cards
                     _lock.SetActive(false);
                     _picture.SetActive(false);
                     _text.gameObject.SetActive(true);
+                    _button.gameObject.SetActive(true);
                     break;
                 }
             }
@@ -62,6 +75,11 @@ namespace Script.Cards
         public void SetProgress(string amount)
         {
             _text.text = amount;
+        }
+        
+        public void SetIndex(int index)
+        {
+            _index = index;
         }
     }
 }

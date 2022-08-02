@@ -12,12 +12,13 @@ namespace Script.Cards
         [SerializeField] private float _hideTime;
         
         [SerializeField] private UnlockCardPanel _unlockCardPanel;
+        [SerializeField] private FullCardPanel _fullCardPanel;
+        
         [SerializeField] private CardsList _cardsData;
         private List<CardIcon> _cards;
         
-        [SerializeField] private Button _openBtn;
         
-        private int currentCard = 0;
+        private int currentCard = 2;
 
         [SerializeField] private GameObject _cardPrefab;
         [SerializeField] private Transform _cardsIconListParent;
@@ -27,9 +28,11 @@ namespace Script.Cards
             _cards = new List<CardIcon>();
             Load();
             
-            _openBtn.onClick.AddListener(Open);
             _unlockCardPanel.closeBtn.onClick.AddListener(CloseUnlockPanel);
+            _fullCardPanel.closeBtn.onClick.AddListener(CloseFullCardPanel);
+            
             _unlockCardPanel.gameObject.SetActive(false);
+            _fullCardPanel.gameObject.SetActive(false);
         }
 
         public void Load()
@@ -43,6 +46,7 @@ namespace Script.Cards
             OpenUnlockPanel();
         }
 
+        // UNLOCK PANEL
         public void OpenUnlockPanel()
         {
             foreach (var h in _hideElements)
@@ -71,6 +75,34 @@ namespace Script.Cards
             
         }
 
+        // FULL CARD PANEL
+        public void OpenFullCardPanel(int index)
+        {
+            foreach (var h in _hideElements)
+            {
+                h.DOFade(0, _hideTime).From(1);
+            }
+            _fullCardPanel.gameObject.SetActive(true);
+            _fullCardPanel.SetImage(_cardsData.cards[index]);
+            
+            _fullCardPanel.transform.DOScale(1, _hideTime * 1.5f).From(0.7f);
+            _fullCardPanel.canvasGroup.DOFade(1, _hideTime * 1.5f).From(0);
+            
+        }
+        
+        public void CloseFullCardPanel()
+        {
+            foreach (var h in _hideElements)
+            {
+                h.DOFade(1, _hideTime* 1.5f).From(0);
+            }
+            
+            _fullCardPanel.transform.DOScale(0.7f, _hideTime).From(1);
+            _fullCardPanel.canvasGroup.DOFade(0, _hideTime).From(1)
+                .OnComplete(()=>_fullCardPanel.gameObject.SetActive(false));
+        }
+        
+        //CARD ICONS
         public void CreateCardIconList()
         {
             for (int i = 0; i < _cardsData.cards.Count; i++)
@@ -79,13 +111,25 @@ namespace Script.Cards
                 
                 ci.SetState(i < currentCard? CardState.unlocked: i == currentCard? CardState.current : CardState.locked);
                 ci.SetPicture(_cardsData.cards[i]);
+                ci.SetIndex(i);
+                
                 _cards.Add(ci);
+                ci.OnButtonClick += OnCardIconClick;
             }
         }
 
+        public void OnCardIconClick(int index)
+        {
+            if (index == currentCard)
+                OpenUnlockPanel();
+            else
+                OpenFullCardPanel(index);
+        }
         public void UpdateProgressCard()
         {
             _cards[currentCard].SetProgress("0 /6");
         }
+
+     
     }
 }
