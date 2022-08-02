@@ -24,7 +24,7 @@ namespace Script.Cards
         [SerializeField] private Button _button;
         
         [SerializeField] private Image _image;
-        private CardState _state;
+        public CardState _state;
         private int _index;
         
         private void Start()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using Script.PlayerProfile;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +22,7 @@ namespace Script.Cards
         private int currentCard = 2;
 
         [SerializeField] private GameObject _cardPrefab;
-        [SerializeField] private Transform _cardsIconListParent;
+        [SerializeField] private RectTransform _cardsIconListParent;
         
         private void Start()
         {
@@ -33,17 +34,21 @@ namespace Script.Cards
             
             _unlockCardPanel.gameObject.SetActive(false);
             _fullCardPanel.gameObject.SetActive(false);
+
+            PlayerSaveProfile.instance.onOpenCardPartsAmpuntChange += UpdateProgressCard;
+            PlayerSaveProfile.instance.onCurrentCardChange += OnCurrentCardChange;
         }
 
         public void Load()
         {
+            currentCard = PlayerSaveProfile.instance._currentCardIndex;
+              
             CreateCardIconList();
-            _unlockCardPanel.Load(new List<int>(), _cardsData.cards[currentCard]);
-        }
+            
+            if(currentCard < _cards.Count)
+                _unlockCardPanel.Load(PlayerSaveProfile.instance._openedCardParts, _cardsData.cards[currentCard]);
 
-        public void Open()
-        {
-            OpenUnlockPanel();
+            UpdateProgressCard(PlayerSaveProfile.instance._openedCardParts.Count);
         }
 
         // UNLOCK PANEL
@@ -54,6 +59,8 @@ namespace Script.Cards
                 h.DOFade(0, _hideTime).From(1);
             }
             _unlockCardPanel.gameObject.SetActive(true);
+            
+            _unlockCardPanel.Load(PlayerSaveProfile.instance._openedCardParts, _cardsData.cards[currentCard]);
             _unlockCardPanel.HideAll();
 
             _unlockCardPanel.transform.DOScale(1, _hideTime * 1.5f).From(0.7f);
@@ -125,11 +132,31 @@ namespace Script.Cards
             else
                 OpenFullCardPanel(index);
         }
-        public void UpdateProgressCard()
+        
+        // PROGRESS
+        public void UpdateProgressCard(int amount)
         {
-            _cards[currentCard].SetProgress("0 /6");
+            if(currentCard < _cards.Count)
+                _cards[currentCard].SetProgress(amount + " /6");
         }
 
-     
+        public void OnCurrentCardChange(int index)
+        {
+            if(index > 0)
+                _cards[index-1].SetState(CardState.unlocked);
+            if(index < _cards.Count)
+                _cards[index].SetState(CardState.current);
+
+            currentCard = index;
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_cardsIconListParent);
+            UpdateProgressCard(PlayerSaveProfile.instance._openedCardParts.Count);
+        }
+
+        private void OnDestroy()
+        {
+            PlayerSaveProfile.instance.onOpenCardPartsAmpuntChange -= UpdateProgressCard;
+            PlayerSaveProfile.instance.onCurrentCardChange -= OnCurrentCardChange;
+        }
     }
 }

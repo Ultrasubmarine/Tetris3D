@@ -19,10 +19,14 @@ namespace Script.PlayerProfile
 
         public Dictionary<Currency, int> wallet;
         public bool x2Reward = false;
+
+        public int currentCard = 0;
+        public List<int> openedCardParts;
         
-        public SaveData(Dictionary<Currency, int> wallet)
+        public SaveData(Dictionary<Currency, int> wallet, List<int> openedCardParts)
         {
             this.wallet = wallet;
+            this.openedCardParts = openedCardParts;
         }
     }
 
@@ -37,11 +41,17 @@ namespace Script.PlayerProfile
     {
         public Action<int> onLevelChange;
         public Action<int> onBestScoreChange;
+        
+        public Action<int> onCurrentCardChange;
+        public Action<int> onOpenCardPartsAmpuntChange;
 
         public Action<Currency, int> onCurrencyAmountChanged;
             
         public int _lvl => _data.lvl;
         public int _bestScore => _data.bestScore;
+
+        public int _currentCardIndex => _data.currentCard;
+        public List<int> _openedCardParts => _data.openedCardParts;
         
         private SaveData _data;
         [SerializeField] private LvlList _lvlList;
@@ -116,7 +126,7 @@ namespace Script.PlayerProfile
            
             if (!File.Exists(Application.persistentDataPath + "/MySaveData.tds"))
             {
-                _data = new SaveData(new Dictionary<Currency, int>());
+                _data = new SaveData(new Dictionary<Currency, int>(), new List<int>());
             }
             else
             { 
@@ -145,7 +155,7 @@ namespace Script.PlayerProfile
             {
                 File.Delete(Application.persistentDataPath + "/MySaveData.tds");
             }
-            _data = new SaveData(new Dictionary<Currency, int>());
+            _data = new SaveData(new Dictionary<Currency, int>(),new List<int>());
         }
 
         public void CheckWin()
@@ -188,6 +198,27 @@ namespace Script.PlayerProfile
         public void SetRewardX2()
         {
             _data.x2Reward = true;
+            Save();
+        }
+
+        public void AddUnlockCardPart(int partIndex)
+        {
+            _data.openedCardParts.Add(partIndex);
+            onOpenCardPartsAmpuntChange?.Invoke(_data.openedCardParts.Count);
+            Save();
+        }
+
+        public void ResetUnlockedCardParts()
+        {
+            _data.openedCardParts.Clear();
+            onOpenCardPartsAmpuntChange?.Invoke(_data.openedCardParts.Count);
+            Save();
+        }
+        
+        public void IncrementCurrentCard()
+        {
+            _data.currentCard++;
+            onCurrentCardChange?.Invoke(_data.currentCard);
             Save();
         }
     }
