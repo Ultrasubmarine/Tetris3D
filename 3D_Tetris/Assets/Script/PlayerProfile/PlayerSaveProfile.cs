@@ -70,9 +70,9 @@ namespace Script.PlayerProfile
             CheckWin();
         }
 
-        public void Add5Stars()
+        public void Add15Stars()
         {
-            ChangeCurrencyAmount(Currency.coin, 5);
+            ChangeCurrencyAmount(Currency.stars, 15);
         }
         public bool ChangeCurrencyAmount(Currency type, int offset)
         {
