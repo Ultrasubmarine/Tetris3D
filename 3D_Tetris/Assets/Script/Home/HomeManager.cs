@@ -15,7 +15,11 @@ namespace Script.PlayerProfile
         {
             PlayerSaveProfile.instance.CheckWin();
             int lvl = PlayerSaveProfile.instance._lvl;
-            _lvlText.text = (PlayerSaveProfile.instance._lvl+1).ToString() + " lvl";
+
+            if (PlayerSaveProfile.instance._lvl > PlayerSaveProfile.instance._lvlData)
+                _lvlText.text = (PlayerSaveProfile.instance._lvl+1).ToString() + " lvl (" + PlayerSaveProfile.instance._lvlData + ")";
+            else
+                _lvlText.text = (PlayerSaveProfile.instance._lvl + 1).ToString() + " lvl";
             
         }
 
@@ -29,6 +33,26 @@ namespace Script.PlayerProfile
         { 
             DOTween.KillAll();
             LvlLoader.instance.Select(lvl);
+        }
+
+        public void IncrementLvlData()
+        {
+            PlayerSaveProfile.instance.IncrementLvl();
+            
+            if (PlayerSaveProfile.instance._lvl > PlayerSaveProfile.instance._lvlData)
+                _lvlText.text = (PlayerSaveProfile.instance._lvl+1).ToString() + " lvl (" + (PlayerSaveProfile.instance._lvlData+1) + ")";
+            else
+                _lvlText.text = (PlayerSaveProfile.instance._lvl + 1).ToString() + " lvl";
+        }
+
+        public void DecrementLvlData()
+        {
+            PlayerSaveProfile.instance.DecrementLvl();
+            
+            if (PlayerSaveProfile.instance._lvl > PlayerSaveProfile.instance._lvlData)
+                _lvlText.text = (PlayerSaveProfile.instance._lvl+1).ToString() + " lvl (" + (PlayerSaveProfile.instance._lvlData+1) + ")";
+            else
+                _lvlText.text = (PlayerSaveProfile.instance._lvl + 1).ToString() + " lvl";
         }
     }
 }

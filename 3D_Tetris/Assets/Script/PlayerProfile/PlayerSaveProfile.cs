@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -48,6 +49,8 @@ namespace Script.PlayerProfile
         public Action<Currency, int> onCurrencyAmountChanged;
             
         public int _lvl => _data.lvl;
+        public int _lvlData => _data.currentLvlData;
+        
         public int _bestScore => _data.bestScore;
 
         public int _currentCardIndex => _data.currentCard;
@@ -101,8 +104,44 @@ namespace Script.PlayerProfile
         
         public void IncrementLvl()
         {
-            _data.lvl++;
-            onLevelChange?.Invoke(_data.lvl);
+            if (_data.currentLvlData == _data.lvl)
+            {
+                if (_data.lvl < _lvlList.lvls.Count() - 1)
+                {
+                    _data.lvl++;
+                    _data.currentLvlData = _data.lvl;
+                    onLevelChange?.Invoke(_data.lvl);
+                }
+            }
+            else if( _data.currentLvlData < _lvlList.lvls.Count() - 1)
+            {
+                _data.currentLvlData++;
+                onLevelChange?.Invoke(_data.currentLvlData);
+            }
+            
+            Save();
+        }
+        
+        
+        public void DecrementLvl()
+        {
+            if (_data.currentLvlData == _data.lvl )
+            {
+                if (_data.lvl == 0)
+                    return;
+
+                _data.lvl--;
+                _data.currentLvlData = _data.lvl;
+                onLevelChange?.Invoke(_data.lvl);
+            }
+            else
+            {
+                if (_data.currentLvlData == 0)
+                    return;
+                _data.currentLvlData--;
+                onLevelChange?.Invoke(_data.currentLvlData);
+            }
+            
             Save();
         }
         
@@ -179,7 +218,7 @@ namespace Script.PlayerProfile
                 Save();
             }
         }
-
+        
         private void AddReward(LvlSettings completedLvl, bool x2 = false)
         {
             int reward = completedLvl.starSettings.winAmount;
