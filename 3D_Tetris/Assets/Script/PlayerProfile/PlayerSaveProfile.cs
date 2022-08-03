@@ -174,6 +174,12 @@ namespace Script.PlayerProfile
                 BinaryFormatter bf = new BinaryFormatter(); 
                 _data =(SaveData)bf.Deserialize(file);
                 file.Close();
+                
+                if (_data.openedCardParts == null)
+                {
+                    _data.openedCardParts =  new List<int>();
+                    Save();
+                }
             }
         }
 
