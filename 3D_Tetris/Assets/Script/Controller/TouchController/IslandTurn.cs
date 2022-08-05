@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 namespace Script.Controller.TouchController
 {
     
-    public class IslandTurn : MonoBehaviour, IPointerExitHandler
+    public class IslandTurn : MonoBehaviour, IPointerExitHandler, IPointerUpHandler
     {
         public bool isTurnIsland => isTurn;
         
@@ -126,6 +126,11 @@ namespace Script.Controller.TouchController
             island.transform.DORotate(new Vector3(0, 0, 0), 0);
             foreach (var item in extraTurn) item.DORotate(new Vector3(0, 0, 0), 0);
             _gameController.CorrectTurn(0);
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            OnEndTurn.Invoke();
         }
     }
 }

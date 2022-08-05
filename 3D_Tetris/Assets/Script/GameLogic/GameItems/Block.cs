@@ -127,7 +127,7 @@ public class Block : MonoBehaviour
 
         _star.transform.localPosition = Vector3.zero;
         _star.transform.localScale = Vector3.one;
-        _star.transform.rotation = Quaternion.identity;
+        _star.transform.localRotation = Quaternion.identity;
         _star.SetActive(false);
         _star.transform.DOKill();
         oreol.gameObject.SetActive(false);
@@ -236,9 +236,9 @@ public class Block : MonoBehaviour
 
     public void TransformToStone(Mesh _cellMesh, Material _cellMaterial, Material blockMaterial, int lives)
     {
-        _star.transform.rotation = Quaternion.identity;
-        _star.layer = 11;//"element";
         _star.SetActive(true);
+        _star.transform.localRotation = Quaternion.identity;
+        _star.layer = 11;//"element";
         
         extraMeshFilter.mesh = _cellMesh;
         extraMesh.material = _cellMaterial;
