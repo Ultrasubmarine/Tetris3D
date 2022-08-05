@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -10,19 +11,27 @@ namespace Script.PlayerProfile
     {
         [SerializeField] string _lvlSceneName;
         [SerializeField] private TextMeshProUGUI _lvlText;
+
+        [SerializeField] private bool isCheat;
+        [SerializeField] private List<GameObject> _cheatObjects;
         
         private void Start()
         {
             PlayerSaveProfile.instance.CheckWin();
             int lvl = PlayerSaveProfile.instance._lvl;
 
-            if (PlayerSaveProfile.instance._lvl > PlayerSaveProfile.instance._lvlData)
-                _lvlText.text = (PlayerSaveProfile.instance._lvl+1).ToString() + " lvl (" + PlayerSaveProfile.instance._lvlData + ")";
-            else
-                _lvlText.text = (PlayerSaveProfile.instance._lvl + 1).ToString() + " lvl";
-            
+            SetLvlText();
+            CheatSet();
         }
 
+        public void CheatSet()
+        {
+            foreach (var c in _cheatObjects)
+            {
+                c.SetActive(isCheat);
+            }
+            
+        }
         public void StartLvl()
         {
             SelectLvlSettings(PlayerSaveProfile.instance.GetCurrentLvlData());
@@ -38,21 +47,21 @@ namespace Script.PlayerProfile
         public void IncrementLvlData()
         {
             PlayerSaveProfile.instance.IncrementLvl();
-            
-            if (PlayerSaveProfile.instance._lvl > PlayerSaveProfile.instance._lvlData)
-                _lvlText.text = (PlayerSaveProfile.instance._lvl+1).ToString() + " lvl (" + (PlayerSaveProfile.instance._lvlData+1) + ")";
-            else
-                _lvlText.text = (PlayerSaveProfile.instance._lvl + 1).ToString() + " lvl";
+            SetLvlText();
         }
 
         public void DecrementLvlData()
         {
             PlayerSaveProfile.instance.DecrementLvl();
-            
-            if (PlayerSaveProfile.instance._lvl > PlayerSaveProfile.instance._lvlData)
-                _lvlText.text = (PlayerSaveProfile.instance._lvl+1).ToString() + " lvl (" + (PlayerSaveProfile.instance._lvlData+1) + ")";
+            SetLvlText();
+        }
+
+        public void SetLvlText()
+        {
+            if (PlayerSaveProfile.instance._lvl > PlayerSaveProfile.instance._lvlData && isCheat)
+                _lvlText.text = "level " + (PlayerSaveProfile.instance._lvl+1).ToString() + " (" + (PlayerSaveProfile.instance._lvlData+1) + ")";
             else
-                _lvlText.text = (PlayerSaveProfile.instance._lvl + 1).ToString() + " lvl";
+                _lvlText.text = "level " + (PlayerSaveProfile.instance._lvl + 1).ToString();
         }
     }
 }

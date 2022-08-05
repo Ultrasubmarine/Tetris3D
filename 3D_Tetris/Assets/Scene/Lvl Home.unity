@@ -9456,7 +9456,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -9556,7 +9556,7 @@ RectTransform:
   m_Children:
   - {fileID: 150306179}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -12935,7 +12935,7 @@ RectTransform:
   - {fileID: 1071356918}
   - {fileID: 1580839318}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 2
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -13027,7 +13027,7 @@ RectTransform:
   - {fileID: 1838568774}
   - {fileID: 1445843331}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -14072,7 +14072,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0 lvl
+  m_text: level 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7a6e672f495504703a2394b826271e4d, type: 2}
   m_sharedMaterial: {fileID: -3378624318516094251, guid: 7a6e672f495504703a2394b826271e4d,
@@ -14100,8 +14100,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 78.9
-  m_fontSizeBase: 78.9
+  m_fontSize: 72
+  m_fontSizeBase: 72
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -14635,13 +14635,13 @@ RectTransform:
   m_Children:
   - {fileID: 436494817}
   - {fileID: 547163890}
-  - {fileID: 993507854}
   - {fileID: 1966363798}
   - {fileID: 640033092}
   - {fileID: 2073917333}
   - {fileID: 646079652}
   - {fileID: 1276015392}
   - {fileID: 998934207}
+  - {fileID: 993507854}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15596,7 +15596,7 @@ RectTransform:
   - {fileID: 1152081739}
   - {fileID: 1042243830}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -25156,7 +25156,7 @@ RectTransform:
   m_Children:
   - {fileID: 737446462}
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -25606,6 +25606,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lvlSceneName: Lv1
   _lvlText: {fileID: 1124403009}
+  isCheat: 1
+  _cheatObjects:
+  - {fileID: 973993396}
+  - {fileID: 1638887511}
+  - {fileID: 6336547770078311613}
+  - {fileID: 1580839317}
 --- !u!4 &2035909411
 Transform:
   m_ObjectHideFlags: 0
@@ -26085,7 +26091,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1152037280}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

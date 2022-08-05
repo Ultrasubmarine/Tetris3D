@@ -29,6 +29,7 @@ namespace Script.Tutor
 
         private IEnumerable<CoordinatXZ> blocksXZ;
         private float usualSpeed;
+        private bool _isSuccess = false;
         
         private void Start()
         {
@@ -104,12 +105,13 @@ namespace Script.Tutor
             RealizationBox.Instance.FSM.onStateChange += FinishMove;
           //  RealizationBox.Instance.joystick.onStateChange += FinishMove;
             RealizationBox.Instance.FSM.onStateChange += SecondDotFiveStep;
+            RealizationBox.Instance.gameController.onMoveApply += OnSuccess;
          //   OnMoveSuccess += ThirdStep;
         }
 
         void SecondDotFiveStep(TetrisState state)
         {
-            if (state == TetrisState.EndInfluence)
+            if (state == TetrisState.EndInfluence && _isSuccess)
             {
                 RealizationBox.Instance.FSM.onStateChange -= SecondDotFiveStep;
                 ElementData.Instance.onNewElementUpdate += ThirdStep;
@@ -227,10 +229,19 @@ namespace Script.Tutor
         }
 
 
+        void OnSuccess(bool isSuccess, move move)
+        {
+            if(isSuccess) 
+                RealizationBox.Instance.gameController.onMoveApply -= OnSuccess;
+            _isSuccess = isSuccess;
+        }
+        
         void FinishMove(TetrisState state)
         {
-            if(state == TetrisState.EndInfluence)
+            if (state == TetrisState.EndInfluence && _isSuccess)
+            {
                 OnMoveSuccess?.Invoke();
+            }
         }
         
      
