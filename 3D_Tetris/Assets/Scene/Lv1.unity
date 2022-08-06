@@ -3250,7 +3250,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: x2
+  m_text: x5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7a6e672f495504703a2394b826271e4d, type: 2}
   m_sharedMaterial: {fileID: -3378624318516094251, guid: 7a6e672f495504703a2394b826271e4d,
@@ -5112,7 +5112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31642baaccff1f9429fcac59cb6d0571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lvlName: LVLScene
+  _lvlName: LVL Home
 --- !u!114 &298759314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8753,7 +8753,7 @@ GameObject:
   - component: {fileID: 508559027}
   - component: {fileID: 508559026}
   m_Layer: 5
-  m_Name: BTN_x2
+  m_Name: BTN_x5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19661,7 +19661,7 @@ GameObject:
   - component: {fileID: 1351814856}
   - component: {fileID: 1351814855}
   m_Layer: 5
-  m_Name: BTN_MAP (1)
+  m_Name: BTN_HOME
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34916,7 +34916,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 311359819}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetRewardX2
+        m_MethodName: SetRewardX5
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -35336,9 +35336,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Map
-
-'
+  m_Text: Home
 --- !u!222 &2118339179
 CanvasRenderer:
   m_ObjectHideFlags: 0

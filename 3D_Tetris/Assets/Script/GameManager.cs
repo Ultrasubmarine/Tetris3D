@@ -189,14 +189,14 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void SetRewardX2()
+    public void SetRewardX5()
     {
         //TODO ADS
         PlayerSaveProfile.instance.SetRewardX2();
         
-        var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount * 2;
+        var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount * 5;
         _starReward.OnCurrencyAmountChanged(Currency.stars,reward);
-        _coinReward.OnCurrencyAmountChanged(Currency.coin,reward*2);
+        _coinReward.OnCurrencyAmountChanged(Currency.coin,reward*5);
         _rewardX2Btn.SetActive(false);
         
     }
