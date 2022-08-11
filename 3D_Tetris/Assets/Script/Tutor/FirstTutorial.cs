@@ -36,7 +36,8 @@ namespace Script.Tutor
         private float usualSpeed;
         private bool _isSuccess = false;
 
-        private bool _returnToSecond = false;
+        [SerializeField] private int countOfMoveCycle = 2;
+        private int _currentCountOfMoveCycle = 0;
         
         private void Start()
         {
@@ -54,6 +55,8 @@ namespace Script.Tutor
             RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
             RealizationBox.Instance.generator.fixedHightPosition = 8;
             RealizationBox.Instance.tapsEvents.enabled = false;
+
+            RealizationBox.Instance.projectionLineManager.TurnOnOff(false);
         }
 
         void StartGame()
@@ -102,7 +105,9 @@ namespace Script.Tutor
             RealizationBox.Instance.speedChanger.ResetSpeed();
             RealizationBox.Instance.tapsEvents.OnSingleTap -= SecondStep;
             
-            _firstTutor.DOComplete();
+            _firstTutor.DOKill();
+            _secondTutor.DOKill();
+            
             _firstTutor.DOFade(0, 0.1f).SetDelay(0.1f).OnComplete(() => _secondTutor.DOFade(1, 0.2f));
             
             blocksXZ = ElementData.Instance.newElement.blocks.Select(b => b.xz);
@@ -116,7 +121,6 @@ namespace Script.Tutor
          //   OnMoveSuccess += ThirdStep;
 
             RealizationBox.Instance.joystick.onStateChange += OnJoyStickStateChange;
-            _returnToSecond = true;
         }
 
         void SecondBreak()
@@ -126,7 +130,7 @@ namespace Script.Tutor
         
         public void OnJoyStickStateChange(JoystickState state)
         {
-            if (_returnToSecond && state == JoystickState.Hide)
+            if (state == JoystickState.Hide)
             {
                 RealizationBox.Instance.tapsEvents.OnSingleTap += SecondStep;
                 
@@ -135,6 +139,8 @@ namespace Script.Tutor
                 RealizationBox.Instance.FSM.onStateChange -= SecondDotFiveStep;
                 RealizationBox.Instance.gameController.onMoveApply -= OnSuccess;
                 
+                _firstTutor.DOKill();
+                _secondTutor.DOKill();
                 _secondTutor.DOFade(0, 0.1f)
                     .OnComplete(() =>_firstTutor.DOFade(1, 0.2f));
             }
@@ -179,7 +185,13 @@ namespace Script.Tutor
             ElementData.Instance.onNewElementUpdate -= ThirdStep;
             //  OnMoveSuccess -= ThirdStep;
        //     OnMoveFail += ReturnToSecondStep;
-       
+            _currentCountOfMoveCycle++;
+            if(_currentCountOfMoveCycle < countOfMoveCycle)
+            {
+                FirstStep();
+                return;
+            }
+            
             _thirdTutor.DOFade(1, 0.2f);
             usualSpeed = global::Speed.timeDrop;
             global::Speed.SetTimeDrop(2.5f);
@@ -262,6 +274,7 @@ namespace Script.Tutor
            // RealizationBox.Instance.FSM.onStateChange -= FinishMove;
            
            RealizationBox.Instance.nextElementUI.gameObject.SetActive(true);
+           RealizationBox.Instance.projectionLineManager.TurnOnOff(true);
         }
         
         private Vector2 WorldToCanvas(Vector3 world_position)
@@ -279,7 +292,6 @@ namespace Script.Tutor
             {
                 RealizationBox.Instance.gameController.onMoveApply -= OnSuccess;
                 RealizationBox.Instance.joystick.onStateChange -= OnJoyStickStateChange;
-                _returnToSecond = false;
             }
             _isSuccess = isSuccess;
         }

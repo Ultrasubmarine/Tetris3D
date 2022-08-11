@@ -33,6 +33,8 @@ namespace Script.Projections
         private PlaneMatrix _matrix;
         private float _lateYElementPosition;
         private ElementData _elementData;
+
+        private bool state = true;
         
         private void Start()
         {
@@ -50,6 +52,9 @@ namespace Script.Projections
         {
             Clear();
 
+            if (!state)
+                return;
+            
              foreach (var block in  _elementData.newElement.projectionBlocks)
              {
                  var o = _pool.Pop(true);
@@ -126,6 +131,19 @@ namespace Script.Projections
             
             UpdateProjectionLines();
         }
-        
+
+        public void TurnOnOff(bool state)
+        {
+            this.state = state;
+            if (state)
+            {
+                _elementData.onNewElementUpdate += UpdateProjectionLines;
+            }
+            else
+            {
+                _elementData.onNewElementUpdate -= UpdateProjectionLines;
+                Clear();
+            }
+        }
     }
 }
