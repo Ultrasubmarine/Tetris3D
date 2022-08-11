@@ -30,6 +30,7 @@ MonoBehaviour:
     stepsBetweenStar: 0
     firstStep: 1000
     allPlaceInFirstStep: 0
+    onlyStarPlace: 0
   _generatorSettings:
     points:
     - score: 0
@@ -48,36 +49,33 @@ MonoBehaviour:
       layerDown: 20
       neighbours: 5
       startPoints: 10
-    exceptCurrentElementForNext: 0
+    exceptCurrentElementForNext: 1
   _lvlElements:
   - material: {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
     blocks:
     - {x: 1, y: 0, z: 1}
+    isStone: 0
+    isEvilBox: 0
   - material: {fileID: 2100000, guid: 897947c54411847d7b7c5fce703fa20d, type: 2}
     blocks:
     - {x: 2, y: 0, z: 0}
     - {x: 2, y: 1, z: 0}
+    isStone: 0
+    isEvilBox: 0
   - material: {fileID: 2100000, guid: 3963cdb215dc4f54ab8f2d3dabaff056, type: 2}
     blocks:
     - {x: 0, y: 0, z: 2}
     - {x: 0, y: 1, z: 2}
+    isStone: 0
+    isEvilBox: 0
   - material: {fileID: 2100000, guid: 95162ccc08966f347a68407a921b11d0, type: 2}
     blocks:
     - {x: 2, y: 2, z: 0}
     - {x: 1, y: 2, z: 0}
-    - {x: 1, y: 2, z: 1}
     - {x: 0, y: 2, z: 1}
     - {x: 0, y: 2, z: 2}
-  - material: {fileID: 2100000, guid: 48fd4a211077b4e1da335139776c9dbb, type: 2}
-    blocks:
-    - {x: 2, y: 3, z: 0}
-    - {x: 2, y: 4, z: 0}
-    - {x: 1, y: 4, z: 0}
-    - {x: 0, y: 4, z: 0}
-    - {x: 0, y: 4, z: 1}
-    - {x: 0, y: 4, z: 2}
-    - {x: 0, y: 3, z: 2}
-    - {x: 1, y: 4, z: 1}
+    isStone: 0
+    isEvilBox: 0
   _startState: 8
   _starPlaces:
   - amountStars: 1
@@ -85,8 +83,14 @@ MonoBehaviour:
   _bombsSettings:
     makeBombs: 0
     bombStep: 0
-  _nextBigBombOfferSettings:
-    betweenOffersSteps: 0
-    inOneGameMax: 1
+    currentStep: 0
+  _evilBoxSettings:
+    lvlWithEvilBox: 0
+    boxStep: 0
+    currentBoxStep: 0
+  _stoneBlockSettings:
+    lvlWithStoneBlocks: 0
+    stoneStep: 0
+    currentStoneStep: 0
   _lvl: 3
   _infinity: 0
