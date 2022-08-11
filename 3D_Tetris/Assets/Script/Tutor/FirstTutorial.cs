@@ -22,6 +22,10 @@ namespace Script.Tutor
         [SerializeField] private CanvasGroup _topPanel;
         [SerializeField] private CanvasGroup _bottomPanel;
         [SerializeField] private RectTransform _hand;
+        [SerializeField] private GameObject _islandHighlight;
+        [SerializeField] private Canvas _canvas;
+        [SerializeField] private Transform _islandTransform;
+        
         private int _amountSetElements = 0; 
         
         private Action OnMoveSuccess, OnMoveFail;
@@ -202,7 +206,11 @@ namespace Script.Tutor
             RealizationBox.Instance.tapsEvents.OnDragIceIsland += Finished;
 
             int w = Screen.width / 2;
+            
+            _islandHighlight.SetActive(true);
+            _hand.anchoredPosition = WorldToCanvas(_islandTransform.position);
             _hand.DOMoveX(w - w/3, 1.0f).From(w + w/3).SetLoops(-1, LoopType.Yoyo);
+            
         }
         
         private void Finished()
@@ -220,6 +228,7 @@ namespace Script.Tutor
             RealizationBox.Instance.FSM.OnStart -= StartGame;
             RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.None;
             _hand.DOKill();
+            _islandHighlight.SetActive(false);
             
         //    RealizationBox.Instance.joystick.onStateChange -= FinishMove;
             RealizationBox.Instance.generator._generateNeedElement = _generateNeedElement;
@@ -227,7 +236,15 @@ namespace Script.Tutor
            
            RealizationBox.Instance.nextElementUI.gameObject.SetActive(true);
         }
-
+        
+        private Vector2 WorldToCanvas(Vector3 world_position)
+        {
+            var viewport_position = Camera.main.WorldToViewportPoint(world_position);
+            var canvas_rect = _canvas.GetComponent<RectTransform>();
+        
+            return new Vector2((viewport_position.x * canvas_rect.sizeDelta.x) - (canvas_rect.sizeDelta.x * 0.5f),
+                (viewport_position.y * canvas_rect.sizeDelta.y) - (canvas_rect.sizeDelta.y * 0.5f));
+        }
 
         void OnSuccess(bool isSuccess, move move)
         {
