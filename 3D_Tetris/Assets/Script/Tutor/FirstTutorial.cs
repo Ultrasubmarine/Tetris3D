@@ -6,6 +6,7 @@ using DG.Tweening;
 using Script.Controller;
 using Script.GameLogic.TetrisElement;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Script.Tutor
 {
@@ -34,6 +35,8 @@ namespace Script.Tutor
         private IEnumerable<CoordinatXZ> blocksXZ;
         private float usualSpeed;
         private bool _isSuccess = false;
+
+        private bool _returnToSecond = false;
         
         private void Start()
         {
@@ -111,8 +114,32 @@ namespace Script.Tutor
             RealizationBox.Instance.FSM.onStateChange += SecondDotFiveStep;
             RealizationBox.Instance.gameController.onMoveApply += OnSuccess;
          //   OnMoveSuccess += ThirdStep;
+
+            RealizationBox.Instance.joystick.onStateChange += OnJoyStickStateChange;
+            _returnToSecond = true;
         }
 
+        void SecondBreak()
+        {
+            RealizationBox.Instance.tapsEvents.OnSingleTap -= SecondStep;
+        }
+        
+        public void OnJoyStickStateChange(JoystickState state)
+        {
+            if (_returnToSecond && state == JoystickState.Hide)
+            {
+                RealizationBox.Instance.tapsEvents.OnSingleTap += SecondStep;
+                
+                RealizationBox.Instance.joystick.onStateChange -= OnJoyStickStateChange;
+                RealizationBox.Instance.FSM.onStateChange -= FinishMove;
+                RealizationBox.Instance.FSM.onStateChange -= SecondDotFiveStep;
+                RealizationBox.Instance.gameController.onMoveApply -= OnSuccess;
+                
+                _secondTutor.DOFade(0, 0.1f)
+                    .OnComplete(() =>_firstTutor.DOFade(1, 0.2f));
+            }
+        }
+        
         void SecondDotFiveStep(TetrisState state)
         {
             if (state == TetrisState.EndInfluence && _isSuccess)
@@ -150,7 +177,7 @@ namespace Script.Tutor
         void ThirdStep() // double tap
         {
             ElementData.Instance.onNewElementUpdate -= ThirdStep;
-          //  OnMoveSuccess -= ThirdStep;
+            //  OnMoveSuccess -= ThirdStep;
        //     OnMoveFail += ReturnToSecondStep;
        
             _thirdTutor.DOFade(1, 0.2f);
@@ -248,8 +275,12 @@ namespace Script.Tutor
 
         void OnSuccess(bool isSuccess, move move)
         {
-            if(isSuccess) 
+            if(isSuccess)
+            {
                 RealizationBox.Instance.gameController.onMoveApply -= OnSuccess;
+                RealizationBox.Instance.joystick.onStateChange -= OnJoyStickStateChange;
+                _returnToSecond = false;
+            }
             _isSuccess = isSuccess;
         }
         
@@ -281,6 +312,7 @@ namespace Script.Tutor
         //         OnMoveFail?.Invoke();
         //     }
         // }
- 
+
+        
     }
 }
