@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 namespace Script.Controller.TouchController
 {
     
-    public class IslandTurn : MonoBehaviour, IPointerExitHandler, IPointerUpHandler
+    public class IslandTurn : MonoBehaviour, IPointerExitHandler//, IPointerUpHandler
     {
         public bool isTurnIsland => isTurn;
         
@@ -62,14 +62,26 @@ namespace Script.Controller.TouchController
                 _startTime = Time.time;
                 OnStartTurn?.Invoke();
             }
+            // else
+            // {
+            //     OnEndTurn?.Invoke();
+            // }
             lastPosition = Input.mousePosition.x;
         }
 
         private void Update()
         {
             if (!isTurn)
+            {
                 return;
-
+            }
+               
+            if (Input.touchCount == 0)
+            {
+                OnPointerExit(null);
+                return;
+            }
+            
             if (Mathf.Abs(Input.mousePosition.x - lastPosition) > delta)
             {
                 float angle = 180 * (lastPosition - Input.mousePosition.x ) / (Screen.width * 0.8f);
@@ -83,6 +95,7 @@ namespace Script.Controller.TouchController
 
         public void OnPointerExit(PointerEventData eventData)
         {
+         //   Debug.Log("OnPointerExit");
             Turn(false);
             TurnFinished();
         }
@@ -116,7 +129,7 @@ namespace Script.Controller.TouchController
                 speed = _speedForCorrectRotate;
             }
             
-            island.transform.DORotate(new Vector3(0, needRotate, 0), speed).OnComplete(() => OnEndTurn.Invoke());
+            island.transform.DORotate(new Vector3(0, needRotate, 0), speed).OnComplete(() => OnEndTurn?.Invoke());
             foreach (var item in extraTurn) item.DORotate(new Vector3(0, needRotate, 0), speed);
             _gameController.CorrectTurn((int)needRotate);
         }
@@ -128,9 +141,11 @@ namespace Script.Controller.TouchController
             _gameController.CorrectTurn(0);
         }
 
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            OnEndTurn.Invoke();
-        }
+        // public void OnPointerUp(PointerEventData eventData)
+        // {
+        //  //   Debug.Log("OnPointerUp");
+        //     Turn(false);
+        //     TurnFinished();
+        // }
     }
 }
