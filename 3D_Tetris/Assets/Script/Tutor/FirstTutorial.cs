@@ -49,7 +49,7 @@ namespace Script.Tutor
             _bottomPanel.gameObject.SetActive(false);
             
             RealizationBox.Instance.tapsEvents._blockTapEvents = BlockingType.OnlySingleTap;
-            RealizationBox.Instance.generator.fixedHightPosition = 10;
+            RealizationBox.Instance.generator.fixedHightPosition = 8;
             RealizationBox.Instance.tapsEvents.enabled = false;
         }
 
