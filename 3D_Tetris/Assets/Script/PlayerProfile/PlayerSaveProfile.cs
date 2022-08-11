@@ -19,7 +19,7 @@ namespace Script.PlayerProfile
         public int bestScore = 0;
 
         public Dictionary<Currency, int> wallet;
-        public bool x2Reward = false;
+        public int rewardMultiplier = 1;
 
         public int currentCard = 0;
         public List<int> openedCardParts;
@@ -207,9 +207,9 @@ namespace Script.PlayerProfile
         {
             if (_data.completedLvlData == _data.currentLvlData)
             {
-                AddReward(GetCurrentLvlData(),_data.x2Reward);
+                AddReward(GetCurrentLvlData(),_data.rewardMultiplier);
                 
-                _data.x2Reward = false;
+                _data.rewardMultiplier = 1;
                 _data.lvl++;
                 if (_data.lvl <= _lvlList.lvls.Length - 1)
                     _data.currentLvlData = _data.lvl;
@@ -225,24 +225,23 @@ namespace Script.PlayerProfile
             }
         }
         
-        private void AddReward(LvlSettings completedLvl, bool x2 = false)
+        private void AddReward(LvlSettings completedLvl, int multiplier = 1)
         {
             int reward = completedLvl.starSettings.winAmount;
             
-            if (x2)
-                reward *= 2;
+            reward *= multiplier;
 
             ChangeCurrencyAmount(Currency.stars, reward);
-            ChangeCurrencyAmount(Currency.coin, reward*2 );
+            ChangeCurrencyAmount(Currency.coin, reward*multiplier );
         }
         public LvlSettings GetCurrentLvlData()
         {
             return _lvlList.lvls[_data.currentLvlData];
         }
 
-        public void SetRewardX2()
+        public void SetRewardMultiplier(int multiplier)
         {
-            _data.x2Reward = true;
+            _data.rewardMultiplier = multiplier;
             Save();
         }
 

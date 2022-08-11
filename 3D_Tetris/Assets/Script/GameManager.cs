@@ -31,7 +31,8 @@ public class GameManager : MonoBehaviour
     private TetrisFSM _fsm;
 
     private TetrisState _startState;
-    
+    [SerializeField] private int multiplier = 5;
+    [SerializeField] private TextMeshProUGUI _textMultiplier;
     public event Action OnReplay;
 
     private void Awake()
@@ -123,6 +124,7 @@ public class GameManager : MonoBehaviour
     private void OnWinGame()
     {
         _winPanel.gameObject.SetActive(true);
+        _textMultiplier.text = "x" + multiplier.ToString();
     }
 
     public void Restart()
@@ -189,10 +191,10 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void SetRewardX5()
+    public void SetRewardMultiply()
     {
         //TODO ADS
-        PlayerSaveProfile.instance.SetRewardX2();
+        PlayerSaveProfile.instance.SetRewardMultiplier(multiplier);
         
         var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount * 5;
         _starReward.OnCurrencyAmountChanged(Currency.stars,reward);
