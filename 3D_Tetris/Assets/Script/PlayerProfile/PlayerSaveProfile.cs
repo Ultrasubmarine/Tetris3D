@@ -232,7 +232,7 @@ namespace Script.PlayerProfile
             reward *= multiplier;
 
             ChangeCurrencyAmount(Currency.stars, reward);
-            ChangeCurrencyAmount(Currency.coin, reward*multiplier );
+            ChangeCurrencyAmount(Currency.coin, reward*2);
         }
         public LvlSettings GetCurrentLvlData()
         {

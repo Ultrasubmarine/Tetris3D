@@ -5505,7 +5505,9 @@ MonoBehaviour:
   _rewardX2Btn: {fileID: 508559024}
   _topGamePanel: {fileID: 1782275821}
   multiplier: 5
-  _textMultiplier: {fileID: 0}
+  _textMultiplier: {fileID: 1715798185}
+  _continueBtn: {fileID: 592580975}
+  delayForContinueBtn: 3
 --- !u!4 &311359820
 Transform:
   m_ObjectHideFlags: 0
@@ -9847,6 +9849,7 @@ GameObject:
   - component: {fileID: 592580972}
   - component: {fileID: 592580974}
   - component: {fileID: 592580973}
+  - component: {fileID: 592580975}
   m_Layer: 5
   m_Name: BTN_continue
   m_TagString: Untagged
@@ -9914,6 +9917,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 592580971}
   m_CullTransparentMesh: 1
+--- !u!225 &592580975
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592580971}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &598440329
 GameObject:
   m_ObjectHideFlags: 0

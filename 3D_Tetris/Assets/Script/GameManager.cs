@@ -33,6 +33,11 @@ public class GameManager : MonoBehaviour
     private TetrisState _startState;
     [SerializeField] private int multiplier = 5;
     [SerializeField] private TextMeshProUGUI _textMultiplier;
+    
+    
+    [SerializeField] private CanvasGroup _continueBtn;
+    [SerializeField] private float delayForContinueBtn;
+    
     public event Action OnReplay;
 
     private void Awake()
@@ -175,6 +180,9 @@ public class GameManager : MonoBehaviour
         _winPanel.gameObject.SetActive(true);
         _winPanel.DOFade(1, 0.4f);
         _winPanel.transform.DOMoveY(_winPanel.transform.position.y, 0.4f).From(_winPanel.transform.position.y - 250);
+
+        _continueBtn.alpha = 0;
+        _continueBtn.interactable = false;
         
         foreach (var o in _rewardOreols)
         {
@@ -184,8 +192,14 @@ public class GameManager : MonoBehaviour
         var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount;
         _starReward.SetCurrencyAmount( reward);
         _coinReward.SetCurrencyAmount( reward * 2);
+        
+        Invoke(nameof(ShowContinueBtn), delayForContinueBtn);
     }
 
+    private void ShowContinueBtn()
+    {
+        _continueBtn.DOFade(1, 0.3f).From(0).OnComplete( () => _continueBtn.interactable = true);
+    }
     public void ResetPause()
     {
         
@@ -196,11 +210,14 @@ public class GameManager : MonoBehaviour
         //TODO ADS
         PlayerSaveProfile.instance.SetRewardMultiplier(multiplier);
         
-        var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount * 5;
+        var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount * multiplier;
         _starReward.OnCurrencyAmountChanged(Currency.stars,reward);
-        _coinReward.OnCurrencyAmountChanged(Currency.coin,reward*5);
+        _coinReward.OnCurrencyAmountChanged(Currency.coin,reward*2);
         _rewardX2Btn.SetActive(false);
         
+        CancelInvoke(nameof(ShowContinueBtn));
+        if(_continueBtn.alpha < 1)
+            ShowContinueBtn();
     }
     public void HideGamePanels()
     {
