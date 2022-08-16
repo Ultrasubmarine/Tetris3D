@@ -47,6 +47,7 @@ namespace Script.StateMachine.States
             _projection.Destroy();
             _projLineManager.Clear();
             RealizationBox.Instance.gameManager.OnLoseGame();
+            PlayerSaveProfile.instance.SetSkipMode(true);
         }
         
         public void WaitPause(bool pauseState)

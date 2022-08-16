@@ -14,6 +14,8 @@ namespace Script.PlayerProfile
 
         [SerializeField] private bool isCheat;
         [SerializeField] private List<GameObject> _cheatObjects;
+
+        [SerializeField] public GameObject _skipLvl;
         
         private void Start()
         {
@@ -21,9 +23,22 @@ namespace Script.PlayerProfile
             int lvl = PlayerSaveProfile.instance._lvl;
 
             SetLvlText();
+            SetSkipLvl();
             CheatSet();
         }
 
+        public void SetSkipLvl()
+        {
+            _skipLvl.SetActive(PlayerSaveProfile.instance.canSkipLvl);
+        }
+
+        public void Skip()
+        {
+            PlayerSaveProfile.instance.IncrementLvl();
+            SetLvlText();
+            SetSkipLvl();
+        }
+        
         public void CheatSet()
         {
             foreach (var c in _cheatObjects)

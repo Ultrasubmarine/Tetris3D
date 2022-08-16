@@ -20,6 +20,7 @@ namespace Script.StateMachine.States
 
             if (!RealizationBox.Instance.gameManager.infinity)
                 PlayerSaveProfile.instance.CompleteCurrentLvl();
+            PlayerSaveProfile.instance.SetSkipMode(false);
             
             if (_pauseUI.isPause)
             {
@@ -30,6 +31,7 @@ namespace Script.StateMachine.States
                 RealizationBox.Instance.gameManager.ShowWinPanel();
                 RealizationBox.Instance.gameManager.HideGamePanels();
             }
+            
         }
 
         public void WaitPause(bool pauseState)

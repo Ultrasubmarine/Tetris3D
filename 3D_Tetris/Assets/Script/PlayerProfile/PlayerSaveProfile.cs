@@ -23,7 +23,8 @@ namespace Script.PlayerProfile
 
         public int currentCard = 0;
         public List<int> openedCardParts;
-        
+
+        public bool canSkip = false;
         public SaveData(Dictionary<Currency, int> wallet, List<int> openedCardParts)
         {
             this.wallet = wallet;
@@ -55,6 +56,7 @@ namespace Script.PlayerProfile
 
         public int _currentCardIndex => _data.currentCard;
         public List<int> _openedCardParts => _data.openedCardParts;
+        public bool canSkipLvl => _data.canSkip;
         
         private SaveData _data;
         [SerializeField] private LvlList _lvlList;
@@ -132,6 +134,7 @@ namespace Script.PlayerProfile
                 onLevelChange?.Invoke(_data.currentLvlData);
             }
             
+            _data.canSkip = false;
             Save();
         }
         
@@ -233,9 +236,16 @@ namespace Script.PlayerProfile
                         _data.currentLvlData = Random.Range(_lvlList.firstRepeatLvl, _lvlList.lvls.Length);
                     } while (_data.currentLvlData == _data.completedLvlData );
                 }
-                
+
+                _data.canSkip = false;
                 Save();
             }
+        }
+
+        public void SetSkipMode(bool canSkip)
+        {
+            _data.canSkip = canSkip;
+            Save();
         }
         
         private void AddReward(LvlSettings completedLvl, int multiplier = 1)
