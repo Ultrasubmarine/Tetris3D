@@ -77,6 +77,19 @@ namespace Script.PlayerProfile
         {
             ChangeCurrencyAmount(Currency.stars, 15);
         }
+
+        //to ads
+        public void AddStars(int amount)
+        {
+            ChangeCurrencyAmount(Currency.stars, amount);
+        }
+        
+        //to ads
+        public void AddCoins(int amount)
+        {
+            ChangeCurrencyAmount(Currency.coin, amount);
+        }
+        
         public bool ChangeCurrencyAmount(Currency type, int offset)
         {
             if (_data.wallet.ContainsKey(type))
