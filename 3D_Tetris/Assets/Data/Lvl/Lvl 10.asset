@@ -14,16 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tutorType: 0
   _speedSettings:
-  - time: 0.35
+  - time: 0.55
     score: 0
-  - time: 0.28
+  - time: 0.45
     score: 27
-  - time: 0.23
+  - time: 0.35
     score: 45
-  - time: 0.2
-    score: 72
-  - time: 0.17
-    score: 81
   _winScore: 0
   _starSettings:
     collectStar: 1
@@ -89,9 +85,6 @@ MonoBehaviour:
     makeBombs: 1
     bombStep: 5
     currentStep: 0
-  _nextBigBombOfferSettings:
-    betweenOffersSteps: 30
-    inOneGameMax: 1
   _evilBoxSettings:
     lvlWithEvilBox: 1
     boxStep: 7
