@@ -32,6 +32,8 @@ namespace Script.PlayerProfile
         }
 
         public String lastFreeOpenCard;
+
+        public bool muteAudio = false;
     }
 
     [Serializable]
@@ -59,6 +61,8 @@ namespace Script.PlayerProfile
         public int _currentCardIndex => _data.currentCard;
         public List<int> _openedCardParts => _data.openedCardParts;
         public bool canSkipLvl => _data.canSkip;
+        public bool muteAudio => _data.muteAudio;
+        
         public DateTime lastFreeOpenCard
         {
             get
@@ -309,6 +313,12 @@ namespace Script.PlayerProfile
         { 
             _data.lastFreeOpenCard= DateTime.UtcNow.ToString();
            // _data.lastFreeOpenCard = DateTime.Now.ToBinary().ToString();
+            Save();
+        }
+
+        public void SoundChange(bool mute)
+        {
+            _data.muteAudio = mute;
             Save();
         }
     }

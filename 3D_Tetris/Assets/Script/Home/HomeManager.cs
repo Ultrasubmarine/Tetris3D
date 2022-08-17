@@ -20,6 +20,8 @@ namespace Script.PlayerProfile
 
         [SerializeField] public Button _incrementStars;
         [SerializeField] public Button _incrementCoins;
+
+        [SerializeField] public Toggle _soundTogle;
         
         private void Start()
         {
@@ -32,6 +34,7 @@ namespace Script.PlayerProfile
             SetLvlText();
             SetSkipLvl();
             CheatSet();
+            SetAudio();
         }
 
         public void SetSkipLvl()
@@ -93,6 +96,18 @@ namespace Script.PlayerProfile
                 _lvlText.text = "level " + (PlayerSaveProfile.instance._lvl+1).ToString() + " (" + (PlayerSaveProfile.instance._lvlData+1) + ")";
             else
                 _lvlText.text = "level " + (PlayerSaveProfile.instance._lvl + 1).ToString();
+        }
+
+        public void SoundChange(bool active)
+        {
+            PlayerSaveProfile.instance.SoundChange(!active);
+            SetAudio();
+        }
+
+        public void SetAudio()
+        {
+            AudioListener.pause = PlayerSaveProfile.instance.muteAudio;
+            _soundTogle.isOn = !PlayerSaveProfile.instance.muteAudio;
         }
     }
 }
