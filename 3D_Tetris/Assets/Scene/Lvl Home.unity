@@ -24165,19 +24165,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1580839321}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1925011926}
-        m_TargetAssemblyTypeName: Script.PlayerProfile.PlayerSaveProfile, Assembly-CSharp
-        m_MethodName: AddStars
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 10
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1580839321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27836,6 +27824,8 @@ MonoBehaviour:
   - {fileID: 6336547770078311613}
   - {fileID: 1580839317}
   _skipLvl: {fileID: 1179415855}
+  _incrementStars: {fileID: 1580839320}
+  _incrementCoins: {fileID: 2077254213}
 --- !u!4 &2035909411
 Transform:
   m_ObjectHideFlags: 0
@@ -28540,19 +28530,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2077254214}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1925011926}
-        m_TargetAssemblyTypeName: Script.PlayerProfile.PlayerSaveProfile, Assembly-CSharp
-        m_MethodName: AddCoins
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 50
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2077254214
 MonoBehaviour:
   m_ObjectHideFlags: 0

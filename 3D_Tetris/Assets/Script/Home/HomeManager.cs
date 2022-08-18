@@ -4,6 +4,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Script.PlayerProfile
 {
@@ -16,12 +17,18 @@ namespace Script.PlayerProfile
         [SerializeField] private List<GameObject> _cheatObjects;
 
         [SerializeField] public GameObject _skipLvl;
+
+        [SerializeField] public Button _incrementStars;
+        [SerializeField] public Button _incrementCoins;
         
         private void Start()
         {
             PlayerSaveProfile.instance.CheckWin();
             int lvl = PlayerSaveProfile.instance._lvl;
 
+            _incrementCoins.onClick.AddListener(OfferIncrementCoins);
+            _incrementStars.onClick.AddListener(OfferIncrementStars);
+            
             SetLvlText();
             SetSkipLvl();
             CheatSet();
@@ -71,6 +78,15 @@ namespace Script.PlayerProfile
             SetLvlText();
         }
 
+        public void OfferIncrementStars()
+        {
+            PlayerSaveProfile.instance.AddStars(10);
+        }
+
+        public void OfferIncrementCoins()
+        {
+            PlayerSaveProfile.instance.AddCoins(50);
+        }
         public void SetLvlText()
         {
             if (PlayerSaveProfile.instance._lvl > PlayerSaveProfile.instance._lvlData && isCheat)
