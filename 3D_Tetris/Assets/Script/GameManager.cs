@@ -232,4 +232,14 @@ public class GameManager : MonoBehaviour
         LvlLoader.instance.Select(PlayerSaveProfile.instance.GetCurrentLvlData());
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (!pauseStatus)
+        {
+            DOTween.KillAll();
+            LvlLoader.instance.Select(PlayerSaveProfile.instance.GetCurrentLvlData());
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
 }

@@ -109,5 +109,14 @@ namespace Script.PlayerProfile
             AudioListener.pause = PlayerSaveProfile.instance.muteAudio;
             _soundTogle.isOn = !PlayerSaveProfile.instance.muteAudio;
         }
+        
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (!pauseStatus)
+            {
+                DOTween.KillAll();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        }
     }
 }
