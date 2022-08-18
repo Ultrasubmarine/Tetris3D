@@ -30,6 +30,8 @@ namespace Script.PlayerProfile
             this.wallet = wallet;
             this.openedCardParts = openedCardParts;
         }
+
+        public String lastFreeOpenCard;
     }
 
     [Serializable]
@@ -57,7 +59,21 @@ namespace Script.PlayerProfile
         public int _currentCardIndex => _data.currentCard;
         public List<int> _openedCardParts => _data.openedCardParts;
         public bool canSkipLvl => _data.canSkip;
-        
+        public DateTime lastFreeOpenCard
+        {
+            get
+            {
+                if (_data.lastFreeOpenCard != "")
+                {
+                   DateTime date;
+                   DateTime.TryParse( _data.lastFreeOpenCard,out date);
+                   return date;
+                }
+
+                return DateTime.MinValue;
+            }
+        }
+
         private SaveData _data;
         [SerializeField] private LvlList _lvlList;
 
@@ -286,6 +302,13 @@ namespace Script.PlayerProfile
         {
             _data.currentCard++;
             onCurrentCardChange?.Invoke(_data.currentCard);
+            Save();
+        }
+
+        public void OpenCardFree()
+        { 
+            _data.lastFreeOpenCard= DateTime.UtcNow.ToString();
+           // _data.lastFreeOpenCard = DateTime.Now.ToBinary().ToString();
             Save();
         }
     }

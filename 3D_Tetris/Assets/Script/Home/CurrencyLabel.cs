@@ -6,6 +6,7 @@ using IntegerExtension;
 using Script.PlayerProfile;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Script.Home
 {
@@ -76,7 +77,11 @@ namespace Script.Home
                 _changeAnimation.Play();
                 DOTween.To(x => _text.text = ((int)x).ToString(), currentInt, endInt, _animationDuration)
                     .SetEase(Ease.OutCirc)
-                    .SetAutoKill(true).OnComplete(() => currentInt = endInt);
+                    .SetAutoKill(true).OnComplete(() =>
+                    {
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(_text.GetComponent<RectTransform>());
+                        currentInt = endInt;
+                    });
             }
         }
         

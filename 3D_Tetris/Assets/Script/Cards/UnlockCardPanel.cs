@@ -144,5 +144,52 @@ namespace Script.Cards
             cost = step * (_showPuzzle.Count+1);
             _text.text = cost.ToString();
         }
+        
+        
+        [SerializeField] private GameObject FreeBtn;
+
+        [SerializeField] private int _hours = 6;
+        
+        private void Start()
+        {
+            LoadFree();
+        }
+
+        public void LoadFree()
+        {
+            if (DateTime.UtcNow.CompareTo(PlayerSaveProfile.instance.lastFreeOpenCard.AddHours(_hours)) < 0)
+                FreeBtn.SetActive(false);
+            else
+                FreeBtn.SetActive(true);
+        }
+
+        public void OpencardFree()
+        {
+            if(_showPuzzle.Count == _puzzle.Count)
+                return;
+            
+            PlayerSaveProfile.instance.OpenCardFree();
+            FreeBtn.SetActive(false);
+            
+            var lockedP = _puzzle.Except(_showPuzzle).ToArray();
+
+            var unlocked = lockedP[Random.Range(0, lockedP.Count())];
+            
+            _showPuzzle.Add(unlocked);
+            unlocked.DOFade(0, _timeAlphaUnlock);
+
+            var index = _puzzle.IndexOf(unlocked);
+            PlayerSaveProfile.instance.AddUnlockCardPart(index);
+            UpdatePuzzleCost();
+            
+            if (_showPuzzle.Count == _puzzle.Count)
+            {
+                _unlockBtnCanvasGroup.DOFade(0, 0.2f).From(1);
+                Invoke(nameof(FullUnlock),_timeAlphaUnlock);
+                
+                PlayerSaveProfile.instance.ResetUnlockedCardParts();
+                PlayerSaveProfile.instance.IncrementCurrentCard();
+            }
+        }
     }
 }
