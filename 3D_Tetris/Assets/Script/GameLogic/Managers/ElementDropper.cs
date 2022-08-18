@@ -101,8 +101,11 @@ namespace Script.GameLogic.TetrisElement
             
             if(_fsm.GetCurrentState() != TetrisState.WaitInfluence)
                 InfluenceData.delayedDrop = true;
-            else
+            else if(_fsm.GetCurrentState() != TetrisState.BigBombGenegation)
+            {
                 _fsm.SetNewState(TetrisState.Drop);
+            }
+              
         }
 
         #endregion

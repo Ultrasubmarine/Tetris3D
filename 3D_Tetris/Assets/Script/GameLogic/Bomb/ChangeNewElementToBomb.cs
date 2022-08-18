@@ -31,6 +31,7 @@ namespace Script.GameLogic.Bomb
 
         public void ChangeToBigBomb(bool isBig)
         {
+            
             // clear old
             var deleteBlocks = new List<Block>(_elementData.newElement.blocks);
             OnDestroyBlock(_elementData.newElement.blocks);

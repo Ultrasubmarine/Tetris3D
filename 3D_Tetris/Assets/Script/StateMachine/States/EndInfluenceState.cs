@@ -13,6 +13,9 @@ namespace Script.StateMachine.States
         
         public override void Enter(TetrisState last)
         {
+            if (_FSM.GetCurrentState() == TetrisState.BigBombGenegation)
+                return;
+            
             if (InfluenceData.delayedDrop)
             {
                 InfluenceData.delayedDrop = false;

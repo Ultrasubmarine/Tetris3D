@@ -25,6 +25,7 @@ public enum TetrisState
     Restart,
     
     OpenEvilBox,
+    BigBombGenegation,
 }
 
 public class TetrisFSM : AbstractFSM<TetrisState>
@@ -54,7 +55,8 @@ public class TetrisFSM : AbstractFSM<TetrisState>
         _statesDictionary.Add(TetrisState.CreateStar, new CreateStarState());
         _statesDictionary.Add(TetrisState.Restart, new RestartState());
         _statesDictionary.Add(TetrisState.OpenEvilBox, new EvilBoxAddBlockState());
-        
+        _statesDictionary.Add(TetrisState.BigBombGenegation, new BigBombGenerationState());
+       
         RealizationBox.Instance.gameCamera.onFirstAnimationEnd += StartFSM;
 //		Invoke( "StartFSM", 1.0f);
     }

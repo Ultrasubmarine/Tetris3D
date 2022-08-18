@@ -183,14 +183,15 @@ namespace Script.Offers
         {
             HideBtn();
             
+            _fastElementDrop.ResetFastSpeed();
+            
             if(Equals(_elementData.newElement, null))
                 _generator.SetNextAsBigBomb();
             else
             {
-                _changeNewElementToBomb.ChangeToBigBomb(true);
+                RealizationBox.Instance.FSM.SetNewState(TetrisState.BigBombGenegation);
+            //    _changeNewElementToBomb.ChangeToBigBomb(true);
             }
-
-            _fastElementDrop.ResetFastSpeed();
         }
         
         public void Clear()

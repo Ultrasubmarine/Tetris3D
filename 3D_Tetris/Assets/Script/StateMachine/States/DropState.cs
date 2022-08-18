@@ -22,7 +22,7 @@ public class DropState : AbstractState<TetrisState>
     {
         base.Enter(last);
         
-        if (last != TetrisState.WaitInfluence && last != TetrisState.EndInfluence && last != TetrisState.GenerateElement)
+        if (last != TetrisState.WaitInfluence && last != TetrisState.EndInfluence && last != TetrisState.GenerateElement && last != TetrisState.BigBombGenegation)
         {
             InfluenceData.delayedDrop = true;
             return;
