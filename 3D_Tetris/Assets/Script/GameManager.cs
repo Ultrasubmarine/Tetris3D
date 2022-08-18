@@ -10,6 +10,7 @@ using Script.PlayerProfile;
 using Script.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -223,5 +224,12 @@ public class GameManager : MonoBehaviour
     {
         _topGamePanel.DOFade(0, 0.1f);
         _topGamePanel.interactable = false;
+    }
+
+    public void SkipLvl()
+    {
+        PlayerSaveProfile.instance.IncrementLvl();
+        LvlLoader.instance.Select(PlayerSaveProfile.instance.GetCurrentLvlData());
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
