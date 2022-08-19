@@ -27,12 +27,20 @@ namespace Script.Home
         private void Start()
         {
             _switchButton.onClick.AddListener(OnSwitch);
+            
+            _rightCanvas.alpha = 0;
+            _rightCanvas.interactable = false;
+            Invoke(nameof(LateStart),1);
+        }
 
+        public void LateStart()
+        {
+            _rightCanvas.interactable = true;
             _cardPanel.anchorMin = Vector2.one * 0.5f;
             _cardPanel.anchorMax = Vector2.one * 0.5f;
             _cardPanel.pivot = new Vector2(0.5f, 0.5f);
             _cardPanel.sizeDelta = _cardPanel.parent.GetComponent<RectTransform>().rect.size;
-
+            
             _leftAnimation = DOTween.Sequence().SetAutoKill(false).Pause();
             _leftAnimation
                 .Append(_animationTextCanvas.DOFade(0f, _time / 4).From(1f))
@@ -58,7 +66,6 @@ namespace Script.Home
             _isLeft = true;
             _leftAnimation.Complete();
         }
-
         public void OnSwitch()
         {
             if (_isLeft)
