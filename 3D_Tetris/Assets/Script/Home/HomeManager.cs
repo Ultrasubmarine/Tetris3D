@@ -15,7 +15,8 @@ namespace Script.PlayerProfile
 
         [SerializeField] private bool isCheat;
         [SerializeField] private List<GameObject> _cheatObjects;
-
+        [SerializeField] private List<GameObject> _adsObjects;
+        
         [SerializeField] public GameObject _skipLvl;
 
         [SerializeField] public Button _incrementStars;
@@ -33,7 +34,10 @@ namespace Script.PlayerProfile
             
             SetLvlText();
             SetSkipLvl();
+            
             CheatSet();
+            AdsSet();
+            
             SetAudio();
         }
 
@@ -55,7 +59,14 @@ namespace Script.PlayerProfile
             {
                 c.SetActive(isCheat);
             }
-            
+        }
+        
+        public void AdsSet()
+        {
+            foreach (var c in _adsObjects)
+            {
+                c.SetActive(AdsManager.instance.isAds);
+            }
         }
         public void StartLvl()
         {

@@ -21,4 +21,6 @@ public class SafeAreaFitter : MonoBehaviour
         _rectTransform.anchorMin = anchorMin;
         _rectTransform.anchorMax = anchorMax;
     }
+    
+    
 }

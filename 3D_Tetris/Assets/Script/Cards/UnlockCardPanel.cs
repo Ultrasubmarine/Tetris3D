@@ -157,7 +157,8 @@ namespace Script.Cards
 
         public void LoadFree()
         {
-            if (DateTime.UtcNow.CompareTo(PlayerSaveProfile.instance.lastFreeOpenCard.AddHours(_hours)) < 0)
+            if (DateTime.UtcNow.CompareTo(PlayerSaveProfile.instance.lastFreeOpenCard.AddHours(_hours)) < 0
+                ||  !AdsManager.instance.isAds)
                 FreeBtn.SetActive(false);
             else
                 FreeBtn.SetActive(true);
