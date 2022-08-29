@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Script
@@ -6,11 +7,18 @@ namespace Script
     {
         [SerializeField] private bool useSayGamesAdds = true;
         
-        public bool isAds { get; private set; } = false;
-        public bool ShowAds()
+        public bool isAds { get; private set; } = true;
+        
+        public void ShowInterstitial(Action callBack)
         {
-            return true;
+            callBack.Invoke();
         }
 
+        public void ShowRewarded(Action<bool> callBack)
+        {
+            callBack.Invoke(true);
+        }
+        
+        
     }
 }

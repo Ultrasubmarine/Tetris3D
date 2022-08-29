@@ -163,8 +163,13 @@ namespace Script.Cards
             else
                 FreeBtn.SetActive(true);
         }
-
-        public void OpencardFree()
+        
+        private void OpencardFree()
+        {
+            AdsManager.instance.ShowRewarded(b=> {if(b) UnlockFree();});
+        }
+        
+        private void UnlockFree()
         {
             if(_showPuzzle.Count == _puzzle.Count)
                 return;

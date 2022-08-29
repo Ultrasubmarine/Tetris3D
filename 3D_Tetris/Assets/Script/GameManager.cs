@@ -208,18 +208,24 @@ public class GameManager : MonoBehaviour
 
     public void SetRewardMultiply()
     {
-        //TODO ADS
-        PlayerSaveProfile.instance.SetRewardMultiplier(multiplier);
+        AdsManager.instance.ShowRewarded(b =>
+        {
+            if (b)
+            {
+                PlayerSaveProfile.instance.SetRewardMultiplier(multiplier);
         
-        var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount * multiplier;
-        _starReward.OnCurrencyAmountChanged(Currency.stars,reward);
-        _coinReward.OnCurrencyAmountChanged(Currency.coin,reward*2);
-        _rewardX2Btn.SetActive(false);
+                var reward = LvlLoader.instance.lvlSettings.starSettings.winAmount * multiplier;
+                _starReward.OnCurrencyAmountChanged(Currency.stars,reward);
+                _coinReward.OnCurrencyAmountChanged(Currency.coin,reward*2);
+                _rewardX2Btn.SetActive(false);
         
-        CancelInvoke(nameof(ShowContinueBtn));
-        if(_continueBtn.alpha < 1)
-            ShowContinueBtn();
+                CancelInvoke(nameof(ShowContinueBtn));
+                if(_continueBtn.alpha < 1)
+                    ShowContinueBtn();
+            }
+        });
     }
+    
     public void HideGamePanels()
     {
         _topGamePanel.DOFade(0, 0.1f);
@@ -228,9 +234,15 @@ public class GameManager : MonoBehaviour
 
     public void SkipLvl()
     {
-        PlayerSaveProfile.instance.IncrementLvl();
-        LvlLoader.instance.Select(PlayerSaveProfile.instance.GetCurrentLvlData());
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        AdsManager.instance.ShowRewarded(b =>
+        {
+            if (b)
+            {
+                PlayerSaveProfile.instance.IncrementLvl();
+                LvlLoader.instance.Select(PlayerSaveProfile.instance.GetCurrentLvlData());
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        });
     }
 
     private void OnApplicationPause(bool pauseStatus)

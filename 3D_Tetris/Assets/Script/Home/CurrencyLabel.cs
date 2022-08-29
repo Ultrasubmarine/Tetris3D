@@ -87,7 +87,8 @@ namespace Script.Home
         
         private void OnDestroy()
         {
-            PlayerSaveProfile.instance.onCurrencyAmountChanged -= OnCurrencyAmountChanged;
+            if (_linkWithWallet)
+                PlayerSaveProfile.instance.onCurrencyAmountChanged -= OnCurrencyAmountChanged;
         }
 
         // Animation 

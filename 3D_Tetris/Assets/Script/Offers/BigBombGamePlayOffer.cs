@@ -174,9 +174,11 @@ namespace Script.Offers
 
         public void OnAdsButtonClick()
         {
-            //todo ads
-            HideExtraPanel();
-            MakeBigBomb();
+            AdsManager.instance.ShowRewarded((b) =>
+            {
+                HideExtraPanel();
+                MakeBigBomb();
+            });
         }
         
         public void MakeBigBomb()

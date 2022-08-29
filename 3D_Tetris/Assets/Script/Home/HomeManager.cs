@@ -33,10 +33,10 @@ namespace Script.PlayerProfile
             _incrementStars.onClick.AddListener(OfferIncrementStars);
             
             SetLvlText();
-            SetSkipLvl();
             
             CheatSet();
             AdsSet();
+            SetSkipLvl();
             
             SetAudio();
         }
@@ -48,9 +48,15 @@ namespace Script.PlayerProfile
 
         public void Skip()
         {
-            PlayerSaveProfile.instance.IncrementLvl();
-            SetLvlText();
-            SetSkipLvl();
+            AdsManager.instance.ShowRewarded(b =>
+            {
+                if (b)
+                {
+                    PlayerSaveProfile.instance.IncrementLvl();
+                    SetLvlText();
+                    SetSkipLvl();
+                }
+            });
         }
         
         public void CheatSet()
@@ -70,8 +76,11 @@ namespace Script.PlayerProfile
         }
         public void StartLvl()
         {
-            SelectLvlSettings(PlayerSaveProfile.instance.GetCurrentLvlData());
-            SceneManager.LoadScene(_lvlSceneName);
+            AdsManager.instance.ShowInterstitial(() =>
+            {
+                SelectLvlSettings(PlayerSaveProfile.instance.GetCurrentLvlData());
+                SceneManager.LoadScene(_lvlSceneName);
+            } );
         }
 
         private void SelectLvlSettings(LvlSettings lvl)
@@ -94,12 +103,16 @@ namespace Script.PlayerProfile
 
         public void OfferIncrementStars()
         {
-            PlayerSaveProfile.instance.AddStars(10);
+            AdsManager.instance.ShowRewarded(
+                b => {if(b) PlayerSaveProfile.instance.AddStars(10);});
+            
         }
 
         public void OfferIncrementCoins()
         {
-            PlayerSaveProfile.instance.AddCoins(50);
+            AdsManager.instance.ShowRewarded(
+                b => {if(b) PlayerSaveProfile.instance.AddCoins(50);});
+            
         }
         public void SetLvlText()
         {
