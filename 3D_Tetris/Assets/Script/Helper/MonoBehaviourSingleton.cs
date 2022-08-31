@@ -1,5 +1,4 @@
 using UnityEngine;
-using GooglePlayGames;
 
 public class MonoBehaviourSingleton<T> : MonoBehaviour where T : Component
 {
