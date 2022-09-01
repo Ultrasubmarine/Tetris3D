@@ -247,7 +247,7 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationPause(bool pauseStatus)
     {
-        if (!pauseStatus)
+        if (!pauseStatus && !AdsManager.instance.isShowingAds)
         {
             DOTween.KillAll();
             LvlLoader.instance.Select(PlayerSaveProfile.instance.GetCurrentLvlData());

@@ -32,6 +32,7 @@ namespace Script.StateMachine.States
                 RealizationBox.Instance.gameManager.HideGamePanels();
             }
             
+            TrackManager.LvlCompleted(RealizationBox.Instance.starsManager.collectedStars);
         }
 
         public void WaitPause(bool pauseState)

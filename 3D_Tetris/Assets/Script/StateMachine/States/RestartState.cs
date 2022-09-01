@@ -36,6 +36,7 @@ namespace Script.StateMachine.States
             RealizationBox.Instance.generatorChanger.ResetGenerator();
 
             //  _FSM.StartFSM();
+            TrackManager.LvlStart();
         }
 
         public override void Exit(TetrisState last)

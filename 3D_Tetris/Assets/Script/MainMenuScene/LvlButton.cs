@@ -23,6 +23,11 @@ public class LvlButton : MonoBehaviour
         SceneManager.LoadScene(_lvlName);
     }
     
+    public void OpenLvlAfterAds()
+    {
+        AdsManager.instance.ShowInterstitial(OpenLvl);
+    }
+    
     public void SelectLvlSettings(LvlSettings lvl)
     { 
         DOTween.KillAll();

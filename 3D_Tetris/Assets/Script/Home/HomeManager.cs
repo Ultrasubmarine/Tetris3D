@@ -76,11 +76,10 @@ namespace Script.PlayerProfile
         }
         public void StartLvl()
         {
-            AdsManager.instance.ShowInterstitial(() =>
-            {
-                SelectLvlSettings(PlayerSaveProfile.instance.GetCurrentLvlData());
-                SceneManager.LoadScene(_lvlSceneName);
-            } );
+            TrackManager.LvlStart();
+            
+            SelectLvlSettings(PlayerSaveProfile.instance.GetCurrentLvlData());
+            SceneManager.LoadScene(_lvlSceneName);
         }
 
         private void SelectLvlSettings(LvlSettings lvl)
@@ -136,11 +135,12 @@ namespace Script.PlayerProfile
         
         private void OnApplicationPause(bool pauseStatus)
         {
-            if (!pauseStatus)
+            if (!pauseStatus && !AdsManager.instance.isShowingAds)
             {
                 DOTween.KillAll();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
+        
     }
 }

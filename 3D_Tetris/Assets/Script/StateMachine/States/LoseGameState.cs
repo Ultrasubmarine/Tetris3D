@@ -43,6 +43,8 @@ namespace Script.StateMachine.States
 
         private void Lose()
         {
+            TrackManager.LvlFailed(RealizationBox.Instance.starsManager.collectedStars);
+            
             _ceiling.Destroy();
             _projection.Destroy();
             _projLineManager.Clear();

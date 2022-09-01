@@ -9,16 +9,41 @@ namespace Script
         
         public bool isAds { get; private set; } = true;
         
+        public bool isShowingAds { get; private set; } = false;
+        
         public void ShowInterstitial(Action callBack)
         {
-            callBack.Invoke();
+            if (SayKit.isInterstitialAvailable())
+            {
+                isShowingAds = true;
+                SayKit.showInterstitial(() =>
+                {
+                    callBack.Invoke();
+                    Invoke(nameof(ShowingFinish), 1f);
+                });
+            }
+            else
+            {
+                callBack.Invoke();
+            }
         }
 
         public void ShowRewarded(Action<bool> callBack)
         {
-            callBack.Invoke(true);
+            if (SayKit.isRewardedAvailable())
+            {
+                isShowingAds = true;
+                SayKit.showRewarded((b) =>
+                {
+                    callBack.Invoke(b);
+                    Invoke(nameof(ShowingFinish), 1f);
+                });
+            }
         }
-        
-        
+
+        public void ShowingFinish()
+        {
+            isShowingAds = false;
+        }
     }
 }
