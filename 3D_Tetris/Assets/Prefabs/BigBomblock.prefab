@@ -101,6 +101,8 @@ MonoBehaviour:
   _coordinates: {x: -1, y: 10, z: 0}
   oreol: {fileID: 5092039041939342667}
   _star: {fileID: 2588658567842732660}
+  _outline: {fileID: 0}
+  blockType: 0
 --- !u!331 &5750160469099465364
 SpriteMask:
   m_ObjectHideFlags: 0
@@ -288,7 +290,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -0.07}
-  m_SizeDelta: {x: 1.6146, y: 1.439}
+  m_SizeDelta: {x: 2.3, y: 1.439}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &23220383274446471
 MeshRenderer:

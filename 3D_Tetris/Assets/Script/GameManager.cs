@@ -240,6 +240,7 @@ public class GameManager : MonoBehaviour
             {
                 PlayerSaveProfile.instance.IncrementLvl();
                 LvlLoader.instance.Select(PlayerSaveProfile.instance.GetCurrentLvlData());
+                TrackManager.LvlStart();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         });
