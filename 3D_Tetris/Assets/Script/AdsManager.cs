@@ -10,9 +10,18 @@ namespace Script
         public bool isAds { get; private set; } = true;
         
         public bool isShowingAds { get; private set; } = false;
-        
+
+        public FakeAds _fakeAds = null;
         public void ShowInterstitial(Action callBack)
         {
+            if (_fakeAds != null)
+            {
+                _fakeAds.StartAds(() =>
+                {
+                    callBack.Invoke();
+                    Invoke(nameof(ShowingFinish), 1f);
+                });
+            }
            // if (SayKit.isInterstitialAvailable())
            // {
            //     isShowingAds = true;
@@ -30,6 +39,14 @@ namespace Script
 
         public void ShowRewarded(Action<bool> callBack)
         {
+            if (_fakeAds != null)
+            {
+                _fakeAds.StartAds(() =>
+                {
+                    callBack.Invoke(true);
+                    Invoke(nameof(ShowingFinish), 1f);
+                });
+            }
             // if (SayKit.isRewardedAvailable())
             // {
             //     isShowingAds = true;

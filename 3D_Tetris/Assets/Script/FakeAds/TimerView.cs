@@ -41,7 +41,7 @@ public class TimerView : MonoBehaviour
     public void Reset()
     {
         _progress.fillAmount = 0;
-       // _text.text = TimersKeeper.Schedule(_timeRespawn).S;
+        _text.text = "";
     }
     
 }
